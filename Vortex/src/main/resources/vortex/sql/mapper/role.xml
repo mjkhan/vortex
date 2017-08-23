@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="role">
+
+<resultMap id="roleRow" type="role">
+	<id property="id" column="ROLE_ID"/>
+	<result property="name" column="ROLE_NAME"/>
+	<result property="description" column="DESCRP"/>
+	<result property="modifiedBy" column="UPD_ID"/>
+	<result property="lastModified" column="UPD_TIME"/>
+</resultMap>
+
+<!-- 역할 목록 가져오기 -->
+<select id="getRoles" resultType="dataobject">
+SELECT '000' ROLE_ID, '모두' ROLE_NAME, NULL UPD_ID, NULL UPD_TIME UNION
+SELECT '001' ROLE_ID, '로그인 사용자' ROLE_NAME, NULL UPD_ID, NULL UPD_TIME UNION
+SELECT ROLE_ID, ROLE_NAME, UPD_ID, UPD_TIME
+FROM TBL_ROLE
+ORDER BY ROLE_ID
+</select>
+
+<!-- 역할 가져오기 -->
+<select id="getRole" parameterType="string" resultMap="roleRow">
+SELECT *
+FROM TBL_ROLE
+WHERE ROLE_ID = #{roleID}
+</select>
+
+<!-- 새 역할 아이디 가져오기 -->
+<select id="newID" resultType="string">
+SELECT LPAD(IFNULL(CAST(MAX(ROLE_ID) AS UNSIGNED) + 1, 2), 3, '0') NEW_ID
+FROM TBL_ROLE
+WHERE ROLE_ID > '001'
+</select>
+
+<!-- 역할 정보 생성 -->
+<insert id="insert" parameterType="role">
+INSERT INTO TBL_ROLE (
+	ROLE_ID,
+	ROLE_NAME,
+	DESCRP,
+	UPD_ID,
+	UPD_TIME
+) VALUES (
+	#{id},
+	#{name},
+	#{description},
+	#{modifiedBy},
+	CURRENT_TIMESTAMP
+)
+</insert>
+
+<!-- 역할 정보 수정 -->
+<update id="update" parameterType="role">
+UPDATE TBL_ROLE SET
+	ROLE_NAME = #{name},
+	DESCRP = #{description},
+	UPD_ID = #{modifiedBy},
+	UPD_TIME = CURRENT_TIMESTAMP
+WHERE ROLE_ID = #{id}
+</update>
+
+<!-- roleIDs의 역할 정보를 삭제 -->
+<delete id="delete" parameterType="hashmap">
+DELETE FROM TBL_ROLE
+<if test="roleIDs != null">
+WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{roleID}</foreach>)
+</if>
+</delete>
+
+</mapper>

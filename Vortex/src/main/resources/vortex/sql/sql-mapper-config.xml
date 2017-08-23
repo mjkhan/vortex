@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+		<typeAlias alias="dataobject" type="vortex.support.data.DataObject"/>
+
+		<typeAlias alias="group" type="vortex.application.group.Group"/>
+		<typeAlias alias="code" type="vortex.application.code.Code"/>
+		<typeAlias alias="action" type="vortex.application.action.Action"/>
+		<typeAlias alias="role" type="vortex.application.role.Role"/>
+    </typeAliases>
+</configuration>

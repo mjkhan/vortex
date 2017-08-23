@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>1.2</jsp-version>
+	<short-name>vtx</short-name>
+	<uri>vortex.tld</uri>
+	<display-name>Vortex JSP Tags</display-name>
+	<description>Vortex JSP Tag Library</description>
+
+    <tag>
+		<name>meta</name>
+		<tag-class>vortex.support.web.tag.MetaTag</tag-class>
+		<body-content>empty</body-content>
+		<description><![CDATA[<p>Provides information on either a FieldAware, a Dataset, or a BoundedList of FieldAwares to the JSP.<br />
+		The information is, by default, written to the JSP.<br />
+		With the <code>var</code> attribute set, the information is stored as a page scoped variable.
+		</p>
+		<p>With the <code>info</code> attribute, you specify the type of information needed.<br />
+		Note that you can use different <code>info</code> depending on whether you specify the <code>field</code> attribute or not.
+		</p>
+		]]></description>
+		<attribute>
+			<name>data</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>vortex.support.data.BoundedList</type>
+			<description><![CDATA[a BoundedList]]></description>
+		</attribute>
+		<attribute>
+			<name>field</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[The name of a field]]></description>
+		</attribute>
+		<attribute>
+			<name>info</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[Provides the specified information on the data.<br />
+				<p>If the <code>field</code> attribute is empty and the data is a Dataset or a BoundedList, possible values are
+				<ul><li><b>size</b> for the record count(int) of the list</li>
+					<li><b>totalSize</b> for the total count(int) of the list</li>
+					<li><b>hasMore</b> for whether the Dataset has more records to fetch(boolean)</li>
+					<li><b>hasPrevious</b> for whether the list has previous records to fetch(boolean)</li>
+					<li><b>hasNext</b> for whether the list has next records to fetch(boolean)</li>
+					<li><b>start</b> for the 0-based index(int) of the first record of the list</li>
+					<li><b>end</b> for the 0-based index(int) of the last record of the list</li>
+				</ul>
+				If the <code>field</code> attribute is not empty and the data is a FieldAware, a Dataset, or a BoundedList of FieldAwares,<br />
+				possible values are
+				<ul><li><b>index</b> for the index(int) of the specified field</li>
+					<li><b>className</b> for the class name(string) of the specified field's values</li>
+					<li><b>idField</b> for whether the specified field is an id field(boolean)</li>
+					<li><b>persistent</b> for whether the specified field is persistent(boolean)</li>
+					<li><b>autoInc</b> for whether the specified field's value is auto-incremented(boolean)</li>
+					<li><b>length</b> for the length of the specified field's values</li>
+				</ul>
+			]]></description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[variable name to store the information as a page scoped variable]]></description>
+		</attribute>
+    </tag>
+
+    <tag>
+		<name>paginate</name>
+		<tag-class>vortex.support.web.tag.PaginateTag</tag-class>
+		<body-content>empty</body-content>
+		<description><![CDATA[Writes links to paginate a Dataset or a BoundedList.<br />
+		With the 'info' attribute set, writes the specified information on the links for pagination.
+		]]></description>
+		<attribute>
+			<name>data</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>vortex.support.data.BoundedList</type>
+			<description><![CDATA[a Dataset or a BoundedList]]></description>
+		</attribute>
+		<attribute>
+			<name>info</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[Sets to write the specified information on the links for pagination. The possible value is
+			<ul><li><strong>link-number</strong> to write the number of the link to the current page</li>
+			</ul>
+			]]></description>
+		</attribute>
+		<attribute>
+			<name>attrs</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[
+			The attributes used to invoke on a link click.<br />
+			You should specify either 'href' or 'onclick' attributes here, if necessary, along with other attributes.<br />  
+			While at it, use '@{start}' to indicate the place for the start index of the records for the link.<br />
+			Also, use optionally '@{end}' to indicate the place for the last index of the records for the link.<br />
+			For example, you can use 'attrs' as below:
+			<pre> &lt;vtx:paginate .. attrs="href=\"/my-info?start=<b>@{start}</b>\"" ../><br />
+			&lt;vtx:paginate .. attrs="onclick=\"myInfo(<b>@{start}</b>, <b>@{end}</b>);\"" ../></pre>
+			]]></description>
+		</attribute>
+		<attribute>
+			<name>space</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>int</type>
+			<description><![CDATA[The number of space between links. The default value is 1, which is &npsp;]]></description>
+		</attribute>
+		<attribute>
+			<name>links</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>int</type>
+			<description><![CDATA[The number of links visible at once]]></description>
+		</attribute>
+		<attribute>
+			<name>before</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string before each link]]></description>
+		</attribute>
+		<attribute>
+			<name>after</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string after each link]]></description>
+		</attribute>
+		<attribute>
+			<name>first</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string for the link to the first page. The default value is |◀]]></description>
+		</attribute>
+		<attribute>
+			<name>previous</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string for the link to the previous links. The default value is ◀]]></description>
+		</attribute>
+		<attribute>
+			<name>beforeCurrent</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string before the text indicating the current page]]></description>
+		</attribute>
+		<attribute>
+			<name>current</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string for the text indicating the current page]]></description>
+		</attribute>
+		<attribute>
+			<name>afterCurrent</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string after the text indicating the current page]]></description>
+		</attribute>
+		<attribute>
+			<name>next</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string for the link to the next links. The default value is ▶]]></description>
+		</attribute>
+		<attribute>
+			<name>last</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[string for the link to the last page. The default value is ▶|]]></description>
+		</attribute>
+    </tag>
+
+    <tag>
+		<name>this</name>
+		<tag-class>vortex.support.web.tag.ThisTag</tag-class>
+		<body-content>empty</body-content>
+		<description><![CDATA[Writes the path to a resource of the JSP.]]></description>
+		<attribute>
+			<name>type</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[
+			<ul><li><b>page</b>(default) for the path to the current page</li>
+				<li><b>context</b> for the path to the current web application context</li>
+				<li><b>host</b> for the path to the current web application's host</li>
+				<li><b>baseUrl</b> for the base URL of the current web application's host</li>
+			</ul>
+			]]></description>
+		</attribute>
+		<attribute>
+			<name>parent</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[
+			With the 'type' attribute set to 'page' and the JSP included in an outer JSP,
+			Writes the path to the outer JSP.<p>
+			]]></description>
+		</attribute>
+    </tag>
+
+    <function>
+		<description><![CDATA[Returns the first arg if it is not empty or the second arg if the first is empty.]]></description>
+    	<name>ifEmpty</name>
+    	<function-class>vortex.support.Assert</function-class>
+    	<function-signature>java.lang.Object ifEmpty(java.lang.Object, java.lang.Object)</function-signature>
+    </function>
+</taglib>

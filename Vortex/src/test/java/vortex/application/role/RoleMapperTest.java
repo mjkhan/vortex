@@ -54,26 +54,26 @@ public class RoleMapperTest extends VortexTest {
 	}
 	
 	@Test
-	public void deleteRoles() {
+	public void remove() {
 		ArrayList<String> roleIDs = new ArrayList<>();
 		for (int i = 0; i < 5; ++i)
 			roleIDs.add(roleMapper.create(newRole("role " + i)));
 		
 		String id = roleIDs.get(0);
-		Assert.assertEquals(1, roleMapper.deleteRoles(id));
+		Assert.assertEquals(1, roleMapper.remove(id));
 		Assert.assertNull(roleMapper.getRole(id));
 		
-		Assert.assertEquals(2, roleMapper.deleteRoles(new String[]{roleIDs.get(1), roleIDs.get(2)}));
+		Assert.assertEquals(2, roleMapper.remove(new String[]{roleIDs.get(1), roleIDs.get(2)}));
 		Assert.assertNull(roleMapper.getRole(roleIDs.get(1)));
 		Assert.assertNull(roleMapper.getRole(roleIDs.get(2)));
 		
-		Assert.assertEquals(2, roleMapper.deleteRoles());
+		Assert.assertEquals(2, roleMapper.remove());
 		Assert.assertNull(roleMapper.getRole(roleIDs.get(3)));
 		Assert.assertNull(roleMapper.getRole(roleIDs.get(4)));
 	}
-	
+
 	@After
 	public void tearDown() {
-		roleMapper.deleteRoles();
+		roleMapper.remove();
 	}
 }

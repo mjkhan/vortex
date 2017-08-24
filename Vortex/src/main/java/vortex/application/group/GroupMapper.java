@@ -16,7 +16,7 @@ public class GroupMapper extends AbstractMapper {
 	
 	public BoundedList<DataObject> search(DataObject req) {
 		log().debug(() -> "Searching Groups...");
-		List<DataObject> list = selectList("group.search", req.set("grpType", groupType));
+		List<DataObject> list = selectList("group.search", req.set("groupType", groupType));
 		return boundedList(list, req);
 	}
 	
@@ -24,8 +24,8 @@ public class GroupMapper extends AbstractMapper {
 		log().debug(() -> "Getting a Group('" + groupID + "')...");
 		return selectOne(
 			"group.getGroup"
-			,params().set("grpType", groupType)
-					 .set("grpID", groupID)
+			,params().set("groupType", groupType)
+					 .set("groupID", groupID)
 		);
 	}
 	
@@ -49,7 +49,7 @@ public class GroupMapper extends AbstractMapper {
 		log().debug(() -> "Setting status of Groups(" + groupIDs + ")...");
 		return update(
 			"group.setStatus"
-		   , params().set("grpType", groupType)
+		   , params().set("groupType", groupType)
 		   			 .set("groupIDs", groupIDs)
 		   			 .set("status", status)
 		);
@@ -66,7 +66,7 @@ public class GroupMapper extends AbstractMapper {
 			deleteMembers(groupIDs, null)
 		  + delete(
 				"group.delete"
-			   , params().set("grpType", groupType)
+			   , params().set("groupType", groupType)
 			   			 .set("groupIDs", groupIDs)
 			);
 	}
@@ -77,9 +77,9 @@ public class GroupMapper extends AbstractMapper {
 		log().debug(() -> "Adding members to Groups...");
 		return insert(
 			"group.addMembers"
-		   , params().set("grpType", groupType)
+		   , params().set("groupType", groupType)
 		   			 .set("groupIDs", groupIDs)
-		   			 .set("mbType", memberType)
+		   			 .set("memberType", memberType)
 		   			 .set("memberIDs", memberIDs)
 		   			 .set("createdBy", createdBy)
 		);
@@ -94,9 +94,9 @@ public class GroupMapper extends AbstractMapper {
 		log().debug(() -> "Deleting members from Groups...");
 		return delete(
 			"group.deleteMembers"
-		   , params().set("grpType", groupType)
+		   , params().set("groupType", groupType)
 		   			 .set("groupIDs", !isEmpty(groupIDs) ? groupIDs : null)
-		   			 .set("mbType", memberType)
+		   			 .set("memberType", memberType)
 		   			 .set("memberIDs", !isEmpty(memberIDs) ? memberIDs : null)
 		);
 	}
@@ -112,9 +112,9 @@ public class GroupMapper extends AbstractMapper {
 		log().debug(() -> "Reordering members of the Group('" + groupID + "')...");
 		return update(
 			"group.reorderMembers"
-		   , params().set("grpType", groupType)
-		   			 .set("grpID", groupID)
-		   			 .set("mbType", memberType)
+		   , params().set("groupType", groupType)
+		   			 .set("groupID", groupID)
+		   			 .set("memberType", memberType)
 		   			 .set("memberIDs", memberIDs)
 		);
 	}

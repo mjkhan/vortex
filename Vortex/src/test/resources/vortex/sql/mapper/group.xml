@@ -19,7 +19,7 @@
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
 	SELECT SQL_CALC_FOUND_ROWS *, FOUND_ROWS() TOTAL_ROW_CNT
 	FROM TBL_GROUP
-	WHERE GRP_TYPE = #{grpType}
+	WHERE GRP_TYPE = #{groupType}
 	<if test="field != null and value != null">
 	AND #{field} LIKE CONCAT(#{value}, '%')
 	</if>
@@ -31,7 +31,7 @@
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
 	SELECT * FROM TBL_GROUP
-	WHERE GRP_TYPE = #{grpType}
+	WHERE GRP_TYPE = #{groupType}
 	<if test="field != null and value != null">
 	AND #{field} LIKE CONCAT(#{value}, '%')
 	</if>
@@ -46,15 +46,15 @@
 <select id="getGroup" parameterType="hashmap" resultMap="groupRow">
 SELECT *
 FROM TBL_GROUP
-WHERE GRP_TYPE = #{grpType}
-AND GRP_ID = #{grpID}
+WHERE GRP_TYPE = #{groupType}
+AND GRP_ID = #{groupID}
 </select>
 
 <!-- 새 그룹 아이디 가져오기 -->
 <select id="newID" parameterType="string" resultType="string">
 SELECT LPAD(IFNULL(CAST(MAX(GRP_ID) AS UNSIGNED) + 1, 1), 3, '0') NEW_ID
 FROM TBL_GROUP
-WHERE GRP_TYPE = #{grpType}
+WHERE GRP_TYPE = #{groupType}
 </select>
 
 <!-- 그룹 정보 생성 -->
@@ -98,7 +98,7 @@ AND GRP_ID = #{id}
 UPDATE TBL_GROUP SET
 	STATUS = #{status},
 	UPD_TIME = CURRENT_TIMESTAMP
-WHERE GRP_TYPE = #{grpType}
+WHERE GRP_TYPE = #{groupType}
 <if test="groupIDs != null">
 AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 </if>
@@ -107,7 +107,7 @@ AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{gr
 <!-- groupIDs의 그룹 정보를 삭제 -->
 <delete id="delete" parameterType="hashmap">
 DELETE FROM TBL_GROUP
-WHERE GRP_TYPE = #{grpType}
+WHERE GRP_TYPE = #{groupType}
 <if test="groupIDs != null">
 AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 </if>
@@ -116,7 +116,7 @@ AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{gr
 <!-- groupIDs의 그룹에 소속원 정보를 추가 -->
 <insert id="addMembers" parameterType="hashmap">
 INSERT INTO TBL_GROUP_MEMBER(GRP_TYPE, GRP_ID, MB_TYPE, MB_ID, INS_ID, INS_TIME)
-SELECT #{grpType}, GRP_ID, #{mbType}, MB_ID, #{createdBy}, CURRENT_TIMESTAMP
+SELECT #{groupType}, GRP_ID, #{memberType}, MB_ID, #{createdBy}, CURRENT_TIMESTAMP
 FROM (
 <foreach collection="groupIDs" item="groupID" separator=" UNION">SELECT #{groupID} GRP_ID</foreach>
 ) A, (
@@ -125,8 +125,8 @@ FROM (
 WHERE NOT EXISTS (
 	SELECT GRP_ID, MB_ID
 	FROM TBL_GROUP_MEMBER C
-	WHERE GRP_TYPE = #{grpType}
-	AND MB_TYPE = #{mbType}
+	WHERE GRP_TYPE = #{groupType}
+	AND MB_TYPE = #{memberType}
 	AND C.GRP_ID = A.GRP_ID
 	AND C.MB_ID = B.MB_ID
 )
@@ -135,9 +135,9 @@ WHERE NOT EXISTS (
 <!-- 그룹에서 소속원 정보를 삭제 -->
 <delete id="deleteMembers" parameterType="hashmap">
 DELETE FROM TBL_GROUP_MEMBER
-WHERE GRP_TYPE = #{grpType}
+WHERE GRP_TYPE = #{groupType}
 <if test="groupIDs != null">AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)</if>
-<if test="mbType != null">AND MB_TYPE = #{mbType}</if>
+<if test="mbType != null">AND MB_TYPE = #{memberType}</if>
 <if test="memberIDs != null">AND MB_ID IN (<foreach collection="memberIDs" item="memberID" separator=", ">#{memberID}</foreach>)</if>
 </delete>
 
@@ -145,9 +145,9 @@ WHERE GRP_TYPE = #{grpType}
 <update id="reorderMembers" parameterType="hashmap">
 UPDATE TBL_GROUP_MEMBER SET
 SRT_ORD = CASE MB_ID<foreach collection="memberIDs" item="memberID" index="i">WHEN #{memberID} THEN #{i}</foreach> ELSE 99999 END
-WHERE GRP_TYPE = #{grpType}
-AND GRP_ID = #{grpID}
-AND MB_TYPE = #{mbType}
+WHERE GRP_TYPE = #{groupType}
+AND GRP_ID = #{groupID}
+AND MB_TYPE = #{memberType}
 </update>
 
 </mapper>

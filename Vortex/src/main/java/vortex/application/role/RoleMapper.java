@@ -28,11 +28,31 @@ public class RoleMapper extends AbstractMapper {
 		return update("role.update", role);
 	}
 	
-	public int deleteRoles(String groupID, String... roleIDs) {
+	public int deleteRoles(String... roleIDs) {
 		return delete(
 			"role.delete"
-		   , params().set("groupID", groupID)
-		  			 .set("roleIDs", !isEmpty(roleIDs) ? roleIDs : null)
+		   , params().set("roleIDs", !isEmpty(roleIDs) ? roleIDs : null)
+		);
+	}
+	
+	public int addActions(String addedBy, String[] roleIDs, String... actionIDs) {
+		if (isEmpty(roleIDs) || isEmpty(actionIDs)) return 0;
+		
+		return delete(
+			"role.addActions"
+		   , params().set("roleIDs", roleIDs)
+		   			 .set("actionIDs", actionIDs)
+		   			 .set("addedBy", addedBy)
+		);
+	}
+	
+	public int deleteActions(String[] roleIDs, String... actionIDs) {
+		if (isEmpty(roleIDs)) return 0;
+		
+		return delete(
+			"role.deleteActions"
+		   , params().set("roleIDs", roleIDs)
+		   			 .set("actionIDs", !isEmpty(actionIDs) ? actionIDs : null)
 		);
 	}
 }

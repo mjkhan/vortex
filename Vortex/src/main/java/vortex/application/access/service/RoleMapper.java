@@ -1,4 +1,4 @@
-package vortex.application.role;
+package vortex.application.access.service;
 
 import java.util.List;
 

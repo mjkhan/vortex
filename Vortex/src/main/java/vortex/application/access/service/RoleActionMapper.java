@@ -1,4 +1,4 @@
-package vortex.application.role;
+package vortex.application.access.service;
 
 import vortex.support.database.AbstractMapper;
 

@@ -1,4 +1,4 @@
-package vortex.application.role;
+package vortex.application.access.service;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import vortex.application.VortexTest;
+import vortex.application.access.service.Role;
+import vortex.application.access.service.RoleMapper;
 
 public class RoleMapperTest extends VortexTest {
 	private RoleMapper roleMapper = getBean("roleMapper");

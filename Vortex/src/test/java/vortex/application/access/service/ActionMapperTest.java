@@ -1,4 +1,4 @@
-package vortex.application.action;
+package vortex.application.access.service;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import vortex.application.VortexTest;
+import vortex.application.access.service.Action;
+import vortex.application.access.service.ActionMapper;
 import vortex.support.data.DataObject;
 
 public class ActionMapperTest extends VortexTest {

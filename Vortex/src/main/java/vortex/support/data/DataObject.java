@@ -97,6 +97,7 @@ public class DataObject extends GenericMap<Object> {
 	 * @param name 필드이름
 	 * @return 배열로 캐스팅한 필드값
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T[] arrays(String name) {
 		return (T[])get(name);
 	}
@@ -104,6 +105,7 @@ public class DataObject extends GenericMap<Object> {
 	 * @param name 필드이름
 	 * @return List로 캐스팅한 필드값
 	 */
+	@SuppressWarnings("unchecked")
 	public <E, T extends List<E>> T asList(String name) {
 		return (T)get(name);
 	}
@@ -111,6 +113,7 @@ public class DataObject extends GenericMap<Object> {
 	 * @param name 필드이름
 	 * @return Map으로 캐스팅한 필드값
 	 */
+	@SuppressWarnings("unchecked")
 	public <K, V, T extends Map<K, V>> T asMap(String name) {
 		return (T)get(name);
 	}

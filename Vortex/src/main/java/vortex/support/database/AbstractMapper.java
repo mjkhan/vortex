@@ -47,12 +47,13 @@ public class AbstractMapper extends EgovAbstractMapper {
 	 */
 	protected <E> BoundedList<E> boundedList(List<E> list, int start, int fetch) {
 		BoundedList<E> result = new BoundedList<>();
-		if (list != null && !list.isEmpty()) {
+		if (!isEmpty(list)) {
 			result.addAll(list);
 			
 			if (fetch > 0) {
 				Object e = list.get(0);
 				if (e instanceof Map) {
+					@SuppressWarnings("unchecked")
 					Map<String, Object> row = (Map<String, Object>)e;
 					Number totalCount = (Number)row.get("TOTAL_ROW_CNT");
 					if (totalCount != null)

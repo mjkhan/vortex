@@ -213,7 +213,7 @@ public class GroupMapperTest extends VortexTest {
 		String[] memberIDs = {member2, member1};
 		groupMapper.addMembers(user, groupIDs, memberType, member0, member1, member2);
 
-		int saved = groupMapper.reorderMembers(id0, memberType, memberIDs);
+		groupMapper.reorderMembers(id0, memberType, memberIDs);
 		
 	}
 

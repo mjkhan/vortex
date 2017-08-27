@@ -1,4 +1,4 @@
-package vortex.application.code;
+package vortex.application.code.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,8 +10,12 @@ import vortex.support.data.DataObject;
 import vortex.support.database.AbstractMapper;
 
 public class CodeMapper extends AbstractMapper {
-	public Map<String, List<DataObject>> getCodes(String... groupIDs) {
-		List<DataObject> codes = selectList("code.getCodes", params().set("groupIDs", groupIDs));
+	public List<DataObject> getCodes(String... groupIDs) {
+		return selectList("code.getCodes", params().set("groupIDs", groupIDs));
+	}
+	
+	public Map<String, List<DataObject>> getCodesOf(String... groupIDs) {
+		List<DataObject> codes = getCodes(groupIDs);
 		if (codes.isEmpty()) return Collections.emptyMap();
 		
 		LinkedHashMap<String, List<DataObject>> result = new LinkedHashMap<>();

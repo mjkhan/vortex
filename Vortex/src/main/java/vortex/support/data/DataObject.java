@@ -58,6 +58,15 @@ public class DataObject extends GenericMap<Object> {
 		super.set(key, value);
 		return this;
 	}
+	@SuppressWarnings("unchecked")
+	/**지정하는 이름의 값을 T로 캐스팅하여 반환한다.
+	 * @param name 필드 이름
+	 * @return T로 캐스팅한 값
+	 * @throws ClassCastException
+	 */
+	public <T> T value(String name) {
+		return (T)get(name);
+	}
 	/**지정하는 이름의 값을 String으로 캐스팅하여 반환한다.
 	 * @param name 필드 이름
 	 * @return String으로 캐스팅한 값
@@ -98,7 +107,7 @@ public class DataObject extends GenericMap<Object> {
 	 * @return 배열로 캐스팅한 필드값
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T[] arrays(String name) {
+	public <T> T[] array(String name) {
 		return (T[])get(name);
 	}
 	/**지정하는 이름의 필드값을 List로 캐스팅하여 반환한다.

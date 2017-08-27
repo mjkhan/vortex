@@ -1,4 +1,4 @@
-package vortex.application.code;
+package vortex.application.code.service;
 
 import java.sql.Date;
 

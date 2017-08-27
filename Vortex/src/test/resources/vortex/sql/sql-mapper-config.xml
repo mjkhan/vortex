@@ -7,8 +7,8 @@
 		<typeAlias alias="dataobject" type="vortex.support.data.DataObject"/>
 
 		<typeAlias alias="group" type="vortex.application.group.Group"/>
-		<typeAlias alias="code" type="vortex.application.code.Code"/>
-		<typeAlias alias="action" type="vortex.application.action.Action"/>
-		<typeAlias alias="role" type="vortex.application.role.Role"/>
+		<typeAlias alias="code" type="vortex.application.code.service.Code"/>
+		<typeAlias alias="action" type="vortex.application.access.service.Action"/>
+		<typeAlias alias="role" type="vortex.application.access.service.Role"/>
     </typeAliases>
 </configuration>

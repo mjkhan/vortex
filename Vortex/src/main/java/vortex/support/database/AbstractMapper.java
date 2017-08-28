@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import vortex.support.Assert;
@@ -28,11 +27,6 @@ public class AbstractMapper extends EgovAbstractMapper {
 	 */
 	protected static <T> T ifEmpty(T t, Supplier<T> nt) {
 		return Assert.ifEmpty(t, nt);
-	}
-
-	@Override
-	public void setSqlSessionFactory(SqlSessionFactory sqlSession) {
-		super.setSqlSessionFactory(sqlSession);
 	}
 
 	protected SqlSession getSqlSession(String name) {

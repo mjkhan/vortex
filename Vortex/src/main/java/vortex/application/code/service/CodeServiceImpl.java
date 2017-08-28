@@ -2,11 +2,14 @@ package vortex.application.code.service;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
+
 import vortex.application.ApplicationService;
 import vortex.application.group.Group;
 import vortex.application.group.GroupMapper;
 import vortex.support.data.DataObject;
 
+@Service("codeService")
 public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Resource(name="codeGroup")
 	private GroupMapper codeGroup;
@@ -14,14 +17,14 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject getGroups(DataObject req) {
 		return dataobject()
-			.set("codeGroups", codeGroup.search(req));
+			.set("groups", codeGroup.search(req));
 	}
 
 	@Override
 	public DataObject getGroup(DataObject req) {
 		String groupID = req.string("groupID");
 		return dataobject()
-			.set("codeGroup", codeGroup.getGroup(groupID));
+			.set("group", codeGroup.getGroup(groupID));
 	}
 
 	@Override

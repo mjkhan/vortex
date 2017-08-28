@@ -1,5 +1,7 @@
 package vortex.application;
 
+import javax.annotation.Resource;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,6 +10,7 @@ import vortex.support.data.DataObject;
 import vortex.support.database.AbstractService;
 
 public class ApplicationService extends AbstractService implements ApplicationAccess {
+	@Resource(name="sqlSession")
 	private SqlSessionFactory sqlSessionFactory;
 	
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {

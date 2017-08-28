@@ -6,9 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import vortex.support.data.DataObject;
 import vortex.support.database.AbstractMapper;
 
+@Repository("codeMapper")
 public class CodeMapper extends AbstractMapper {
 	public List<DataObject> getCodes(String... groupIDs) {
 		return selectList("code.getCodes", params().set("groupIDs", groupIDs));

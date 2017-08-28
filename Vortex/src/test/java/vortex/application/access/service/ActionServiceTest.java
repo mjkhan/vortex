@@ -11,7 +11,7 @@ import vortex.application.access.service.Action;
 import vortex.application.access.service.ActionMapper;
 import vortex.support.data.DataObject;
 
-public class ActionMapperTest extends VortexTest {
+public class ActionServiceTest extends VortexTest {
 	private ActionMapper actionMapper = getBean("actionMapper");
 	
 	@Test

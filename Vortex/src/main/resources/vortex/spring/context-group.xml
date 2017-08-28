@@ -8,13 +8,10 @@
     	<property name="sqlSessionFactory" ref="sqlSession"/>
     	<property name="groupType" value="001"/>
     </bean>
-    
-    <bean id="codeMapper" class="vortex.application.code.service.CodeMapper">
+
+    <bean id="actionGroup" class="vortex.application.group.GroupMapper">
     	<property name="sqlSessionFactory" ref="sqlSession"/>
-    </bean>
-    
-    <bean id="codeService" class="vortex.application.code.service.CodeServiceImpl">
-    	<property name="sqlSessionFactory" ref="sqlSession"/>
+    	<property name="groupType" value="002"/>
     </bean>
     
 </beans>

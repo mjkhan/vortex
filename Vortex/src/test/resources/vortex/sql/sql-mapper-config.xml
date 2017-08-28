@@ -6,6 +6,7 @@
 		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 		<typeAlias alias="dataobject" type="vortex.support.data.DataObject"/>
 
+		<typeAlias alias="user" type="vortex.application.user.service.User"/>
 		<typeAlias alias="group" type="vortex.application.group.Group"/>
 		<typeAlias alias="code" type="vortex.application.code.service.Code"/>
 		<typeAlias alias="action" type="vortex.application.access.service.Action"/>

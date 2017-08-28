@@ -45,7 +45,8 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 
 	@Override
 	public DataObject delete(DataObject req) {
-		String[] roleIDs = req.string("roleID").split(",");
+		String s = req.string("roleID");
+		String[] roleIDs = !isEmpty(s) ? s.split(",") : null;
 		roleMemberMapper.deleteActions(roleIDs);
 		roleMemberMapper.deleteUsers(roleIDs, null);
 		int saved = roleMapper.remove(roleIDs);

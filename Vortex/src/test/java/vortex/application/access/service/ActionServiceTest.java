@@ -45,7 +45,18 @@ public class ActionServiceTest extends VortexTest {
 	}
 	
 	@Test
-	public void updateGroup() {}
+	public void updateGroup() {
+		String groupID = actionService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
+		Group group = actionService.getGroup(dataObject().set("groupID", groupID)).value("group");
+		Assert.assertNotNull(group);
+		
+		String name = "new name";
+		group.setName(name);
+		actionService.updateGroup(dataObject().set("group", group));
+		group = actionService.getGroup(dataObject().set("groupID", groupID)).value("group");
+		Assert.assertNotNull(group);
+		Assert.assertEquals(name, group.getName());
+	}
 	
 	@Test
 	public void deleteGroups() {}

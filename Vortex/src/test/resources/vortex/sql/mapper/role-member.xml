@@ -35,11 +35,13 @@ WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{r
 <!-- groupIDs 그룹의 역할에서 액션 삭제 -->
 <delete id="deleteActionsOfGroups" parameterType="hashmap">
 DELETE FROM TBL_ROLE_ACTION
+<if test="groupIDs != null">
 WHERE ACT_ID IN (
 	SELECT ACT_ID
 	FROM TBL_ACTION
 	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 )
+</if>
 </delete>
 
 <!-- roleIDs의 역할에 userIDs의 사용자 추가 -->
@@ -67,8 +69,8 @@ DELETE FROM TBL_ROLE_USER
 WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{roleID}</foreach>)
 </if>
 <if test="userIDs != null">
-	<if test="roleIDs != null">AND</if>
 	<if test="roleIDs == null">WHERE</if>
+	<if test="roleIDs != null">AND</if>
 	USER_TYPE = #{userType}
 	AND USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </if>

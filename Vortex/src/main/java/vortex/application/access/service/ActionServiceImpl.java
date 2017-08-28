@@ -53,8 +53,10 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	public DataObject removeGroups(DataObject req) {
 		String[] groupIDs = req.string("groupID").split(",");
 		
-		for (String id: groupIDs)
-			actionMapper.deleteActions(id);
+		roleMemberMapper.deleteActionsOfGroups(groupIDs);
+		for (String groupID: groupIDs) {
+			actionMapper.deleteActions(groupID);
+		}
 		int saved = actionGroup.remove(groupIDs);
 		return dataobject()
 				.set("saved", saved > 0);
@@ -65,11 +67,12 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		String s = req.string("groupID");
 		String[] groupIDs = !isEmpty(s) ? s.split(",") : null;
 		
+		roleMemberMapper.deleteActionsOfGroups(groupIDs);
 		if (isEmpty(s)) {
 			actionMapper.deleteActions(null);
 		} else {
-			for (String id: groupIDs)
-				actionMapper.deleteActions(id);
+			for (String groupID: groupIDs)
+				actionMapper.deleteActions(groupID);
 		}
 		int saved = actionGroup.deleteGroups(groupIDs);
 		return dataobject()

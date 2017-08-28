@@ -7,41 +7,69 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import vortex.application.VortexTest;
-import vortex.application.access.service.Action;
-import vortex.application.access.service.ActionMapper;
+import vortex.application.group.Group;
 import vortex.support.data.DataObject;
 
 public class ActionServiceTest extends VortexTest {
-	private ActionMapper actionMapper = getBean("actionMapper");
+	private ActionService actionService = getBean("actionService");
+	
+	private Group newGroup(int num) {
+		Group group = new Group();
+		group.setName("action group " + num);
+		String userID = "test user";
+		group.setCreatedBy(userID);
+		group.setModifiedBy(userID);
+		return group;
+	}
+	
+	private Action newAction(String groupID, int num) {
+		Action action = new Action();
+		action.setId("action-" + num);
+		action.setGroupID(groupID);
+		action.setName("action name " + num);
+		action.setModifiedBy("test user");
+		return action;
+	}
+	
+	@Test
+	public void getGroups() {}
+	
+	@Test
+	public void getGroup() {}
+	
+	@Test
+	public void createGroup() {
+		String groupID = actionService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
+		Group group = actionService.getGroup(dataObject().set("groupID", groupID)).value("group");
+		Assert.assertNotNull(group);
+	}
+	
+	@Test
+	public void updateGroup() {}
+	
+	@Test
+	public void deleteGroups() {}
 	
 	@Test
 	public void getActions() {
 		String groupID = "001";
 		for (int i = 0; i < 3; ++i) {
-			Action action = new Action();
-			action.setId("action-" + i);
-			action.setGroupID(groupID);
-			action.setName("action name " + i);
-			action.setModifiedBy("test user");
-			actionMapper.create(action);
+			Action action = newAction(groupID, i);
+			actionService.createAction(dataObject().set("action", action));
 		}
-		List<DataObject> list = actionMapper.getActions(groupID);
+		List<DataObject> list = actionService.getActions(dataObject().set("groupID", groupID)).value("actions");
 		Assert.assertEquals(3, list.size());
 	}
-	
+
 	@Test
-	public void create() {
-		String id = "action-0",
-			   name = "action zero",
-			   groupID = "001";
-		Action action = new Action();
-		action.setId(id);
-		action.setGroupID(groupID);
-		action.setName(name);
-		action.setModifiedBy("test user");
-		actionMapper.create(action);
+	public void createAction() {
+		String groupID = "001";
+		Action action = newAction(groupID, 0);
+		actionService.createAction(dataObject().set("action", action));
+		String id = action.getId(),
+			   name = action.getName();
 		
-		Action loaded = actionMapper.getAction(id);
+		Action loaded = actionService.getAction(dataObject().set("actionID", id)).value("action");
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(id, loaded.getId());
 		Assert.assertEquals(name, loaded.getName());
@@ -49,22 +77,21 @@ public class ActionServiceTest extends VortexTest {
 	}
 	
 	@Test
-	public void update() {
-		String id = "action-0",
-			   name = "action zero",
-			   groupID = "001";
-		Action action = new Action();
-		action.setId(id);
-		action.setGroupID(groupID);
-		action.setName(name);
-		action.setModifiedBy("test user");
-		actionMapper.create(action);
+	public void updateAction() {
+		String groupID = "001";
+		Action action = newAction(groupID, 0);
+		actionService.createAction(dataObject().set("action", action));
+		String id = action.getId(),
+			   name = action.getName();
+		
+		Action loaded = actionService.getAction(dataObject().set("actionID", id)).value("action");
 		
 		name = "Action Zero";
 		action.setName(name);
-		actionMapper.update(action);
+		actionService.updateAction(dataObject().set("action", action));
 		
-		Action loaded = actionMapper.getAction(id);
+		loaded = actionService.getAction(dataObject().set("actionID", id)).value("action");
+
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(id, loaded.getId());
 		Assert.assertEquals(name, loaded.getName());
@@ -72,24 +99,22 @@ public class ActionServiceTest extends VortexTest {
 	}
 	
 	@Test
-	public void delete() {
+	public void deleteActions() {
 		String groupID = "001";
 		for (int i = 0; i < 3; ++i) {
-			Action action = new Action();
-			action.setId("action-" + i);
-			action.setGroupID(groupID);
-			action.setName("action name " + i);
-			action.setModifiedBy("test user");
-			actionMapper.create(action);
+			actionService.createAction(dataObject().set("action", newAction(groupID, i)));
 		}
-		int saved = actionMapper.deleteActions(groupID, "action-0", "action-1");
-		Assert.assertEquals(2, saved);
-		saved = actionMapper.deleteActions(groupID);
-		Assert.assertEquals(1, saved);
+		boolean saved = actionService.deleteActions(dataObject().set("actionID", "action-0,action-1")).bool("saved");
+		Assert.assertEquals(true, saved);
+		saved = actionService.deleteActions(dataObject()).bool("saved");
+		Assert.assertEquals(true, saved);
+		
+		List<DataObject> list = actionService.getActions(dataObject().set("groupID", groupID)).value("actions");
+		Assert.assertTrue(list.isEmpty());
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		actionMapper.deleteActions("001");
+		actionService.deleteGroups(dataObject());
 	}
 }

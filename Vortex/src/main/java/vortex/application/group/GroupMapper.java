@@ -62,7 +62,7 @@ public class GroupMapper extends AbstractMapper {
 		  + setStatus(Status.REMOVED.code(), groupIDs);
 	}
 	
-	public int delete(String... groupIDs) {
+	public int deleteGroups(String... groupIDs) {
 		return
 			deleteMembers(groupIDs, null)
 		  + delete(

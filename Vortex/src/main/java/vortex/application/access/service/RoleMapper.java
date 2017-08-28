@@ -2,9 +2,12 @@ package vortex.application.access.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import vortex.support.data.DataObject;
 import vortex.support.database.AbstractMapper;
 
+@Repository("roleMapper")
 public class RoleMapper extends AbstractMapper {
 	public List<DataObject> getRoles() {
 		return selectList("role.getRoles");

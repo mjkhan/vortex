@@ -16,6 +16,8 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private GroupMapper actionGroup;
 	@Autowired
 	private ActionMapper actionMapper;
+	@Autowired
+	private RoleMemberMapper roleMemberMapper;
 
 	@Override
 	public DataObject getGroups(DataObject req) {
@@ -48,13 +50,30 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 
 	@Override
-	public DataObject deleteGroups(DataObject req) {
-		String[] groupIDs = req.string("groupIDs").split(",");
-		for (String groupID: groupIDs)
-			actionMapper.deleteActions(groupID);
+	public DataObject removeGroups(DataObject req) {
+		String[] groupIDs = req.string("groupID").split(",");
+		
+		for (String id: groupIDs)
+			actionMapper.deleteActions(id);
 		int saved = actionGroup.remove(groupIDs);
 		return dataobject()
-			.set("saved", saved > 0);
+				.set("saved", saved > 0);
+	}
+
+	@Override
+	public DataObject deleteGroups(DataObject req) {
+		String s = req.string("groupID");
+		String[] groupIDs = !isEmpty(s) ? s.split(",") : null;
+		
+		if (isEmpty(s)) {
+			actionMapper.deleteActions(null);
+		} else {
+			for (String id: groupIDs)
+				actionMapper.deleteActions(id);
+		}
+		int saved = actionGroup.deleteGroups(groupIDs);
+		return dataobject()
+				.set("saved", saved > 0);
 	}
 
 	@Override
@@ -89,12 +108,10 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 
 	@Override
 	public DataObject deleteActions(DataObject req) {
-		String groupID = req.string("groupID"),
-			   actionID = req.string("actionID");
-		int saved = actionMapper.deleteActions(
-			groupID,
-			!isEmpty(actionID) ? actionID.split(",") : null
-			);
+		String actionID = req.string("actionID");
+		String[] actionIDs = !isEmpty(actionID) ? actionID.split(",") : null;
+		
+		int saved = actionMapper.deleteActions(null, actionIDs);
 		return dataobject()
 			.set("saved", saved > 0);
 	}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roleMember">
+
+<!-- roleIDs의 역할에 actionIDs의 액션 추가 -->
+<insert id="addActions" parameterType="hashmap">
+INSERT INTO TBL_ROLE_ACTION (ROLE_ID, ACT_ID, INS_ID, INS_TIME)
+SELECT ROLE_ID, ACT_ID, #{addedBy}, CURRENT_TIMESTAMP
+FROM (
+	<foreach collection="roleIDs" item="roleID" separator=" UNION">SELECT #{roleID} ROLE_ID</foreach>
+) A, (
+	<foreach collection="actionIDs" item="actionID" separator=" UNION">SELECT #{actionID} ACT_ID</foreach>
+) B
+WHERE NOT EXISTS (
+	SELECT ROLE_ID, ACT_ID
+	FROM TBL_ROLE_ACTION C
+	WHERE C.ROLE_ID = A.ROLE_ID
+	AND C.ACT_ID = B.ACT_ID
+)
+</insert>
+
+<!-- roleIDs의 역할에서 actionIDs의 액션 삭제 -->
+<delete id="deleteActions" parameterType="hashmap">
+DELETE FROM TBL_ROLE_ACTION
+<if test="roleIDs != null">
+WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{roleID}</foreach>)
+</if>
+<if test="actionIDs != null">
+	<if test="roleIDs != null">AND</if>
+	<if test="roleIDs == null">WHERE</if>
+	ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
+</if>
+</delete>
+
+<!-- groupIDs 그룹의 역할에서 액션 삭제 -->
+<delete id="deleteActionsOfGroups" parameterType="hashmap">
+DELETE FROM TBL_ROLE_ACTION
+WHERE ACT_ID IN (
+	SELECT ACT_ID
+	FROM TBL_ACTION
+	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+)
+</delete>
+
+<!-- roleIDs의 역할에 userIDs의 사용자 추가 -->
+<insert id="addUsers" parameterType="hashmap">
+INSERT INTO TBL_ROLE_USER (ROLE_ID, USER_TYPE, USER_ID, INS_ID, INS_TIME)
+SELECT ROLE_ID, #{userType} USER_TYPE, USER_ID, #{addedBy}, CURRENT_TIMESTAMP
+FROM (
+	<foreach collection="roleIDs" item="roleID" separator=" UNION">SELECT #{roleID} ROLE_ID</foreach>
+) A, (
+	<foreach collection="userIDs" item="userID" separator=" UNION">SELECT #{userID} USER_ID</foreach>
+) B
+WHERE NOT EXISTS (
+	SELECT ROLE_ID, USER_ID
+	FROM TBL_ROLE_USER C
+	WHERE C.USER_TYPE = #{userType} 
+	AND C.ROLE_ID = A.ROLE_ID
+	AND C.USER_ID = B.USER_ID
+)
+</insert>
+
+<!-- roleIDs의 역할에서 userIDs의 사용자 삭제 -->
+<delete id="deleteUsers" parameterType="hashmap">
+DELETE FROM TBL_ROLE_USER
+<if test="roleIDs != null">
+WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{roleID}</foreach>)
+</if>
+<if test="userIDs != null">
+	<if test="roleIDs != null">AND</if>
+	<if test="roleIDs == null">WHERE</if>
+	USER_TYPE = #{userType}
+	AND USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
+</if>
+</delete>
+
+</mapper>

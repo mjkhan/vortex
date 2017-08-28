@@ -12,6 +12,8 @@ public interface ActionService extends ApplicationAccess {
 	
 	public DataObject updateGroup(DataObject req);
 	
+	public DataObject removeGroups(DataObject req);
+	
 	public DataObject deleteGroups(DataObject req);
 	
 	public DataObject getActions(DataObject req);

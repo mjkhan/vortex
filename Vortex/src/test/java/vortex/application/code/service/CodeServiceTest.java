@@ -8,10 +8,20 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import vortex.application.VortexTest;
+import vortex.application.group.Group;
 import vortex.support.data.DataObject;
 
 public class CodeServiceTest extends VortexTest {
 	private CodeService codeService = getBean("codeService");
+	
+	private Group newGroup(int num) {
+		Group group = new Group();
+		group.setName("code group " + num);
+		String userID = "test user";
+		group.setCreatedBy(userID);
+		group.setModifiedBy(userID);
+		return group;
+	}
 	
 	private Code newCode(String group, String code, String value, String user) {
 		Code obj = new Code();
@@ -23,7 +33,45 @@ public class CodeServiceTest extends VortexTest {
 	}
 	
 	@Test
-	public void create() {
+	public void createGroup() {
+		String groupID = codeService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
+		Group group = codeService.getGroup(dataObject().set("groupID", groupID)).value("group");
+		Assert.assertNotNull(group);
+		Assert.assertEquals(groupID, group.getId());
+	}
+	
+	@Test
+	public void updateGroup() {
+		String groupID = codeService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
+		Group group = codeService.getGroup(dataObject().set("groupID", groupID)).value("group");
+		Assert.assertNotNull(group);
+		Assert.assertEquals(groupID, group.getId());
+		
+		String name = "new group name";
+		group.setName(name);
+		codeService.updateGroup(dataObject().set("group", group));
+		group = codeService.getGroup(dataObject().set("groupID", groupID)).value("group");
+		Assert.assertNotNull(group);
+		Assert.assertEquals(name, group.getName());
+	}
+	
+	@Test
+	public void removeGroups() {
+		String groupID0 = codeService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
+		String groupID1 = codeService.createGroup(dataObject().set("group", newGroup(1))).string("groupID");
+		
+		codeService.removeGroups(dataObject().set("groupID", groupID0 + "," + groupID1));
+		Group group = codeService.getGroup(dataObject().set("groupID", groupID0)).value("group");
+		Assert.assertEquals("999", group.getStatus());
+		group = codeService.getGroup(dataObject().set("groupID", groupID1)).value("group");
+		Assert.assertEquals("999", group.getStatus());
+	}
+	
+	@Test
+	public void getGroups() {}
+	
+	@Test
+	public void createCode() {
 		String group = "001",
 			   code = "code0",
 			   value = "value0";
@@ -35,7 +83,7 @@ public class CodeServiceTest extends VortexTest {
 	}
 
 	@Test
-	public void update() {
+	public void updateCode() {
 		String group = "001",
 			   code = "code0",
 			   value = "value0";
@@ -59,7 +107,7 @@ public class CodeServiceTest extends VortexTest {
 	}
 
 	@Test
-	public void delete() {
+	public void deleteCode() {
 		DataObject req = dataObject();
 		String groupIDs = "001,002,003";
 		String[] groups = groupIDs.split(",");
@@ -115,12 +163,10 @@ public class CodeServiceTest extends VortexTest {
 			}
 		}
 	}
-/*	
-*/	
+
 	@After
 	public void teardown() {
 		DataObject req = dataObject();
-		for (int i = 1; i <= 3; ++i)
-		codeService.deleteCodes(req.set("groupID", "00" + i));
+		codeService.deleteGroups(req.set("groupID", "001,002,003"));
 	}
 }

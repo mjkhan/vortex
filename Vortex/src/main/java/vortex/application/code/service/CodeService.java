@@ -12,6 +12,8 @@ public interface CodeService extends ApplicationAccess {
 	
 	public DataObject updateGroup(DataObject req);
 	
+	public DataObject removeGroups(DataObject req);
+	
 	public DataObject deleteGroups(DataObject req);
 	
 	public DataObject getCodes(DataObject req);

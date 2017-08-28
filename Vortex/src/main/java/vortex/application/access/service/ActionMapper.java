@@ -2,9 +2,12 @@ package vortex.application.access.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import vortex.support.data.DataObject;
 import vortex.support.database.AbstractMapper;
 
+@Repository("actionMapper")
 public class ActionMapper extends AbstractMapper {
 	public List<DataObject> getActions(String groupID) {
 		return selectList("action.getActions", groupID);

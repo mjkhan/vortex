@@ -45,11 +45,26 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	}
 
 	@Override
-	public DataObject deleteGroups(DataObject req) {
-		String[] groupIDs = req.string("groupIDs").split(",");
+	public DataObject removeGroups(DataObject req) {
+		String[] groupIDs = req.notEmpty("groupID").string("groupID").split(",");
 		for (String groupID: groupIDs)
 			codeMapper.deleteCodes(groupID);
 		int saved = codeGroup.remove(groupIDs);
+		return dataobject()
+			.set("saved", saved > 0);
+	}
+
+	@Override
+	public DataObject deleteGroups(DataObject req) {
+		String s = req.string("groupID");
+		String[] groupIDs = !isEmpty(s) ? s.split(",") : null;
+		if (isEmpty(groupIDs))
+			codeMapper.deleteCodes(null);
+		else {
+			for (String groupID: groupIDs)
+				codeMapper.deleteCodes(groupID);
+		}
+		int saved = codeGroup.deleteGroups(groupIDs);
 		return dataobject()
 			.set("saved", saved > 0);
 	}

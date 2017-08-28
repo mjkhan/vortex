@@ -219,6 +219,6 @@ public class GroupMapperTest extends VortexTest {
 
 	@After
 	public void clear() {
-		groupMapper.delete((String[])null);
+		groupMapper.deleteGroups();
 	}
 }

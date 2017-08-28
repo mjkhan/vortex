@@ -61,7 +61,7 @@ WHERE ROLE_ID = #{id}
 </update>
 
 <!-- roleIDs의 역할 정보를 삭제 -->
-<delete id="delete" parameterType="hashmap">
+<delete id="remove" parameterType="hashmap">
 DELETE FROM TBL_ROLE
 <if test="roleIDs != null">
 WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{roleID}</foreach>)

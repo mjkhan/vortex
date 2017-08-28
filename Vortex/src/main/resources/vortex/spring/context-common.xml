@@ -8,6 +8,14 @@
        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
+    <bean id="actionMapper" class="vortex.application.access.service.ActionMapper">
+    	<property name="sqlSessionFactory" ref="sqlSession"/>
+    </bean>
+    
+    <bean id="roleMapper" class="vortex.application.access.service.RoleMapper">
+    	<property name="sqlSessionFactory" ref="sqlSession"/>
+    </bean>
+
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>

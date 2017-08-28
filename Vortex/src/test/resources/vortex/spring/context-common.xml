@@ -7,16 +7,7 @@
     <context:component-scan base-package="vortex">
        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
-<!--     
-    <bean id="groupMapper" class="vortex.application.group.GroupMapper">
-    	<property name="sqlSessionFactory" ref="sqlSession"/>
-    	<property name="groupType" value="001"/>
-    </bean>
-    
-    <bean id="codeMapper" class="vortex.application.code.CodeMapper">
-    	<property name="sqlSessionFactory" ref="sqlSession"/>
-    </bean>
- -->    
+
     <bean id="actionMapper" class="vortex.application.access.service.ActionMapper">
     	<property name="sqlSessionFactory" ref="sqlSession"/>
     </bean>

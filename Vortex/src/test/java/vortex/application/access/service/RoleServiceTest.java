@@ -14,6 +14,7 @@ public class RoleServiceTest extends VortexTest {
 	private Role newRole(String name) {
 		String userID = "test user";
 		Role role = new Role();
+		role.setId(name);
 		role.setName(name);
 		role.setModifiedBy(userID);
 		return role;

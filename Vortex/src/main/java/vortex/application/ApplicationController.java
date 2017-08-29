@@ -17,10 +17,14 @@ public class ApplicationController extends AbstractObject {
 	@Autowired
 	protected EgovPropertyService properties;
 
+	private static final String AJAX = "XMLHttpRequest";
+	
 	@SuppressWarnings("unchecked")
 	protected DataObject request(HttpServletRequest hreq) {
 		DataObject req = new DataObject();
 		req.putAll(hreq.getParameterMap());
+		String reqWith = hreq.getHeader("X-Requested-With");
+		req.set("ajax", AJAX.equalsIgnoreCase(reqWith));
 		return req;
 	}
 

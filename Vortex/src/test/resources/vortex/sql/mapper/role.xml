@@ -26,13 +26,6 @@ FROM TBL_ROLE
 WHERE ROLE_ID = #{roleID}
 </select>
 
-<!-- 새 역할 아이디 가져오기 -->
-<select id="newID" resultType="string">
-SELECT LPAD(IFNULL(CAST(MAX(ROLE_ID) AS UNSIGNED) + 1, 2), 3, '0') NEW_ID
-FROM TBL_ROLE
-WHERE ROLE_ID > '001'
-</select>
-
 <!-- 역할 정보 생성 -->
 <insert id="insert" parameterType="role">
 INSERT INTO TBL_ROLE (

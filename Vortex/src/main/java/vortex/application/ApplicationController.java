@@ -4,14 +4,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.rte.fdl.property.EgovPropertyService;
 import vortex.support.AbstractObject;
 import vortex.support.data.DataObject;
 
 @Controller
 public class ApplicationController extends AbstractObject {
+	@Autowired
+	protected EgovPropertyService properties;
+
 	@SuppressWarnings("unchecked")
 	protected DataObject request(HttpServletRequest hreq) {
 		DataObject req = new DataObject();

@@ -15,14 +15,12 @@ public class GroupMapper extends AbstractMapper {
 	}
 	
 	public BoundedList<DataObject> search(DataObject req) {
-		log().debug(() -> "Searching Groups...");
 		DataObject params = ifEmpty(req, this::params);
 		List<DataObject> list = selectList("group.search", params.set("groupType", groupType));
 		return boundedList(list, params);
 	}
 	
 	public Group getGroup(String groupID) {
-		log().debug(() -> "Getting a Group('" + groupID + "')...");
 		return selectOne(
 			"group.getGroup"
 			,params().set("groupType", groupType)
@@ -35,19 +33,16 @@ public class GroupMapper extends AbstractMapper {
 		String id = group.getId();
 		if (isEmpty(id))
 			group.setId(id = selectOne("group.newID", groupType));
-		log().debug(() -> "Inserting " + group + "...");
 		insert("group.insert", group);
 		return id;
 	}
 	
 	public int update(Group group) {
 		group.setType(groupType);
-		log().debug(() -> "Updating " + group + "...");
 		return update("group.update", group);
 	}
 	
 	public int setStatus(String status, String... groupIDs) {
-		log().debug(() -> "Setting status of Groups(" + groupIDs + ")...");
 		return update(
 			"group.setStatus"
 		   , params().set("groupType", groupType)
@@ -75,7 +70,6 @@ public class GroupMapper extends AbstractMapper {
 	public int addMembers(String createdBy, String[] groupIDs, String memberType, String... memberIDs) {
 		if (isEmpty(memberIDs)) return 0;
 		
-		log().debug(() -> "Adding members to Groups...");
 		return insert(
 			"group.addMembers"
 		   , params().set("groupType", groupType)
@@ -92,7 +86,6 @@ public class GroupMapper extends AbstractMapper {
 	}
 	
 	public int deleteMembers(String[] groupIDs, String memberType, String... memberIDs) {
-		log().debug(() -> "Deleting members from Groups...");
 		return delete(
 			"group.deleteMembers"
 		   , params().set("groupType", groupType)
@@ -110,7 +103,6 @@ public class GroupMapper extends AbstractMapper {
 	public int reorderMembers(String groupID, String memberType, String... memberIDs) {
 		if (isEmpty(memberIDs)) return 0;
 		
-		log().debug(() -> "Reordering members of the Group('" + groupID + "')...");
 		return update(
 			"group.reorderMembers"
 		   , params().set("groupType", groupType)

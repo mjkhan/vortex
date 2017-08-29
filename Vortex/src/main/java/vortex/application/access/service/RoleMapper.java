@@ -16,13 +16,8 @@ public class RoleMapper extends AbstractMapper {
 	public Role getRole(String roleID) {
 		return selectOne("role.getRole", roleID);
 	}
-/*	
-	private String newID() {
-		return selectOne("role.newID");
-	}
-*/	
+
 	public String create(Role role) {
-//		role.setId(newID());
 		insert("role.insert", role);
 		return role.getId();
 	}

@@ -204,6 +204,27 @@
 		</attribute>
     </tag>
 
+    <tag>
+		<name>json</name>
+		<tag-class>vortex.support.web.tag.JSONTag</tag-class>
+		<body-content>empty</body-content>
+		<description><![CDATA[Writes the data in JSON.]]></description>
+		<attribute>
+			<name>data</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[data to be written in JSON]]></description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[
+			name of the page-scoped variable where the data in JSON is stored 
+			]]></description>
+		</attribute>
+    </tag>
+
     <function>
 		<description><![CDATA[Returns the first arg if it is not empty or the second arg if the first is empty.]]></description>
     	<name>ifEmpty</name>

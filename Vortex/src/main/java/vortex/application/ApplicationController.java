@@ -1,5 +1,6 @@
 package vortex.application;
 
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,11 @@ public class ApplicationController extends AbstractObject {
 	@SuppressWarnings("unchecked")
 	protected DataObject request(HttpServletRequest hreq) {
 		DataObject req = new DataObject();
-		req.putAll(hreq.getParameterMap());
+		Enumeration<String> names = hreq.getParameterNames();
+		while (names.hasMoreElements()) {
+			String name = names.nextElement();
+			req.put(name, hreq.getParameter(name));
+		}
 		String reqWith = hreq.getHeader("X-Requested-With");
 		req.set("ajax", AJAX.equalsIgnoreCase(reqWith));
 		return req;

@@ -66,5 +66,7 @@ function Eval(expr, debug) {
 }
 
 function ajax(options) {
+	if (options.data)
+		options.method = "POST";
 	$.ajax(options);
 }

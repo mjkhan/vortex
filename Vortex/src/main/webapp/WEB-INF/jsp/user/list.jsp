@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="vtx" uri="vortex.tld"%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -12,9 +13,9 @@
 </head>
 <body>
 <header>
+	<h1>사용자 정보</h1>
 </header>
 <main>
-<h1>사용자 정보</h1>
 <div id="searchUsers">
 	<div class="search">
 		<select id="field">
@@ -24,13 +25,13 @@
 			<option value="ALIAS">별명</option>
 		 </select>
 		 <input id="value" type="text" placeholder="검색어"/>
-		 <button type="button">찾기</button>
-		 <button type="button">추가</button>
+		 <button onclick="getUsers(0);" type="button">찾기</button>
+		 <button onclick="newUser();" type="button">추가</button>
 		 <button type="button" class="hidden">삭제</button>
 	</div>
 	<table>
 		<thead>
-			<tr><th><input id="toggleUsers" type="checkbox" /></th>
+			<tr><th><input id="toggleChecks" type="checkbox" /></th>
 				<th>아이디</th>
 				<th>이름</th>
 				<th>별명</th>
@@ -43,13 +44,14 @@
 				<td>이름</td>
 				<td>별명</td>
 				<td>등록</td>
-			</tr>--%>			
+			</tr>--%>
 		</tbody>
 	</table>
 	<div class="paging">
 		<button type="button">더 보기</button>
 	</div>
 </div>
+<div id="userDetail"></div>
 </main>
 <footer>
 </footer>
@@ -79,11 +81,24 @@ function getUsers(start) {
 	});
 }
 
+function showList(show) {
+	if (show == false)
+		$("#searchUsers").hide();
+	else
+		$("#searchUsers").fadeIn();
+}
+
+function closeUser() {
+	$("#userDetail").hide();
+	showList();
+}
+
 function newUser() {
 	ajax({
 		url:"<c:url value='/user/info.do'/>",
 		success:function(resp) {
-			log(resp);
+			showList(false);
+			$("#userDetail").html(resp).fadeIn();
 		}
 	});
 }
@@ -92,7 +107,8 @@ function getUser(userID) {
 	ajax({
 		url:"<c:url value='/user/info.do'/>?userID=" + userID,
 		success:function(resp) {
-			log(resp);
+			showList(false);
+			$("#userDetail").html(resp).fadeIn();
 		}
 	});
 }
@@ -102,7 +118,7 @@ function setUserList(resp, start) {
 		rows = [];
 	
 	if (list.length < 1) {
-		rows.push("<tr><td colspan="5">사용자를 찾지 못했습니다.</td>");
+		rows.push("<tr><td colspan=\"5\">사용자를 찾지 못했습니다.</td>");
 	} else {
 		var tag = "<tr>"
 		 + "<td><input name=\"userID\" value=\"{userID}\" type=\"checkbox\" /></td>"
@@ -137,7 +153,7 @@ function setUserList(resp, start) {
 $(function(){
 	setTitle("사용자 정보");
 	setUserList({
-		users:[],
+		users:<vtx:json data="${users}"/>,
 		more:${more},
 		next:${next}
 	}, 0);

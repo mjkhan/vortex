@@ -25,6 +25,8 @@ q:before, q:after {content:'';}
 
 *[onclick], *[href] {cursor:pointer;}
 
+input[readonly] {border:none;}
+
 .hidden {display:none;}
 
 .striped tr:nth-child(even) {background-color:#cfcfcf;}

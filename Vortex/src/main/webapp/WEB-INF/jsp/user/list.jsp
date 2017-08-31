@@ -14,13 +14,11 @@
 </head>
 <body>
 <header>
-	<h1>Vortex</h1>
+	<div class="mainTitle">Vortex</div>
+	<div class="subTitle">사용자 정보</div>
 </header>
 <main>
-<header>
-	<h1>사용자 정보</h1>
-</header>
-<div id="searchUsers">
+<div id="searchUsers" style="width:100%;">
 	<div class="search">
 		<select id="field">
 			<option value="">검색조건</option>
@@ -28,10 +26,10 @@
 			<option value="USER_NAME">이름</option>
 			<option value="ALIAS">별명</option>
 		 </select>
-		 <input id="value" type="text" placeholder="검색어"/>
+		 <input id="value" type="text" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getUsers(0);" type="button">찾기</button>
 		 <button onclick="newUser();" type="button">추가</button>
-		 <button type="button" class="hidden">삭제</button>
+		 <button id="btnRemove" onclick="removeUsers();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
@@ -63,7 +61,8 @@
 <script type="text/javascript" src="<c:url value='/asset/js/base.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
 <script type="text/javascript">
-var wctx = "${pageContext.request.contextPath}";
+var wctx = "${pageContext.request.contextPath}",
+	checkedUsers;
 
 function setTitle(title) {
 	document.title = "Vortex";
@@ -83,6 +82,10 @@ function getUsers(start) {
 			setUserList(resp, start);
 		}
 	});
+}
+
+function removeUsers() {
+	log("checkedUsers: " + checkedUsers.values());
 }
 
 function showList(show) {
@@ -152,15 +155,26 @@ function setUserList(resp, start) {
 	} else {
 		$(".paging").hide();
 	}
+	
+	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
+		.onChange(function(checked){
+			if (checked)
+				$("#btnRemove").fadeIn();
+			else
+				$("#btnRemove").fadeOut();
+		});
+	checkbox("#toggleChecks").echo(checkedUsers.target);
 }
 
 $(function(){
 	setTitle("사용자 정보");
+	onEnterPress("#value", function(){getUsers(0);});
 	setUserList({
 		users:<vtx:json data="${users}"/>,
 		more:${more},
 		next:${next}
 	}, 0);
+	
 });
 </script>
 </body>

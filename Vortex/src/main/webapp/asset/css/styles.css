@@ -25,28 +25,31 @@ q:before, q:after {content:'';}
 
 *[onclick], *[href] {cursor:pointer;}
 
+button {min-width:55px; padding:0 .25em;}
+
+input[type='text'], input[type='password'] {padding:.1em .25em;}
 input[readonly] {border:none;}
 
 .hidden {display:none;}
 
 .striped tr:nth-child(even) {background-color:#cfcfcf;}
 
-body {width:100%;}
-body > header {
-	padding:.5em;
+body, header, .mainTitle, .subTitle {width:100%;}
+
+.mainTitle {
+	font-size:2em; font-weight:bold;
 	color:white; background-color:purple;
-	font-weight:bold;
 	text-align:center;
+}
+.subTitle {
+	font-size:1em; font-weight:bold;
+	padding:.2em .5em;
+	color:white; background-color:deeppink;
 }
 
 main {
 	width:95%;
 	margin:0 auto;
-}
-
-main > header {
-	padding:.5em;
-	font-weight:bold;
 }
 
 .infoList {
@@ -58,6 +61,9 @@ main > header {
 	border-bottom:1px solid lightgrey;
 }
 .infoList th, .infoList td {
-	padding:.5em;
+	padding:.25em .1em;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    font-size:small;
 }
+
+.infoList tbody tr:nth-child(even) {background-color:#e7efff;}

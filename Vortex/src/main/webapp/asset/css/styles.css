@@ -30,3 +30,34 @@ input[readonly] {border:none;}
 .hidden {display:none;}
 
 .striped tr:nth-child(even) {background-color:#cfcfcf;}
+
+body {width:100%;}
+body > header {
+	padding:.5em;
+	color:white; background-color:purple;
+	font-weight:bold;
+	text-align:center;
+}
+
+main {
+	width:95%;
+	margin:0 auto;
+}
+
+main > header {
+	padding:.5em;
+	font-weight:bold;
+}
+
+.infoList {
+	width:100%;
+	border-top:1.75px solid lightgrey;
+	border-bottom:1.75px solid lightgrey;
+}
+.infoList thead {
+	border-bottom:1px solid lightgrey;
+}
+.infoList th, .infoList td {
+	padding:.5em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}

@@ -14,9 +14,12 @@
 </head>
 <body>
 <header>
-	<h1>사용자 정보</h1>
+	<h1>Vortex</h1>
 </header>
 <main>
+<header>
+	<h1>사용자 정보</h1>
+</header>
 <div id="searchUsers">
 	<div class="search">
 		<select id="field">
@@ -30,13 +33,13 @@
 		 <button onclick="newUser();" type="button">추가</button>
 		 <button type="button" class="hidden">삭제</button>
 	</div>
-	<table>
+	<table class="infoList">
 		<thead>
-			<tr><th><input id="toggleChecks" type="checkbox" /></th>
-				<th>아이디</th>
-				<th>이름</th>
-				<th>별명</th>
-				<th>등록</th>
+			<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
+				<th width="20%">아이디</th>
+				<th width="30%">이름</th>
+				<th width="20%">별명</th>
+				<th width="20%">등록</th>
 			</tr>
 		</thead>
 		<tbody id="userList"><%--		

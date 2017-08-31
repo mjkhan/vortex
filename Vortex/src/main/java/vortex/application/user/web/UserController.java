@@ -40,6 +40,7 @@ public class UserController extends ApplicationController {
 		user.setId(req.string("userID"));
 		user.setName(req.string("userName"));
 		user.setAlias(req.string("alias"));
+		user.setPassword(req.string("password"));
 		return modelAndView("jsonView", userService.create(req.set("user", user)));
 	}
 	
@@ -49,6 +50,7 @@ public class UserController extends ApplicationController {
 		User user = userService.getUser(req).value("user");
 		user.setName(req.string("userName"));
 		user.setAlias(req.string("alias"));
+		user.setPassword(req.string("password"));
 		return modelAndView("jsonView", userService.update(req.set("user", user)));
 	}
 	

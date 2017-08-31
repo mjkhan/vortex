@@ -6,6 +6,7 @@
 	<id property="id" column="USER_ID"/>
 	<result property="name" column="USER_NAME"/>
 	<result property="alias" column="ALIAS"/>
+	<result property="password" column="PASSWD"/>
 	<result property="createdAt" column="INS_TIME"/>
 	<result property="lastModified" column="UPD_TIME"/>
 	<result property="status" column="STATUS"/>
@@ -43,6 +44,7 @@ INSERT INTO TBL_USER (
 	USER_ID,
 	USER_NAME,
 	ALIAS,
+	PASSWD,
 	INS_TIME,
 	UPD_TIME,
 	STATUS
@@ -50,6 +52,7 @@ INSERT INTO TBL_USER (
 	#{id},
 	#{name},
 	#{alias},
+	#{password},
 	CURRENT_TIMESTAMP,
 	CURRENT_TIMESTAMP,
 	'001'
@@ -61,6 +64,7 @@ INSERT INTO TBL_USER (
 UPDATE TBL_USER SET
 	USER_NAME = #{name},
 	ALIAS = #{alias},
+	PASSWD = #{password},
 	UPD_TIME = CURRENT_TIMESTAMP
 WHERE USER_ID = #{id}
 </update>

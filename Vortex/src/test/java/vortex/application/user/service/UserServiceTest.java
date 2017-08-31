@@ -16,6 +16,7 @@ public class UserServiceTest extends VortexTest {
 		user.setId("user-id" + num);
 		user.setName("user name" + num);
 		user.setAlias("alias" + num);
+		user.setPassword("password " + num);
 		return user;
 	}
 

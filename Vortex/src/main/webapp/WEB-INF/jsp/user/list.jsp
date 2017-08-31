@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <html>
 <head>
@@ -141,7 +142,7 @@ function setUserList(resp, start) {
 		$("#userList").html(rows.join("\n"));
 	else
 		$("#userList").append(rows.join("\n"));
-	
+
 	if (resp.more) {
 		$(".paging button").removeAttr("onclick").attr("onclick", "getUsers(" + resp.next + ")");
 		$(".paging").show();

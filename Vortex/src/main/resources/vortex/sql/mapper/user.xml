@@ -14,10 +14,11 @@
 <!-- 사용자 목록 가져오기 -->
 <select id="search" parameterType="hashmap" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
-	SELECT SQL_CALC_FOUND_ROWS *, FOUND_ROWS() TOTAL_ROW_CNT
+	SELECT SQL_CALC_FOUND_ROWS *, FOUND_ROWS() AS TOTAL_ROW_CNT
 	FROM TBL_USER
 	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
 	<if test="field != null and value != null">AND #{field} LIKE CONCAT(#{value}, '%')</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">USER_ID</if>
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->

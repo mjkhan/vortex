@@ -53,7 +53,7 @@
 		<button type="button">더 보기</button>
 	</div>
 </div>
-<div id="userDetail"></div>
+<div id="userDetail" style="padding:1em 0;"></div>
 </main>
 <footer>
 </footer>

@@ -48,15 +48,27 @@ main {
 	color:white; background-color:deeppink;
 }
 
+.search {
+	padding:.75em 0;
+    font-size:small;
+}
+
 .infoList {
 	width:100%;
 	border-top:1.75px solid lightgrey;
 	border-bottom:1.75px solid lightgrey;
 }
-.infoList thead {border-bottom:1px solid lightgrey;}
+.infoList thead {background-color:lightskyblue;}
 .infoList tbody tr:nth-child(even) {background-color:#e7efff;}
 .infoList th, .infoList td {
-	padding:.25em .1em;
+	padding:.5em .2em;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     font-size:small;
 }
+
+.infoForm {
+	width:100%;
+    font-size:small;
+}
+.infoForm th {background-color:#e7efff; border-bottom:1px solid white;}
+.infoForm th, .infoForm td {padding:.5em;}

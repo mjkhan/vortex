@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="create">${empty user}</c:set>
-<table>
+<table class="infoForm">
 	<tr><th><label for="userID">아이디</label></th>
 		<td><input id="userID" value="${user.id}" type="text" required <c:if test="${!create}">readonly</c:if>/></td>
 	</tr>
@@ -27,7 +27,7 @@
 	</tr>
 </c:if>
 </table>
-<div>
+<div style="padding:.5em 0;">
 	<button onclick="saveUser();" type="button">저장</button>
 	<button onclick="closeUser();" type="button">닫기</button>
 </div>
@@ -67,4 +67,5 @@ function saveUser() {
 }
 <c:if test="${create}">$("#userID").focus();</c:if>
 <c:if test="${!create}">$("#userName").focus();</c:if>
+enterPressed(".infoForm input:not([readonly])", saveUser);
 </script>

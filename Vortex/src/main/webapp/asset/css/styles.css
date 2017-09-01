@@ -1,10 +1,8 @@
 @CHARSET "UTF-8";
 
 html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, pre, code, address, variable, form, fieldset, blockquote, input, textarea, div, header, main, footer {
-	padding:0;
-	margin:0;
-	font-size:100%;
-	font-weight:normal;
+	margin:0; padding:0;
+	font-size:100%; font-weight:normal;
 
 	-mox-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -30,11 +28,14 @@ button {min-width:55px; padding:0 .25em;}
 input[type='text'], input[type='password'] {padding:.1em .25em;}
 input[readonly] {border:none;}
 
-.hidden {display:none;}
-
-.striped tr:nth-child(even) {background-color:#cfcfcf;}
-
 body, header, .mainTitle, .subTitle {width:100%;}
+
+main {
+	width:95%;
+	margin:0 auto;
+}
+
+.hidden {display:none;}
 
 .mainTitle {
 	font-size:2em; font-weight:bold;
@@ -47,23 +48,15 @@ body, header, .mainTitle, .subTitle {width:100%;}
 	color:white; background-color:deeppink;
 }
 
-main {
-	width:95%;
-	margin:0 auto;
-}
-
 .infoList {
 	width:100%;
 	border-top:1.75px solid lightgrey;
 	border-bottom:1.75px solid lightgrey;
 }
-.infoList thead {
-	border-bottom:1px solid lightgrey;
-}
+.infoList thead {border-bottom:1px solid lightgrey;}
+.infoList tbody tr:nth-child(even) {background-color:#e7efff;}
 .infoList th, .infoList td {
 	padding:.25em .1em;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     font-size:small;
 }
-
-.infoList tbody tr:nth-child(even) {background-color:#e7efff;}

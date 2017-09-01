@@ -40,8 +40,7 @@ function saveUser() {
 		if (!value) {
 			var label = $("label[for='" + input.attr("id") + "']").html();
 			alert(label + "을(를) 입력하십시오.");
-			valid = false;
-			return false;
+			return valid = false;
 		}
 	});
 	if (!valid) return;

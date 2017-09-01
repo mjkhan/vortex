@@ -18,7 +18,7 @@
 	SELECT SQL_CALC_FOUND_ROWS *, FOUND_ROWS() AS TOTAL_ROW_CNT
 	FROM TBL_USER
 	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
-	<if test="field != null and value != null">AND #{field} LIKE CONCAT(#{value}, '%')</if>
+	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
 	ORDER BY <if test="order != null">#{order}</if><if test="order == null">USER_ID</if>
 	LIMIT #{start}, #{fetch} 
 </if>

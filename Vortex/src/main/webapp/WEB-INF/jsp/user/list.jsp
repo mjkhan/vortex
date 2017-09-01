@@ -62,7 +62,9 @@
 <script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
 <script type="text/javascript">
 var wctx = "${pageContext.request.contextPath}",
-	checkedUsers;
+	checkedUsers,
+	currentUsers,
+	afterSave;
 
 function setTitle(title) {
 	document.title = "Vortex";
@@ -76,16 +78,30 @@ function getUsers(start) {
 		data:{
 			field:$("#field").val(),
 			value:$("#value").val(),
-			start:start
+			start:start || 0
 		},
 		success:function(resp) {
-			setUserList(resp, start);
+			setUserList(resp, start || 0);
 		}
 	});
+	currentUsers = function(){getUsers(start);};
 }
 
 function removeUsers() {
-	log("checkedUsers: " + checkedUsers.values());
+	if (!confirm("선택한 사용자를 삭제하시겠습니까?")) return;
+
+	var userIDs = checkedUsers.values();
+	ajax({
+		url:"<c:url value='/user/remove.do'/>",
+		data:{userID:userIDs.join(",")},
+		success:function(resp) {
+			if (resp.saved) {
+				currentUsers();
+			} else {
+				alert("저장하지 못했습니다.");
+			}
+		}
+	});
 }
 
 function showList(show) {
@@ -96,6 +112,10 @@ function showList(show) {
 }
 
 function closeUser() {
+	if (afterSave) {
+		afterSave();
+		afterSave = null;
+	}
 	$("#userDetail").hide();
 	showList();
 }
@@ -174,7 +194,7 @@ $(function(){
 		more:${more},
 		next:${next}
 	}, 0);
-	
+	currentUsers = getUsers;
 });
 </script>
 </body>

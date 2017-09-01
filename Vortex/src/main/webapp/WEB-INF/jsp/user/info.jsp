@@ -56,6 +56,8 @@ function saveUser() {
 		},
 		success:function(resp) {
 			if (resp.saved) {
+				<c:if test='${create}'>afterSave = getUsers;</c:if>
+				<c:if test='${!create}'>afterSave = currentUsers;</c:if>
 				alert("저장됐습니다.");
 				getUser($("#userID").val());
 			} else {

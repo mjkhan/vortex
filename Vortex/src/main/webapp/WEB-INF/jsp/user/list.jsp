@@ -67,9 +67,7 @@ var wctx = "${pageContext.request.contextPath}",
 	afterSave;
 
 function setTitle(title) {
-	document.title = "Vortex";
-	if (title)
-		document.title = "Vortex - " + title;
+	document.title = title ? "Vortex - " + title : "Vortex";
 }
 
 function getUsers(start) {
@@ -90,10 +88,9 @@ function getUsers(start) {
 function removeUsers() {
 	if (!confirm("선택한 사용자를 삭제하시겠습니까?")) return;
 
-	var userIDs = checkedUsers.values();
 	ajax({
 		url:"<c:url value='/user/remove.do'/>",
-		data:{userID:userIDs.join(",")},
+		data:{userID:checkedUsers.values().join(",")},
 		success:function(resp) {
 			if (resp.saved) {
 				currentUsers();

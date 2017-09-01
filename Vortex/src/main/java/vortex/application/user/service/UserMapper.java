@@ -15,6 +15,12 @@ public class UserMapper extends AbstractMapper {
 	public BoundedList<DataObject> search(DataObject req) {
 		log().debug(() -> "Searching Users...");
 		DataObject params = ifEmpty(req, this::params);
+		
+		if (isEmpty(req.get("field")))
+			req.remove("field");
+		if (isEmpty(req.get("value")))
+			req.remove("value");
+		
 		List<DataObject> list = selectList("user.search", params);
 		return boundedList(list, params);
 	}

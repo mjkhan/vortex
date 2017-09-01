@@ -71,11 +71,15 @@ function setTitle(title) {
 }
 
 function getUsers(start) {
+	var field = $("#field").val(),
+		value = $("#value").val();
+	if (value && !field)
+		return alert("검색조건을 선택하십시오.");
 	ajax({
 		url:"<c:url value='/user/list.do'/>",
 		data:{
-			field:$("#field").val(),
-			value:$("#value").val(),
+			field:field,
+			value:value,
 			start:start || 0
 		},
 		success:function(resp) {
@@ -187,7 +191,7 @@ function setUserList(resp, start) {
 
 $(function(){
 	setTitle("사용자 정보");
-	onEnterPress("#value", function(){getUsers(0);});
+	enterPressed("#value", getUsers);
 	setUserList({
 		users:<vtx:json data="${users}"/>,
 		more:${more},

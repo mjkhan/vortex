@@ -1,4 +1,4 @@
-function onEnterPress(selector, handler) {
+function enterPressed(selector, handler) {
 	$(selector).keypress(function(evt) {
 		if (evt.which != 13) return;
 		handler.apply();

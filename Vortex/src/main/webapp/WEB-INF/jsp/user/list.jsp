@@ -81,7 +81,7 @@ function getUsers(start) {
 			start:start || 0
 		},
 		success:function(resp) {
-			setUserList(resp, start || 0);
+			setUserList(resp, start);
 		}
 	});
 	currentUsers = function(){getUsers(start);};
@@ -164,13 +164,15 @@ function setUserList(resp, start) {
 			);
 		}
 	}
-	if (start < 1)
+	if (!start)
 		$("#userList").html(rows.join("\n"));
 	else
 		$("#userList").append(rows.join("\n"));
 
 	if (resp.more) {
-		$(".paging button").removeAttr("onclick").attr("onclick", "getUsers(" + resp.next + ")");
+		$(".paging button")
+			.removeAttr("onclick")
+			.attr("onclick", "getUsers(" + resp.next + ")");
 		$(".paging").show();
 	} else {
 		$(".paging").hide();

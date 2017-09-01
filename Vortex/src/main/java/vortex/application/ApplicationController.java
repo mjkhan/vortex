@@ -30,18 +30,11 @@ public class ApplicationController extends AbstractObject {
 		req.set("ajax", AJAX.equalsIgnoreCase(reqWith));
 		return req;
 	}
-
-	protected ModelAndView setViewName(ModelAndView mv, String viewName) {
-		mv.setViewName(viewName);
-		if (!isEmpty(viewName))
-			log().debug(() -> "view name: " + viewName);
-		return mv;
-	}
 	
 	protected ModelAndView modelAndView(String viewName, Map<String, ?> map) {
 		ModelAndView result = new ModelAndView();
-		if (!isEmpty(map))
-			map.forEach((key, value) -> result.addObject(key, value));
-		return setViewName(result, viewName);
+		log().debug(() -> "view name: " + viewName);
+		result.setViewName(viewName);
+		return result.addAllObjects(map);
 	}
 }

@@ -28,7 +28,7 @@ public class UserController extends ApplicationController {
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getInfo(HttpServletRequest hreq) {
+	public ModelAndView getUser(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		return modelAndView("user/info", userService.getUser(req));
 	}

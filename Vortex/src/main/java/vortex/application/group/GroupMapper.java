@@ -16,6 +16,10 @@ public class GroupMapper extends AbstractMapper {
 	
 	public BoundedList<DataObject> search(DataObject req) {
 		DataObject params = ifEmpty(req, this::params);
+		if (isEmpty(req.get("field")))
+			req.remove("field");
+		if (isEmpty(req.get("value")))
+			req.remove("value");
 		List<DataObject> list = selectList("group.search", params.set("groupType", groupType));
 		return boundedList(list, params);
 	}

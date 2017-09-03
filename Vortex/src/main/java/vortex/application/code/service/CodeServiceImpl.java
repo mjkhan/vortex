@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vortex.application.ApplicationService;
 import vortex.application.group.Group;
 import vortex.application.group.GroupMapper;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Service("codeService")
@@ -16,8 +17,11 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	
 	@Override
 	public DataObject getGroups(DataObject req) {
+		BoundedList<DataObject> groups = codeGroup.search(req);
 		return dataobject()
-			.set("groups", codeGroup.search(req));
+			.set("groups", groups)
+			.set("more", groups.hasNext())
+			.set("next", groups.getEnd() + 1);
 	}
 
 	@Override
@@ -30,6 +34,8 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject createGroup(DataObject req) {
 		Group group = req.value("group");
+		group.setCreatedBy("admin");
+		group.setModifiedBy("admin");
 		String groupID = codeGroup.create(group);
 		return dataobject()
 			.set("saved", true)
@@ -39,6 +45,7 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject updateGroup(DataObject req) {
 		Group group = req.value("group");
+		group.setModifiedBy("admin");
 		int saved = codeGroup.update(group);
 		return dataobject()
 			.set("saved", saved == 1);

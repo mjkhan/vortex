@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
-import vortex.application.user.service.User;
+import vortex.application.User;
 import vortex.application.user.service.UserService;
 import vortex.support.data.DataObject;
 

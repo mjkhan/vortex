@@ -15,7 +15,7 @@
 <body>
 <header>
 	<div class="mainTitle">Vortex</div>
-	<div class="subTitle">코드 그룹 정보</div>
+	<div class="subTitle">공통코드 그룹 정보</div>
 </header>
 <main>
 <div id="searchGroups" style="width:100%;">
@@ -144,7 +144,7 @@ function setGroupList(resp, start) {
 		rows = [];
 	
 	if (length < 1) {
-		rows.push("<tr><td colspan=\"4\" style=\"text-align:center;\">코드그룹을 찾지 못했습니다.</td>");
+		rows.push("<tr><td colspan=\"4\" style=\"text-align:center;\">공통코드 그룹을 찾지 못했습니다.</td>");
 	} else {
 		var tag = "<tr>"
 		 + "<td><input name=\"groupID\" value=\"{groupID}\" type=\"checkbox\" /></td>"

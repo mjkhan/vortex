@@ -31,4 +31,12 @@ public class ApplicationService extends AbstractService implements ApplicationAc
 	protected DataObject dataobject() {
 		return new DataObject();
 	}
+	
+	protected User currentUser() {
+		User user = new User();
+		user.setId("user-00");
+		user.setName("User zero");
+		user.setAlias("Zero");
+		return user;
+	}
 }

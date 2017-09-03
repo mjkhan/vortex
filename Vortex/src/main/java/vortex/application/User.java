@@ -1,4 +1,4 @@
-package vortex.application.user.service;
+package vortex.application;
 
 import java.sql.Date;
 
@@ -79,5 +79,4 @@ public class User {
 	public String toString() {
 		return String.format("%s('%s', '%s')", getClass().getSimpleName(), id, name);
 	}
-	
 }

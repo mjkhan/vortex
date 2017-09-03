@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
+import vortex.application.User;
 import vortex.application.VortexTest;
 
 public class UserServiceTest extends VortexTest {

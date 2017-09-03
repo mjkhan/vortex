@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
+import vortex.application.User;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 

@@ -34,8 +34,9 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject createGroup(DataObject req) {
 		Group group = req.value("group");
-		group.setCreatedBy("admin");
-		group.setModifiedBy("admin");
+		String userID = currentUser().getId();
+		group.setCreatedBy(userID);
+		group.setModifiedBy(userID);
 		String groupID = codeGroup.create(group);
 		return dataobject()
 			.set("saved", true)
@@ -45,7 +46,7 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject updateGroup(DataObject req) {
 		Group group = req.value("group");
-		group.setModifiedBy("admin");
+		group.setModifiedBy(currentUser().getId());
 		int saved = codeGroup.update(group);
 		return dataobject()
 			.set("saved", saved == 1);
@@ -101,6 +102,7 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject createCode(DataObject req) {
 		Code code = req.value("code");
+		code.setModifiedBy(currentUser().getId());
 		int saved = codeMapper.create(code);
 		return dataobject()
 			.set("saved", saved == 1);
@@ -109,6 +111,7 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public DataObject updateCode(DataObject req) {
 		Code code = req.value("code");
+		code.setModifiedBy(currentUser().getId());
 		int saved = codeMapper.update(code);
 		return dataobject()
 			.set("saved", saved == 1);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.application.User;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;

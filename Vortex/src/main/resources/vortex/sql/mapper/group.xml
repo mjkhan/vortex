@@ -21,7 +21,7 @@
 	FROM TBL_GROUP
 	WHERE GRP_TYPE = #{groupType}
 	<if test="field != null and value != null">
-	AND #{field} LIKE CONCAT(#{value}, '%')
+	AND ${field} LIKE CONCAT(#{value}, '%')
 	</if>
 	<if test="status == null">AND STATUS &lt;&gt; '999'</if> 
 	<if test="status != null">AND STATUS = #{status}</if> 

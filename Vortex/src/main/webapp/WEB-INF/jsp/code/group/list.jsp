@@ -95,6 +95,7 @@ function removeGroups() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentGroups();
+				$("#btnRemove").fadeOut();
 			} else {
 				alert("저장하지 못했습니다.");
 			}

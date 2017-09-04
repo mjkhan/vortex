@@ -98,6 +98,7 @@ function removeUsers() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentUsers();
+				$("#btnRemove").fadeOut();
 			} else {
 				alert("저장하지 못했습니다.");
 			}

@@ -85,6 +85,7 @@ function removeCodes() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentCodes();
+				$("#btnRemove").fadeOut();
 			} else {
 				alert("저장하지 못했습니다.");
 			}

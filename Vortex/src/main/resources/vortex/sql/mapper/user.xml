@@ -26,7 +26,7 @@
 	SELECT *
 	FROM TBL_USER
 	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
-	<if test="field != null and value != null">AND #{field} LIKE CONCAT(#{value}, '%')</if>
+	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
 	ORDER BY <if test="order != null">#{order}</if><if test="order == null">USER_ID</if>
 </if>
 </select>

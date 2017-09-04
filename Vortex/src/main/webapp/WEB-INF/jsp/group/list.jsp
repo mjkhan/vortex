@@ -63,7 +63,7 @@ var wctx = "${pageContext.request.contextPath}",
 	currentGroups,
 	afterSave;
 
-function setTitle(title) {
+function docTitle(title) {
 	document.title = title ? "Vortex - " + title : "Vortex";
 }
 
@@ -186,7 +186,7 @@ function setGroupList(resp, start) {
 }
 
 $(function(){
-	setTitle("코드그룹 정보");
+	docTitle("데이터 그룹 정보");
 	enterPressed("#value", getGroups);
 	setGroupList({
 		groups:<vtx:json data="${groups}"/>,

@@ -35,6 +35,9 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Override
 	public DataObject createGroup(DataObject req) {
 		Group group = req.value("group");
+		String userID = currentUser().getId();
+		group.setCreatedBy(userID);
+		group.setModifiedBy(userID);
 		String groupID = actionGroup.create(group);
 		return dataobject()
 			.set("saved", true)
@@ -44,6 +47,8 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Override
 	public DataObject updateGroup(DataObject req) {
 		Group group = req.value("group");
+		String userID = currentUser().getId();
+		group.setModifiedBy(userID);
 		int saved = actionGroup.update(group);
 		return dataobject()
 			.set("saved", saved == 1);
@@ -96,6 +101,9 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Override
 	public DataObject createAction(DataObject req) {
 		Action action = req.value("action");
+		String userID = currentUser().getId();
+		action.setModifiedBy(userID);
+
 		int saved = actionMapper.create(action);
 		return dataobject()
 			.set("saved", saved == 1);
@@ -104,6 +112,9 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Override
 	public DataObject updateAction(DataObject req) {
 		Action action = req.value("action");
+		String userID = currentUser().getId();
+		action.setModifiedBy(userID);
+
 		int saved = actionMapper.update(action);
 		return dataobject()
 			.set("saved", saved == 1);

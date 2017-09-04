@@ -4,16 +4,16 @@
 <c:set var="create">${empty user}</c:set>
 <table class="infoForm">
 	<tr><th><label for="userID">아이디</label></th>
-		<td><input id="userID" value="${user.id}" type="text" required <c:if test="${!create}">readonly</c:if>/></td>
+		<td><input id="userID" value="${user.id}" type="text" required maxlength="32" <c:if test="${!create}">readonly</c:if>/></td>
 	</tr>
 	<tr><th><label for="userName">이름</label></th>
-		<td><input id="userName" value="${user.name}" type="text" required/></td>
+		<td><input id="userName" value="${user.name}" type="text" required maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="alias">별명</label></th>
-		<td><input id="alias" value="${user.alias}" type="text"/></td>
+		<td><input id="alias" value="${user.alias}" type="text" maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="password">비밀번호</label></th>
-		<td><input id="password" value="${user.password}" type="password" required/></td>
+		<td><input id="password" value="${user.password}" type="password" required maxlength="32" /></td>
 	</tr>
 <c:if test="${!create}">
 	<tr><th>등록</th>

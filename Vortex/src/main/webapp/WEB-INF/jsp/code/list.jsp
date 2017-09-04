@@ -57,7 +57,7 @@ var wctx = "${pageContext.request.contextPath}",
 	currentCodes,
 	afterSave;
 
-function setTitle(title) {
+function docTitle(title) {
 	document.title = title ? "Vortex - " + title : "Vortex";
 }
 
@@ -163,7 +163,7 @@ function setCodeList(resp) {
 }
 
 $(function(){
-	setTitle("공통 코드");
+	docTitle("공통 코드");
 	setCodeList({
 		codes:<vtx:json data="${codes}"/>
 	});

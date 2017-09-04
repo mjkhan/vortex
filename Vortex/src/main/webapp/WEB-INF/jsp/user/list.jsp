@@ -66,7 +66,7 @@ var wctx = "${pageContext.request.contextPath}",
 	currentUsers,
 	afterSave;
 
-function setTitle(title) {
+function docTitle(title) {
 	document.title = title ? "Vortex - " + title : "Vortex";
 }
 
@@ -191,7 +191,7 @@ function setUserList(resp, start) {
 }
 
 $(function(){
-	setTitle("사용자 정보");
+	docTitle("사용자 정보");
 	enterPressed("#value", getUsers);
 	setUserList({
 		users:<vtx:json data="${users}"/>,

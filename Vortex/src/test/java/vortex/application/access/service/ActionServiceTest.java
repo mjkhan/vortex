@@ -16,9 +16,9 @@ public class ActionServiceTest extends VortexTest {
 	private Group newGroup(int num) {
 		Group group = new Group();
 		group.setName("action group " + num);
-		String userID = "test user";
-		group.setCreatedBy(userID);
-		group.setModifiedBy(userID);
+//		String userID = "test user";
+//		group.setCreatedBy(userID);
+//		group.setModifiedBy(userID);
 		return group;
 	}
 	

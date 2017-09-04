@@ -4,10 +4,10 @@
 <c:set var="create">${empty group}</c:set>
 <table class="infoForm">
 	<tr><th><label for="groupID">아이디</label></th>
-		<td><input id="groupID" value="${group.id}" type="text" required <c:if test="${!create}">readonly</c:if>/></td>
+		<td><input id="groupID" value="${group.id}" type="text" required maxlength="3" <c:if test="${!create}">readonly</c:if>/></td>
 	</tr>
 	<tr><th><label for="groupName">이름</label></th>
-		<td><input id="groupName" value="${group.name}" type="text" required/></td>
+		<td><input id="groupName" value="${group.name}" type="text" required maxlength="64" /></td>
 	</tr>
 	<tr><th><label for="descrption">설명</label></th>
 		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${group.description}</textarea>

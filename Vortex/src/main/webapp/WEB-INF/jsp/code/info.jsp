@@ -4,10 +4,10 @@
 <c:set var="create">${empty code}</c:set>
 <table class="infoForm">
 	<tr><th><label for="code">코드</label></th>
-		<td><input id="code" value="${code.code}" type="text" required <c:if test="${!create}">readonly</c:if>/></td>
+		<td><input id="code" value="${code.code}" type="text" required maxlength="32" <c:if test="${!create}">readonly</c:if>/></td>
 	</tr>
 	<tr><th><label for="value">코드값</label></th>
-		<td><input id="value" value="${code.value}" type="text" required/></td>
+		<td><input id="value" value="${code.value}" type="text" required maxlength="64" /></td>
 	</tr>
 	<tr><th><label for="descrption">설명</label></th>
 		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${code.description}</textarea>

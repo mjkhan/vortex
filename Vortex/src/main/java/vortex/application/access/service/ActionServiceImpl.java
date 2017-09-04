@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import vortex.application.ApplicationService;
 import vortex.application.group.Group;
 import vortex.application.group.GroupMapper;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Service("actionService")
@@ -21,8 +22,11 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 
 	@Override
 	public DataObject getGroups(DataObject req) {
+		BoundedList<DataObject> groups = actionGroup.search(req);
 		return dataobject()
-			.set("groups", actionGroup.search(req));
+			.set("groups", groups)
+			.set("more", groups.hasNext())
+			.set("next", groups.getEnd() + 1);
 	}
 
 	@Override

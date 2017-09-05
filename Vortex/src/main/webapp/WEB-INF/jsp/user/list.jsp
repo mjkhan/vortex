@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <html>
 <head>
@@ -40,13 +41,15 @@
 				<th width="20%">등록</th>
 			</tr>
 		</thead>
-		<tbody id="userList"><%--		
-			<tr><td><input name="userID" value="아이디" type="checkbox" /></td>
-				<td><a onclick="">아이디</a></td>
-				<td>이름</td>
-				<td>별명</td>
-				<td>등록</td>
-			</tr>--%>
+		<tbody id="userList">
+			<c:set var="notFound"><tr><td colspan=\"5\" style=\"text-align:center;\">사용자를 찾지 못했습니다.</td></c:set>
+			<c:set var="userRow"><tr>
+				<td><input name="userID" value="{userID}" type="checkbox" /></td>
+				<td><a onclick="getUser('{userID}')">{userID}</a></td>
+				<td>{userName}</td>
+				<td>{alias}</td>
+				<td>{insTime}</td>
+			</tr></c:set>
 		</tbody>
 	</table>
 	<div class="paging">
@@ -98,7 +101,6 @@ function removeUsers() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentUsers();
-				$("#btnRemove").fadeOut();
 			} else {
 				alert("저장하지 못했습니다.");
 			}
@@ -148,7 +150,7 @@ function setUserList(resp, start) {
 		rows = [];
 	
 	if (length < 1) {
-		rows.push("<tr><td colspan=\"5\" style=\"text-align:center;\">사용자를 찾지 못했습니다.</td>");
+		rows.push("${notFound}");
 	} else {
 		var tag = "<tr>"
 		 + "<td><input name=\"userID\" value=\"{userID}\" type=\"checkbox\" /></td>"
@@ -167,9 +169,10 @@ function setUserList(resp, start) {
 			);
 		}
 	}
-	if (!start)
+	if (!start) {
 		$("#userList").html(rows.join("\n"));
-	else
+		$("#btnRemove").fadeOut();
+	} else
 		$("#userList").append(rows.join("\n"));
 
 	if (resp.more) {

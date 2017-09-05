@@ -26,6 +26,7 @@ q:before, q:after {content:'';}
 button {min-width:55px; padding:0 .25em;}
 
 input[type='text'], input[type='password'] {padding:.1em .25em;}
+input[type='number'] {text-align:right;}
 input[readonly] {border:none;}
 
 body, header, .mainTitle, .subTitle {width:100%;}

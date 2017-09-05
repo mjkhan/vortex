@@ -1,30 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="create">${empty code}</c:set>
+<c:set var="create">${empty action}</c:set>
 <table class="infoForm">
-	<tr><th><label for="code">코드</label></th>
-		<td><input id="code" value="${code.code}" type="text" required maxlength="32" <c:if test="${!create}">readonly</c:if>/></td>
+	<tr><th><label for="actionID">아이디</label></th>
+		<td><input id="actionID" value="${action.id}" type="text" required maxlength="32" <c:if test="${!create}">readonly</c:if>/></td>
 	</tr>
-	<tr><th><label for="value">코드값</label></th>
-		<td><input id="value" value="${code.value}" type="text" required maxlength="64" /></td>
+	<tr><th><label for="actionName">이름</label></th>
+		<td><input id="actionName" value="${action.name}" type="text" required maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="descrption">설명</label></th>
-		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${code.description}</textarea>
+		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${action.description}</textarea>
 		</td>
 	</tr>
 <c:if test="${!create}">
 	<tr><th>수정</th>
-		<td><fmt:formatDate value="${code.lastModified}" pattern="yy-MM-dd hh:mm:ss"/></td>
+		<td><fmt:formatDate value="${action.lastModified}" pattern="yy-MM-dd hh:mm:ss"/></td>
 	</tr>
 </c:if>
 </table>
 <div style="padding:.5em 0;">
-	<button onclick="saveCode();" type="button">저장</button>
-	<button onclick="closeCode();" type="button">닫기</button>
+	<button onclick="saveAction();" type="button">저장</button>
+	<button onclick="closeAction();" type="button">닫기</button>
 </div>
 <script type="text/javascript">
-function saveCode() {
+function saveAction() {
 	var valid = true;
 	$("input[required]").each(function(){
 		var input = $(this),
@@ -38,25 +38,25 @@ function saveCode() {
 	if (!valid) return;
 	
 	ajax({
-		url:"<c:if test='${create}'><c:url value='/code/create.do'/></c:if><c:if test='${!create}'><c:url value='/code/update.do'/></c:if>",
+		url:"<c:if test='${create}'><c:url value='/action/create.do'/></c:if><c:if test='${!create}'><c:url value='/action/update.do'/></c:if>",
 		data:{
 			groupID:$("#groupID").val(),
-			code:$("#code").val(),
-			value:$("#value").val(),
+			actionID:$("#actionID").val(),
+			actionName:$("#actionName").val(),
 			description:$("#description").val()
 		},
 		success:function(resp) {
 			if (resp.saved) {
-				afterSave = getCodes;
+				afterSave = getActions;
 				alert("저장됐습니다.");
-				getCode($("#code").val());
+				getAction($("#actionID").val());
 			} else {
 				alert("저장하지 못했습니다.");
 			}
 		}
 	});
 }
-<c:if test="${create}">$("#code").focus();</c:if>
-<c:if test="${!create}">$("#value").focus();</c:if>
-enterPressed(".infoForm input:not([readonly])", saveCode);
+<c:if test="${create}">$("#actionID").focus();</c:if>
+<c:if test="${!create}">$("#actionName").focus();</c:if>
+enterPressed(".infoForm input:not([readonly])", saveAction);
 </script>

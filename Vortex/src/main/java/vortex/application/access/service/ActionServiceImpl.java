@@ -128,7 +128,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	public DataObject deleteActions(DataObject req) {
 		String actionID = req.string("actionID");
 		String[] actionIDs = !isEmpty(actionID) ? actionID.split(",") : null;
-		
+		roleMemberMapper.deleteActions(null, actionIDs);
 		int saved = actionMapper.deleteActions(null, actionIDs);
 		return dataobject()
 			.set("saved", saved > 0);

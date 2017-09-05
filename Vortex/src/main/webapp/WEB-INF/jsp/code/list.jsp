@@ -34,13 +34,14 @@
 				<th width="20%">수정</th>
 			</tr>
 		</thead>
-		<tbody id="codeList"><%--		
-			<tr><td><input name="code" value="아이디" type="checkbox" /></td>
-				<td><a onclick="">아이디</a></td>
-				<td>이름</td>
-				<td>별명</td>
-				<td>등록</td>
-			</tr>--%>
+		<tbody id="codeList">
+		<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">코드를 찾지 못했습니다.</td></c:set>
+		<c:set var="codeRow"><tr>
+				<td><input name="code" value="{code}" type="checkbox" /></td>
+				<td><a onclick="getCode('{code}')">{code}</a></td>
+				<td>{value}</td>
+				<td>{updTime}</td>
+			</tr></c:set>
 		</tbody>
 	</table>
 </div>
@@ -85,7 +86,6 @@ function removeCodes() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentCodes();
-				$("#btnRemove").fadeOut();
 			} else {
 				alert("저장하지 못했습니다.");
 			}
@@ -134,14 +134,9 @@ function setCodeList(resp) {
 		rows = [];
 	
 	if (list.length < 1) {
-		rows.push("<tr><td colspan=\"4\" style=\"text-align:center;\">코드를 찾지 못했습니다.</td>");
+		rows.push("${vtx:jstring(notFound)}");
 	} else {
-		var tag = "<tr>"
-		 + "<td><input name=\"code\" value=\"{code}\" type=\"checkbox\" /></td>"
-		 + "<td><a onclick=\"getCode('{code}')\">{code}</a></td>"
-		 + "<td>{value}</td>"
-		 + "<td>{updTime}</td>"
-		 + "</tr>";
+		var tag = "${vtx:jstring(codeRow)}";
 		for (var i = 0; i < list.length; ++i) {
 			var row = list[i];
 			rows.push(
@@ -161,6 +156,7 @@ function setCodeList(resp) {
 				$("#btnRemove").fadeOut();
 		});
 	checkbox("#toggleChecks").echo(checkedCodes.target);
+	$("#btnRemove").fadeOut();
 }
 
 $(function(){

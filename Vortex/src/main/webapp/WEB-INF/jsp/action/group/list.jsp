@@ -38,12 +38,14 @@
 				<th width="20%">등록</th>
 			</tr>
 		</thead>
-		<tbody id="groupList"><%--		
-			<tr><td><input name="groupID" value="아이디" type="checkbox" /></td>
-				<td><a onclick="">아이디</a></td>
-				<td>이름</td>
-				<td>등록</td>
-			</tr>--%>
+		<tbody id="groupList">
+		<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">액션 그룹을 찾지 못했습니다.</td></c:set>
+		<c:set var="groupRow"><tr>
+			<td><input name="groupID" value="{groupID}" type="checkbox" /></td>
+				<td><a onclick="getGroup('{groupID}')">{groupID}</a></td>
+				<td>{groupName}</td>
+				<td>{insTime}</td>
+			</tr></c:set>
 		</tbody>
 	</table>
 	<div class="paging">
@@ -95,7 +97,6 @@ function removeGroups() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentGroups();
-				$("#btnRemove").fadeOut();
 			} else {
 				alert("저장하지 못했습니다.");
 			}
@@ -145,14 +146,9 @@ function setGroupList(resp, start) {
 		rows = [];
 	
 	if (length < 1) {
-		rows.push("<tr><td colspan=\"4\" style=\"text-align:center;\">액션 그룹을 찾지 못했습니다.</td>");
+		rows.push("${vtx:jstring(notFound)}");
 	} else {
-		var tag = "<tr>"
-		 + "<td><input name=\"groupID\" value=\"{groupID}\" type=\"checkbox\" /></td>"
-		 + "<td><a onclick=\"getGroup('{groupID}')\">{groupID}</a></td>"
-		 + "<td>{groupName}</td>"
-		 + "<td>{insTime}</td>"
-		 + "</tr>";
+		var tag = "${vtx:jstring(groupRow)}";
 		for (var i = 0; i < length; ++i) {
 			var row = list[i];
 			rows.push(
@@ -162,9 +158,10 @@ function setGroupList(resp, start) {
 			);
 		}
 	}
-	if (!start)
+	if (!start) {
 		$("#groupList").html(rows.join("\n"));
-	else
+		$("#btnRemove").fadeOut();
+	} else
 		$("#groupList").append(rows.join("\n"));
 
 	if (resp.more) {

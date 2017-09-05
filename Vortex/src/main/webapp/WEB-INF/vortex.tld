@@ -231,4 +231,11 @@
     	<function-class>vortex.support.Assert</function-class>
     	<function-signature>java.lang.Object ifEmpty(java.lang.Object, java.lang.Object)</function-signature>
     </function>
+
+    <function>
+		<description><![CDATA[Returns the first arg if it is not empty or the second arg if the first is empty.]]></description>
+    	<name>jstring</name>
+    	<function-class>vortex.support.web.tag.ToJScript</function-class>
+    	<function-signature>java.lang.String get(java.lang.String)</function-signature>
+    </function>
 </taglib>

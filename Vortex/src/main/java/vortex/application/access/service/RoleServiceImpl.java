@@ -29,6 +29,7 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 	@Override
 	public DataObject create(DataObject req) {
 		Role role = req.value("role");
+		role.setModifiedBy(currentUser().getId());
 		String roleID = roleMapper.create(role);
 		return dataobject()
 			.set("saved", true)
@@ -38,6 +39,7 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 	@Override
 	public DataObject update(DataObject req) {
 		Role role = req.value("role");
+		role.setModifiedBy(currentUser().getId());
 		int saved = roleMapper.update(role);
 		return dataobject()
 			.set("saved", saved == 1);

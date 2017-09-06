@@ -17,10 +17,10 @@
 	</tr>
 <c:if test="${!create}">
 	<tr><th>등록</th>
-		<td><fmt:formatDate value="${user.createdAt}" pattern="yy-MM-dd hh:mm:ss"/></td>
+		<td><fmt:formatDate value="${user.createdAt}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
 	<tr><th>수정</th>
-		<td><fmt:formatDate value="${user.lastModified}" pattern="yy-MM-dd hh:mm:ss"/></td>
+		<td><fmt:formatDate value="${user.lastModified}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
 	<tr><th>상태</th>
 		<td>${user.status}</td>

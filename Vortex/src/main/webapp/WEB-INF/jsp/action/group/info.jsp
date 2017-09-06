@@ -15,10 +15,10 @@
 	</tr>
 <c:if test="${!create}">
 	<tr><th>등록</th>
-		<td><fmt:formatDate value="${group.createdAt}" pattern="yy-MM-dd hh:mm:ss"/></td>
+		<td><fmt:formatDate value="${group.createdAt}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
 	<tr><th>수정</th>
-		<td><fmt:formatDate value="${group.lastModified}" pattern="yy-MM-dd hh:mm:ss"/></td>
+		<td><fmt:formatDate value="${group.lastModified}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
 </c:if>
 </table>

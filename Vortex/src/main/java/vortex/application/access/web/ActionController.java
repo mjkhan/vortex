@@ -86,8 +86,8 @@ public class ActionController extends ApplicationController {
 		DataObject req = request(hreq);
 		Action action = new Action();
 		action.setGroupID(req.string("groupID"));
-		action.setId(req.string("actionID"));
 		action.setName(req.string("actionName"));
+		action.setPath(req.string("actionPath"));
 		action.setDescription(req.string("description"));
 		return modelAndView("jsonView", actionService.createAction(req.set("action", action)));
 	}
@@ -97,6 +97,7 @@ public class ActionController extends ApplicationController {
 		DataObject req = request(hreq);
 		Action action = actionService.getAction(req).value("action");
 		action.setName(req.string("actionName"));
+		action.setPath(req.string("actionPath"));
 		action.setDescription(req.string("description"));
 		return modelAndView("jsonView", actionService.updateAction(req.set("action", action)));
 	}

@@ -108,9 +108,10 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		String userID = currentUser().getId();
 		action.setModifiedBy(userID);
 
-		int saved = actionMapper.create(action);
+		String id = actionMapper.create(action);
 		return dataobject()
-			.set("saved", saved == 1);
+			.set("actionID", id)
+			.set("saved", !isEmpty(id));
 	}
 
 	@Override

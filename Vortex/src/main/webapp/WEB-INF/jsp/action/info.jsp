@@ -3,11 +3,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="create">${empty action}</c:set>
 <table class="infoForm">
+<c:if test="${!create}">
 	<tr><th><label for="actionID">아이디</label></th>
-		<td><input id="actionID" value="${action.id}" type="text" required maxlength="32" <c:if test="${!create}">readonly</c:if>/></td>
+		<td><input id="actionID" value="${action.id}" type="text" readonly /></td>
 	</tr>
+</c:if>
 	<tr><th><label for="actionName">이름</label></th>
 		<td><input id="actionName" value="${action.name}" type="text" required maxlength="32" /></td>
+	</tr>
+	<tr><th><label for="actionPath">경로</label></th>
+		<td><input id="actionPath" value="${action.path}" type="text" required maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="descrption">설명</label></th>
 		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${action.description}</textarea>
@@ -43,20 +48,20 @@ function saveAction() {
 			groupID:$("#groupID").val(),
 			actionID:$("#actionID").val(),
 			actionName:$("#actionName").val(),
+			actionPath:$("#actionPath").val(),
 			description:$("#description").val()
 		},
 		success:function(resp) {
 			if (resp.saved) {
 				afterSave = getActions;
 				alert("저장됐습니다.");
-				getAction($("#actionID").val());
+				getAction(resp.actionID);
 			} else {
 				alert("저장하지 못했습니다.");
 			}
 		}
 	});
 }
-<c:if test="${create}">$("#actionID").focus();</c:if>
-<c:if test="${!create}">$("#actionName").focus();</c:if>
+$("#actionName").focus();
 enterPressed(".infoForm input:not([readonly])", saveAction);
 </script>

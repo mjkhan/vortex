@@ -1,5 +1,6 @@
 package vortex.application.access.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -24,9 +25,9 @@ public class ActionServiceTest extends VortexTest {
 	
 	private Action newAction(String groupID, int num) {
 		Action action = new Action();
-		action.setId("action-" + num);
 		action.setGroupID(groupID);
 		action.setName("action name " + num);
+		action.setPath("action-" + num);
 		action.setModifiedBy("test user");
 		return action;
 	}
@@ -76,8 +77,7 @@ public class ActionServiceTest extends VortexTest {
 	public void createAction() {
 		String groupID = "001";
 		Action action = newAction(groupID, 0);
-		actionService.createAction(dataObject().set("action", action));
-		String id = action.getId(),
+		String id = actionService.createAction(dataObject().set("action", action)).string("actionID"),
 			   name = action.getName();
 		
 		Action loaded = actionService.getAction(dataObject().set("actionID", id)).value("action");
@@ -91,8 +91,7 @@ public class ActionServiceTest extends VortexTest {
 	public void updateAction() {
 		String groupID = "001";
 		Action action = newAction(groupID, 0);
-		actionService.createAction(dataObject().set("action", action));
-		String id = action.getId(),
+		String id = actionService.createAction(dataObject().set("action", action)).string("actionID"),
 			   name = action.getName();
 		
 		Action loaded = actionService.getAction(dataObject().set("actionID", id)).value("action");
@@ -111,11 +110,14 @@ public class ActionServiceTest extends VortexTest {
 	
 	@Test
 	public void deleteActions() {
+		ArrayList<String> actionIDs = new ArrayList<>();
 		String groupID = "001";
 		for (int i = 0; i < 3; ++i) {
-			actionService.createAction(dataObject().set("action", newAction(groupID, i)));
+			String id = actionService.createAction(dataObject().set("action", newAction(groupID, i))).string("actionID");
+			actionIDs.add(id);
 		}
-		boolean saved = actionService.deleteActions(dataObject().set("actionID", "action-0,action-1")).bool("saved");
+		String delete = actionIDs.get(0) + "," + actionIDs.get(1);
+		boolean saved = actionService.deleteActions(dataObject().set("actionID", delete)).bool("saved");
 		Assert.assertEquals(true, saved);
 		saved = actionService.deleteActions(dataObject()).bool("saved");
 		Assert.assertEquals(true, saved);

@@ -7,6 +7,7 @@ public class Action {
 		id,
 		groupID,
 		name,
+		path,
 		description,
 		modifiedBy;
 	private Date lastModified;
@@ -33,6 +34,14 @@ public class Action {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+	
+	public void setPath(String path) {
+		this.path = path;
 	}
 	
 	public String getDescription() {

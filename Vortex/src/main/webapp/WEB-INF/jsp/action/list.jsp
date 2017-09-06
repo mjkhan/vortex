@@ -29,8 +29,8 @@
 	<table class="infoList">
 		<thead>
 			<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
-				<th width="20%">아이디</th>
-				<th width="30%">이름</th>
+				<th width="20%">이름</th>
+				<th width="30%">경로</th>
 				<th width="20%">수정</th>
 			</tr>
 		</thead>
@@ -38,8 +38,8 @@
 			<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">액션정보를 찾지 못했습니다.</td></c:set>
 			<c:set var="actionRow"><tr>
 				<td><input name="actionID" value="{actionID}" type="checkbox" /></td>
-				<td><a onclick="getAction('{actionID}')">{actionID}</a></td>
-				<td>{actionName}</td>
+				<td><a onclick="getAction('{actionID}')">{actionName}</a></td>
+				<td>{actionPath}</td>
 				<td>{updTime}</td>
 			</tr></c:set>
 		</tbody>
@@ -75,7 +75,7 @@ function getActions() {
 }
 
 function removeActions() {
-	if (!confirm("선택한 코드를 삭제하시겠습니까?")) return;
+	if (!confirm("선택한 액션을 삭제하시겠습니까?")) return;
 
 	ajax({
 		url:"<c:url value='/action/delete.do'/>",
@@ -142,6 +142,7 @@ function setActionList(resp) {
 			rows.push(
 				tag.replace(/{actionID}/g, row.ACT_ID)
 				   .replace(/{actionName}/g, row.ACT_NAME)
+				   .replace(/{actionPath}/g, row.ACT_PATH)
 				   .replace(/{updTime}/g, row.UPD_TIME)
 			);
 		}

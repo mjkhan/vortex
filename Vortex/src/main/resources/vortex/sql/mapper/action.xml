@@ -6,6 +6,7 @@
 	<id property="id" column="ACT_ID"/>
 	<result property="groupID" column="GRP_ID"/>
 	<result property="name" column="ACT_NAME"/>
+	<result property="path" column="ACT_PATH"/>
 	<result property="description" column="DESCRP"/>
 	<result property="modifiedBy" column="UPD_ID"/>
 	<result property="lastModified" column="UPD_TIME"/>
@@ -13,9 +14,9 @@
 	
 <!-- 그룹별 액션 목록 가져오기 -->
 <select id="getActions" parameterType="string" resultType="dataobject">
-	SELECT * FROM TBL_ACTION
-	WHERE GRP_ID = #{groupID}
-	ORDER BY ACT_ID
+SELECT * FROM TBL_ACTION
+WHERE GRP_ID = #{groupID}
+ORDER BY ACT_ID
 </select>
 	
 <!-- 액션 가져오기 -->
@@ -25,12 +26,19 @@ FROM TBL_ACTION
 WHERE ACT_ID = #{actionID}
 </select>
 
+<!-- 액션 아이디 가져오기 -->
+<select id="newID" resultType="string">
+SELECT LPAD(IFNULL((CAST(MAX(ACT_ID) AS UNSIGNED) + 1), 1), 5, '0') NEW_ID
+FROM TBL_ACTION;
+</select>
+
 <!-- 액션 정보 생성 -->
 <insert id="insert" parameterType="action">
 INSERT INTO TBL_ACTION (
 	ACT_ID,
 	GRP_ID,
 	ACT_NAME,
+	ACT_PATH,
 	DESCRP,
 	UPD_ID,
 	UPD_TIME
@@ -38,6 +46,7 @@ INSERT INTO TBL_ACTION (
 	#{id},
 	#{groupID},
 	#{name},
+	#{path},
 	#{description},
 	#{modifiedBy},
 	CURRENT_TIMESTAMP
@@ -48,6 +57,7 @@ INSERT INTO TBL_ACTION (
 <update id="update" parameterType="action">
 UPDATE TBL_ACTION SET
 	ACT_NAME = #{name},
+	ACT_PATH = #{path},
 	DESCRP = #{description},
 	UPD_ID = #{modifiedBy},
 	UPD_TIME = CURRENT_TIMESTAMP

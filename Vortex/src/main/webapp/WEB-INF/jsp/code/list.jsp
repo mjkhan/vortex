@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
+<%! private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd hh:mm:ss"); %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -162,7 +163,7 @@ function setCodeList(resp) {
 $(function(){
 	docTitle("공통 코드");
 	setCodeList({
-		codes:<vtx:json data="${codes}"/>
+		codes:<vtx:json data="${codes}" dateFormat="<%=dateFormat%>"/>
 	});
 	currentCodes = getCodes;
 });

@@ -12,9 +12,7 @@
 
 <!-- 역할 목록 가져오기 -->
 <select id="getRoles" resultType="dataobject">
-SELECT 'everyone' ROLE_ID, '모두' ROLE_NAME, NULL UPD_ID, CURRENT_TIMESTAMP UPD_TIME UNION
-SELECT 'authenticated' ROLE_ID, '로그인 사용자' ROLE_NAME, NULL UPD_ID, CURRENT_TIMESTAMP UPD_TIME UNION
-SELECT ROLE_ID, ROLE_NAME, UPD_ID, UPD_TIME
+SELECT *
 FROM TBL_ROLE
 ORDER BY ROLE_ID
 </select>

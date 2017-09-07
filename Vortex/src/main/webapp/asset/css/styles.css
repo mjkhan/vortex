@@ -56,6 +56,7 @@ main {
 
 .infoList {
 	width:100%;
+	table-layout:fixed;
 	border-top:1.75px solid lightgrey;
 	border-bottom:1.75px solid lightgrey;
 }

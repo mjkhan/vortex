@@ -1,7 +1,5 @@
 package vortex.support.data;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import vortex.support.Assert;
@@ -101,29 +99,5 @@ public class DataObject extends GenericMap<Object> {
 
 		Boolean bool = obj instanceof Boolean ? Boolean.class.cast(obj) : Boolean.valueOf(obj.toString());
 		return bool.booleanValue();
-	}
-	/**지정하는 이름의 필드값을 배열로 캐스팅하여 반환한다.
-	 * @param name 필드이름
-	 * @return 배열로 캐스팅한 필드값
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T[] array(String name) {
-		return (T[])get(name);
-	}
-	/**지정하는 이름의 필드값을 List로 캐스팅하여 반환한다.
-	 * @param name 필드이름
-	 * @return List로 캐스팅한 필드값
-	 */
-	@SuppressWarnings("unchecked")
-	public <E, T extends List<E>> T asList(String name) {
-		return (T)get(name);
-	}
-	/**지정하는 이름의 필드값을 Map으로 캐스팅하여 반환한다.
-	 * @param name 필드이름
-	 * @return Map으로 캐스팅한 필드값
-	 */
-	@SuppressWarnings("unchecked")
-	public <K, V, T extends Map<K, V>> T asMap(String name) {
-		return (T)get(name);
 	}
 }

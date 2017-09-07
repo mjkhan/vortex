@@ -66,6 +66,7 @@ main {
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     font-size:small;
 }
+.infoList a[onclick], .infoList a[href] {color:navy; text-decoration:underline;}
 
 .infoForm {
 	width:100%;

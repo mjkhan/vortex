@@ -190,7 +190,7 @@ $(function(){
 	docTitle("사용자 정보");
 	enterPressed("#value", getUsers);
 	setUserList({
-		users:<vtx:json data="${users}" dateFormat="${dateFormat}%>"/>,
+		users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
 		more:${more},
 		next:${next}
 	}, 0);

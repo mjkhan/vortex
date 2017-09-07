@@ -119,11 +119,11 @@ public class CodeServiceTest extends VortexTest {
 		
 		codeService.deleteCodes(req.set("groupID", "001").set("code", "001-code0"));
 		req.clear();
-		Map<String, List<DataObject>> codes = codeService.getCodesOf(req.set("groupID", groupIDs)).asMap("codes");
+		Map<String, List<DataObject>> codes = codeService.getCodesOf(req.set("groupID", groupIDs)).value("codes");
 		List<DataObject> code001 = codes.get("001");
 		Assert.assertEquals(1, code001.size());
 		codeService.deleteCodes(req.set("groupID", "001"));
-		codes = codeService.getCodesOf(req.set("groupID", groupIDs)).asMap("codes");
+		codes = codeService.getCodesOf(req.set("groupID", groupIDs)).value("codes");
 		code001 = codes.get("001");
 		Assert.assertNull(code001);
 	}

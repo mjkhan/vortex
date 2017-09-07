@@ -205,6 +205,25 @@
     </tag>
 
     <tag>
+		<name>script</name>
+		<tag-class>vortex.support.web.tag.ScriptTag</tag-class>
+		<body-content>JSP</body-content>
+		<description><![CDATA[Writes the data in JSON.]]></description>
+		<attribute>
+			<name>type</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[data to be written in JSON]]></description>
+		</attribute>
+		<attribute>
+			<name>write</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[ObjectMapper]]></description>
+		</attribute>
+    </tag>
+
+    <tag>
 		<name>json</name>
 		<tag-class>vortex.support.web.tag.JSONTag</tag-class>
 		<body-content>empty</body-content>

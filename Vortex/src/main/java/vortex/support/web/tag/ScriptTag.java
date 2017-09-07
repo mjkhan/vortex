@@ -16,9 +16,22 @@ public class ScriptTag extends VortexTag {
 	public void setWrite(boolean write) {
 		this.write = write;
 	}
-	
+/*	
+	private void printAttrs() {
+		String[] attrs = {"request_uri", "context_path", "servlet_path", "path_info", "query_strinig"};
+		for (String attr: attrs) {
+			String name = "javax.servlet.forward." + attr;
+			System.out.println(name + ": " + hreq().getAttribute(name));
+		}
+		for (String attr: attrs) {
+			String name = "javax.servlet.include." + attr;
+			System.out.println(name + ": " + hreq().getAttribute(name));
+		}
+	}
+*/	
 	@Override
 	public int doStartTag() throws JspException {
+//		printAttrs();
 		if (!write)
 			return EVAL_BODY_BUFFERED;
 		try {

@@ -197,5 +197,6 @@ $(function(){
 	currentUsers = getUsers;
 });
 </script>
+<vtx:script type="test" />
 </body>
 </html>

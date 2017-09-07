@@ -1,15 +1,16 @@
 package vortex.support.web.tag;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyContent;
 
 public class ScriptTag extends VortexTag {
 	private static final long serialVersionUID = 1L;
 
-	private String attr;
+	private String type;
 	private boolean write;
 	
-	public void setAttr(String attr) {
-		this.attr = attr;
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	public void setWrite(boolean write) {
@@ -18,11 +19,26 @@ public class ScriptTag extends VortexTag {
 	
 	@Override
 	public int doStartTag() throws JspException {
+		if (!write)
+			return EVAL_BODY_BUFFERED;
 		try {
-			if (!write) {
-				setScript();
-			} else
-				writeScript();
+			writeScript();
+			return SKIP_PAGE;
+		} catch (Exception e) {
+			throw jspException(e);
+		}
+	}
+	
+	@Override
+	public int doAfterBody() throws JspException {
+		if (write)
+			return SKIP_PAGE;
+		try {
+			BodyContent content = getBodyContent();
+			String str = content != null ? content.getString() : null;
+			if (!isEmpty(str)) {
+				setScript(str.trim());
+			}
 			return SKIP_BODY;
 		} catch (Exception e) {
 			throw jspException(e);
@@ -30,14 +46,11 @@ public class ScriptTag extends VortexTag {
 	}
 
 	private String getScript() {
-		return ifEmpty((String)hreq().getAttribute(attr), "");
-	}
-	
-	private void setScript() {
+		return ifEmpty((String)hreq().getAttribute(type), "");
 	}
 	
 	private void setScript(String script) {
-		hreq().setAttribute(attr, getScript() + script);
+		hreq().setAttribute(type, getScript() + script);
 	}
 	
 	private void writeScript() throws Exception {
@@ -47,7 +60,7 @@ public class ScriptTag extends VortexTag {
 	@Override
 	public void release() {
 		write = false;
-		attr = null;
+		type = null;
 		super.release();
 	}
 }

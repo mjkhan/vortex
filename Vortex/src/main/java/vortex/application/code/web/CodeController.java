@@ -24,8 +24,7 @@ public class CodeController extends ApplicationController {
 	@RequestMapping("/group/list.do")
 	public ModelAndView getGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		int start = Integer.parseInt(ifEmpty(req.string("start"), "0"));
-		req.set("start", start)
+		req.set("start", req.number("start"))
 		   .set("fetch", properties.getInt("fetch"));
 		return modelAndView(!req.bool("ajax") ? "code/group/list" : "jsonView", codeService.getGroups(req)); 
 	}

@@ -83,7 +83,13 @@ public class DataObject extends GenericMap<Object> {
 	 */
 	public Number number(String name) {
 		Object obj = get(name);
-		return obj != null ?  Number.class.cast(obj) : Integer.valueOf(0);
+		if (obj == null)
+			return Integer.valueOf(0);
+		if (obj instanceof Number)
+			return Number.class.cast(obj);
+		if (obj instanceof String)
+			return Double.valueOf((String)obj);
+		throw new RuntimeException("The Object named '" + name + "' is not a Number");
 	}
 	/**지정한 이름의 필드값을 boolean값으로 변환하여 반환한다.
 	 * @param name 필드 이름

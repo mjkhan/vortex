@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
-<%@ page import="java.text.SimpleDateFormat"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<%! private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd hh:mm"); %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -192,7 +190,7 @@ $(function(){
 	docTitle("사용자 정보");
 	enterPressed("#value", getUsers);
 	setUserList({
-		users:<vtx:json data="${users}" dateFormat="<%=dateFormat%>"/>,
+		users:<vtx:json data="${users}" dateFormat="${dateFormat}%>"/>,
 		more:${more},
 		next:${next}
 	}, 0);

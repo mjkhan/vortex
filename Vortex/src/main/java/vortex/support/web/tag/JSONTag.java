@@ -11,6 +11,7 @@ public class JSONTag extends VortexTag {
 
 	private Object data;
 	private String var;
+	private ObjectMapper mapper;
 	private DateFormat dateFormat;
 
 	public void setData(Object data) {
@@ -21,6 +22,10 @@ public class JSONTag extends VortexTag {
 		this.var = var;
 	}
 	
+	public void setMapper(ObjectMapper mapper) {
+		this.mapper = mapper;
+	}
+	
 	public void setDateFormat(DateFormat dateFormat) {
 		this.dateFormat = dateFormat;
 	}
@@ -28,6 +33,9 @@ public class JSONTag extends VortexTag {
 	private static final String KEY = "jsonMapper";
 	
 	private ObjectMapper objectMapper() {
+		if (this.mapper != null)
+			return this.mapper;
+
 		ObjectMapper mapper = (ObjectMapper)hreq().getAttribute(KEY);
 		if (mapper == null)
 			hreq().setAttribute(KEY, mapper = new ObjectMapper());
@@ -52,6 +60,7 @@ public class JSONTag extends VortexTag {
 	
 	@Override
 	public void release() {
+		mapper = null;
 		dateFormat = null;
 		data = var = null;
 		super.release();

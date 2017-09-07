@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
-<%@ page import="java.text.SimpleDateFormat"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<%! private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd hh:mm"); %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -164,7 +162,7 @@ function setActionList(resp) {
 $(function(){
 	docTitle("액션 정보");
 	setActionList({
-		actions:<vtx:json data="${actions}" dateFormat="<%=dateFormat%>"/>
+		actions:<vtx:json data="${actions}" mapper="${objectMapper}"/>
 	});
 	currentActions = getActions;
 });

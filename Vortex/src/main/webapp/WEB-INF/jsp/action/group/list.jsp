@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
-<%@ page import="java.text.SimpleDateFormat"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<%! private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd hh:mm"); %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -188,7 +186,7 @@ $(function(){
 	docTitle("액션 그룹 정보");
 	enterPressed("#value", getGroups);
 	setGroupList({
-		groups:<vtx:json data="${groups}" dateFormat="<%=dateFormat%>"/>,
+		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
 		more:${more},
 		next:${next}
 	}, 0);

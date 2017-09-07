@@ -216,6 +216,12 @@
 			<description><![CDATA[data to be written in JSON]]></description>
 		</attribute>
 		<attribute>
+			<name>mapper</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[ObjectMapper]]></description>
+		</attribute>
+		<attribute>
 			<name>dateFormat</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

@@ -40,6 +40,10 @@ function numberFormat(x) {
     return parts.join(".");
 }
 
+function getParam(name) {
+	return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+
 function toQuery(map, encode) {
 	if (isEmpty(map)) return "";
 

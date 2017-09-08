@@ -50,7 +50,7 @@ public class ScriptTag extends VortexTag {
 			BodyContent content = getBodyContent();
 			String str = content != null ? content.getString() : null;
 			if (!isEmpty(str)) {
-				setScript(str.trim());
+				setScript(str);
 			}
 			return SKIP_BODY;
 		} catch (Exception e) {
@@ -63,11 +63,11 @@ public class ScriptTag extends VortexTag {
 	}
 	
 	private void setScript(String script) {
-		hreq().setAttribute(type, getScript() + script);
+		hreq().setAttribute(type, getScript() + script.trim());
 	}
 	
 	private void writeScript() throws Exception {
-		out().write(getScript());
+		out().write(getScript().trim());
 	}
 	
 	@Override

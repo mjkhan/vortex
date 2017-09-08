@@ -1,22 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="initial-scale=1.0, width=device-width">
-<link href="<c:url value='/asset/image/favicon.ico'/>" rel="shortcut icon" type="image/x-icon" />
-<link href="<c:url value='/asset/image/favicon.ico'/>" rel="icon" type="image/x-icon" />
-<link href="<c:url value='/asset/css/styles.css'/>" rel="stylesheet" type="text/css" />
-<!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><![endif]-->
-<title>Vortex</title>
-</head>
-<body>
-<header>
-	<div class="mainTitle">Vortex</div>
-	<div class="subTitle">공통코드 그룹 정보</div>
-</header>
-<main>
+<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="searchGroups" style="width:100%;">
 	<div class="search">
 		<select id="field">
@@ -52,21 +37,10 @@
 	</div>
 </div>
 <div id="groupDetail" style="padding:1em 0;"></div>
-</main>
-<footer>
-</footer>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="<c:url value='/asset/js/base.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
-<script type="text/javascript">
-var wctx = "${pageContext.request.contextPath}",
-	checkedGroups,
+<vtx:script type="decl">
+var checkedGroups,
 	currentGroups,
 	afterSave;
-
-function docTitle(title) {
-	document.title = title ? "Vortex - " + title : "Vortex";
-}
 
 function getGroups(start) {
 	var field = $("#field").val(),
@@ -181,9 +155,10 @@ function setGroupList(resp, start) {
 		});
 	checkbox("#toggleChecks").echo(checkedGroups.target);
 }
-
-$(function(){
+</vtx:script>
+<vtx:script type="docReady">
 	docTitle("코드그룹 정보");
+	subTitle("코드그룹 정보");
 	enterPressed("#value", getGroups);
 	setGroupList({
 		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
@@ -191,7 +166,5 @@ $(function(){
 		next:${next}
 	}, 0);
 	currentGroups = getGroups;
-});
-</script>
-</body>
-</html>
+</vtx:script>
+<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

@@ -75,3 +75,37 @@ function message(id) {
 	};
 	return msg;
 }
+
+var dialog = {
+	container:null,
+	onclose:null,
+	render:function(options) {
+		dialog.container.addClass("dialogModal");
+		if (options.override)
+			dialog.container.html(options.content);
+		else {
+			$("#_dlgTitle").html(options.title || "Vortex");
+			$("#_dlgContent").html(options.content);
+		}
+		dialog.container.show();
+	},
+	show:function(options) {
+		dialog.onclose = dialog.onclose;
+		if (!dialog.container) {
+			dialog.container = $("<div>").appendTo("body");
+			ajax({
+				url:wctx + "/asset/html/dialog.html",
+				success:function(resp) {
+					dialog.container.html(resp);
+					dialog.render(options);
+				}
+			});
+		} else
+			dialog.render(options);
+	},
+	close:function() {
+		dialog.container.fadeOut();
+		if (dialog.onclose)
+			dialog.onclose();
+	}
+};

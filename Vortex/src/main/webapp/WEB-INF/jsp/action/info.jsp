@@ -55,7 +55,7 @@ function saveAction() {
 			if (resp.saved) {
 				afterSave = getActions;
 				alert("저장됐습니다.");
-				getAction(resp.actionID);
+				getAction(resp.actionID || $("#actionID").val());
 			} else {
 				alert("저장하지 못했습니다.");
 			}

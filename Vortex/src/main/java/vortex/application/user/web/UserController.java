@@ -37,9 +37,7 @@ public class UserController extends ApplicationController {
 		DataObject req = request(hreq);
 		User user = new User();
 		user.setId(req.string("userID"));
-		user.setName(req.string("userName"));
-		user.setAlias(req.string("alias"));
-		user.setPassword(req.string("password"));
+		setUser(user, req);
 		return modelAndView("jsonView", userService.create(req.set("user", user)));
 	}
 	
@@ -47,10 +45,14 @@ public class UserController extends ApplicationController {
 	public ModelAndView update(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		User user = userService.getUser(req).value("user");
+		setUser(user, req);
+		return modelAndView("jsonView", userService.update(req.set("user", user)));
+	}
+	
+	private void setUser(User user, DataObject req) {
 		user.setName(req.string("userName"));
 		user.setAlias(req.string("alias"));
 		user.setPassword(req.string("password"));
-		return modelAndView("jsonView", userService.update(req.set("user", user)));
 	}
 	
 	@RequestMapping("/setStatus.do")

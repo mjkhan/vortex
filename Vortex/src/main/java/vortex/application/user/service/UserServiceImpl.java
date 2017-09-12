@@ -70,4 +70,17 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 			.set("saved", saved > 0);
 	}
 
+	@Override
+	public DataObject login(DataObject req) {
+		String userID = req.string("userID");
+		User user = userMapper.getUser(userID);
+		boolean loggedIn = user != null && user.getPassword().equals(req.get("password"));
+		return dataobject().set("loggedIn", loggedIn);
+	}
+
+	@Override
+	public DataObject logout(DataObject req) {
+		return null;
+	}
+
 }

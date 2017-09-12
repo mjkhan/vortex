@@ -76,7 +76,11 @@ function Eval(expr, debug) {
 }
 
 function ajax(options) {
-	if (options.data)
-		options.method = "POST";
+	if (window.csrf) 
+	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};
+	if (!options.error)
+		options.error = function(req, status, error) {
+			log(req.status + "\n\n" + error);
+		};
 	$.ajax(options);
 }

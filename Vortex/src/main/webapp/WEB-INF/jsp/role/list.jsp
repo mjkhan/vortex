@@ -9,7 +9,7 @@
 			<option value="ROLE_ID">아이디</option>
 			<option value="ROLE_NAME">이름</option>
 		 </select>
-		 <input id="value" type="text" placeholder="검색어" style="width:40%;"/>
+		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getRoles();" type="button">찾기</button>
 		 <button onclick="newRole();" type="button">추가</button>
 		 <button id="btnRemove" onclick="removeRoles();" type="button" class="hidden">삭제</button>

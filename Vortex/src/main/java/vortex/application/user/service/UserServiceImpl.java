@@ -75,6 +75,9 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 		String userID = req.string("userID");
 		User user = userMapper.getUser(userID);
 		boolean loggedIn = user != null && user.getPassword().equals(req.get("password"));
+		if (loggedIn) {
+			
+		}
 		return dataobject().set("loggedIn", loggedIn);
 	}
 

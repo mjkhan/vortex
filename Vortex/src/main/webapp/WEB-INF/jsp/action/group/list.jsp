@@ -9,7 +9,7 @@
 			<option value="GRP_ID">아이디</option>
 			<option value="GRP_NAME">이름</option>
 		 </select>
-		 <input id="value" type="text" placeholder="검색어" style="width:40%;"/>
+		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getGroups();" type="button">찾기</button>
 		 <button onclick="newGroup();" type="button">추가</button>
 		 <button id="btnRemove" onclick="removeGroups();" type="button" class="hidden">삭제</button>

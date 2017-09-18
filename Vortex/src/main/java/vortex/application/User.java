@@ -79,4 +79,59 @@ public class User {
 	public String toString() {
 		return String.format("%s('%s', '%s')", getClass().getSimpleName(), id, name);
 	}
+	
+	public static class Client {
+		public static final Client UNKNOWN = new Client().seal();
+		
+		private boolean
+			sealed,
+			persistent;
+		private String
+			id,
+			password,
+			sessionID;
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			notSealed().id = id;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			notSealed().password = password;
+		}
+
+		public String getSessionID() {
+			return sessionID;
+		}
+
+		public void setSessionID(String sessionID) {
+			notSealed().sessionID = sessionID;
+		}
+		
+		public boolean isPersistent() {
+			return persistent;
+		}
+		
+		public void setPersistent(boolean persistent) {
+			notSealed().persistent = persistent;
+		}
+		
+		private Client seal() {
+			sealed = true;
+			return this;
+		}
+		
+		private Client notSealed() {
+			if (sealed)
+				throw new RuntimeException("The client is sealed.");
+			return this;
+		}
+	}
 }

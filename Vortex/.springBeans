@@ -10,14 +10,17 @@
 	</configs>
 	<autoconfigs>
 		<config>src/main/resources/vortex/spring/context-properties.xml</config>
+		<config>src/test/resources/vortex/spring/context-group.xml</config>
 		<config>src/test/resources/vortex/spring/context-common.xml</config>
 		<config>src/test/resources/vortex/spring/context-transaction.xml</config>
 		<config>src/main/resources/vortex/spring/context-aspect.xml</config>
 		<config>src/main/resources/vortex/spring/context-transaction.xml</config>
 		<config>src/main/resources/vortex/spring/context-datasource.xml</config>
 		<config>src/test/resources/vortex/spring/context-datasource.xml</config>
+		<config>src/main/resources/vortex/spring/context-group.xml</config>
 		<config>src/main/resources/vortex/spring/context-common.xml</config>
 		<config>src/test/resources/vortex/spring/context-mapper.xml</config>
+		<config>src/test/resources/vortex/spring/context-properties.xml</config>
 		<config>src/main/webapp/WEB-INF/config/vortex/springmvc/dispatcher-servlet.xml</config>
 		<config>src/main/resources/vortex/spring/context-idgen.xml</config>
 		<config>src/main/resources/vortex/spring/context-mapper.xml</config>

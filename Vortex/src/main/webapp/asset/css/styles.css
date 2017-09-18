@@ -2,6 +2,7 @@
 
 html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, pre, code, address, variable, form, fieldset, blockquote, input, textarea, div, header, main, footer {
 	margin:0; padding:0;
+	font-family:Arial, Verdana, sans-serif, dotum, gulim;
 	font-size:100%; font-weight:normal;
 
 	-mox-box-sizing: border-box;
@@ -25,7 +26,7 @@ q:before, q:after {content:'';}
 
 button {min-width:55px; padding:0 .25em;}
 
-input[type='text'], input[type='password'] {padding:.1em .25em;}
+input[type='text'], input[type='search'], input[type='password'] {padding:.1em .25em;}
 input[type='number'] {text-align:right;}
 input[readonly] {border:none;}
 
@@ -80,8 +81,8 @@ main {
 .infoList {
 	width:100%;
 	table-layout:fixed;
-	border-top:1.75px solid lightgrey;
-	border-bottom:1.75px solid lightgrey;
+	border-top:2px solid purple;
+	border-bottom:1px solid lightgrey;
 }
 .infoList thead {background-color:lightskyblue;}
 .infoList tbody tr:nth-child(even) {background-color:#e7efff;}

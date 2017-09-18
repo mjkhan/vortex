@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,9 @@ public class ApplicationController extends AbstractObject {
 			System.out.println("action:" + action);
 			HttpSession session = hreq.getSession(false);
 			if (session != null) {
-				boolean anew = session.isNew();
+				boolean newsession = session.isNew();
 				String sessionID = session.getId();
-				System.out.println("new session:" + anew);
+				System.out.println("new session:" + newsession);
 				System.out.println("session id:" + sessionID);
 				System.out.println("JSESSIONID:" + Kookie.get(hreq).getValue("JSESSIONID"));
 			} else {
@@ -70,8 +71,40 @@ public class ApplicationController extends AbstractObject {
 			chain.doFilter(sreq, sresp);
 		}
 		
-
 		@Override
 		public void destroy() {}
+	}
+	
+	public static class ClientToken {
+		private static final String NAME = "vortexToken";
+		
+		public User.Client read(HttpServletRequest hreq) {
+			String token = Kookie.get(hreq).getValue(NAME);
+			if (isEmpty(token)) return User.Client.UNKNOWN;
+			
+			try {
+				String[] segs = token.split(";");
+				User.Client client = new User.Client();
+				client.setId(segs[0]);
+				client.setPassword(segs[1]);
+				return client;
+			} catch (Exception e) {
+				return User.Client.UNKNOWN;
+			}
+		}
+		
+		public void write(User.Client client, HttpServletRequest hreq, HttpServletResponse hresp) {
+			String token = client.getId() + ";" + client.getPassword(); 
+			Kookie kookie = Kookie.get(hreq).setResponse(hresp);
+			if (!client.isPersistent()) {
+				kookie.shortSave(NAME, token);
+			} else {
+				kookie.longSave(NAME, token);
+			}
+		}
+		
+		public void delete(HttpServletRequest hreq, HttpServletResponse hresp) {
+			Kookie.get(hreq).setResponse(hresp).remove(NAME);
+		}
 	}
 }

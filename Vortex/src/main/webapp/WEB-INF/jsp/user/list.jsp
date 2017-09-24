@@ -12,7 +12,7 @@
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getUsers(0);" type="button">찾기</button>
-		 <button onclick="newUser();" type="button">추가</button>
+		 <button onclick="newUser();" type="button" class="add">추가</button>
 		 <button id="btnRemove" onclick="removeUsers();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">

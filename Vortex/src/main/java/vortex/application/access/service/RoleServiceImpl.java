@@ -1,5 +1,8 @@
 package vortex.application.access.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,12 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 	public DataObject getRoles(DataObject req) {
 		return dataobject()
 			.set("roles", roleMapper.getRoles());
+	}
+
+	@Override
+	public DataObject getRolesFor(DataObject req) {
+		return dataobject()
+			.set("roles", roleMapper.getRolesFor(req.string("member")));
 	}
 
 	@Override
@@ -54,5 +63,13 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 		int saved = roleMapper.remove(roleIDs);
 		return dataobject()
 			.set("saved", saved > 0);
+	}
+
+	@Override
+	public DataObject getActions(DataObject req) {
+		String roleID = req.string("roleID");
+		List<Map<String, Object>> actions = roleMemberMapper.getActions(roleID);
+		return dataobject()
+			.set("actions", actions);
 	}
 }

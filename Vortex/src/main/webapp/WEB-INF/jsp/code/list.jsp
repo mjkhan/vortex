@@ -7,7 +7,7 @@
 		<select id="groupID" onchange="getCodes();"><c:forEach items="${groups}" var="group">
 			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
 		 </select>
-		 <button onclick="newCode();" type="button">추가</button>
+		 <button onclick="newCode();" type="button" class="add">추가</button>
 		 <button id="btnRemove" onclick="removeCodes();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">

@@ -12,7 +12,10 @@ html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, pre, code, address, variable,
 	vertical-align: baseline;
 }
 
-table {border-collapse:collapse; border-spacing:0;}
+table {
+	border-collapse:collapse; border-spacing:0;
+	table-layout:fixed;
+}
 td, th, caption {font-weight:normal; text-align:left;}
 
 img, fieldset {border:0;}
@@ -35,6 +38,13 @@ body, header, .mainTitle, .subTitle {width:100%;}
 main {
 	width:95%;
 	margin:0 auto;
+}
+
+button.add {
+	width:3em; height:4em;
+	position:fixed; top:7em; left:22.2em;
+	background-color:white;
+	border:2px solid deeppink; border-radius:50%;
 }
 
 .hidden {display:none;}
@@ -80,7 +90,6 @@ main {
 
 .infoList {
 	width:100%;
-	table-layout:fixed;
 	border-top:2px solid purple;
 	border-bottom:1px solid lightgrey;
 }

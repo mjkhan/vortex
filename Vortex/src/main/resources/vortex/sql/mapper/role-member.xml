@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="roleMember">
 
+<!-- roleID에 설정된 액션 정보 가져오기 -->
+<select id="getActions" parameterType="hashmap" resultType="hashmap">
+SELECT SQL_CALC_FOUND_ROWS A.ACT_ID, ACT_NAME, INS_ID, INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
+FROM TBL_ROLE_ACTION A, TBL_ACTION B
+WHERE ROLE_ID = #{roleID}
+AND A.ACT_ID = B.ACT_ID
+ORDER BY A.ACT_ID
+LIMIT #{start}, #{fetch} 
+</select>
+
 <!-- roleIDs의 역할에 actionIDs의 액션 추가 -->
 <insert id="addActions" parameterType="hashmap">
 INSERT INTO TBL_ROLE_ACTION (ROLE_ID, ACT_ID, INS_ID, INS_TIME)
@@ -43,6 +53,17 @@ WHERE ACT_ID IN (
 )
 </if>
 </delete>
+
+<!-- roleID에 설정된 사용자 정보 가져오기 -->
+<select id="getUsers" parameterType="hashmap" resultType="hashmap">
+SELECT SQL_CALC_FOUND_ROWS A.USER_ID, USER_NAME, INS_ID, A.INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
+FROM TBL_ROLE_USER A, TBL_USER B
+WHERE ROLE_ID = #{roleID}
+AND STATUS &lt;&gt; '999'
+AND A.USER_ID = B.USER_ID
+ORDER BY A.USER_ID
+LIMIT #{start}, #{fetch} 
+</select>
 
 <!-- roleIDs의 역할에 userIDs의 사용자 추가 -->
 <insert id="addUsers" parameterType="hashmap">

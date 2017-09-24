@@ -13,6 +13,10 @@ public class RoleMapper extends AbstractMapper {
 		return selectList("role.getRoles");
 	}
 	
+	public List<DataObject> getRolesFor(String member) {
+		return selectList("role.getRolesForMember", member);
+	}
+	
 	public Role getRole(String roleID) {
 		return selectOne("role.getRole", roleID);
 	}

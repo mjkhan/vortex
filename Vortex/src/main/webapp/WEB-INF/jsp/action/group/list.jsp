@@ -11,7 +11,7 @@
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getGroups();" type="button">찾기</button>
-		 <button onclick="newGroup();" type="button">추가</button>
+		 <button onclick="newGroup();" type="button" class="add">추가</button>
 		 <button id="btnRemove" onclick="removeGroups();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">

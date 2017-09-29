@@ -101,6 +101,7 @@ button.add {
     font-size:small;
 }
 .infoList a[onclick], .infoList a[href] {color:navy; text-decoration:underline;}
+.infoList .notFound {text-align:center;}
 
 .infoForm {
 	width:100%;

@@ -25,7 +25,7 @@
 			</tr>
 		</thead>
 		<tbody id="userList">
-			<c:set var="notFound"><tr><td colspan="5" style="text-align:center;">사용자를 찾지 못했습니다.</td></c:set>
+			<c:set var="notFound"><tr><td colspan="5" class="notFound">사용자를 찾지 못했습니다.</td></c:set>
 			<c:set var="userRow"><tr>
 				<td><input name="userID" value="{userID}" type="checkbox" /></td>
 				<td><a onclick="getUser('{userID}')">{userID}</a></td>
@@ -117,30 +117,22 @@ function getUser(userID) {
 }
 
 function setUserList(resp, start) {
-	var list = resp.users,
-		length = list.length || 0,
-		rows = [];
+	var append = start > 0;
+	$("#userList").populate({
+		data:resp.users,
+		tr:function(row){
+			return "${vtx:jstring(userRow)}"
+				.replace(/{userID}/g, row.USER_ID)
+				.replace(/{userName}/g, row.USER_NAME)
+				.replace(/{alias}/g, row.ALIAS)
+				.replace(/{insTime}/g, row.INS_TIME);
+		},
+		ifEmpty:"${vtx:jstring(notFound)}",
+		append:append
+	});
 	
-	if (length < 1) {
-		rows.push("${vtx:jstring(notFound)}");
-	} else {
-		var tag = "${vtx:jstring(userRow)}";
-		for (var i = 0; i < length; ++i) {
-			var row = list[i];
-			rows.push(
-				tag.replace(/{userID}/g, row.USER_ID)
-				   .replace(/{userName}/g, row.USER_NAME)
-				   .replace(/{alias}/g, row.ALIAS)
-				   .replace(/{insTime}/g, row.INS_TIME)
-			);
-		}
-	}
-	if (!start) {
-		$("#userList").html(rows.join("\n"));
+	if (!append)
 		$("#btnRemove").fadeOut();
-	} else
-		$("#userList").append(rows.join("\n"));
-
 	if (resp.more) {
 		$(".paging button")
 			.removeAttr("onclick")

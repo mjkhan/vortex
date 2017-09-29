@@ -23,7 +23,7 @@
 			</tr>
 		</thead>
 		<tbody id="roleList">
-		<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">ROLE을 찾지 못했습니다.</td></c:set>
+		<c:set var="notFound"><tr><td colspan="4" class="notFound">ROLE을 찾지 못했습니다.</td></c:set>
 		<c:set var="roleRow"><tr>
 			<td><input name="roleID" value="{roleID}" type="checkbox" /></td>
 				<td><a onclick="getRole('{roleID}')">{roleID}</a></td>
@@ -114,29 +114,21 @@ function getRole(roleID) {
 }
 
 function setRoleList(resp, start) {
-	var list = resp.roles,
-		length = list.length || 0,
-		rows = [];
-	
-	if (length < 1) {
-		rows.push("${vtx:jstring(notFound)}");
-	} else {
-		var tag = "${vtx:jstring(roleRow)}";
-		for (var i = 0; i < length; ++i) {
-			var row = list[i];
-			rows.push(
-				tag.replace(/{roleID}/g, row.ROLE_ID)
-				   .replace(/{roleName}/g, row.ROLE_NAME)
-				   .replace(/{updTime}/g, row.UPD_TIME)
-			);
-		}
-	}
-	if (!start) {
-		$("#roleList").html(rows.join("\n"));
-		$("#btnRemove").fadeOut();
-	} else
-		$("#roleList").append(rows.join("\n"));
+	var append = start > 0;
+	$("#roleList").populate({
+		data:resp.roles,
+		tr:function(row){
+			return "${vtx:jstring(roleRow)}"
+				.replace(/{roleID}/g, row.ROLE_ID)
+				.replace(/{roleName}/g, row.ROLE_NAME)
+				.replace(/{updTime}/g, row.UPD_TIME);
+		},
+		ifEmpty:"${vtx:jstring(notFound)}",
+		append:append
+	});
 
+	if (!append)
+		$("#btnRemove").fadeOut();
 	if (resp.more) {
 		$(".paging button")
 			.removeAttr("onclick")

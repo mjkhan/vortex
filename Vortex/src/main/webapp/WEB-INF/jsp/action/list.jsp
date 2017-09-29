@@ -19,7 +19,7 @@
 			</tr>
 		</thead>
 		<tbody id="actionList">
-			<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">액션정보를 찾지 못했습니다.</td></c:set>
+			<c:set var="notFound"><tr><td colspan="4" class="notFound">액션정보를 찾지 못했습니다.</td></c:set>
 			<c:set var="actionRow"><tr>
 				<td><input name="actionID" value="{actionID}" type="checkbox" /></td>
 				<td><a onclick="getAction('{actionID}')">{actionName}</a></td>
@@ -103,24 +103,17 @@ function getAction(actionID) {
 }
 
 function setActionList(resp) {
-	var list = resp.actions,
-		rows = [];
-	
-	if (list.length < 1) {
-		rows.push("${vtx:jstring(notFound)}");
-	} else {
-		var tag = "${vtx:jstring(actionRow)}";
-		for (var i = 0; i < list.length; ++i) {
-			var row = list[i];
-			rows.push(
-				tag.replace(/{actionID}/g, row.ACT_ID)
-				   .replace(/{actionName}/g, row.ACT_NAME)
-				   .replace(/{actionPath}/g, row.ACT_PATH)
-				   .replace(/{updTime}/g, row.UPD_TIME)
-			);
-		}
-	}
-	$("#actionList").html(rows.join("\n"));
+	$("#actionList").populate({
+		data:resp.actions,
+		tr:function(row){
+			return "${vtx:jstring(actionRow)}"
+				.replace(/{actionID}/g, row.ACT_ID)
+				.replace(/{actionName}/g, row.ACT_NAME)
+				.replace(/{actionPath}/g, row.ACT_PATH)
+				.replace(/{updTime}/g, row.UPD_TIME);
+		},
+		ifEmpty:"${vtx:jstring(notFound)}"
+	});
 
 	checkedActions = checkbox("input[type='checkbox'][name='actionID']")
 		.onChange(function(checked){

@@ -4,6 +4,36 @@ function enterPressed(selector, handler) {
 		handler.apply();
 	});
 }
+/**
+ * config = {
+ * 	data:[],
+ * 	ifEmpty:"...",
+ * 	tr:function(row){return ...;},
+ * 	append:true || false
+ * }
+ * $("select tbody").populate(list, options);
+ */
+$.fn.populate = function(config) {
+	return this.each(function(){
+		var list = config.data,
+			length = !list ? 0 : list.length,
+			table = $(this),
+			trs = [];
+		if (length) {
+			for (var i = 0; i < length; ++i) {
+				trs.push(config.tr(list[i]));
+			}
+		} else {
+			if (!config.append) {
+				trs.push(config.ifEmpty);
+			}
+		}
+		if (!config.append)
+			table.html(trs.join());
+		else
+			table.append(trs.join());
+	});
+}
 
 function checkbox(selector) {
 	var objs = {

@@ -23,7 +23,7 @@
 			</tr>
 		</thead>
 		<tbody id="groupList">
-		<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">공통코드 그룹을 찾지 못했습니다.</td></c:set>
+		<c:set var="notFound"><tr><td colspan="4" class="notFound">공통코드 그룹을 찾지 못했습니다.</td></c:set>
 		<c:set var="groupRow"><tr>
 			<td><input name="groupID" value="{groupID}" type="checkbox" /></td>
 				<td><a onclick="getGroup('{groupID}')">{groupID}</a></td>
@@ -114,29 +114,21 @@ function getGroup(groupID) {
 }
 
 function setGroupList(resp, start) {
-	var list = resp.groups,
-		length = list.length || 0,
-		rows = [];
-	
-	if (length < 1) {
-		rows.push("${vtx:jstring(notFound)}");
-	} else {
-		var tag = "${vtx:jstring(groupRow)}";
-		for (var i = 0; i < length; ++i) {
-			var row = list[i];
-			rows.push(
-				tag.replace(/{groupID}/g, row.GRP_ID)
-				   .replace(/{groupName}/g, row.GRP_NAME)
-				   .replace(/{insTime}/g, row.INS_TIME)
-			);
-		}
-	}
-	if (!start) {
-		$("#groupList").html(rows.join("\n"));
-		$("#btnRemove").fadeOut();
-	} else
-		$("#groupList").append(rows.join("\n"));
+	var append = start > 0;
+	$("#groupList").populate({
+		data:resp.groups,
+		tr:function(row){
+			return "${vtx:jstring(groupRow)}"
+				.replace(/{groupID}/g, row.GRP_ID)
+				.replace(/{groupName}/g, row.GRP_NAME)
+				.replace(/{insTime}/g, row.INS_TIME);
+		},
+		ifEmpty:"${vtx:jstring(notFound)}",
+		append:append
+	});
 
+	if (!append)
+		$("#btnRemove").fadeOut();
 	if (resp.more) {
 		$(".paging button")
 			.removeAttr("onclick")

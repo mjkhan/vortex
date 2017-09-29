@@ -19,7 +19,7 @@
 			</tr>
 		</thead>
 		<tbody id="codeList">
-		<c:set var="notFound"><tr><td colspan="4" style="text-align:center;">코드를 찾지 못했습니다.</td></c:set>
+		<c:set var="notFound"><tr><td colspan="4" class="notFound">코드를 찾지 못했습니다.</td></c:set>
 		<c:set var="codeRow"><tr>
 				<td><input name="code" value="{code}" type="checkbox" /></td>
 				<td><a onclick="getCode('{code}')">{code}</a></td>
@@ -107,23 +107,16 @@ function getCode(code) {
 }
 
 function setCodeList(resp) {
-	var list = resp.codes,
-		rows = [];
-	
-	if (list.length < 1) {
-		rows.push("${vtx:jstring(notFound)}");
-	} else {
-		var tag = "${vtx:jstring(codeRow)}";
-		for (var i = 0; i < list.length; ++i) {
-			var row = list[i];
-			rows.push(
-				tag.replace(/{code}/g, row.CD_ID)
-				   .replace(/{value}/g, row.CD_VAL)
-				   .replace(/{updTime}/g, row.UPD_TIME)
-			);
-		}
-	}
-	$("#codeList").html(rows.join("\n"));
+	$("#codeList").populate({
+		data:resp.codes,
+		tr:function(row){
+			return "${vtx:jstring(codeRow)}"
+				.replace(/{code}/g, row.CD_ID)
+				.replace(/{value}/g, row.CD_VAL)
+				.replace(/{updTime}/g, row.UPD_TIME);
+		},
+		ifEmpty:"${vtx:jstring(notFound)}"
+	});
 
 	checkedCodes = checkbox("input[type='checkbox'][name='code']")
 		.onChange(function(checked){

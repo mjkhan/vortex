@@ -67,8 +67,7 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 
 	@Override
 	public DataObject getActions(DataObject req) {
-		String roleID = req.string("roleID");
-		List<Map<String, Object>> actions = roleMemberMapper.getActions(roleID);
+		List<Map<String, Object>> actions = roleMemberMapper.getActions(req);
 		return dataobject()
 			.set("actions", actions);
 	}

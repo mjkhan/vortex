@@ -13,7 +13,7 @@
 </head>
 <body>
 <header>
-	<div class="mainTitle">Vortex</div>
-	<div class="subTitle"></div>
+	<div id="mainTitle" class="mainTitle">Vortex</div>
+	<div id="subTitle" class="subTitle"></div>
 </header>
 <main>

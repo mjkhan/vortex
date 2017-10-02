@@ -21,7 +21,7 @@ function docTitle(title) {
 }
 
 function subTitle(title) {
-	$(".subTitle").html(title);
+	$("#subTitle").html(title);
 }
 
 <vtx:script type="decl" write="true"/>

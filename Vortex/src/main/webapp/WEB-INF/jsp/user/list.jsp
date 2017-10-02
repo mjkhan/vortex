@@ -149,7 +149,7 @@ function setUserList(resp, start) {
 			else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleChecks").echo(checkedUsers.target);
+	checkbox("#toggleChecks").onChange(function(checked){checkedUsers.check(checked);});
 }
 </vtx:script>
 <vtx:script type="docReady">

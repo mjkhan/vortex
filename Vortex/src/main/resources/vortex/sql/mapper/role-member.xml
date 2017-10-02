@@ -4,12 +4,21 @@
 
 <!-- roleID에 설정된 액션 정보 가져오기 -->
 <select id="getActions" parameterType="hashmap" resultType="hashmap">
-SELECT SQL_CALC_FOUND_ROWS A.ACT_ID, ACT_NAME, INS_ID, INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
-FROM TBL_ROLE_ACTION A, TBL_ACTION B
-WHERE ROLE_ID = #{roleID}
-AND A.ACT_ID = B.ACT_ID
-ORDER BY A.ACT_ID
-LIMIT #{start}, #{fetch} 
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS A.ACT_ID, ACT_NAME, INS_ID, INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
+	FROM TBL_ROLE_ACTION A, TBL_ACTION B
+	WHERE ROLE_ID = #{roleID}
+	AND A.ACT_ID = B.ACT_ID
+	ORDER BY A.ACT_ID
+	LIMIT #{start}, #{fetch} 
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
+	SELECT A.ACT_ID, ACT_NAME, INS_ID, INS_TIME
+	FROM TBL_ROLE_ACTION A, TBL_ACTION B
+	WHERE ROLE_ID = #{roleID}
+	AND A.ACT_ID = B.ACT_ID
+	ORDER BY A.ACT_ID
+</if>
 </select>
 
 <!-- roleIDs의 역할에 actionIDs의 액션 추가 -->

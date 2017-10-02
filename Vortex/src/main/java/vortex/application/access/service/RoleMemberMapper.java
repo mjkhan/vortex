@@ -5,12 +5,15 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.support.data.BoundedList;
+import vortex.support.data.DataObject;
 import vortex.support.database.AbstractMapper;
 
 @Repository("roleMemberMapper")
 public class RoleMemberMapper extends AbstractMapper {	
-	public List<Map<String, Object>> getActions(String roleID) {
-		return selectList("roleMember.getActions", roleID);
+	public BoundedList<Map<String, Object>> getActions(DataObject req) {
+		List<Map<String, Object>> list = selectList("roleMember.getActions", req);
+		return boundedList(list, req);
 	}
 	
 	public int addActions(String addedBy, String[] roleIDs, String... actionIDs) {

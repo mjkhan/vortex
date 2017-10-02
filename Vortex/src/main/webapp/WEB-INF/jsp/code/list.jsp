@@ -125,7 +125,7 @@ function setCodeList(resp) {
 			else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleChecks").echo(checkedCodes.target);
+	checkbox("#toggleChecks").onChange(function(checked){checkedCodes.check(checked);});
 	$("#btnRemove").fadeOut();
 }
 </vtx:script>

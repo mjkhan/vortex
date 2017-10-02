@@ -1,5 +1,7 @@
 package vortex.application.access.web;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,5 +53,22 @@ public class RoleController extends ApplicationController {
 	@RequestMapping("/delete.do")
 	public ModelAndView delete(HttpServletRequest hreq) {
 		return modelAndView("jsonView", roleService.delete(request(hreq)));
+	}
+	
+	@RequestMapping("/action/list.do")
+	public ModelAndView getActions(HttpServletRequest hreq) {
+		DataObject req = request(hreq),
+				   res = new DataObject();
+		String roleID = req.string("roleID");
+		boolean init = isEmpty(roleID);
+		if (init) {
+			List<DataObject> roles = roleService.getRolesFor(req.set("member", "action")).value("roles");
+			roleID = !isEmpty(roles) ? roles.get(0).string("ROLE_ID") : null;
+			res.set("roles", roles);
+		}
+		if (!isEmpty(roleID)) {
+			res.set("actions", roleService.getActions(req.set("roleID", roleID)).value("actions"));
+		}
+		return modelAndView(init ? "role/actions" : "jsonView", res);
 	}
 }

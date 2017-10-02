@@ -122,7 +122,7 @@ function setActionList(resp) {
 			else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleChecks").echo(checkedActions.target);
+	checkbox("#toggleChecks").onChange(function(checked){checkedActions.check(checked);});
 	$("#btnRemove").fadeOut();
 }
 </vtx:script>

@@ -145,7 +145,7 @@ function setGroupList(resp, start) {
 			else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleChecks").echo(checkedGroups.target);
+	checkbox("#toggleChecks")onChange(function(checked){checkedGroups.check(checked);});
 }
 </vtx:script>
 <vtx:script type="docReady">

@@ -145,7 +145,7 @@ function setRoleList(resp, start) {
 			else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleChecks").echo(checkedRoles.target);
+	checkbox("#toggleChecks").onChange(function(checked){checkedRoles.check(checked);});
 }
 </vtx:script>
 <vtx:script type="docReady">

@@ -50,7 +50,7 @@ function checkbox(selector) {
 			return result;
 		},
 		value: function(checked) {
-			var values = objs.values(checked);
+			var values = objs.values(checked != false);
 			return values.length > 0 ? values[0] : null;
 		},
 		isChecked: function() {
@@ -62,11 +62,8 @@ function checkbox(selector) {
 			});
 			return checked;
 		},
-		echo: function(children) {
-			objs.target.click(function(){
-				var checked = $(this).is(":checked");
-				$(children).each(function() {$(this).prop("checked", checked).change()});
-			});
+		check:function(checked) {
+			objs.target.each(function(){$(this).prop("checked", checked).change();});
 			return objs;
 		},
 		onChange: function(handler) {

@@ -21,10 +21,19 @@ public class UserController extends ApplicationController {
 	
 	@RequestMapping("/list.do")
 	public ModelAndView search(HttpServletRequest hreq) {
+		return search(hreq, "user/list");
+	}
+	
+	@RequestMapping("/select.do")
+	public ModelAndView select(HttpServletRequest hreq) {
+		return search(hreq, "user/select");
+	}
+
+	private ModelAndView search(HttpServletRequest hreq, String initView) {
 		DataObject req = request(hreq);
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
-		return modelAndView(!req.bool("ajax") ? "user/list" : "jsonView", userService.search(req));
+		return modelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView", userService.search(req));
 	}
 	
 	@RequestMapping("/info.do")

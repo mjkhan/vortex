@@ -71,4 +71,53 @@ public class RoleController extends ApplicationController {
 		}
 		return modelAndView(init ? "role/actions" : "jsonView", res);
 	}
+	
+	@RequestMapping("/action/add.do")
+	public ModelAndView addActions(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		req.set("roleIDs", req.string("roleIDs").split(","))
+		   .set("actionIDs", req.string("actionIDs").split(","));
+		return modelAndView("jsonView", roleService.addActions(req));
+	}
+	
+	@RequestMapping("/action/delete.do")
+	public ModelAndView deleteActions(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		req.set("roleIDs", req.string("roleIDs").split(","))
+		   .set("actionIDs", req.string("actionIDs").split(","));
+		return modelAndView("jsonView", roleService.deleteActions(req));
+	}
+	
+	@RequestMapping("/user/list.do")
+	public ModelAndView getUsers(HttpServletRequest hreq) {
+		DataObject req = request(hreq),
+				   res = new DataObject();
+		String roleID = req.string("roleID");
+		boolean init = isEmpty(roleID);
+		if (init) {
+			List<DataObject> roles = roleService.getRoles(req).value("roles");
+			roleID = !isEmpty(roles) ? roles.get(0).string("ROLE_ID") : null;
+			res.set("roles", roles);
+		}
+		if (!isEmpty(roleID)) {
+			res.set("users", roleService.getUsers(req.set("roleID", roleID)).value("users"));
+		}
+		return modelAndView(init ? "role/users" : "jsonView", res);
+	}
+	
+	@RequestMapping("/user/add.do")
+	public ModelAndView addUsers(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		req.set("roleIDs", req.string("roleIDs").split(","))
+		   .set("userIDs", req.string("userIDs").split(","));
+		return modelAndView("jsonView", roleService.addUsers(req));
+	}
+	
+	@RequestMapping("/user/delete.do")
+	public ModelAndView deleteUsers(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		req.set("roleIDs", req.string("roleIDs").split(","))
+		   .set("userIDs", req.string("userIDs").split(","));
+		return modelAndView("jsonView", roleService.deleteUsers(req));
+	}
 }

@@ -14,32 +14,32 @@
 		<c:set var="notFound"><tr><td colspan="3" class="notFound">ROLE을 찾지 못했습니다.</td></c:set>
 		<c:set var="roleRow"><tr>
 			<td><input name="roleID" value="{roleID}" type="checkbox" /></td>
-				<td><a onclick="getActions('{roleID}')">{roleID}</a></td>
+				<td><a onclick="getUsers('{roleID}')">{roleID}</a></td>
 				<td>{roleName}</td>
 			</tr></c:set>
 		</tbody>
 	</table>
 </div>
-<div id="roleActions" style="padding:1em 0;">
-	<div id="actionTitle" class="subTitle">액션 정보</div>
+<div id="roleUsers" style="padding:1em 0;">
+	<div id="userTitle" class="subTitle">사용자 정보</div>
 	<div class="search">
-		 <button id="btnAdd" onclick="addActions();" type="button" class="add hidden">추가</button>
-		 <button id="btnRemove" onclick="deleteActions();" type="button" class="hidden">삭제</button>
+		 <button id="btnAdd" onclick="addUsers();" type="button" class="add hidden">추가</button>
+		 <button id="btnRemove" onclick="deleteUsers();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
-			<tr><th width="10%"><input id="toggleActions" type="checkbox" /></th>
-				<th width="30%">이름</th>
-				<th width="40%">경로</th>
+			<tr><th width="10%"><input id="toggleUsers" type="checkbox" /></th>
+				<th width="30%">아이디</th>
+				<th width="40%">이름</th>
 				<th width="20%">등록</th>
 			</tr>
 		</thead>
-		<tbody id="actionList">
-		<c:set var="actionNotFound"><tr><td colspan="4" class="notFound">액션정보를 찾지 못했습니다.</td></c:set>
-		<c:set var="actionRow"><tr>
-			<td><input name="actionID" value="{actionID}" type="checkbox" /></td>
-				<td>{actionName}</td>
-				<td>{actionPath}</td>
+		<tbody id="userList">
+		<c:set var="userNotFound"><tr><td colspan="4" class="notFound">사용자정보를 찾지 못했습니다.</td></c:set>
+		<c:set var="userRow"><tr>
+			<td><input name="userID" value="{userID}" type="checkbox" /></td>
+				<td>{userID}</td>
+				<td>{userName}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
 		</tbody>
@@ -47,11 +47,11 @@
 </div>
 <vtx:script type="decl">
 var checkedRoles,
-	checkedActions,
-	currentActions;
+	checkedUsers,
+	currentUsers;
 
-function setActionTitle(roleID) {
-	$("#actionTitle").html(roleID + " 액션 정보");
+function setUserTitle(roleID) {
+	$("#userTitle").html(roleID + " 사용자 정보");
 }
 
 function setRoles(resp) {
@@ -71,7 +71,7 @@ function setRoles(resp) {
 				$("#btnAdd").fadeIn();
 			else {
 				$("#btnAdd").fadeOut();
-				checkbox("#toggleActions").check(false);
+				checkbox("#toggleUsers").check(false);
 			}
 		});
 	checkbox("#toggleRoles").onChange(function(checked){
@@ -79,31 +79,30 @@ function setRoles(resp) {
 	});
 }
 
-function getActions(roleID) {
+function getUsers(roleID) {
 	ajax({
-		url:"<c:url value='/role/action/list.do'/>",
+		url:"<c:url value='/role/user/list.do'/>",
 		data:{roleID:roleID},
-		success:setActions
+		success:setUsers
 	});
-	setActionTitle(roleID);
-	currentActions = function(){getActions(roleID);};
+	setUserTitle(roleID);
+	currentUsers = function(){getUsers(roleID);};
 }
 
-function setActions(resp) {
-	$("#actionList").populate({
-		data:resp.actions,
+function setUsers(resp) {
+	$("#userList").populate({
+		data:resp.users,
 		tr:function(row){
-			return "${vtx:jstring(actionRow)}"
-				.replace(/{actionID}/g, row.ACT_ID)
-				.replace(/{actionName}/g, row.ACT_NAME)
-				.replace(/{actionPath}/g, row.ACT_PATH)
+			return "${vtx:jstring(userRow)}"
+				.replace(/{userID}/g, row.USER_ID)
+				.replace(/{userName}/g, row.USER_NAME)
 				.replace(/{insTime}/g, row.INS_TIME);
 		},
-		ifEmpty:"${vtx:jstring(actionNotFound)}"
+		ifEmpty:"${vtx:jstring(userNotFound)}"
 	});
 
 	$("#btnRemove").fadeOut();
-	checkedActions = checkbox("input[type='checkbox'][name='actionID']")
+	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
 		.onChange(function(checked){
 			if (checked) {
 				if (checkedRoles.isChecked())
@@ -111,33 +110,34 @@ function setActions(resp) {
 			} else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleActions").onChange(function(checked){checkedActions.check(checked);});
+	checkbox("#toggleUsers").onChange(function(checked){checkedUsers.check(checked);});
 }
 
-function addActions(){
+function addUsers(){
 	ajax({
-		url:"<c:url value='/action/select.do'/>",
+		url:"<c:url value='/user/select.do'/>",
+		data:{init:true},
 		success:function(resp) {
 			dialog.show({
-				title:"액션 선택",
+				title:"사용자 선택",
 				content:resp,
 				onOK:function(){
-					var actionIDs = actionInfo.checked.value();
-					if (!actionIDs)
-						return alert("액션을 선택하십시오.");
+					var userIDs = userInfo.checked.value();
+					if (!userIDs)
+						return alert("사용자를 선택하십시오.");
 					
 					dialog.close();
 					ajax({
-						url:"<c:url value='/role/action/add.do'/>",
+						url:"<c:url value='/role/user/add.do'/>",
 						data:{
 							roleIDs:checkedRoles.value().join(","),
-							actionIDs:actionIDs.join(","),
+							userIDs:userIDs.join(","),
 						},
 						success:function(resp){
 							if (!resp.saved)
 								return alert("저장되지 않았습니다.");
-							if (currentActions)
-								currentActions();
+							if (currentUsers)
+								currentUsers();
 							else
 								location.reload();
 						}
@@ -148,21 +148,21 @@ function addActions(){
 	});
 }
 
-function deleteActions(){
-	if (!confirm("선택한 액션을 ROLE에서 삭제하시겠습니까?")) return;
+function deleteUsers(){
+	if (!confirm("선택한 사용자를 ROLE에서 삭제하시겠습니까?")) return;
 	
-	var actionIDs = checkedActions.value();
+	var userIDs = checkedUsers.value();
 	ajax({
-		url:"<c:url value='/role/action/delete.do'/>",
+		url:"<c:url value='/role/user/delete.do'/>",
 		data:{
 			roleIDs:checkedRoles.value().join(","),
-			actionIDs:actionIDs.join(","),
+			userIDs:userIDs.join(","),
 		},
 		success:function(resp){
 			if (!resp.saved)
 				return alert("저장되지 않았습니다.");
-			if (currentActions)
-				currentActions();
+			if (currentUsers)
+				currentUsers();
 			else
 				location.reload();
 		}
@@ -170,11 +170,11 @@ function deleteActions(){
 }
 </vtx:script>
 <vtx:script type="docReady">
-	docTitle("ROLE 액션 정보");
+	docTitle("ROLE 사용자 정보");
 	subTitle("ROLE 정보");
 	setRoles({roles:<vtx:json data="${roles}" mapper="${objectMapper}"/>});
-	setActions({
-		actions:<vtx:json data="${actions}" mapper="${objectMapper}"/>
+	setUsers({
+		users:<vtx:json data="${users}" mapper="${objectMapper}"/>
 	});
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

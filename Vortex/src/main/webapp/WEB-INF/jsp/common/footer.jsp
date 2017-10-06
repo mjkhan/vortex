@@ -4,7 +4,7 @@
 </main>
 <footer>
 </footer>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="<c:url value='/asset/js/jquery-3.2.1.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/asset/js/base.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
 <vtx:script type="src" write="true"/>

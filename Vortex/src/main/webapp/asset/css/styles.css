@@ -82,6 +82,10 @@ button.add {
 	width:100%;
 	padding:.2em .5em;
 }
+.dialogFooter {
+	width:100%;
+	text-align:center;
+}
 
 .search {
 	padding:.75em 0;

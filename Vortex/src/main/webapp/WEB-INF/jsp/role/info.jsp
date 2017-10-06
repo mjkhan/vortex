@@ -14,9 +14,6 @@
 		</td>
 	</tr>
 <c:if test="${!create}">
-	<tr><th>등록</th>
-		<td><fmt:formatDate value="${role.createdAt}" pattern="yy-MM-dd hh:mm"/></td>
-	</tr>
 	<tr><th>수정</th>
 		<td><fmt:formatDate value="${role.lastModified}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>

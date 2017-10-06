@@ -71,4 +71,53 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 		return dataobject()
 			.set("actions", actions);
 	}
+
+	@Override
+	public DataObject addActions(DataObject req) {
+		String addedBy = currentUser().getId();
+		String[] roleIDs = req.value("roleIDs"),
+				 actionIDs = req.value("actionIDs");
+		int affected = roleMemberMapper.addActions(addedBy, roleIDs, actionIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject deleteActions(DataObject req) {
+		String[] roleIDs = req.value("roleIDs"),
+				 actionIDs = req.value("actionIDs");
+		int affected = roleMemberMapper.deleteActions(roleIDs, actionIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject getUsers(DataObject req) {
+		List<Map<String, Object>> users = roleMemberMapper.getUsers(req);
+		return dataobject()
+			.set("users", users);
+	}
+
+	@Override
+	public DataObject addUsers(DataObject req) {
+		String addedBy = currentUser().getId();
+		String[] roleIDs = req.value("roleIDs"),
+				 userIDs = req.value("userIDs");
+		int affected = roleMemberMapper.addUsers(addedBy, roleIDs, userIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject deleteUsers(DataObject req) {
+		String[] roleIDs = req.value("roleIDs"),
+				 userIDs = req.value("userIDs");
+		int affected = roleMemberMapper.deleteUsers(roleIDs, userIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
 }

@@ -17,4 +17,14 @@ public interface RoleService extends ApplicationAccess {
 	public DataObject delete(DataObject req);
 	
 	public DataObject getActions(DataObject req);
+	
+	public DataObject addActions(DataObject req);
+	
+	public DataObject deleteActions(DataObject req);
+	
+	public DataObject getUsers(DataObject req);
+	
+	public DataObject addUsers(DataObject req);
+	
+	public DataObject deleteUsers(DataObject req);
 }

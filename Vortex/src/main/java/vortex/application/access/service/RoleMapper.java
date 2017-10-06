@@ -14,7 +14,7 @@ public class RoleMapper extends AbstractMapper {
 	}
 	
 	public List<DataObject> getRolesFor(String member) {
-		return selectList("role.getRolesForMember", member);
+		return selectList("role.getRolesForMember", params().set("member", member));
 	}
 	
 	public Role getRole(String roleID) {

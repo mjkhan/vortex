@@ -51,7 +51,7 @@ function checkbox(selector) {
 		},
 		value: function(checked) {
 			var values = objs.values(checked != false);
-			return values.length > 0 ? values[0] : null;
+			return values.length > 0 ? values : null;
 		},
 		isChecked: function() {
 			var checked = false;
@@ -103,6 +103,13 @@ function message(id) {
 	return msg;
 }
 
+/**
+ * options = {
+ * 	title:"...",
+ *  content:"... ",
+ *  onclose:function
+ * }
+ */
 var dialog = {
 	container:null,
 	onclose:null,
@@ -114,10 +121,12 @@ var dialog = {
 			$("#_dlgTitle").html(options.title || "Vortex");
 			$("#_dlgContent").html(options.content);
 		}
+		if (options.onOK)
+			$("#_ok").click(options.onOK);
 		dialog.container.show();
 	},
 	show:function(options) {
-		dialog.onclose = dialog.onclose;
+		dialog.onclose = options.onclose;
 		if (!dialog.container) {
 			dialog.container = $("<div>").appendTo("body");
 			ajax({

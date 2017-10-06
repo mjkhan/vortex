@@ -5,7 +5,7 @@
 <!-- roleID에 설정된 액션 정보 가져오기 -->
 <select id="getActions" parameterType="hashmap" resultType="hashmap">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
-	SELECT SQL_CALC_FOUND_ROWS A.ACT_ID, ACT_NAME, INS_ID, INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
+	SELECT SQL_CALC_FOUND_ROWS A.ACT_ID, ACT_NAME, ACT_PATH, INS_ID, INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
 	FROM TBL_ROLE_ACTION A, TBL_ACTION B
 	WHERE ROLE_ID = #{roleID}
 	AND A.ACT_ID = B.ACT_ID
@@ -13,7 +13,7 @@
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
-	SELECT A.ACT_ID, ACT_NAME, INS_ID, INS_TIME
+	SELECT A.ACT_ID, ACT_NAME, ACT_PATH, INS_ID, INS_TIME
 	FROM TBL_ROLE_ACTION A, TBL_ACTION B
 	WHERE ROLE_ID = #{roleID}
 	AND A.ACT_ID = B.ACT_ID
@@ -65,19 +65,29 @@ WHERE ACT_ID IN (
 
 <!-- roleID에 설정된 사용자 정보 가져오기 -->
 <select id="getUsers" parameterType="hashmap" resultType="hashmap">
-SELECT SQL_CALC_FOUND_ROWS A.USER_ID, USER_NAME, INS_ID, A.INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
-FROM TBL_ROLE_USER A, TBL_USER B
-WHERE ROLE_ID = #{roleID}
-AND STATUS &lt;&gt; '999'
-AND A.USER_ID = B.USER_ID
-ORDER BY A.USER_ID
-LIMIT #{start}, #{fetch} 
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS A.USER_ID, USER_NAME, ALIAS, INS_ID, A.INS_TIME, FOUND_ROWS() AS TOTAL_ROW_CNT
+	FROM TBL_ROLE_USER A, TBL_USER B
+	WHERE ROLE_ID = #{roleID}
+	AND STATUS &lt;&gt; '999'
+	AND A.USER_ID = B.USER_ID
+	ORDER BY A.USER_ID
+	LIMIT #{start}, #{fetch} 
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 필요 시 -->
+	SELECT A.USER_ID, USER_NAME, ALIAS, INS_ID, A.INS_TIME
+	FROM TBL_ROLE_USER A, TBL_USER B
+	WHERE ROLE_ID = #{roleID}
+	AND STATUS &lt;&gt; '999'
+	AND A.USER_ID = B.USER_ID
+	ORDER BY A.USER_ID
+</if>
 </select>
 
 <!-- roleIDs의 역할에 userIDs의 사용자 추가 -->
 <insert id="addUsers" parameterType="hashmap">
-INSERT INTO TBL_ROLE_USER (ROLE_ID, USER_TYPE, USER_ID, INS_ID, INS_TIME)
-SELECT ROLE_ID, #{userType} USER_TYPE, USER_ID, #{addedBy}, CURRENT_TIMESTAMP
+INSERT INTO TBL_ROLE_USER (ROLE_ID, USER_ID, INS_ID, INS_TIME)
+SELECT ROLE_ID, USER_ID, #{addedBy}, CURRENT_TIMESTAMP
 FROM (
 	<foreach collection="roleIDs" item="roleID" separator=" UNION">SELECT #{roleID} ROLE_ID</foreach>
 ) A, (
@@ -86,8 +96,7 @@ FROM (
 WHERE NOT EXISTS (
 	SELECT ROLE_ID, USER_ID
 	FROM TBL_ROLE_USER C
-	WHERE C.USER_TYPE = #{userType} 
-	AND C.ROLE_ID = A.ROLE_ID
+	WHERE C.ROLE_ID = A.ROLE_ID
 	AND C.USER_ID = B.USER_ID
 )
 </insert>
@@ -101,8 +110,7 @@ WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{r
 <if test="userIDs != null">
 	<if test="roleIDs == null">WHERE</if>
 	<if test="roleIDs != null">AND</if>
-	USER_TYPE = #{userType}
-	AND USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
+	USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </if>
 </delete>
 

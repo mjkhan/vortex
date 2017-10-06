@@ -23,14 +23,11 @@
 		</tr></c:set>
 	</tbody>
 </table>
-<div class="search">
-	<button onclick="onOK();" type="button">확인</button>
-</div>
 <script type="text/javascript">
 var actionInfo = {
 	get:function(){
 		ajax({
-			url:"<c:url value='/action/list.do'/>",
+			url:"<c:url value='/action/select.do'/>",
 			data:{
 				groupID:$("#_actionGroup").val()
 			},
@@ -38,8 +35,9 @@ var actionInfo = {
 		});
 	},
 	set:function(resp){
+		var actions = resp.actions;
 		$("#_actionList").populate({
-			data:resp.actions,
+			data:actions,
 			tr:function(row){
 				return "${vtx:jstring(actionRow)}"
 					.replace(/{actionID}/g, row.ACT_ID)
@@ -52,18 +50,9 @@ var actionInfo = {
 		checkbox("#_toggleActions").onChange(function(checked){
 			actionInfo.checked.check(checked);
 		});
+		showOK(actions && actions.length);
 	}
 };
-
-function onOK(){
-	var actionIDs = actionInfo.checked.value();
-	if (!actionIDs)
-		return alert("액션을 선택하십시오.");
-	
-	dialog.close();
-	if (window.actionSelected)
-		actionSelected(actionIDs);
-}
 
 $(function(){
 	actionInfo.set({

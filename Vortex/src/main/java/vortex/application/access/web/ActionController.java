@@ -58,29 +58,21 @@ public class ActionController extends ApplicationController {
 		return modelAndView("jsonView", actionService.deleteGroups(request(hreq)));
 	}
 	
-	@RequestMapping("/search.do")
-	public ModelAndView search(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		String groupID = req.string("groupID");
-		boolean init = isEmpty(groupID);
-		ModelAndView mav = new ModelAndView(init ? "action/search" : "jsonView");
-		if (init) {
-			List<DataObject> groups = actionService.getGroups(req).value("groups");
-			mav.addObject("groups", groups);
-			if (!groups.isEmpty()) {
-				groupID = groups.get(0).string("grp_id");
-				req.set("groupID", groupID);
-			}
-		}
-		return mav.addObject("actions", actionService.getActions(req).value("actions"));
+	@RequestMapping("/select.do")
+	public ModelAndView select(HttpServletRequest hreq) {
+		return search(hreq, "action/select");
 	}
 	
 	@RequestMapping("/list.do")
 	public ModelAndView getActions(HttpServletRequest hreq) {
+		return search(hreq, "action/list");
+	}
+
+	private ModelAndView search(HttpServletRequest hreq, String initView) {
 		DataObject req = request(hreq);
 		String groupID = req.string("groupID");
 		boolean init = isEmpty(groupID);
-		ModelAndView mav = new ModelAndView(init ? "action/list" : "jsonView");
+		ModelAndView mav = new ModelAndView(init ? initView : "jsonView");
 		if (init) {
 			List<DataObject> groups = actionService.getGroups(req).value("groups");
 			mav.addObject("groups", groups);

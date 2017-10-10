@@ -1,10 +1,14 @@
 package vortex.application;
 
 import java.sql.Date;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import vortex.support.data.Status;
 
-public class User {
+public class User implements UserDetails {
 	private String
 		id,
 		name,
@@ -39,6 +43,7 @@ public class User {
 		this.alias = alias;
 	}
 	
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -133,5 +138,35 @@ public class User {
 				throw new RuntimeException("The client is sealed.");
 			return this;
 		}
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		return getId();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

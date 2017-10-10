@@ -2,7 +2,6 @@ package vortex.application.user.web;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,7 +75,7 @@ public class UserController extends ApplicationController {
 		DataObject req = request(hreq);
 		return modelAndView("jsonView", userService.remove(req));
 	}
-	
+/*	
 	@RequestMapping("/login.do")
 	public ModelAndView login(HttpServletRequest hreq, HttpServletResponse hresp) {
 		DataObject req = request(hreq),
@@ -98,4 +97,5 @@ public class UserController extends ApplicationController {
 		}
 		return modelAndView("jsonView", resp);
 	}
+*/	
 }

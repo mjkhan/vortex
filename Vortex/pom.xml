@@ -139,21 +139,37 @@
             <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc-14.jar</systemPath>
         </dependency>
         -->
+
         <dependency>
         	<groupId>commons-dbcp</groupId>
         	<artifactId>commons-dbcp</artifactId>
         	<version>1.4</version>
         </dependency>
+
+        <dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		    <version>4.1.2.RELEASE</version>
+        </dependency>
+
+        <dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-config</artifactId>
+		    <version>4.1.2.RELEASE</version>
+        </dependency>
+
         <dependency>
         	<groupId>mysql</groupId>
         	<artifactId>mysql-connector-java</artifactId>
         	<version>5.0.8</version>
         </dependency>
+
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.9.0</version>
 		</dependency>
+
         <dependency>
         	<groupId>log4sql</groupId>
         	<artifactId>log4sql</artifactId>

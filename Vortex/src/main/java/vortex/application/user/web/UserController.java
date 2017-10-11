@@ -75,27 +75,4 @@ public class UserController extends ApplicationController {
 		DataObject req = request(hreq);
 		return modelAndView("jsonView", userService.remove(req));
 	}
-/*	
-	@RequestMapping("/login.do")
-	public ModelAndView login(HttpServletRequest hreq, HttpServletResponse hresp) {
-		DataObject req = request(hreq),
-				   resp = userService.login(req);
-		boolean loggedIn = resp.bool("loggedIn");
-		if (loggedIn) {
-			boolean remember = req.bool("remember");
-			
-		}
-		return modelAndView("jsonView", resp);
-	}
-	
-	@RequestMapping("/logout.do")
-	public ModelAndView logout(HttpServletRequest hreq, HttpServletResponse hresp) {
-		DataObject req = request(hreq),
-				   resp = userService.logout(req);
-		boolean loggedIn = resp.bool("loggedIn");
-		if (loggedIn) {
-		}
-		return modelAndView("jsonView", resp);
-	}
-*/	
 }

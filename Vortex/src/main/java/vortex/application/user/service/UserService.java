@@ -6,11 +6,6 @@ import vortex.application.ApplicationAccess;
 import vortex.support.data.DataObject;
 
 public interface UserService extends ApplicationAccess, UserDetailsService {
-/*
-	public DataObject login(DataObject req);
-	
-	public DataObject logout(DataObject req);
-*/	
 	public DataObject search(DataObject req);
 	
 	public DataObject getUser(DataObject req);

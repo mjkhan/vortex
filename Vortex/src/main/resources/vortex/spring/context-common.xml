@@ -12,7 +12,6 @@
 		<property name="basenames">
 			<list>
 				<value>classpath:/vortex/properties/message-common</value>
-				<value>classpath:/egovframework/rte/fdl/idgnr/messages/idgnr</value>
 				<value>classpath:/egovframework/rte/fdl/property/messages/properties</value>
 			</list>
 		</property>

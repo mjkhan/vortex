@@ -4,6 +4,21 @@ function enterPressed(selector, handler) {
 		handler.apply();
 	});
 }
+
+function emptyRequired() {
+	var empty = false;
+	$("*[required]").each(function(){
+		if (empty) return;
+		var input = $(this),
+			value = input.val();
+		if (empty = isEmpty(value)) {
+			var label = $("label[for='" + input.attr("id") + "']").html();
+			alert(label + "을(를) 입력하십시오.");
+			input.focus();
+		}
+	});
+	return empty;
+}
 /**
  * config = {
  * 	data:[],

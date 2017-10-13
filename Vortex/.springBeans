@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[3.7.3.201602250914-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[3.8.4.201703310634-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -19,10 +19,10 @@
 		<config>src/test/resources/vortex/spring/context-datasource.xml</config>
 		<config>src/main/resources/vortex/spring/context-group.xml</config>
 		<config>src/main/resources/vortex/spring/context-common.xml</config>
+		<config>src/main/resources/vortex/spring/context-security.xml</config>
 		<config>src/test/resources/vortex/spring/context-mapper.xml</config>
 		<config>src/test/resources/vortex/spring/context-properties.xml</config>
 		<config>src/main/webapp/WEB-INF/config/vortex/springmvc/dispatcher-servlet.xml</config>
-		<config>src/main/resources/vortex/spring/context-idgen.xml</config>
 		<config>src/main/resources/vortex/spring/context-mapper.xml</config>
 	</autoconfigs>
 	<configSets>

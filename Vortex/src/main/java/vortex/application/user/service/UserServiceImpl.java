@@ -19,6 +19,8 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		DataObject result = getUser(dataobject().set("userID", username));
 		User user = result.value("user");
+		if (user == null)
+			throw new UsernameNotFoundException("User not found with the username: " + username);
 		return user;
 	}
 	

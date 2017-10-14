@@ -26,10 +26,12 @@ public class AuthenticationHandler extends ApplicationController implements Auth
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest hreq, HttpServletResponse hresp, Authentication authentication) throws IOException, ServletException {
+		log().debug(() -> "Authentication success");
 	}
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest hreq, HttpServletResponse hresp, AuthenticationException exception) throws IOException, ServletException {
+		log().debug(() -> "Authentication failure");
 	}
 
 }

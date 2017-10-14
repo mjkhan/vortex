@@ -1,3 +1,12 @@
+$.fn.onEnterPressed = function(handler) {
+	return this.each(function(){
+		$(this).keypress(function(evt){
+			if (!handler || evt.which != 13) return;
+			handler.apply();
+		});
+	});
+}
+
 function enterPressed(selector, handler) {
 	$(selector).keypress(function(evt) {
 		if (evt.which != 13) return;
@@ -5,15 +14,19 @@ function enterPressed(selector, handler) {
 	});
 }
 
-function emptyRequired() {
+function emptyRequired(whenEmpty) {
 	var empty = false;
 	$("*[required]").each(function(){
 		if (empty) return;
 		var input = $(this),
 			value = input.val();
 		if (empty = isEmpty(value)) {
-			var label = $("label[for='" + input.attr("id") + "']").html();
-			alert(label + "을(를) 입력하십시오.");
+			if (whenEmpty)
+				whenEmpty(input);
+			else {
+				var label = $("label[for='" + input.attr("id") + "']").html();
+				alert(label + "을(를) 입력하십시오.");
+			}
 			input.focus();
 		}
 	});

@@ -30,7 +30,7 @@ subTitle("로그인");
 if (location.href.indexOf("error") > -1)
 	$("#msg").html("로그인하지 못했습니다.");
 
-$("input").onEnterPressed(login);
+$("input").onEnterPress(login);
 $("#userID").focus();
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

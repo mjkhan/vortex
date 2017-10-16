@@ -68,5 +68,5 @@ function saveUser() {
 }
 <c:if test="${create}">$("#userID").focus();</c:if>
 <c:if test="${!create}">$("#userName").focus();</c:if>
-enterPressed(".infoForm input:not([readonly])", saveUser);
+$(".infoForm input:not([readonly])").onEnterPress(saveUser);
 </script>

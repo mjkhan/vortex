@@ -63,5 +63,5 @@ function saveAction() {
 	});
 }
 $("#actionName").focus();
-enterPressed(".infoForm input:not([readonly])", saveAction);
+$(".infoForm input:not([readonly])").onEnterPress(saveAction);
 </script>

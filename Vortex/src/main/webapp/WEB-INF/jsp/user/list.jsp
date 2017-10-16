@@ -155,7 +155,7 @@ function setUserList(resp, start) {
 <vtx:script type="docReady">
 	docTitle("사용자 정보");
 	subTitle("사용자 정보");
-	enterPressed("#value", getUsers);
+	$("#value").onEnterPress(getUsers);
 	setUserList({
 		users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
 		more:${more},

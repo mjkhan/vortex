@@ -58,5 +58,5 @@ function saveRole() {
 }
 <c:if test="${create}">$("#roleID").focus();</c:if>
 <c:if test="${!create}">$("#roleName").focus();</c:if>
-enterPressed(".infoForm input:not([readonly])", saveRole);
+$(".infoForm input:not([readonly])").onEnterPress(saveRole);
 </script>

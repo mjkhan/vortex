@@ -1,16 +1,9 @@
-$.fn.onEnterPressed = function(handler) {
+$.fn.onEnterPress = function(handler) {
 	return this.each(function(){
 		$(this).keypress(function(evt){
 			if (!handler || evt.which != 13) return;
 			handler.apply();
 		});
-	});
-}
-
-function enterPressed(selector, handler) {
-	$(selector).keypress(function(evt) {
-		if (evt.which != 13) return;
-		handler.apply();
 	});
 }
 

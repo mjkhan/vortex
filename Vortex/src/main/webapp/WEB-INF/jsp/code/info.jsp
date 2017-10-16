@@ -58,5 +58,5 @@ function saveCode() {
 }
 <c:if test="${create}">$("#code").focus();</c:if>
 <c:if test="${!create}">$("#value").focus();</c:if>
-enterPressed(".infoForm input:not([readonly])", saveCode);
+$(".infoForm input:not([readonly])").onEnterPress(saveCode);
 </script>

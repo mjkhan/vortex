@@ -61,5 +61,5 @@ function saveGroup() {
 }
 <c:if test="${create}">$("#groupID").focus();</c:if>
 <c:if test="${!create}">$("#groupName").focus();</c:if>
-enterPressed(".infoForm input:not([readonly])", saveGroup);
+$(".infoForm input:not([readonly])").onEnterPress(saveGroup);
 </script>

@@ -151,7 +151,7 @@ function setRoleList(resp, start) {
 <vtx:script type="docReady">
 	docTitle("ROLE 정보");
 	subTitle("ROLE 정보");
-	enterPressed("#value", getRoles);
+	$("#value").onEnterPress(getRoles);
 	setRoleList({
 		roles:<vtx:json data="${roles}" mapper="${objectMapper}"/>
 	}, 0);

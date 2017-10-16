@@ -151,7 +151,7 @@ function setGroupList(resp, start) {
 <vtx:script type="docReady">
 	docTitle("데이터 그룹 정보");
 	subTitle("데이터 그룹 정보");
-	enterPressed("#value", getGroups);
+	$("#value").onEnterPress(getGroups);
 	setGroupList({
 		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
 		more:${more},

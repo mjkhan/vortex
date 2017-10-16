@@ -145,13 +145,13 @@ function setGroupList(resp, start) {
 			else
 				$("#btnRemove").fadeOut();
 		});
-	checkbox("#toggleChecks")onChange(function(checked){checkedGroups.check(checked);});
+	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
 }
 </vtx:script>
 <vtx:script type="docReady">
 	docTitle("코드그룹 정보");
 	subTitle("코드그룹 정보");
-	enterPressed("#value", getGroups);
+	$("#value").onEnterPress(getGroups);
 	setGroupList({
 		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
 		more:${more},

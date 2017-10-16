@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
@@ -17,6 +18,11 @@ import vortex.support.data.DataObject;
 public class UserController extends ApplicationController {
 	@Resource(name="userService")
 	private UserService userService;
+	
+	@RequestMapping(value="/login.do", method=RequestMethod.GET)
+	public String loginPage() {
+		return "user/login";
+	}
 	
 	@RequestMapping("/list.do")
 	public ModelAndView search(HttpServletRequest hreq) {

@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,14 @@ public class ApplicationController extends AbstractObject {
 		result.setViewName(viewName);
 		return result.addAllObjects(map);
 	}
-	
+/*	
+	protected static boolean isRememberMeAuthenticated() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth != null ?
+			RememberMeAuthenticationToken.class.isAssignableFrom(auth.getClass()) :
+			false;
+	}
+*/
 	public static class Filter implements javax.servlet.Filter {
 
 		@Override
@@ -75,36 +81,4 @@ public class ApplicationController extends AbstractObject {
 		public void destroy() {}
 	}
 	
-	public static class ClientToken {
-		private static final String NAME = "vortexToken";
-		
-		public User.Client read(HttpServletRequest hreq) {
-			String token = Kookie.get(hreq).getValue(NAME);
-			if (isEmpty(token)) return User.Client.UNKNOWN;
-			
-			try {
-				String[] segs = token.split(";");
-				User.Client client = new User.Client();
-				client.setId(segs[0]);
-				client.setPassword(segs[1]);
-				return client;
-			} catch (Exception e) {
-				return User.Client.UNKNOWN;
-			}
-		}
-		
-		public void write(User.Client client, HttpServletRequest hreq, HttpServletResponse hresp) {
-			String token = client.getId() + ";" + client.getPassword(); 
-			Kookie kookie = Kookie.get(hreq).setResponse(hresp);
-			if (!client.isPersistent()) {
-				kookie.shortSave(NAME, token);
-			} else {
-				kookie.longSave(NAME, token);
-			}
-		}
-		
-		public void delete(HttpServletRequest hreq, HttpServletResponse hresp) {
-			Kookie.get(hreq).setResponse(hresp).remove(NAME);
-		}
-	}
 }

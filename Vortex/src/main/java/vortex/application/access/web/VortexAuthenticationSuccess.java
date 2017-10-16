@@ -11,19 +11,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import vortex.application.ApplicationController;
+import vortex.support.AbstractObject;
 
 @Controller
-public class AuthenticationHandler extends ApplicationController implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
-
-	@RequestMapping(value="/login.do", method=RequestMethod.GET)
-	public String loginPage() {
-		return "user/login";
-	}
-
+public class VortexAuthenticationSuccess extends AbstractObject implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest hreq, HttpServletResponse hresp, Authentication authentication) throws IOException, ServletException {
 		log().debug(() -> "Authentication success");

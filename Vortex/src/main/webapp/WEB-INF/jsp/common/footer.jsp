@@ -25,6 +25,8 @@ function subTitle(title) {
 }
 <sec:authorize access="isAuthenticated()">
 function logout() {
+	if (!confirm("로그아웃 하시겠습니까?")) return;
+
 	var form = $("<form>").attr("action", "<c:url value='/logout'/>").attr("method", "post");
 	$("<input>").attr("name", "${_csrf.parameterName}").val("${_csrf.token}").attr("type", "hidden").appendTo(form);
 	form.appendTo("body").submit();

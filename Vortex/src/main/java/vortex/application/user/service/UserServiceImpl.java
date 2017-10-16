@@ -1,8 +1,6 @@
 package vortex.application.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
@@ -15,15 +13,6 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		DataObject result = getUser(dataobject().set("userID", username));
-		User user = result.value("user");
-		if (user == null)
-			throw new UsernameNotFoundException("User not found with the username: " + username);
-		return user;
-	}
-	
 	@Override
 	public DataObject search(DataObject req) {
 		BoundedList<DataObject> users = userMapper.search(req);

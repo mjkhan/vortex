@@ -1,11 +1,9 @@
 package vortex.application.user.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-
 import vortex.application.ApplicationAccess;
 import vortex.support.data.DataObject;
 
-public interface UserService extends ApplicationAccess, UserDetailsService {
+public interface UserService extends ApplicationAccess {
 	public DataObject search(DataObject req);
 	
 	public DataObject getUser(DataObject req);

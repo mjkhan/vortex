@@ -16,12 +16,16 @@
 			login-page="/login.do"
 			username-parameter="userID" password-parameter="passwd"
 		/>
-		<remember-me remember-me-parameter="remember" />
+		<remember-me
+			remember-me-parameter="remember"
+			remember-me-cookie="remember"
+			data-source-ref="dataSource"
+		/>
 		<logout logout-success-url="/login.do"/>
 	</http>
 	
 	<authentication-manager>
-		<authentication-provider user-service-ref="userService"/>
+		<authentication-provider user-service-ref="authenticationService"/>
 	</authentication-manager>
 
 </beans:beans>

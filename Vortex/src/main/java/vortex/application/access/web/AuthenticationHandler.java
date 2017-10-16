@@ -1,4 +1,4 @@
-package vortex.application.user.web;
+package vortex.application.access.web;
 
 import java.io.IOException;
 

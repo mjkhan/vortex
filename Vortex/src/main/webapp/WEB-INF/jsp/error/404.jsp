@@ -3,7 +3,8 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div style="width:100%; padding:2em;">
-요청하신 페이지를 찾지 못했습니다.
+<p>요청하신 페이지를 찾지 못했습니다.</p>
+<p>${requestScope['javax.servlet.forward.request_uri']}</p>
 </div>
 <vtx:script type="docReady">
 	docTitle("오류: 404");

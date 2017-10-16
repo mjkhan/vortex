@@ -2,6 +2,7 @@ package vortex.application;
 
 import java.sql.Date;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ public class User implements UserDetails {
 	private Date
 		createdAt,
 		lastModified;
+	private List<? extends GrantedAuthority> roles;
 	
 	public String getId() {
 		return id;
@@ -27,6 +29,11 @@ public class User implements UserDetails {
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	@Override
+	public String getUsername() {
+		return getId();
 	}
 	
 	public String getName() {
@@ -86,70 +93,14 @@ public class User implements UserDetails {
 	public String toString() {
 		return String.format("%s('%s', '%s')", getClass().getSimpleName(), id, name);
 	}
-	
-	public static class Client {
-		public static final Client UNKNOWN = new Client().seal();
-		
-		private boolean
-			sealed,
-			persistent;
-		private String
-			id,
-			password,
-			sessionID;
-
-		public String getId() {
-			return id;
-		}
-
-		public void setId(String id) {
-			notSealed().id = id;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			notSealed().password = password;
-		}
-
-		public String getSessionID() {
-			return sessionID;
-		}
-
-		public void setSessionID(String sessionID) {
-			notSealed().sessionID = sessionID;
-		}
-		
-		public boolean isPersistent() {
-			return persistent;
-		}
-		
-		public void setPersistent(boolean persistent) {
-			notSealed().persistent = persistent;
-		}
-		
-		private Client seal() {
-			sealed = true;
-			return this;
-		}
-		
-		private Client notSealed() {
-			if (sealed)
-				throw new RuntimeException("The client is sealed.");
-			return this;
-		}
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return roles;
 	}
-
-	@Override
-	public String getUsername() {
-		return getId();
+	
+	public void setAuthorities(List<? extends GrantedAuthority> authorities) {
+		roles = authorities;
 	}
 
 	@Override

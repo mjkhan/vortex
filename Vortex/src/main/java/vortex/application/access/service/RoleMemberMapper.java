@@ -65,4 +65,8 @@ public class RoleMemberMapper extends AbstractMapper {
 		   			 .set("userIDs", !isEmpty(userIDs) ? userIDs : null)
 		);
 	}
+	
+	public List<Role> getRoles(String userID) {
+		return selectList("role.getUserRoles", userID);
+	}
 }

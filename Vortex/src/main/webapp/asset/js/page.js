@@ -25,8 +25,7 @@ function emptyRequired(whenEmpty) {
 	});
 	return empty;
 }
-/**
- * config = {
+/**config = {
  * 	data:[],
  * 	ifEmpty:"...",
  * 	tr:function(row){return ...;},
@@ -105,27 +104,20 @@ function checkbox(selector) {
 	return objs;
 };
 
-/*message("element").set(msg);
- */
-function message(id) {
-	var msg = {
-		elem: $("#" + id),
-		set: function(s) {
-			if ("text" != msg.elem.attr("type")) {
-				msg.elem.html(s).show();
-				setTimeout(function() {
-					msg.elem.hide({effect:"fade"}).html(null);
-				}, 2000);
-			} else {
-				msg.elem.val(s).focus().select();
-			}
+$.fn.message = function(msg) {
+	return this.each(function(){
+		var elem = $(this);
+		if ("text" != elem.attr("type")) {
+			elem.html(msg).show();
+			setTimeout(function(){
+				elem.hide({effect:"fade"}).html(null);
+			}, 2000);
+		} else {
+			elem.val(s).focus().select();
 		}
-	};
-	return msg;
-}
-
-/**
- * options = {
+	});
+};
+/**options = {
  * 	title:"...",
  *  content:"... ",
  *  onclose:function

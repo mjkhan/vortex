@@ -28,7 +28,7 @@ function login() {
 docTitle("로그인");
 subTitle("로그인");
 if (location.href.indexOf("error") > -1)
-	$("#msg").html("로그인하지 못했습니다.");
+	$("#msg").message("로그인하지 못했습니다.");
 
 $("input").onEnterPress(login);
 $("#userID").focus();

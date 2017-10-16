@@ -4,12 +4,28 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import vortex.support.data.Status;
 
 public class User implements UserDetails {
+	public static User current() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth == null)
+			return null;
+		return (User)auth.getPrincipal();
+	}
+	
+	public void update() {
+		SecurityContextHolder.getContext().setAuthentication(
+			new UsernamePasswordAuthenticationToken(this, getPassword(), getAuthorities())
+		);
+	}
+	
 	private static final long serialVersionUID = 1L;
 
 	private String

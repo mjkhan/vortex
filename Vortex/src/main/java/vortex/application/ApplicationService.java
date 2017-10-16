@@ -33,10 +33,6 @@ public class ApplicationService extends AbstractService implements ApplicationAc
 	}
 	
 	protected User currentUser() {
-		User user = new User();
-		user.setId("user-00");
-		user.setName("User zero");
-		user.setAlias("Zero");
-		return user;
+		return User.current();
 	}
 }

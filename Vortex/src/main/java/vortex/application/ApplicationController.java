@@ -45,14 +45,7 @@ public class ApplicationController extends AbstractObject {
 		result.setViewName(viewName);
 		return result.addAllObjects(map);
 	}
-/*	
-	protected static boolean isRememberMeAuthenticated() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return auth != null ?
-			RememberMeAuthenticationToken.class.isAssignableFrom(auth.getClass()) :
-			false;
-	}
-*/
+
 	public static class Filter implements javax.servlet.Filter {
 
 		@Override

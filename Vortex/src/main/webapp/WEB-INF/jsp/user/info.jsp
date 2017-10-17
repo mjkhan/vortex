@@ -61,7 +61,7 @@ function saveUser() {
 				<c:if test='${create}'>afterSave = getUsers;</c:if>
 				getUser($("#userID").val());
 			} else {
-				alert("저장하지 못했습니다.");
+				onException(resp);
 			}
 		}
 	});

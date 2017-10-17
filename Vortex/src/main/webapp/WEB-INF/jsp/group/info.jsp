@@ -54,7 +54,7 @@ function saveGroup() {
 				alert("저장됐습니다.");
 				getGroup($("#groupID").val());
 			} else {
-				alert("저장하지 못했습니다.");
+				onException(resp);
 			}
 		}
 	});

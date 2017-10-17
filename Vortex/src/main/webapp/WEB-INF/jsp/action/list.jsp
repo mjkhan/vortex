@@ -60,7 +60,7 @@ function removeActions() {
 			if (resp.saved) {
 				currentActions();
 			} else {
-				alert("저장하지 못했습니다.");
+				onException(resp);
 			}
 		}
 	});

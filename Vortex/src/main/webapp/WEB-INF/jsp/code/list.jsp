@@ -64,7 +64,7 @@ function removeCodes() {
 			if (resp.saved) {
 				currentCodes();
 			} else {
-				alert("저장하지 못했습니다.");
+				onException(resp);
 			}
 		}
 	});

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -44,6 +45,21 @@ public class ApplicationController extends AbstractObject {
 		log().debug(() -> "view name: " + viewName);
 		result.setViewName(viewName);
 		return result.addAllObjects(map);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ModelAndView onException(Exception e, HttpServletRequest hreq) throws Exception {
+		String header = hreq.getHeader("X-Requested-With");
+		if (!AJAX.equals(header)) throw e;
+		
+		Throwable cause = rootCause(e);
+		String msg = cause.getMessage();
+		return new ModelAndView("jsonView")
+			.addObject("failed", true)
+			.addObject("url", hreq.getRequestURL().toString())
+			.addObject("exception", cause.getClass().getSimpleName())
+			.addObject("cause", cause)
+			.addObject("message", msg);
 	}
 
 	public static class Filter implements javax.servlet.Filter {

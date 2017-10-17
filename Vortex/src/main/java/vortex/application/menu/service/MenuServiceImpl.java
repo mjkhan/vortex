@@ -16,8 +16,8 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	private MenuMapper menuMapper;
 	
 	@Override
-	public List<DataObject> search(String field, String value, int start, int fetch) {
-		return menuMapper.search(field, value, start, fetch);
+	public List<DataObject> getMenus(String field) {
+		return menuMapper.getMenus(field);
 	}
 
 	@Override
@@ -27,11 +27,13 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 
 	@Override
 	public String create(Menu menu) {
+		menu.setModifiedBy(currentUser().getId());
 		return menuMapper.create(menu);
 	}
 
 	@Override
 	public boolean update(Menu menu) {
+		menu.setModifiedBy(currentUser().getId());
 		return menuMapper.update(menu);
 	}
 
@@ -46,18 +48,18 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	}
 
 	@Override
-	public boolean reorder(String menuID, int offset) {
-		return menuMapper.reorder(menuID, offset);
+	public boolean reorder(String parentID, String menuID, int offset) {
+		return menuMapper.reorder(parentID, menuID, offset);
 	}
 
 	@Override
 	public boolean setStatus(String status, String... menuIDs) {
-		return menuMapper.setStatus(status, menuIDs);
+		return menuMapper.setStatus(currentUser().getId(), status, menuIDs);
 	}
 
 	@Override
 	public boolean delete(String... menuIDs) {
-		return menuMapper.delete(menuIDs);
+		return menuMapper.delete(currentUser().getId(), menuIDs);
 	}
 
 }

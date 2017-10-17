@@ -10,12 +10,14 @@ import vortex.support.data.hierarchy.CompositeElement;
 import vortex.support.data.hierarchy.HierarchyElement;
 
 public class Menu implements CompositeElement {
+	public static final String ROOT_ID = "00000";
+	
 	private String
 		id,
-		parentId,
 		name,
 		actionPath,
 		imageConfig,
+		parentID,
 		modifiedBy,
 		status;
 	private int sortOrder;
@@ -38,12 +40,12 @@ public class Menu implements CompositeElement {
 		return parent;
 	}
 	
-	public String getParentId() {
-		return parentId;
+	public String getParentID() {
+		return parentID;
 	}
 	
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
+	public void setParentID(String parentId) {
+		this.parentID = parentId;
 	}
 	
 	public String getName() {
@@ -113,7 +115,7 @@ public class Menu implements CompositeElement {
 	}
 	
 	public String getStatus() {
-		return status;
+		return status != null ? status : Status.ACTIVE.code();
 	}
 	
 	public void setStatus(String status) {
@@ -124,7 +126,7 @@ public class Menu implements CompositeElement {
 	public HierarchyInfo hierarchyInfo() {
 		if (hierarchyInfo == null)
 			hierarchyInfo = new HierarchyInfo();
-		return hierarchyInfo.setID(id).setParentID(parentId);
+		return hierarchyInfo.setID(id).setParentID(parentID);
 	}
 
 	@Override

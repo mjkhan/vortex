@@ -90,9 +90,11 @@ function onException(obj) {
 	
 	var msg = [];
 	msg.push("요청하신 작업을 수행하지 못했습니다.");
-	if (obj.exception)
-		msg.push(obj.exception);
-	if (obj.message)
-		msg.push(obj.message);
+	if (wctx.debug) {
+		if (obj.exception)
+			msg.push(obj.exception);
+		if (obj.message)
+			msg.push(obj.message);
+	}
 	alert(msg.join("\n\n"));
 }

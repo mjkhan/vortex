@@ -143,7 +143,7 @@ var dialog = {
 		if (!dialog.container) {
 			dialog.container = $("<div>").appendTo("body");
 			ajax({
-				url:wctx + "/asset/html/dialog.html",
+				url:wctx.path + "/asset/html/dialog.html",
 				success:function(resp) {
 					dialog.container.html(resp);
 					dialog.render(options);

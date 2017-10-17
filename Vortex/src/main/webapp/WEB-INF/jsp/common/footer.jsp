@@ -11,11 +11,15 @@
 <script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
 <vtx:script type="src" write="true"/>
 <script type="text/javascript">
-var wctx = "${pageContext.request.contextPath}",
+var wctx = {
+		path:"${pageContext.request.contextPath}",
+		debug:location.href.indexOf("localhost") > -1
+	},
 	csrf = {
 		header:"${_csrf.headerName}",
 		token:"${_csrf.token}"
 	};
+
 function docTitle(title) {
 	document.title = title ? "Vortex - " + title : "Vortex";
 }

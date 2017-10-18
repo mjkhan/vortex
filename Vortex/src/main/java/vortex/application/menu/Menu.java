@@ -41,7 +41,7 @@ public class Menu implements CompositeElement {
 	}
 	
 	public String getParentID() {
-		return parentID;
+		return parentID != null ? parentID : ROOT_ID;
 	}
 	
 	public void setParentID(String parentId) {
@@ -54,6 +54,10 @@ public class Menu implements CompositeElement {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getLevel() {
+		return parent != null ? parent.getLevel() + 1 : 0;
 	}
 	
 	public String getAction() {
@@ -131,7 +135,7 @@ public class Menu implements CompositeElement {
 
 	@Override
 	public void add(HierarchyElement e) {
-		if (!(e instanceof Menu) || equals(this)) return;
+		if (!(e instanceof Menu) || equals(e)) return;
 		
 		if (children == null)
 			children = new ArrayList<Menu>(); 
@@ -139,6 +143,7 @@ public class Menu implements CompositeElement {
 		if (children.contains(child)) return;
 		
 		children.add(child);
+		child.parent = this;
 	}
 
 	@Override

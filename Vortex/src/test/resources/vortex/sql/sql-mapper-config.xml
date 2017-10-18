@@ -11,5 +11,6 @@
 		<typeAlias alias="code" type="vortex.application.code.service.Code"/>
 		<typeAlias alias="action" type="vortex.application.access.service.Action"/>
 		<typeAlias alias="role" type="vortex.application.access.service.Role"/>
+		<typeAlias alias="menu" type="vortex.application.menu.Menu"/>
     </typeAliases>
 </configuration>

@@ -1,7 +1,9 @@
 package vortex.application.menu.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -9,10 +11,17 @@ import org.springframework.stereotype.Repository;
 import vortex.application.menu.Menu;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
+import vortex.support.data.hierarchy.Hierarchy;
+import vortex.support.data.hierarchy.HierarchyBuilder;
 import vortex.support.database.AbstractMapper;
 
 @Repository("menuMapper")
 public class MenuMapper extends AbstractMapper {
+	public Hierarchy<Menu> getTree() {
+		List<Menu> menus = selectList("menu.getTree");
+		return new HierarchyBuilder<Menu>().setElements(menus).build();
+	}
+	
 	public List<DataObject> getMenus(String parentID) {
 		return selectList("menu.getMenus", parentID);
 	}
@@ -38,12 +47,14 @@ public class MenuMapper extends AbstractMapper {
 	}
 	
 	public boolean move(String parentID, String... menuIDs) {
+		if (isEmpty(menuIDs)) return false;
 		DataObject params = params().set("parentID", parentID).set("menuIDs", menuIDs);
 		int affected = update("menu.move", params);
 		return affected > 0;
 	}
 	
 	public boolean reorder(String parentID, String... menuIDs) {
+		if (isEmpty(menuIDs)) return false;
 		DataObject params = params().set("parentID", parentID).set("menuIDs", menuIDs);
 		int affected = update("menu.reorder", params);
 		return affected > 0;
@@ -59,18 +70,34 @@ public class MenuMapper extends AbstractMapper {
 		if (index < 0) return false;
 		
 		int target = Math.min(Math.max(0, index + offset), menus.size() - 1);
+		if (index == target) return false;
+
 		Collections.swap(menus, index, target);
 		
 		List<String> menuIDs = menus.stream().map(row -> row.string("menu_id")).collect(Collectors.toList());
 		return reorder(parentID, menuIDs.toArray(new String[menuIDs.size()]));
 	}
 	
+	private String[] getAllIDs(String... menuIDs) {
+		Hierarchy<Menu> tree = getTree();
+		Map<String, Menu> index = tree.getIndex();
+		ArrayList<Menu> menus = new ArrayList<>();
+		for (String menuID: menuIDs) {
+			Menu menu = index.get(menuID);
+			if (menu == null || menus.contains(menu)) continue;
+			menus.add(menu);
+		}
+		List<String> IDs = Menu.Support.getIDs(menus);
+		return IDs.toArray(new String[IDs.size()]);
+	}
+	
 	public boolean setStatus(String modifiedBy, String status, String... menuIDs) {
+		String[] IDs = getAllIDs(menuIDs);
 		DataObject params = params()
-			.set("menuIDs", menuIDs)
+			.set("menuIDs", IDs)
 			.set("status", status)
 			.set("modifiedBy", modifiedBy);
-		int affected = update("menu.reorderByOffset", params);
+		int affected = update("menu.setStatus", params);
 		return affected > 0;
 	}
 	

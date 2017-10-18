@@ -16,7 +16,7 @@ public class User implements UserDetails {
 	public static User current() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null)
-			return null;
+			return User.unknown;
 		return (User)auth.getPrincipal();
 	}
 	
@@ -27,6 +27,8 @@ public class User implements UserDetails {
 	}
 	
 	private static final long serialVersionUID = 1L;
+	private static final String UNKNOWN = "unknown";
+	public static final User unknown = new User().seal();
 
 	private String
 		id,
@@ -38,13 +40,18 @@ public class User implements UserDetails {
 		createdAt,
 		lastModified;
 	private List<? extends GrantedAuthority> roles;
+	private boolean sealed;
+	
+	public boolean isUnknown() {
+		return UNKNOWN.equals(getId());
+	}
 	
 	public String getId() {
-		return id;
+		return id != null ? id : UNKNOWN;
 	}
 	
 	public void setId(String id) {
-		this.id = id;
+		notSealed().id = id;
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		notSealed().name = name;
 	}
 	
 	public String getAlias() {
@@ -65,7 +72,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setAlias(String alias) {
-		this.alias = alias;
+		notSealed().alias = alias;
 	}
 	
 	@Override
@@ -74,7 +81,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setPassword(String password) {
-		this.password = password;
+		notSealed().password = password;
 	}
 	
 	public Date getCreatedAt() {
@@ -82,7 +89,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+		notSealed().createdAt = createdAt;
 	}
 	
 	public Date getLastModified() {
@@ -90,7 +97,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
+		notSealed().lastModified = lastModified;
 	}
 	
 	public Status status() {
@@ -102,7 +109,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setStatus(String status) {
-		this.status = status;
+		notSealed().status = status;
 	}
 	
 	@Override
@@ -116,7 +123,7 @@ public class User implements UserDetails {
 	}
 	
 	public void setAuthorities(List<? extends GrantedAuthority> authorities) {
-		roles = authorities;
+		notSealed().roles = authorities;
 	}
 
 	@Override
@@ -137,5 +144,16 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	private User seal() {
+		sealed = true;
+		return this;
+	}
+	
+	private User notSealed() {
+		if (sealed)
+			throw new IllegalStateException(this + " is sealed");
+		return this;
 	}
 }

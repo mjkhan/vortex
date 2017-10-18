@@ -9,11 +9,17 @@ import org.springframework.stereotype.Service;
 import vortex.application.ApplicationService;
 import vortex.application.menu.Menu;
 import vortex.support.data.DataObject;
+import vortex.support.data.hierarchy.Hierarchy;
 
 @Service("menuService")
 public class MenuServiceImpl extends ApplicationService implements MenuService {
 	@Resource(name="menuMapper")
 	private MenuMapper menuMapper;
+
+	@Override
+	public Hierarchy<Menu> getTree() {
+		return menuMapper.getTree();
+	}
 	
 	@Override
 	public List<DataObject> getMenus(String field) {

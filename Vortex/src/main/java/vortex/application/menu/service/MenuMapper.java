@@ -1,7 +1,6 @@
 package vortex.application.menu.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -72,7 +71,8 @@ public class MenuMapper extends AbstractMapper {
 		int target = Math.min(Math.max(0, index + offset), menus.size() - 1);
 		if (index == target) return false;
 
-		Collections.swap(menus, index, target);
+//		Collections.swap(menus, index, target);
+		menus.add(target, menus.remove(index));
 		
 		List<String> menuIDs = menus.stream().map(row -> row.string("menu_id")).collect(Collectors.toList());
 		return reorder(parentID, menuIDs.toArray(new String[menuIDs.size()]));

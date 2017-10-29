@@ -22,8 +22,8 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	}
 	
 	@Override
-	public List<DataObject> getMenus(String parentID) {
-		return menuMapper.getMenus(parentID);
+	public List<DataObject> getMenus(String field) {
+		return menuMapper.getMenus(field);
 	}
 
 	@Override

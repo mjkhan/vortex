@@ -1,17 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ taglib prefix="vtx" uri="vortex.tld"%>
+<c:set var="css" scope="request">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-<style>
-button {cursor:pointer;}
-</style>
-<title>Tree Test</title>
-</head>
-<body>
-<div id="tree" style="width:400px; height:250px; overflow:auto; float:left;">
+</c:set>
+<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
+<div id="tree" style="width:100%;">
 	<ul><li id="root">Root
 			<ul><li id="child-1">Child 1</li>
 				<li id="child-2">Child 2
@@ -41,14 +35,13 @@ button {cursor:pointer;}
    <button onclick="editNode();">Edit</button>
    <button onclick="removeNode();">Remove</button>
 </p>
-
-<script src="<c:url value='/asset/js/jquery-3.2.1.min.js'/>" type="text/javascript"></script>
+<div id="menuDetail" style="padding:1em 0;"></div>
+<vtx:script type="src">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="<c:url value='/asset/js/base.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
 <script src="<c:url value="/asset/js/jstree-helper.js"/>" type="text/javascript"></script>
-<script type="text/javascript">
+</vtx:script>
+<vtx:script type="decl">
 function addNode(label) {
 	helper.add(function(node){helper.log("A new node ADDED.");});
 }
@@ -90,6 +83,10 @@ var helper = helpTree("#tree", {
 	onNodeMove: function(data) {console.log(data.node.id + " MOVED to " + data.parent);},
 	onNodeReorder: function(data) {console.log(data.node.id + " REORDERD in " + data.parent + " with offset: " + data.offset + ".");}
 });
+</vtx:script>
+<vtx:script type="docReady">
+docTitle("메뉴 정보");
+subTitle("메뉴 정보");
 
 helper.open("child-3-2");
 
@@ -107,6 +104,5 @@ $("#tree").droppable({
 	accept:".draggable-txt",
 	cursor:"move"
 });
-</script>
-</body>
-</html>
+</vtx:script>
+<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

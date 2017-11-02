@@ -1,12 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
+<%@ page import="java.util.List, vortex.support.data.hierarchy.Hierarchy, vortex.application.menu.Menu"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
+<%!	private static String tag(Menu menu) {
+		String result = "<li id='{id}'>{name}{children}</li>"
+			.replace("{id}", menu.getId())
+			.replace("{name}", menu.getName());
+		List<Menu> children = menu.getChildren();
+		if (children.isEmpty())
+			result = result.replace("{children}", "");
+		else {
+			String s = "";
+			for (Menu child: children) {
+				s += tag(menu);
+			}
+			s = "<ul>" + s + "</ul>";
+			result = result.replace("{children}", s);
+		}
+		return result;
+	}
+%>
 <c:set var="css" scope="request">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 </c:set>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="tree" style="width:100%;">
-	<ul><li id="root">Root
+	<ul><li id="root">메뉴 정보
 			<ul><li id="child-1">Child 1</li>
 				<li id="child-2">Child 2
 					<ul><li id="child-2-1">Child 2-1</li>
@@ -88,7 +107,7 @@ var helper = helpTree("#tree", {
 docTitle("메뉴 정보");
 subTitle("메뉴 정보");
 
-helper.open("child-3-2");
+helper.open();
 
 $(".draggable-txt").draggable({
 	revert: true,

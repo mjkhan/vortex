@@ -40,11 +40,15 @@ public class ApplicationController extends AbstractObject {
 		return req;
 	}
 	
-	protected ModelAndView modelAndView(String viewName, Map<String, ?> map) {
+	protected ModelAndView modelAndView(String viewName) {
 		ModelAndView result = new ModelAndView();
 		log().debug(() -> "view name: " + viewName);
 		result.setViewName(viewName);
-		return result.addAllObjects(map);
+		return result;
+	}
+	
+	protected ModelAndView modelAndView(String viewName, Map<String, ?> map) {
+		return modelAndView(viewName).addAllObjects(map);
 	}
 	
 	@ExceptionHandler(Exception.class)

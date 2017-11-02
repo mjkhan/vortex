@@ -71,12 +71,6 @@ public interface CompositeElement extends HierarchyElement {
 			}
 
 			buff.append(element);
-
-			if (element instanceof CompositeElement)
-				((CompositeElement)element).getChildren().forEach(child -> {
-					if (child == null) return;
-					toString(buff.append("\n"), child, level + 1);
-				});
 		}
 		/**Returns the string representation of the elements and their children.
 		 * @param elements CompositeElements
@@ -84,13 +78,81 @@ public interface CompositeElement extends HierarchyElement {
 		 */
 		public static final String toString(Iterable<? extends CompositeElement> elements) {
 			if (isEmpty(elements)) return "";
+			
+			return new Converter()
+				.setDelimiter("\n")
+				.beginElement(Support::toString)
+				.convert(elements);
+		}
+	}
+	
+	public static class Converter extends AbstractObject {
+		@FunctionalInterface
+		public static interface Stringify {
+			public void set(StringBuilder buff, HierarchyElement element, int level);
+		}
+		
+		private static final Stringify emptyString = (buff, element, level) -> {};
+		
+		private String delimiter = "";
+		private Stringify
+			beginElement = emptyString,
+			endElement = emptyString,
+			beginChildren = emptyString,
+			endChildren = emptyString;
 
-			StringBuilder buff = new StringBuilder();
+		public Converter setDelimiter(String delimiter) {
+			this.delimiter = delimiter;
+			return this;
+		}
+		
+		public Converter beginElement(Stringify begin) {
+			this.beginElement = begin;
+			return this;
+		}
+		
+		public Converter endElement(Stringify end) {
+			this.endElement = end;
+			return this;
+		}
+		
+		public Converter beginChildren(Stringify begin) {
+			this.beginChildren = begin;
+			return this;
+		}
+		
+		public Converter endChildren(Stringify end) {
+			this.endChildren = end;
+			return this;
+		}
+
+		private void convert(Iterable<? extends HierarchyElement> elements, StringBuilder buff, int level) {
 			elements.forEach(element -> {
 				if (element == null) return;
-				toString(buff.append("\n"), element, 0);
+				if (buff.length() > 0)
+					buff.append(delimiter);
+				
+				boolean parent = element instanceof CompositeElement;
+				Collection<? extends HierarchyElement> children = parent ? ((CompositeElement)element).getChildren() : null;
+				parent = parent && !isEmpty(children);
+				
+				beginElement.set(buff, element, level);
+				if (parent) {
+					int sublevel = level + 1;
+					beginChildren.set(buff, element, sublevel);
+					convert(children, buff, sublevel);
+					endChildren.set(buff, element, sublevel);;
+				}
+				endElement.set(buff, element, level);
 			});
-			return buff.toString().replaceFirst("\n", "");
+		}
+		
+		public String convert(Iterable<? extends HierarchyElement> elements) {
+			if (isEmpty(elements)) return "";
+
+			StringBuilder buff = new StringBuilder();
+			convert(elements, buff, 0);
+			return buff.toString();
 		}
 	}
 }

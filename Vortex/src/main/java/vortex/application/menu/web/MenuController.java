@@ -17,6 +17,6 @@ public class MenuController extends ApplicationController {
 	
 	@RequestMapping("/tree.do")
 	public ModelAndView getTree() {
-		return modelAndView("menu/tree", null);
+		return modelAndView("menu/tree").addObject("tree", menuService.getTree());
 	}
 }

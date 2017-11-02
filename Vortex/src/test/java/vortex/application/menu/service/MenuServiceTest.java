@@ -1,7 +1,9 @@
 package vortex.application.menu.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -169,6 +171,41 @@ public class MenuServiceTest extends VortexTest {
 	@Test
 	public void setStatus() {
 		
+	}
+	
+	@Test
+	public void convert() {
+		Function<String, Menu> newMenu = (id) -> {
+			Menu menu = new Menu();
+			menu.setId(id);
+			menu.setName("menu " + id);
+			return menu;
+		};
+		Menu parent0 = newMenu.apply("00000"),
+			 parent1 = newMenu.apply("10000");
+		ArrayList<Menu> menus = new ArrayList<>();
+		menus.add(parent0);
+		menus.add(parent1);
+		parent0.add(newMenu.apply("00001"));
+		parent0.add(newMenu.apply("00002"));
+		parent0.add(newMenu.apply("00003"));
+		parent0.getChildren().get(1).add(newMenu.apply("00021"));
+		parent1.add(newMenu.apply("10001"));
+		parent1.add(newMenu.apply("10002"));
+		parent1.add(newMenu.apply("10003"));
+		parent1.getChildren().get(1).add(newMenu.apply("10021"));
+		System.out.println(Menu.Support.toString(menus));
+
+		Menu.Converter converter = new Menu.Converter()
+			.setDelimiter("\n")
+			.beginElement((buff, e, level) -> {
+				Menu menu = (Menu)e;
+				buff.append("<li id=\"" + menu.getId() + "\"><a>" + menu.getName() + "</a>");
+			})
+			.endElement((buff, e, level) -> {buff.append("</li>");})
+			.beginChildren((buff, e, level) -> {buff.append("<ul>");})
+			.endChildren((buff, e, level) -> {buff.append("</ul>");});
+		System.out.println(converter.convert(menus));
 	}
 
 	@After

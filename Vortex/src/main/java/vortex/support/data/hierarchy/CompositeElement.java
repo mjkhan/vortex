@@ -63,96 +63,24 @@ public interface CompositeElement extends HierarchyElement {
 			return result;
 		}
 
-		private static void toString(StringBuilder buff, HierarchyElement element, int level) {
+		private static String toString(HierarchyElement element, int level) {
+			String result = "\n";
 			if (level > 0) {
-				for (int i = 0; i < level; ++i)
-					buff.append("  ");
-				buff.append("+").append("-");
+				result += Stringify.indent("  ", level) + "+-";
 			}
 
-			buff.append(element);
+			return result += element.toString();
 		}
 		/**Returns the string representation of the elements and their children.
 		 * @param elements CompositeElements
 		 * @return string representation of the elements and their children
 		 */
-		public static final String toString(Iterable<? extends CompositeElement> elements) {
+		public static final <T extends HierarchyElement> String toString(Iterable<T> elements) {
 			if (isEmpty(elements)) return "";
 			
-			return new Converter()
-				.setDelimiter("\n")
+			return new Stringify<T>()
 				.beginElement(Support::toString)
-				.convert(elements);
-		}
-	}
-	
-	public static class Converter extends AbstractObject {
-		@FunctionalInterface
-		public static interface Stringify {
-			public void set(StringBuilder buff, HierarchyElement element, int level);
-		}
-		
-		private static final Stringify emptyString = (buff, element, level) -> {};
-		
-		private String delimiter = "";
-		private Stringify
-			beginElement = emptyString,
-			endElement = emptyString,
-			beginChildren = emptyString,
-			endChildren = emptyString;
-
-		public Converter setDelimiter(String delimiter) {
-			this.delimiter = delimiter;
-			return this;
-		}
-		
-		public Converter beginElement(Stringify begin) {
-			this.beginElement = begin;
-			return this;
-		}
-		
-		public Converter endElement(Stringify end) {
-			this.endElement = end;
-			return this;
-		}
-		
-		public Converter beginChildren(Stringify begin) {
-			this.beginChildren = begin;
-			return this;
-		}
-		
-		public Converter endChildren(Stringify end) {
-			this.endChildren = end;
-			return this;
-		}
-
-		private void convert(Iterable<? extends HierarchyElement> elements, StringBuilder buff, int level) {
-			elements.forEach(element -> {
-				if (element == null) return;
-				if (buff.length() > 0)
-					buff.append(delimiter);
-				
-				boolean parent = element instanceof CompositeElement;
-				Collection<? extends HierarchyElement> children = parent ? ((CompositeElement)element).getChildren() : null;
-				parent = parent && !isEmpty(children);
-				
-				beginElement.set(buff, element, level);
-				if (parent) {
-					int sublevel = level + 1;
-					beginChildren.set(buff, element, sublevel);
-					convert(children, buff, sublevel);
-					endChildren.set(buff, element, sublevel);;
-				}
-				endElement.set(buff, element, level);
-			});
-		}
-		
-		public String convert(Iterable<? extends HierarchyElement> elements) {
-			if (isEmpty(elements)) return "";
-
-			StringBuilder buff = new StringBuilder();
-			convert(elements, buff, 0);
-			return buff.toString();
+				.toString(elements);
 		}
 	}
 }

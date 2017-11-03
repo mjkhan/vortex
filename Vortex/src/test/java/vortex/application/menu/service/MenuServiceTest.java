@@ -14,6 +14,7 @@ import vortex.application.menu.Menu;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
 import vortex.support.data.hierarchy.Hierarchy;
+import vortex.support.data.hierarchy.Stringify;
 
 public class MenuServiceTest extends VortexTest {
 	private MenuService menuService = getBean("menuService");
@@ -179,6 +180,7 @@ public class MenuServiceTest extends VortexTest {
 			Menu menu = new Menu();
 			menu.setId(id);
 			menu.setName("menu " + id);
+			menu.setActionPath("/info?get=");
 			return menu;
 		};
 		Menu parent0 = newMenu.apply("00000"),
@@ -196,16 +198,14 @@ public class MenuServiceTest extends VortexTest {
 		parent1.getChildren().get(1).add(newMenu.apply("10021"));
 		System.out.println(Menu.Support.toString(menus));
 
-		Menu.Converter converter = new Menu.Converter()
-			.setDelimiter("\n")
-			.beginElement((buff, e, level) -> {
-				Menu menu = (Menu)e;
-				buff.append("<li id=\"" + menu.getId() + "\"><a>" + menu.getName() + "</a>");
-			})
-			.endElement((buff, e, level) -> {buff.append("</li>");})
-			.beginChildren((buff, e, level) -> {buff.append("<ul>");})
-			.endChildren((buff, e, level) -> {buff.append("</ul>");});
-		System.out.println(converter.convert(menus));
+		System.out.println(
+			new Stringify<Menu>()
+				.beginElement((e, level) -> Stringify.indent("    ", level) + "<li id=\"" + e.getId() + "\"><a href=\"" + e.getAction() + e.getId() + "\">" + e.getName() + "</a>")
+				.endElement((e, level) -> "\n" + Stringify.indent("    ", level) + "</li>\n")
+				.beginChildren((e, level) -> "\n" + Stringify.indent("    ", level) + "<ul>\n")
+				.endChildren((e, level) -> Stringify.indent("    ", level) + "</ul>")
+				.toString(menus)
+		);
 	}
 
 	@After

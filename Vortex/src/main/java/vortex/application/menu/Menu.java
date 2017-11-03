@@ -111,7 +111,7 @@ public class Menu implements CompositeElement {
 	}
 	
 	public Status status() {
-		return Status.codeOf(status);
+		return Status.codeOf(getStatus());
 	}
 	
 	public boolean isAvailable() {

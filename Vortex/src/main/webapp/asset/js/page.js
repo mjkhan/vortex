@@ -7,7 +7,7 @@ $.fn.onEnterPress = function(handler) {
 	});
 }
 
-function emptyRequired(whenEmpty) {
+function requiredEmpty(whenEmpty) {
 	var empty = false;
 	$("*[required]").each(function(){
 		if (empty) return;

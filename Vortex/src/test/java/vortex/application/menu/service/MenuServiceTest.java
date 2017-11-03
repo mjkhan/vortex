@@ -192,10 +192,12 @@ public class MenuServiceTest extends VortexTest {
 		parent0.add(newMenu.apply("00002"));
 		parent0.add(newMenu.apply("00003"));
 		parent0.getChildren().get(1).add(newMenu.apply("00021"));
+		parent0.getChildren().get(1).add(newMenu.apply("00022"));
 		parent1.add(newMenu.apply("10001"));
 		parent1.add(newMenu.apply("10002"));
 		parent1.add(newMenu.apply("10003"));
 		parent1.getChildren().get(1).add(newMenu.apply("10021"));
+		parent1.getChildren().get(1).add(newMenu.apply("10022"));
 		System.out.println(Menu.Support.toString(menus));
 
 		System.out.println(

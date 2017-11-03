@@ -22,7 +22,7 @@
 </div>
 <div id="roleUsers" style="padding:1em 0;">
 	<div id="userTitle" class="subTitle">사용자 정보</div>
-	<div class="search">
+	<div class="inputArea">
 		 <button id="btnAdd" onclick="addUsers();" type="button" class="add hidden">추가</button>
 		 <button id="btnRemove" onclick="deleteUsers();" type="button" class="hidden">삭제</button>
 	</div>

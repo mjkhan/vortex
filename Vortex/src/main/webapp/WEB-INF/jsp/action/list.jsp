@@ -3,7 +3,7 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="searchActions" style="width:100%;">
-	<div class="search">
+	<div class="inputArea">
 		<select id="groupID" onchange="getActions();"><c:forEach items="${groups}" var="group">
 			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
 		 </select>

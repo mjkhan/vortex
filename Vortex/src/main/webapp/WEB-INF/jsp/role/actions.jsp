@@ -22,7 +22,7 @@
 </div>
 <div id="roleActions" style="padding:1em 0;">
 	<div id="actionTitle" class="subTitle">액션 정보</div>
-	<div class="search">
+	<div class="inputArea">
 		 <button id="btnAdd" onclick="addActions();" type="button" class="add hidden">추가</button>
 		 <button id="btnRemove" onclick="deleteActions();" type="button" class="hidden">삭제</button>
 	</div>

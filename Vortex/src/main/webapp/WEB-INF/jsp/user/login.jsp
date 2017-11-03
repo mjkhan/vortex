@@ -20,7 +20,7 @@
 </div>
 <vtx:script type="decl">
 function login() {
-	if (emptyRequired()) return;
+	if (requiredEmpty()) return;
 	$("#loginForm").submit();
 }
 </vtx:script>

@@ -22,23 +22,13 @@
 	</tr>
 </c:if>
 </table>
-<div style="padding:.5em 0;">
+<div class="inputArea">
 	<button onclick="saveGroup();" type="button">저장</button>
 	<button onclick="closeGroup();" type="button">닫기</button>
 </div>
 <script type="text/javascript">
 function saveGroup() {
-	var valid = true;
-	$("input[required]").each(function(){
-		var input = $(this),
-			value = input.val();
-		if (!value) {
-			var label = $("label[for='" + input.attr("id") + "']").html();
-			alert(label + "을(를) 입력하십시오.");
-			return valid = false;
-		}
-	});
-	if (!valid) return;
+	if (requiredEmpty()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/code/group/create.do'/></c:if><c:if test='${!create}'><c:url value='/code/group/update.do'/></c:if>",

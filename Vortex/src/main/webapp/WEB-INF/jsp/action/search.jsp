@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<div class="search">
+<div class="inputArea">
 	<label for="_actionGroup">액션 그룹</label>
 	<select id="_actionGroup" onchange="actionInfo.get();"><c:forEach items="${groups}" var="group">
 		<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
@@ -23,7 +23,7 @@
 		</tr></c:set>
 	</tbody>
 </table>
-<div class="search">
+<div class="inputArea">
 	<button onclick="onOK();" type="button">확인</button>
 </div>
 <script type="text/javascript">

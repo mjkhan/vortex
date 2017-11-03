@@ -78,6 +78,11 @@ function Eval(expr, debug) {
 function ajax(options) {
 	if (window.csrf) 
 	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};
+
+	if (!options.type) {
+		if (options.data)
+			options.type = "POST";
+	}
 	if (!options.error)
 		options.error = function(req, status, error) {
 			log(req.status + "\n\n" + error);

@@ -3,7 +3,7 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="searchUsers" style="width:100%;">
-	<div class="search">
+	<div class="inputArea">
 		<select id="field">
 			<option value="">검색조건</option>
 			<option value="USER_ID">아이디</option>

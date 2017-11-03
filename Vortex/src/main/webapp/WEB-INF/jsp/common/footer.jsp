@@ -6,9 +6,9 @@
 </main>
 <footer>
 </footer>
-<script type="text/javascript" src="<c:url value='/asset/js/jquery-3.2.1.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/asset/js/base.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/asset/js/page.js'/>"></script>
+<script src="<c:url value='/asset/js/jquery-3.2.1.min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/asset/js/base.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/asset/js/page.js'/>" type="text/javascript"></script>
 <vtx:script type="src" write="true"/>
 <script type="text/javascript">
 var wctx = {

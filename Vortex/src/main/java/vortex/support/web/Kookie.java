@@ -90,6 +90,16 @@ public class Kookie extends AbstractObject {
 			}
 		return null;
 	}
+	/**지정하는 이름의 쿠키가 존재하는지 반환한다.
+	 * @param name 쿠키 이름
+	 * @return
+	 * <ul><li>지정하는 이름의 쿠키가 존재하면 true</li>
+	 * 	   <li>그렇지 않으면 false</li>
+	 * </ul>
+	 */
+	public boolean exists(String name) {
+		return !isEmpty(getValue(name));
+	}
 	/**주어진 값을 지정하는 이름의 쿠키로 지정한 수명으로 저장한다.
 	 * @param name	쿠키 이름
 	 * @param value	쿠키값

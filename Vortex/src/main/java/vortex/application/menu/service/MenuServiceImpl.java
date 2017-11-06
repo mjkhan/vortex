@@ -67,5 +67,4 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	public boolean delete(String... menuIDs) {
 		return menuMapper.delete(currentUser().getId(), menuIDs);
 	}
-
 }

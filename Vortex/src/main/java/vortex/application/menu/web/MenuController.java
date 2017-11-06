@@ -78,4 +78,40 @@ public class MenuController extends ApplicationController {
 		return modelAndView("jsonView")
 			.addObject("saved", saved);
 	}
+	
+	@RequestMapping("/move.do")
+	public ModelAndView move(HttpServletRequest hreq) {
+		String menuID = hreq.getParameter("menuID"),
+			   parentID = hreq.getParameter("parentID");
+		boolean saved = menuService.move(parentID, menuID.split(","));
+		return modelAndView("jsonView")
+			.addObject("saved", saved);
+	}
+	
+	@RequestMapping("/reorder.do")
+	public ModelAndView reorder(HttpServletRequest hreq) {
+		String menuID = hreq.getParameter("menuID"),
+			   parentID = hreq.getParameter("parentID");
+		int offset = Integer.parseInt(ifEmpty(hreq.getParameter("offset"), "0"));
+		boolean saved = menuService.reorder(parentID, menuID, offset);
+		return modelAndView("jsonView")
+			.addObject("saved", saved);
+	}
+	
+	@RequestMapping("/setStatus.do")
+	public ModelAndView setStatus(HttpServletRequest hreq) {
+		String menuID = hreq.getParameter("menuID"),
+			   status = hreq.getParameter("status");
+		boolean saved = menuService.setStatus(status, menuID.split(","));
+		return modelAndView("jsonView")
+			.addObject("saved", saved);
+	}
+	
+	@RequestMapping("/delete.do")
+	public ModelAndView delete(HttpServletRequest hreq) {
+		String menuID = hreq.getParameter("menuID");
+		boolean saved = menuService.delete(menuID.split(","));
+		return modelAndView("jsonView")
+			.addObject("saved", saved);
+	}
 }

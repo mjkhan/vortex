@@ -40,6 +40,13 @@ function helpTree(selector, options) {
 		},
 		getNode: function(id) {return h._tree.get_node(id);},
 		selectNode: function(obj) {return h._tree.select_node(obj);},
+		checkNodes: function(obj, check) {
+			if (check != false) {
+				h._tree.check_node(obj);
+			} else {
+				h._tree.uncheck_node(obj);
+			}
+		},
 		selectedNodes: function() {return h._tree.get_selected();},
 		checkedNodes: function() {return h._tree.get_checked();},
 		add: function(parent, label, onAdd) {
@@ -114,6 +121,7 @@ function helpTree(selector, options) {
 			return $.vakata.dnd.start(evt, {jstree:true, nodes:[{id:true, text:"temporary", dragged:dragged, temp:true}]});
 		},
 		onNodeSelect: options.onNodeSelect,
+		onNodeCheck: options.onNodeCheck,
 		onNodeReorder: options.onNodeReorder,
 		onNodeMove: options.onNodeMove
 	};
@@ -150,6 +158,12 @@ function helpTree(selector, options) {
 		if (h._ondrop)
 			h._ondrop({dragged:dragged, target:target});
 		delete h._ondrop;
+	}).on("check_node.jstree", function(e, data) {
+		if (h.onNodeCheck)
+			h.onNodeCheck({node:data.node, checked:true});
+	}).on("uncheck_node.jstree", function(e, data) {
+		if (h.onNodeCheck)
+			h.onNodeCheck({node:data.node, checked:false});
 	});
 	return h;
 }

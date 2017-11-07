@@ -75,19 +75,12 @@ function Eval(expr, debug) {
 	}
 }
 
-function ajax(options) {
-	if (window.csrf) 
-	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};
-
-	if (!options.type) {
-		if (options.data)
-			options.type = "POST";
-	}
-	if (!options.error)
-		options.error = function(req, status, error) {
-			log(req.status + "\n\n" + error);
-		};
-	$.ajax(options);
+function onError(xhr, ajaxOptions, thrownError) {
+	var resp = JSON.parse(xhr.responseText),
+		msgs = [];
+	for (key in resp)
+		msgs.push(resp[key])
+	alert(msgs.join("\n\n"));
 }
 
 function onException(obj) {
@@ -102,4 +95,17 @@ function onException(obj) {
 			msg.push(obj.message);
 	}
 	alert(msg.join("\n\n"));
+}
+
+function ajax(options) {
+	if (window.csrf) 
+	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};
+
+	if (!options.type) {
+		if (options.data)
+			options.type = "POST";
+	}
+	if (!options.error)
+		options.error = onError
+	$.ajax(options);
 }

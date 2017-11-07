@@ -6,7 +6,7 @@
 	response.setContentType(!ajax ? "text/html; charset=UTF-8" : "application/json; charset=UTF-8");
 	pageContext.setAttribute("ajax", ajax);
 	Throwable cause = Assert.rootCause(exception);
-	pageContext.setAttribute("title", "요청하신 페이지를 찾지 못했습니다.");
+	pageContext.setAttribute("title", "요청하신 페이지에 접근할 수 없습니다.");
 %>
 <c:if test="${!ajax}">
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
@@ -15,8 +15,8 @@
 <p>${requestScope['javax.servlet.forward.request_uri']}</p>
 </div>
 <vtx:script type="docReady">
-	docTitle("오류: 404");
-	subTitle("404 오류");
+	docTitle("오류: 403");
+	subTitle("403 오류");
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>
 </c:if>

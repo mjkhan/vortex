@@ -84,7 +84,7 @@ function removeUsers() {
 			if (resp.saved) {
 				currentUsers();
 			} else {
-				onException(resp);
+				alert("저장하지 못했습니다.");
 			}
 		}
 	});
@@ -127,9 +127,6 @@ function getUser(userID) {
 }
 
 function setUserList(resp, start) {
-	if (resp.failed)
-		return onException(resp);
-		
 	var append = start > 0;
 	$("#userList").populate({
 		data:resp.users,

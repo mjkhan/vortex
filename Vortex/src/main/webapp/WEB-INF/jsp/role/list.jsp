@@ -71,7 +71,7 @@ function removeRoles() {
 			if (resp.saved) {
 				currentRoles();
 			} else {
-				onException(resp);
+				alert("저장하지 못했습니다.");
 			}
 		}
 	});

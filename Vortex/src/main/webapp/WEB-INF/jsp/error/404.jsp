@@ -1,18 +1,14 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" session="false" isErrorPage="true"%>
-<%@ page import="vortex.support.Assert"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<%	boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
-	response.setContentType(!ajax ? "text/html; charset=UTF-8" : "application/json; charset=UTF-8");
-	pageContext.setAttribute("ajax", ajax);
-	Throwable cause = Assert.rootCause(exception);
-	pageContext.setAttribute("title", "요청하신 페이지를 찾지 못했습니다.");
+<jsp:include page="eheader.jsp"/>
+<%	pageContext.setAttribute("title", "알 수 없는 요청입니다.");
 %>
 <c:if test="${!ajax}">
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div style="width:100%; padding:2em;">
 <p>${title}</p>
-<p>${requestScope['javax.servlet.forward.request_uri']}</p>
+<p>${path}</p>
 </div>
 <vtx:script type="docReady">
 	docTitle("오류: 404");
@@ -22,5 +18,5 @@
 </c:if>
 <c:if test="${ajax}">{
 	"title":"${title}",
-	"path":"${requestScope['javax.servlet.forward.request_uri']}"
+	"path":"${path}"
 }</c:if>

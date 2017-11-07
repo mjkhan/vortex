@@ -41,7 +41,7 @@ function saveRole() {
 				alert("저장됐습니다.");
 				getRole($("#roleID").val());
 			} else {
-				alert("저장되지 않았습니다.");
+				alert("저장하지 못했습니다.");
 			}
 		}
 	});

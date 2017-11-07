@@ -83,20 +83,6 @@ function onError(xhr, ajaxOptions, thrownError) {
 	alert(msgs.join("\n\n"));
 }
 
-function onException(obj) {
-	if (!obj.failed) return;
-	
-	var msg = [];
-	msg.push("요청하신 작업을 수행하지 못했습니다.");
-	if (wctx.debug) {
-		if (obj.exception)
-			msg.push(obj.exception);
-		if (obj.message)
-			msg.push(obj.message);
-	}
-	alert(msg.join("\n\n"));
-}
-
 function ajax(options) {
 	if (window.csrf) 
 	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};

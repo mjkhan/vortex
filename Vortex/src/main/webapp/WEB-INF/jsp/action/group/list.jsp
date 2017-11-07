@@ -71,7 +71,7 @@ function removeGroups() {
 			if (resp.saved) {
 				currentGroups();
 			} else {
-				onException(resp);
+				alert("저장하지 못했습니다.");
 			}
 		}
 	});

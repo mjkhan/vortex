@@ -46,7 +46,7 @@ function saveMenu() {
 				getMenu(resp.menuID || $("#menuID").val());
 				afterSave = reload;
 			} else {
-				onException(resp);
+				alert("저장하지 못했습니다.");
 			}
 		}
 	});

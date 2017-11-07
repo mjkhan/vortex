@@ -41,7 +41,7 @@ function saveCode() {
 				alert("저장됐습니다.");
 				getCode($("#code").val());
 			} else {
-				onException(resp);
+				alert("저장하지 못했습니다.");
 			}
 		}
 	});

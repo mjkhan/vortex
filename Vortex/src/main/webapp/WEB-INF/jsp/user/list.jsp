@@ -161,6 +161,77 @@ function setUserList(resp, start) {
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedUsers.check(checked);});
 }
+
+/**
+ config = {
+ 	start:0,
+ 	fetchSize:10,
+ 	totalSize:20
+ };
+ */
+function paginate(config) {
+	var rc = config.totalSize;
+	if (!rc) return "";
+	
+	var	fetchCount = config.fetchSize;
+	if (!fetchCount) return "";
+	
+	var fetch = {
+		all:0,
+		none:-1,
+		count:function(elementCount, size) {
+			if (!elementCount || size == fetch.all) return 1;
+			return (elementCount / size) + ((elementCount % size) == 0 ? 0 : 1);
+		},
+		end:function(elementCount, size, start) {
+			if (size < fetch.all) throw "Invalid size: " + size;
+			if (elementCount < 0) throw "Invalid elementCount: " + elementCount;
+			var last = elementCount - 1;
+			if (size == fetch.all) return last;
+			return Math.min(last, start + size -1);
+		},
+		page:function(current, count) {
+			return count < 1 ? 0 : current / count;
+		},
+		band:function(page, visibleLinks) {
+			return visibleLinks < 1 ? 0 : page / visibleLinks;
+		}
+	};
+	var lc = fetch.count(rc, fetchCount);
+	if (lc < 2) return "";
+	
+	var links = ifEmpty(config.links, fetch.all),
+		page = fetch.page(ifEmpty(config.start, 0), fetchCount),
+		band = fetch.band(page, links),
+		tags = {
+			link:function(tag, current) {
+				return tag.replace(/{start}/gi, current)
+						  .replace(/{end}/gi, fetch.end(rc, fetchCount, current));
+			},
+			first:function() {
+				return band < 2 ? "" : tags.link(config.first, 0);
+			},
+			previous:function() {
+				if (band < 1) return "";
+			    var prevBand = band - 1,
+					prevPage = (prevBand * links) + (links - 1),
+			        fromRec = prevPage * fetchCount;
+			    return linkTag(config.previous, fromRec);
+			},
+			next:function() {},
+			last:function() {}
+		},
+		tag = "";
+	if (links != fetch.all) {
+		tag += tags.first();
+		tag += tags.previous();
+	}
+	if (links != fetch.all) {
+		tag += tags.next();
+		tag += tags.last();
+	}
+	return tag;
+}
 </vtx:script>
 <vtx:script type="docReady">
 	docTitle("사용자 정보");
@@ -172,5 +243,11 @@ function setUserList(resp, start) {
 		next:${next}
 	}, 0);
 	currentUsers = getUsers;
+	
+	log("paging info: " + paginate({
+		start:0,
+		fetchSize:10,
+		totalSize:23
+	}));
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

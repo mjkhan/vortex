@@ -49,10 +49,10 @@ public class AbstractMapper extends EgovAbstractMapper {
 				if (e instanceof Map) {
 					@SuppressWarnings("unchecked")
 					Map<String, Object> row = (Map<String, Object>)e;
-					Number totalCount = (Number)row.get("TOTAL_ROW_CNT");
-					if (totalCount != null)
-						result.setTotalSize(totalCount.intValue());
-					result.setStart(start).setFetchSize(fetch);
+					int totalCount = selectOne("foundRows");
+					result.setTotalSize(totalCount)
+						  .setStart(start)
+						  .setFetchSize(fetch);
 				}
 			}
 		}

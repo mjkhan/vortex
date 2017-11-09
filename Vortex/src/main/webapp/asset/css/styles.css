@@ -108,7 +108,7 @@ button.add {
 .infoList .notFound {text-align:center;}
 
 .paging, .paging button {width:100%;}
-.paging {padding:.75em 0;}
+.paging {padding:.75em 0; text-align:center;}
 .paging button {padding:.5em 0;}
 
 .infoForm {

@@ -164,12 +164,12 @@ var dialog = {
  *  fetchSize:10,
  *  totalSize:135,
  *  links:3,
- *  first:"...",
- *  previous:"...",
- *  link:"...",
- *  current:"...",
- *  next:"...",
- *  last:"..."
+ *  first:function(index, label){return "..."},
+ *  previous:function(index, label){return "..."},
+ *  link:function(index, label){return "..."},
+ *  current:function(index, label){return "..."},
+ *  next:function(index, label){return "..."},
+ *  last:function(index, label){return "..."}
  * }
  * @returns {String}
  */
@@ -212,26 +212,23 @@ function paginate(config) {
 				return !tag ? "" : tag(index, label);
 			},
 			first:function() {
-				return band < 2 ? "" : tags.link(config.first, 0);
+				return band < 2 ? "" : tags.link(config.first, 0, 1);
 			},
 			previous:function() {
 				if (band < 1) return "";
 			    var prevBand = band - 1,
 					prevPage = (prevBand * links) + (links - 1),
 			        fromRec = prevPage * fetchCount;
-			    return tags.link(config.previous, fromRec);
+			    return tags.link(config.previous, fromRec, prevPage + 1);
 			},
 			visibleLinks:function() {
 				var s = "",
 					fromPage = links == fetch.all ? 0 : band * links,
 					toPage = links == fetch.all ? lc : Math.min(lc, fromPage + links);
 				for (var i = fromPage; i < toPage; ++i) {
-					if (i == page)
-						s += tags.link(config.current, i, i + 1);
-					else {
-						var fromRec = i * fetchCount;
-						s += tags.link(config.link, fromRec, i + 1);
-					}
+					var fromRec = i * fetchCount,
+						label = i + 1;
+					s += tags.link(i == page ? config.current : config.link, fromRec, label);
 				}
 				return s;
 			},
@@ -242,7 +239,7 @@ function paginate(config) {
 				var nextBand = band + 1,
 					page = nextBand * links,
 					fromRec = page * fetchCount;
-				return tags.link(config.next, fromRec);
+				return tags.link(config.next, fromRec, page + 1);
 			},
 			last:function(bandCount) {
 				bandCount = parseInt(bandCount);
@@ -251,7 +248,7 @@ function paginate(config) {
 		
 			    var pages = lastBand * links,
 			        fromRec = pages * fetchCount;
-				return tags.link(config.last, fromRec);
+				return tags.link(config.last, fromRec, pages + 1);
 			}
 		},
 		tag = "";

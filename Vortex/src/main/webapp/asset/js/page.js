@@ -266,8 +266,12 @@ function paginate(config) {
 	return tag;
 }
 
-$.fn.paginate = function(options) {
+$.fn.paginate = function(config) {
 	return this.each(function(){
-		$(this).html(paginate(options));
+		var tag = paginate(config),
+			container = $(this);
+		container.html(tag);
+		if (!tag && config.hideIfEmpty != false)
+			container.hide();
 	});
 }

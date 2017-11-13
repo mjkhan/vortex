@@ -36,7 +36,7 @@
 		<button type="button">더 보기</button>
 	</div>
 </div>
-<div id="groupDetail" style="padding:1em 0;"></div>
+<div id="groupDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
 var checkedGroups,
 	currentGroups,
@@ -77,28 +77,26 @@ function removeGroups() {
 	});
 }
 
-function showList(show) {
-	if (show == false)
+function showDetail(show) {
+	if (show != false) {
 		$("#searchGroups").hide();
-	else
+		$("#groupDetail").fadeIn();
+	} else {
+		if (afterSave) {
+			afterSave();
+			afterSave = null;
+		}
+		$("#groupDetail").hide();
 		$("#searchGroups").fadeIn();
-}
-
-function closeGroup() {
-	if (afterSave) {
-		afterSave();
-		afterSave = null;
 	}
-	$("#groupDetail").hide();
-	showList();
 }
 
 function newGroup() {
 	ajax({
 		url:"<c:url value='/code/group/info.do'/>",
 		success:function(resp) {
-			showList(false);
-			$("#groupDetail").html(resp).fadeIn();
+			$("#groupDetail").html(resp);
+			showDetail();
 		}
 	});
 }
@@ -107,8 +105,8 @@ function getGroup(groupID) {
 	ajax({
 		url:"<c:url value='/code/group/info.do'/>?groupID=" + groupID,
 		success:function(resp) {
-			showList(false);
-			$("#groupDetail").html(resp).fadeIn();
+			$("#groupDetail").html(resp);
+			showDetail();
 		}
 	});
 }

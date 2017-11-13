@@ -36,7 +36,7 @@
 		<button type="button">더 보기</button>
 	</div>
 </div>
-<div id="roleDetail" style="padding:1em 0;"></div>
+<div id="roleDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
 var checkedRoles,
 	currentRoles,
@@ -77,28 +77,26 @@ function removeRoles() {
 	});
 }
 
-function showList(show) {
-	if (show == false)
+function showDetail(show) {
+	if (show != false) {
 		$("#searchRoles").hide();
-	else
+		$("#roleDetail").fadeIn();
+	} else {
+		if (afterSave) {
+			afterSave();
+			afterSave = null;
+		}
+		$("#roleDetail").hide();
 		$("#searchRoles").fadeIn();
-}
-
-function closeRole() {
-	if (afterSave) {
-		afterSave();
-		afterSave = null;
 	}
-	$("#roleDetail").hide();
-	showList();
 }
 
 function newRole() {
 	ajax({
 		url:"<c:url value='/role/info.do'/>",
 		success:function(resp) {
-			showList(false);
-			$("#roleDetail").html(resp).fadeIn();
+			$("#roleDetail").html(resp);
+			showDetail();
 		}
 	});
 }
@@ -107,8 +105,8 @@ function getRole(roleID) {
 	ajax({
 		url:"<c:url value='/role/info.do'/>?roleID=" + roleID,
 		success:function(resp) {
-			showList(false);
-			$("#roleDetail").html(resp).fadeIn();
+			$("#roleDetail").html(resp);
+			showDetail();
 		}
 	});
 }

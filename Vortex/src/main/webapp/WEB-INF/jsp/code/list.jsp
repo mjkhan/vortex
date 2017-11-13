@@ -29,7 +29,7 @@
 		</tbody>
 	</table>
 </div>
-<div id="codeDetail" style="padding:1em 0;"></div>
+<div id="codeDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
 var checkedCodes,
 	currentCodes,
@@ -70,28 +70,26 @@ function removeCodes() {
 	});
 }
 
-function showList(show) {
-	if (show == false)
+function showDetail(show) {
+	if (show != false) {
 		$("#searchCodes").hide();
-	else
+		$("#codeDetail").fadeIn();
+	} else {
+		if (afterSave) {
+			afterSave();
+			afterSave = null;
+		}
+		$("#codeDetail").hide();
 		$("#searchCodes").fadeIn();
-}
-
-function closeCode() {
-	if (afterSave) {
-		afterSave();
-		afterSave = null;
 	}
-	$("#codeDetail").hide();
-	showList();
 }
 
 function newCode() {
 	ajax({
 		url:"<c:url value='/code/info.do'/>?" + toQuery({groupID:$("#groupID").val()}),
 		success:function(resp) {
-			showList(false);
-			$("#codeDetail").html(resp).fadeIn();
+			$("#codeDetail").html(resp);
+			showDetail();
 		}
 	});
 }
@@ -100,8 +98,8 @@ function getCode(code) {
 	ajax({
 		url:"<c:url value='/code/info.do'/>?" + toQuery({groupID:$("#groupID").val(), code:code}),
 		success:function(resp) {
-			showList(false);
-			$("#codeDetail").html(resp).fadeIn();
+			$("#codeDetail").html(resp);
+			showDetail();
 		}
 	});
 }

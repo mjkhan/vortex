@@ -39,7 +39,7 @@
 		<button type="button">더 보기</button>
 	</div>
 </div>
-<div id="userDetail" style="padding:1em 0;"></div>
+<div id="userDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
 var checkedUsers,
 	currentUsers,
@@ -80,28 +80,26 @@ function removeUsers() {
 	});
 }
 
-function showList(show) {
-	if (show == false)
+function showDetail(show) {
+	if (show != false) {
 		$("#searchUsers").hide();
-	else
+		$("#userDetail").fadeIn();
+	} else {
+		if (afterSave) {
+			afterSave();
+			afterSave = null;
+		}
+		$("#userDetail").hide();
 		$("#searchUsers").fadeIn();
-}
-
-function closeUser() {
-	if (afterSave) {
-		afterSave();
-		afterSave = null;
 	}
-	$("#userDetail").hide();
-	showList();
 }
 
 function newUser() {
 	ajax({
 		url:"<c:url value='/user/info.do'/>",
 		success:function(resp) {
-			showList(false);
-			$("#userDetail").html(resp).fadeIn();
+			$("#userDetail").html(resp);
+			showDetail();
 		}
 	});
 }
@@ -110,8 +108,8 @@ function getUser(userID) {
 	ajax({
 		url:"<c:url value='/user/info.do'/>?userID=" + userID,
 		success:function(resp) {
-			showList(false);
-			$("#userDetail").html(resp).fadeIn();
+			$("#userDetail").html(resp);
+			showDetail();
 		}
 	});
 }

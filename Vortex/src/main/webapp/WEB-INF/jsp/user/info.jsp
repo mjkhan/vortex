@@ -29,7 +29,7 @@
 </table>
 <div class="inputArea">
 	<button onclick="saveUser();" type="button">저장</button>
-	<button onclick="closeUser();" type="button">닫기</button>
+	<button onclick="showDetail(false);" type="button">닫기</button>
 </div>
 <script type="text/javascript">
 function saveUser() {

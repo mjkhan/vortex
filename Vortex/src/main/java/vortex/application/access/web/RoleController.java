@@ -19,18 +19,18 @@ import vortex.support.data.DataObject;
 public class RoleController extends ApplicationController {
 	@Resource(name="roleService")
 	private RoleService roleService;
-	
+
 	@RequestMapping("/list.do")
 	public ModelAndView getRoles(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		return modelAndView(!req.bool("ajax") ? "role/list" : "jsonView", roleService.getRoles(req));
 	}
-	
+
 	@RequestMapping("/info.do")
 	public ModelAndView getRole(HttpServletRequest hreq) {
 		return modelAndView("role/info", roleService.getRole(request(hreq)));
 	}
-	
+
 	@RequestMapping("/create.do")
 	public ModelAndView create(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -40,7 +40,7 @@ public class RoleController extends ApplicationController {
 		role.setDescription(req.string("description"));
 		return modelAndView("jsonView", roleService.create(req.set("role", role)));
 	}
-	
+
 	@RequestMapping("/update.do")
 	public ModelAndView update(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -49,12 +49,12 @@ public class RoleController extends ApplicationController {
 		role.setDescription(req.string("description"));
 		return modelAndView("jsonView", roleService.update(req.set("role", role)));
 	}
-	
+
 	@RequestMapping("/delete.do")
 	public ModelAndView delete(HttpServletRequest hreq) {
 		return modelAndView("jsonView", roleService.delete(request(hreq)));
 	}
-	
+
 	@RequestMapping("/action/list.do")
 	public ModelAndView getActions(HttpServletRequest hreq) {
 		DataObject req = request(hreq),
@@ -71,7 +71,7 @@ public class RoleController extends ApplicationController {
 		}
 		return modelAndView(init ? "role/actions" : "jsonView", res);
 	}
-	
+
 	@RequestMapping("/action/add.do")
 	public ModelAndView addActions(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -79,7 +79,7 @@ public class RoleController extends ApplicationController {
 		   .set("actionIDs", req.string("actionIDs").split(","));
 		return modelAndView("jsonView", roleService.addActions(req));
 	}
-	
+
 	@RequestMapping("/action/delete.do")
 	public ModelAndView deleteActions(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -87,7 +87,7 @@ public class RoleController extends ApplicationController {
 		   .set("actionIDs", req.string("actionIDs").split(","));
 		return modelAndView("jsonView", roleService.deleteActions(req));
 	}
-	
+
 	@RequestMapping("/user/list.do")
 	public ModelAndView getUsers(HttpServletRequest hreq) {
 		DataObject req = request(hreq),
@@ -104,7 +104,7 @@ public class RoleController extends ApplicationController {
 		}
 		return modelAndView(init ? "role/users" : "jsonView", res);
 	}
-	
+
 	@RequestMapping("/user/add.do")
 	public ModelAndView addUsers(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -112,12 +112,28 @@ public class RoleController extends ApplicationController {
 		   .set("userIDs", req.string("userIDs").split(","));
 		return modelAndView("jsonView", roleService.addUsers(req));
 	}
-	
+
 	@RequestMapping("/user/delete.do")
 	public ModelAndView deleteUsers(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		req.set("roleIDs", req.string("roleIDs").split(","))
 		   .set("userIDs", req.string("userIDs").split(","));
 		return modelAndView("jsonView", roleService.deleteUsers(req));
+	}
+
+	@RequestMapping("/menu/add.do")
+	public ModelAndView addMenus(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		req.set("roleIDs", req.string("roleIDs").split(","))
+		   .set("menuIDs", req.string("menuIDs").split(","));
+		return modelAndView("jsonView", roleService.addMenus(req));
+	}
+
+	@RequestMapping("/menu/delete.do")
+	public ModelAndView deleteMenus(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		req.set("roleIDs", req.string("roleIDs").split(","))
+		   .set("menuIDs", req.string("menuIDs").split(","));
+		return modelAndView("jsonView", roleService.deleteMenus(req));
 	}
 }

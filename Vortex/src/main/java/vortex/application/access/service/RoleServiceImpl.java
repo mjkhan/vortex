@@ -59,7 +59,8 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 		String s = req.string("roleID");
 		String[] roleIDs = !isEmpty(s) ? s.split(",") : null;
 		roleMemberMapper.deleteActions(roleIDs);
-		roleMemberMapper.deleteUsers(roleIDs, null);
+		roleMemberMapper.deleteUsers(roleIDs);
+		roleMemberMapper.deleteMenus(roleIDs);
 		int saved = roleMapper.remove(roleIDs);
 		return dataobject()
 			.set("saved", saved > 0);
@@ -116,6 +117,27 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 		String[] roleIDs = req.value("roleIDs"),
 				 userIDs = req.value("userIDs");
 		int affected = roleMemberMapper.deleteUsers(roleIDs, userIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject addMenus(DataObject req) {
+		String addedBy = currentUser().getId();
+		String[] roleIDs = req.value("roleIDs"),
+				 menuIDs = req.value("menuIDs");
+		int affected = roleMemberMapper.addMenus(addedBy, roleIDs, menuIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject deleteMenus(DataObject req) {
+		String[] roleIDs = req.value("roleIDs"),
+				 menuIDs = req.value("menuIDs");
+		int affected = roleMemberMapper.deleteMenus(roleIDs, menuIDs);
 		return dataobject()
 			.set("affected", affected)
 			.set("saved", affected > 0);

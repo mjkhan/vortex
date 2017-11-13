@@ -114,4 +114,34 @@ WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{r
 </if>
 </delete>
 
+<!-- roleIDs의 역할에 menuIDs의 사용자 추가 -->
+<insert id="addMenus" parameterType="hashmap">
+INSERT INTO TBL_ROLE_MENU (ROLE_ID, MENU_ID, INS_ID, INS_TIME)
+SELECT ROLE_ID, MENU_ID, #{addedBy}, CURRENT_TIMESTAMP
+FROM (
+	<foreach collection="roleIDs" item="roleID" separator=" UNION">SELECT #{roleID} ROLE_ID</foreach>
+) A, (
+	<foreach collection="menuIDs" item="menuID" separator=" UNION">SELECT #{menuID} MENU_ID</foreach>
+) B
+WHERE NOT EXISTS (
+	SELECT ROLE_ID, MENU_ID
+	FROM TBL_ROLE_MENU C
+	WHERE C.ROLE_ID = A.ROLE_ID
+	AND C.MENU_ID = B.MENU_ID
+)
+</insert>
+
+<!-- roleIDs의 역할에서 menuIDs의 메뉴 삭제 -->
+<delete id="deleteMenus" parameterType="hashmap">
+DELETE FROM TBL_ROLE_MENU
+<if test="roleIDs != null">
+WHERE ROLE_ID IN (<foreach collection="roleIDs" item="roleID" separator=", ">#{roleID}</foreach>)
+</if>
+<if test="menuIDs != null">
+	<if test="roleIDs == null">WHERE</if>
+	<if test="roleIDs != null">AND</if>
+	MENU_ID IN (<foreach collection="menuIDs" item="menuID" separator=", ">#{menuID}</foreach>)
+</if>
+</delete>
+
 </mapper>

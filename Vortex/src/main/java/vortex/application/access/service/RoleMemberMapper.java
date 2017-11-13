@@ -69,4 +69,23 @@ public class RoleMemberMapper extends AbstractMapper {
 	public List<Role> getRoles(String userID) {
 		return selectList("role.getUserRoles", userID);
 	}
+
+	public int addMenus(String addedBy, String[] roleIDs, String... menuIDs) {
+		if (isEmpty(roleIDs) || isEmpty(menuIDs)) return 0;
+		
+		return insert(
+			"roleMember.addMenus"
+		   , params().set("roleIDs", roleIDs)
+		   			 .set("menuIDs", menuIDs)
+		   			 .set("addedBy", addedBy)
+		);
+	}
+	
+	public int deleteMenus(String[] roleIDs, String... menuIDs) {
+		return delete(
+			"roleMember.deleteMenus"
+		   , params().set("roleIDs", !isEmpty(roleIDs) ? roleIDs : null)
+		   			 .set("menuIDs", !isEmpty(menuIDs) ? menuIDs : null)
+		);
+	}
 }

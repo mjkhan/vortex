@@ -12,7 +12,7 @@
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getRoles();" type="button">찾기</button>
 		 <button onclick="newRole();" type="button" class="add">추가</button>
-		 <button id="btnRemove" onclick="removeRoles();" type="button" class="hidden">삭제</button>
+		 <button onclick="removeRoles();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
@@ -126,7 +126,7 @@ function setRoleList(resp, start) {
 	});
 
 	if (!append)
-		$("#btnRemove").fadeOut();
+		$(".showOnCheck").fadeOut();
 	if (resp.more) {
 		$(".paging button")
 			.removeAttr("onclick")
@@ -139,9 +139,9 @@ function setRoleList(resp, start) {
 	checkedRoles = checkbox("input[type='checkbox'][name='roleID']")
 		.onChange(function(checked){
 			if (checked)
-				$("#btnRemove").fadeIn();
+				$(".showOnCheck").fadeIn();
 			else
-				$("#btnRemove").fadeOut();
+				$(".showOnCheck").fadeOut();
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedRoles.check(checked);});
 }

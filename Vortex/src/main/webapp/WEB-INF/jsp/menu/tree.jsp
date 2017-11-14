@@ -141,9 +141,6 @@ function initTree(menus) {
 	});
 	
 	helper.open("00000");
-	
-	$(".showOnSelect").hide();
-	$(".showOnCheck").hide();
 }
 </vtx:script>
 <vtx:script type="docReady">

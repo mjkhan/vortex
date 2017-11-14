@@ -8,7 +8,7 @@
 			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
 		 </select>
 		 <button onclick="newCode();" type="button" class="add">추가</button>
-		 <button id="btnRemove" onclick="removeCodes();" type="button" class="hidden">삭제</button>
+		 <button id="btnRemove" onclick="removeCodes();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
@@ -119,12 +119,12 @@ function setCodeList(resp) {
 	checkedCodes = checkbox("input[type='checkbox'][name='code']")
 		.onChange(function(checked){
 			if (checked)
-				$("#btnRemove").fadeIn();
+				$(".showOnCheck").fadeIn();
 			else
-				$("#btnRemove").fadeOut();
+				$(".showOnCheck").fadeOut();
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedCodes.check(checked);});
-	$("#btnRemove").fadeOut();
+	$(".showOnCheck").fadeOut();
 }
 </vtx:script>
 <vtx:script type="docReady">

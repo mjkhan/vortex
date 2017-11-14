@@ -47,7 +47,7 @@ button.add {
 	border:2px solid deeppink; border-radius:50%;
 }
 
-.hidden {display:none;}
+.hidden, .showOnSelect, .showOnCheck {display:none;}
 
 .mainTitle {
 	font-size:2em; font-weight:bold;

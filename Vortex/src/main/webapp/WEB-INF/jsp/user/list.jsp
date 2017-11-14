@@ -13,7 +13,7 @@
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getUsers(0);" type="button">찾기</button>
 		 <button onclick="newUser();" type="button" class="add">추가</button>
-		 <button id="btnRemove" onclick="removeUsers();" type="button" class="hidden">삭제</button>
+		 <button onclick="removeUsers();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
@@ -130,7 +130,7 @@ function setUserList(resp, start) {
 	});
 	
 	if (!append)
-		$("#btnRemove").fadeOut();
+		$(".showOnCheck").fadeOut();
 	if (resp.more) {
 		$(".paging button")
 			.removeAttr("onclick")
@@ -143,9 +143,9 @@ function setUserList(resp, start) {
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
 		.onChange(function(checked){
 			if (checked)
-				$("#btnRemove").fadeIn();
+				$(".showOnCheck").fadeIn();
 			else
-				$("#btnRemove").fadeOut();
+				$(".showOnCheck").fadeOut();
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedUsers.check(checked);});
 }

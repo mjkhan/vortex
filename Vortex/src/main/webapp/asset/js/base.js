@@ -83,7 +83,7 @@ function onError(xhr, ajaxOptions, thrownError) {
 	alert(msgs.join("\n\n"));
 	
 	if (403 == resp.status && window.wctx) {
-		location.href = window.wctx.path;
+		location.href = wctx.path;
 	}
 }
 

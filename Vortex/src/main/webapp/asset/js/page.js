@@ -135,7 +135,7 @@ var dialog = {
 			$("#_dlgContent").html(options.content);
 		}
 		if (options.onOK)
-			$("#_ok").click(options.onOK);
+			$("#_ok").off("click").on("click", options.onOK);
 		dialog.container.show();
 	},
 	show:function(options) {

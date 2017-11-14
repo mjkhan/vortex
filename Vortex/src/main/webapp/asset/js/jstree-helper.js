@@ -14,20 +14,28 @@ function helpTree(selector, options) {
 			   h._tree.open_all(null, dur);
 			   return h.log("All nodes opened.");
 		   }
-
-		   h._tree.open_node(id, null, dur);
-		   var parent = h._tree.get_parent(id);
-		   if (parent)
-			   h.open(parent);
-		   h.log("The node('" + id + "') opened.");
+		   
+		   if ("string" == typeof(id)) {
+			   h._tree.open_node(id, null, dur);
+			   var parent = h._tree.get_parent(id);
+			   if (parent)
+				   h.open(parent);
+			   h.log("The node('" + id + "') opened.");
+		   } else if ("number" == typeof(id)) {
+			   
+		   }
 		},
 		close: function(id) {
 			if (!id) {
 				h._tree.close_all(null, dur);
-				h.log("All nodes closed.");
-			} else {
+				return h.log("All nodes closed.");
+			}
+			if ("string" == typeof(id)) {
 				h._tree.close_node(id, null, dur);
 				h.log("The node('" + id + "') closed.");
+			}
+			if ("number" == typeof(id)) {
+
 			}
 		},
 		toggleFolding: function(expand, handler) {

@@ -81,6 +81,10 @@ function onError(xhr, ajaxOptions, thrownError) {
 	for (key in resp)
 		msgs.push(resp[key])
 	alert(msgs.join("\n\n"));
+	
+	if (403 == resp.status && window.wctx) {
+		location.href = window.wctx.path;
+	}
 }
 
 function ajax(options) {

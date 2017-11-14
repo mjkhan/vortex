@@ -25,5 +25,6 @@
 	"path":"${path}",
 	"title":"${title}",
 	"name":"${name}",
-	"message":"${message}"
+	"message":"${message}",
+	"status":500
 }</c:if>

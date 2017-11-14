@@ -134,8 +134,8 @@ function addActions(){
 							actionIDs:actionIDs.join(","),
 						},
 						success:function(resp){
-							if (!resp.saved)
-								return alert("저장되지 않았습니다.");
+							if (!resp.affected)
+								return alert("이미 등록된 액션입니다.");
 							if (currentActions)
 								currentActions();
 							else

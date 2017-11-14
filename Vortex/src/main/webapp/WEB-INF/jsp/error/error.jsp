@@ -21,11 +21,10 @@
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>
 </c:if>
-<c:if test="${ajax}">
-{
+<c:if test="${ajax}">{
 	"path":"${path}",
 	"title":"${title}",
 	"name":"${name}",
-	"message":"${message}"
-}
-</c:if>
+	"message":"${message}",
+	"status":500
+}</c:if>

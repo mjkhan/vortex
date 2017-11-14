@@ -13,7 +13,7 @@ ${menus}
 	<button onclick="getMenu(selectedID());" class="showOnSelect">수정</button>
 	<button onclick="remove();" class="showOnCheck">삭제</button>
 </div>
-<div id="menuDetail" style="padding:1em 0;"></div>
+<div id="menuDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="src">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js" type="text/javascript"></script>
 <script src="<c:url value="/asset/js/jstree-helper.js"/>" type="text/javascript"></script>
@@ -140,7 +140,7 @@ function initTree(menus) {
 		}
 	});
 	
-	helper.open();
+	helper.open("00000");
 	
 	$(".showOnSelect").hide();
 	$(".showOnCheck").hide();

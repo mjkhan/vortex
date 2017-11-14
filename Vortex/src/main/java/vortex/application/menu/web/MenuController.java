@@ -37,7 +37,7 @@ public class MenuController extends ApplicationController {
 			.toString(tops);
 		if (!isEmpty(result))
 			result = "<ul>\n" + result + "\n</ul>";
-		result = "<ul><li id=\"00000\">메뉴정보\n" + result + "\n</li>\n</ul>";
+		result = "<ul><li id=\"00000\">시스템 메뉴\n" + result + "\n</li>\n</ul>";
 		return result;
 	}
 	

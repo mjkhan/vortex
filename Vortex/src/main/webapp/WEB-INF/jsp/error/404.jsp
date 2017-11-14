@@ -18,5 +18,6 @@
 </c:if>
 <c:if test="${ajax}">{
 	"title":"${title}",
-	"path":"${path}"
+	"path":"${path}",
+	"status":404
 }</c:if>

@@ -15,7 +15,7 @@
 			<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
 				<th width="20%">이름</th>
 				<th width="30%">경로</th>
-				<th width="20%">수정</th>
+				<th width="20%">수정시간</th>
 			</tr>
 		</thead>
 		<tbody id="actionList">

@@ -16,10 +16,10 @@
 		<td><input id="password" value="${user.password}" type="password" required maxlength="32" /></td>
 	</tr>
 <c:if test="${!create}">
-	<tr><th>등록</th>
+	<tr><th>등록시간</th>
 		<td><fmt:formatDate value="${user.createdAt}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
-	<tr><th>수정</th>
+	<tr><th>수정시간</th>
 		<td><fmt:formatDate value="${user.lastModified}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
 	<tr><th>상태</th>

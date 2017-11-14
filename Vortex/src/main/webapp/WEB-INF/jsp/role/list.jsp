@@ -19,7 +19,7 @@
 			<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
 				<th width="20%">아이디</th>
 				<th width="50%">이름</th>
-				<th width="20%">수정</th>
+				<th width="20%">수정시간</th>
 			</tr>
 		</thead>
 		<tbody id="roleList">

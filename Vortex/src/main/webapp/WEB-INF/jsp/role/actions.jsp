@@ -31,7 +31,7 @@
 			<tr><th width="10%"><input id="toggleActions" type="checkbox" /></th>
 				<th width="30%">이름</th>
 				<th width="40%">경로</th>
-				<th width="20%">등록</th>
+				<th width="20%">등록시간</th>
 			</tr>
 		</thead>
 		<tbody id="actionList">

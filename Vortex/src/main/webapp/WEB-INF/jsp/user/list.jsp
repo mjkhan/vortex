@@ -21,7 +21,7 @@
 				<th width="20%">아이디</th>
 				<th width="30%">이름</th>
 				<th width="20%">별명</th>
-				<th width="20%">등록</th>
+				<th width="20%">등록시간</th>
 			</tr>
 		</thead>
 		<tbody id="userList">

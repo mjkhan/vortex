@@ -14,7 +14,7 @@
 		</td>
 	</tr>
 <c:if test="${!create}">
-	<tr><th>수정</th>
+	<tr><th>수정시간</th>
 		<td><fmt:formatDate value="${role.lastModified}" pattern="yy-MM-dd hh:mm"/></td>
 	</tr>
 </c:if>

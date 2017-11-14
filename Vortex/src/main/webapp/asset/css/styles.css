@@ -29,7 +29,7 @@ q:before, q:after {content:'';}
 
 button {min-width:55px; padding:0 .25em;}
 
-input[type='text'], input[type='search'], input[type='password'] {padding:.1em .25em;}
+input[type] {padding:.2em .25em;}
 input[type='number'] {text-align:right;}
 input[readonly] {border:none;}
 

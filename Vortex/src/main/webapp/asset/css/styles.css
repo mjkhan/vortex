@@ -115,6 +115,6 @@ button.add {
 	width:100%;
     font-size:small;
 }
-.infoForm th {background-color:#e7efff; border-bottom:1px solid white;}
+.infoForm th {width:35%; background-color:#e7efff; border-bottom:1px solid white;}
 .infoForm th, .infoForm td {padding:.5em;}
 .infoForm td input {width:100%;}

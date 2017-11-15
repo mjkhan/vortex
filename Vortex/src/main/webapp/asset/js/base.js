@@ -76,6 +76,9 @@ function Eval(expr, debug) {
 }
 
 function onError(xhr, options, error) {
+	if (xhr.readyState == 0)
+		return alert("서버에 접근할 수 없습니다.");
+	
 	var resp = JSON.parse(xhr.responseText);
 	if (resp.handler)
 		return eval(resp.handler);

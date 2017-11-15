@@ -16,8 +16,13 @@
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>
 </c:if>
-<c:if test="${ajax}">{
+<c:if test="${ajax}">
+<c:set var="handler">
+alert(["${title}", "${path}"].join("\n\n"));
+location.reload();
+</c:set>{
 	"title":"${title}",
 	"path":"${path}",
-	"status":403
+	"status":403,
+	"handler":"${vtx:jstring(handler)}"
 }</c:if>

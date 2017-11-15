@@ -75,16 +75,17 @@ function Eval(expr, debug) {
 	}
 }
 
-function onError(xhr, ajaxOptions, thrownError) {
-	var resp = JSON.parse(xhr.responseText),
-		msgs = [];
+function onError(xhr, options, error) {
+	var resp = JSON.parse(xhr.responseText);
+	if (resp.handler)
+		return eval(resp.handler);
+	
+	var	msgs = [];
 	for (key in resp)
 		msgs.push(resp[key])
-	alert(msgs.join("\n\n"));
-	
-	if (403 == resp.status && window.wctx) {
-		location.href = wctx.path;
-	}
+	msgs = msgs.join("\n\n");
+	if (msgs)
+		alert(msgs);
 }
 
 function ajax(options) {

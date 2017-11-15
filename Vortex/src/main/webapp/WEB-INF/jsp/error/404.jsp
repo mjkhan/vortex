@@ -19,5 +19,6 @@
 <c:if test="${ajax}">{
 	"title":"${title}",
 	"path":"${path}",
-	"status":404
+	"status":404,
+	"handler":"alert('${title}\\n\\n${path}');"
 }</c:if>

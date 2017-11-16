@@ -49,6 +49,11 @@ function helpTree(selector, options) {
 		getNode: function(id) {return h._tree.get_node(id);},
 		selectNode: function(obj) {return h._tree.select_node(obj);},
 		checkNodes: function(obj, check) {
+			if (obj == false)
+				return h._tree.uncheck_all();
+			if (obj == true || !obj)
+				return h._tree.check_all();
+			
 			if (check != false) {
 				h._tree.check_node(obj);
 			} else {

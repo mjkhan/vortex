@@ -29,7 +29,7 @@
 		</tr></c:set>
 	</tbody>
 </table>
-<div class="paging">
+<div class="more">
 	<button type="button">더 보기</button>
 </div>
 <script type="text/javascript">
@@ -67,9 +67,9 @@ var userInfo = {
 		});
 
 		if (resp.more) {
-			$(".paging").show();
+			$(".more").show();
 		} else {
-			$(".paging").hide();
+			$(".more").hide();
 		}
 		
 		userInfo.checked = checkbox("input[type='checkbox'][name='_userID']");

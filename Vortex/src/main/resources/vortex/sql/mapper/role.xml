@@ -28,13 +28,15 @@ ORDER BY B.ROLE_ID
 
 <!-- 액션 또는 사용자 설정을 위한 역할 목록 가져오기 -->
 <select id="getRolesForMember" parameterType="hashmap" resultType="dataobject">
+SELECT *
+FROM (
 <if test="member == 'action'">
-SELECT 'all' ROLE_ID, '모두' ROLE_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자' DESCRP UNION
-SELECT 'authenticated' ROLE_ID, '인증된 사용자' ROLE_NAME, '로그인한 모든 사용자' DESCRP UNION
+SELECT 0 SRT_ORD, 'all' ROLE_ID, '모두' ROLE_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자' DESCRP UNION
+SELECT 1 SRT_ORD, 'authenticated' ROLE_ID, '인증된 사용자' ROLE_NAME, '로그인한 모든 사용자' DESCRP UNION
 </if>
-SELECT ROLE_ID, ROLE_NAME, DESCRP
-FROM TBL_ROLE
-ORDER BY ROLE_ID
+SELECT 2 SRT_ORD, ROLE_ID, ROLE_NAME, DESCRP
+FROM TBL_ROLE) A
+ORDER BY SRT_ORD, ROLE_ID
 </select>
 
 <!-- 역할 가져오기 -->

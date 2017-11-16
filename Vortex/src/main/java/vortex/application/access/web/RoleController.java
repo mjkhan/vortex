@@ -121,6 +121,23 @@ public class RoleController extends ApplicationController {
 		return modelAndView("jsonView", roleService.deleteUsers(req));
 	}
 
+	@RequestMapping("/menu/tree.do")
+	public ModelAndView getMenus(HttpServletRequest hreq) {
+		DataObject req = request(hreq),
+				   res = new DataObject();
+		String roleID = req.string("roleID");
+		boolean init = isEmpty(roleID);
+		if (init) {
+			List<DataObject> roles = roleService.getRolesFor(req.set("member", "action")).value("roles");
+			roleID = !isEmpty(roles) ? roles.get(0).string("ROLE_ID") : null;
+			res.set("roles", roles);
+		}
+		if (!isEmpty(roleID)) {
+
+		}
+		return modelAndView(init ? "role/menus" : "jsonView", res);
+	}
+
 	@RequestMapping("/menu/add.do")
 	public ModelAndView addMenus(HttpServletRequest hreq) {
 		DataObject req = request(hreq);

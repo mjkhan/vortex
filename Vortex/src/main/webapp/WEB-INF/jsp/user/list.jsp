@@ -35,7 +35,7 @@
 			</tr></c:set>
 		</tbody>
 	</table>
-	<div class="paging">
+	<div class="more">
 		<button type="button">더 보기</button>
 	</div>
 </div>
@@ -132,12 +132,12 @@ function setUserList(resp, start) {
 	if (!append)
 		$(".showOnCheck").fadeOut();
 	if (resp.more) {
-		$(".paging button")
+		$(".more button")
 			.removeAttr("onclick")
 			.attr("onclick", "getUsers(" + resp.next + ")");
-		$(".paging").show();
+		$(".more").show();
 	} else {
-		$(".paging").hide();
+		$(".more").hide();
 	}
 	
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")

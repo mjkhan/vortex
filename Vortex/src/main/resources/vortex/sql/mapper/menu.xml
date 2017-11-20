@@ -5,6 +5,7 @@
 <resultMap id="menuRow" type="menu">
 	<id property="id" column="MENU_ID"/>
 	<result property="name" column="MENU_NAME"/>
+	<result property="actionID" column="ACT_ID"/>
 	<result property="actionPath" column="ACT_PATH"/>
 	<result property="imageConfig" column="IMG_CFG"/>
 	<result property="parentID" column="PRNT_ID"/>
@@ -16,16 +17,16 @@
 
 <!-- 메뉴 트리 생성을 위한 목록 가져오기 -->
 <select id="getTree" resultMap="menuRow">
-SELECT *
-FROM TBL_MENU
+SELECT A.*, B.ACT_PATH
+FROM TBL_MENU A LEFT OUTER JOIN TBL_ACTION B ON A.ACT_ID = B.ACT_ID
 WHERE STATUS &lt;&gt; '999'
 ORDER BY PRNT_ID, SRT_ORD, MENU_ID
 </select>
 
 <!-- 하위 메뉴 목록 가져오기 -->
 <select id="getMenus" parameterType="string"  resultType="dataobject">
-SELECT *
-FROM TBL_MENU
+SELECT A.*, B.ACT_PATH
+FROM TBL_MENU A LEFT OUTER JOIN TBL_ACTION B ON A.ACT_ID = B.ACT_ID
 WHERE PRNT_ID = #{value}
 AND STATUS &lt;&gt; '999'
 ORDER BY SRT_ORD, MENU_ID
@@ -33,8 +34,8 @@ ORDER BY SRT_ORD, MENU_ID
 
 <!-- 메뉴 가져오기 -->
 <select id="getMenu" parameterType="string" resultMap="menuRow">
-SELECT *
-FROM TBL_MENU
+SELECT A.*, B.ACT_PATH
+FROM TBL_MENU A LEFT OUTER JOIN TBL_ACTION B ON A.ACT_ID = B.ACT_ID
 WHERE MENU_ID = #{value}
 </select>
 
@@ -49,7 +50,7 @@ FROM TBL_MENU
 INSERT INTO TBL_MENU (
 	MENU_ID,
 	MENU_NAME,
-	ACT_PATH,
+	ACT_ID,
 	IMG_CFG,
 	PRNT_ID,
 	SRT_ORD,
@@ -59,7 +60,7 @@ INSERT INTO TBL_MENU (
 ) VALUES (
 	#{id},
 	#{name},
-	#{actionPath},
+	#{actionID},
 	#{imageConfig},
 	#{parentID},
 	99999,
@@ -73,7 +74,7 @@ INSERT INTO TBL_MENU (
 <update id="update" parameterType="menu">
 UPDATE TBL_MENU SET
 	MENU_NAME = #{name},
-	ACT_PATH = #{actionPath},
+	ACT_ID = #{actionID},
 	IMG_CFG = #{imageConfig},
 	UPD_ID = #{modifiedBy},
 	UPD_TIME = CURRENT_TIMESTAMP

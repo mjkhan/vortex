@@ -11,7 +11,7 @@
 	<tr><th><label for="menuName">이름</label></th>
 		<td><input id="menuName" value="${menu.name}" type="text" required maxlength="32" /></td>
 	</tr>
-	<tr><th><label for="actionPath">경로</label></th>
+	<tr><th><label for="actionPath">액션</label><img onclick="setAction();" alt="액션 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></th>
 		<td><input id="actionPath" value="${menu.actionPath}" type="text" maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="imgCfg">이미지</label></th>
@@ -28,6 +28,27 @@
 	<button onclick="showDetail(false);" type="button">닫기</button>
 </div>
 <script type="text/javascript">
+
+function setAction(){
+	ajax({
+		url:"<c:url value='/action/select.do'/>",
+		data:{type:"radio"},
+		success:function(resp) {
+			dialog.show({
+				title:"액션 선택",
+				content:resp,
+				onOK:function(){
+					var actionIDs = actionInfo.selected();
+					if (!actionIDs)
+						return alert("액션을 선택하십시오.");
+
+					dialog.close();
+				}
+			});
+		}
+	});
+}
+
 function saveMenu() {
 	if (requiredEmpty()) return;
 	

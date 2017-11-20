@@ -51,12 +51,14 @@ public class MenuController extends ApplicationController {
 	public ModelAndView create(HttpServletRequest hreq) {
 		String parentID = hreq.getParameter("parentID"),
 			   menuName = hreq.getParameter("menuName"),
-			   actionPath = hreq.getParameter("actionPath"),
+			   actionID = hreq.getParameter("actionID"),
+//			   actionPath = hreq.getParameter("actionPath"),
 			   imgCfg = hreq.getParameter("imgCfg");
 		Menu menu = new Menu();
 		menu.setParentID(parentID);
 		menu.setName(menuName);
-		menu.setActionPath(actionPath);
+		menu.setActionID(actionID);
+//		menu.setActionPath(actionPath);
 		menu.setImageConfig(imgCfg);
 		String menuID = menuService.create(menu);
 		return modelAndView("jsonView")
@@ -68,11 +70,13 @@ public class MenuController extends ApplicationController {
 	public ModelAndView update(HttpServletRequest hreq) {
 		String menuID = hreq.getParameter("menuID"),
 			   menuName = hreq.getParameter("menuName"),
-			   actionPath = hreq.getParameter("actionPath"),
+			   actionID = hreq.getParameter("actionID"),
+//			   actionPath = hreq.getParameter("actionPath"),
 			   imgCfg = hreq.getParameter("imgCfg");
 		Menu menu = menuService.getMenu(menuID);
 		menu.setName(menuName);
-		menu.setActionPath(actionPath);
+		menu.setActionID(actionID);
+//		menu.setActionPath(actionPath);
 		menu.setImageConfig(imgCfg);
 		boolean saved = menuService.update(menu);
 		return modelAndView("jsonView")

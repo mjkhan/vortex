@@ -122,10 +122,10 @@ function addActions(){
 				title:"액션 선택",
 				content:resp,
 				onOK:function(){
-					var actionIDs = actionInfo.checked.value();
+					var actionIDs = actionInfo.value();
 					if (!actionIDs)
 						return alert("액션을 선택하십시오.");
-					
+
 					dialog.close();
 					ajax({
 						url:"<c:url value='/role/action/add.do'/>",

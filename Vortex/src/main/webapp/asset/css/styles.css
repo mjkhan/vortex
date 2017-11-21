@@ -60,11 +60,16 @@ button.add {
 	color:white; background-color:deeppink;
 }
 .menu {
-	width:100%; margin:.2em 0; padding-left:.5em;
+	width:100%; margin:0; padding:0;
+	border-top:1px solid white; border-bottom:1px solid white;
 	list-style-type:none; overflow:hidden;
 }
 .menu li {
 	display:inline;
+	padding:.5em;
+}
+.menu .current {
+	color:white; background-color:lightskyblue;
 }
 
 .dialogModal {

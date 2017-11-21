@@ -9,8 +9,6 @@
 <link href="<c:url value='/asset/image/favicon.ico'/>" rel="icon" type="image/x-icon" />
 <link href="<c:url value='/asset/css/styles.css'/>" rel="stylesheet" type="text/css" />
 <c:if test="${!empty css}">${css}</c:if>
-<style type="text/css">
-</style>
 <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><![endif]-->
 <title></title>
 </head>

@@ -116,13 +116,13 @@ function setUsers(resp) {
 function addUsers(){
 	ajax({
 		url:"<c:url value='/user/select.do'/>",
-		data:{init:true},
+		data:{init:true, type:"radio"},
 		success:function(resp) {
 			dialog.show({
 				title:"사용자 선택",
 				content:resp,
 				onOK:function(){
-					var userIDs = userInfo.checked.value();
+					var userIDs = valuesOf(userInfo.value(), "USER_ID").join(",");
 					if (!userIDs)
 						return alert("사용자를 선택하십시오.");
 					
@@ -131,7 +131,7 @@ function addUsers(){
 						url:"<c:url value='/role/user/add.do'/>",
 						data:{
 							roleIDs:checkedRoles.value().join(","),
-							userIDs:userIDs.join(","),
+							userIDs:userIDs
 						},
 						success:function(resp){
 							if (!resp.saved)

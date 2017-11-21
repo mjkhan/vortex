@@ -40,6 +40,34 @@ function numberFormat(x) {
     return parts.join(".");
 }
 
+function elementsOf(array, name, values) {
+	if (!array || array.length < 1 || !values) return [];
+	
+	if ("string" == typeof(values))
+		values = values.split(",");
+	
+	var filter = function(e) {
+		var v = e[name];
+		for (var i = 0; i < values.length; ++i) {
+			var value = values[i];
+			if (v == value) return true;
+		}
+		return false;
+	};
+	return array.filter(filter);
+}
+
+function valuesOf(array, name) {
+	if (!array || array.length < 1) return [];
+	
+	var result = [];
+	if (array && array.length > 0)
+		for (var i = 0; i < array.length; ++i) {
+			result.push(array[i][name]);
+		}
+	return result;
+}
+
 function getParam(name) {
 	return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }

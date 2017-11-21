@@ -122,7 +122,7 @@ function addActions(){
 				title:"액션 선택",
 				content:resp,
 				onOK:function(){
-					var actionIDs = actionInfo.value();
+					var actionIDs = valuesOf(actionInfo.value(), "ACT_ID").join(",");
 					if (!actionIDs)
 						return alert("액션을 선택하십시오.");
 
@@ -131,7 +131,7 @@ function addActions(){
 						url:"<c:url value='/role/action/add.do'/>",
 						data:{
 							roleIDs:checkedRoles.value().join(","),
-							actionIDs:actionIDs.join(","),
+							actionIDs:actionIDs,
 						},
 						success:function(resp){
 							if (!resp.affected)

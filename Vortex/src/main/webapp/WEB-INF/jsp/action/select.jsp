@@ -29,9 +29,8 @@
 	</tbody>
 </table>
 <script type="text/javascript">
-log("type: ${type}");
 var actionInfo = {
-	get:function(){
+	get:function() {
 		ajax({
 			url:"<c:url value='/action/select.do'/>",
 			data:{
@@ -40,7 +39,7 @@ var actionInfo = {
 			success:actionInfo.set
 		});
 	},
-	set:function(resp){
+	set:function(resp) {
 		var actions = resp.actions;
 		$("#_actionList").populate({
 			data:actions,
@@ -53,13 +52,19 @@ var actionInfo = {
 			ifEmpty:"${vtx:jstring(notFound)}"
 		});
 		<c:if test="${'checkbox' == type}">
-		actionInfo.value = function() {return checkbox("input[name='_actionID']").value();};
+		actionInfo.value = function() {
+			var actionIDs = checkbox("input[name='_actionID']").value();
+			return elementsOf(actions, "ACT_ID", actionIDs);
+		};
 		checkbox("#_toggleActions").onChange(function(checked){
 			actionInfo.checked.check(checked);
 		});
 		</c:if>
 		<c:if test="${'radio' == type}">
-		actionInfo.value = function() {return $("input[name='_actionID']:checked").val();};
+		actionInfo.value = function() {
+			var actionID = $("input[name='_actionID']:checked").val();
+			return elementsOf(actions, "ACT_ID", actionID)[0];
+		};
 		</c:if>
 		showOK(actions && actions.length);
 	}

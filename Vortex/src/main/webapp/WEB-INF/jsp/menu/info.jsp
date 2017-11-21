@@ -11,8 +11,10 @@
 	<tr><th><label for="menuName">이름</label></th>
 		<td><input id="menuName" value="${menu.name}" type="text" required maxlength="32" /></td>
 	</tr>
-	<tr><th><label for="actionPath">액션</label><img onclick="setAction();" alt="액션 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></th>
-		<td><input id="actionPath" value="${menu.actionPath}" type="text" maxlength="32" /></td>
+	<tr><th><label for="actionPath">액션</label><img onclick="setAction();" alt="액션 선택" title="액션 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></th>
+		<td><input id="actionID" value="${menu.actionID}" type="hidden" />
+			<input id="actionPath" value="${menu.actionPath}" type="text" readonly/>
+		</td>
 	</tr>
 	<tr><th><label for="imgCfg">이미지</label></th>
 		<td><input id="imgCfg" value="${menu.imageConfig}" type="text" maxlength="128" /></td>
@@ -28,7 +30,6 @@
 	<button onclick="showDetail(false);" type="button">닫기</button>
 </div>
 <script type="text/javascript">
-
 function setAction(){
 	ajax({
 		url:"<c:url value='/action/select.do'/>",
@@ -38,9 +39,11 @@ function setAction(){
 				title:"액션 선택",
 				content:resp,
 				onOK:function(){
-					var actionIDs = actionInfo.selected();
-					if (!actionIDs)
+					var selected = actionInfo.value();
+					if (!selected)
 						return alert("액션을 선택하십시오.");
+					$("#actionID").val(selected.ACT_ID);
+					$("#actionPath").val(selected.ACT_PATH);
 
 					dialog.close();
 				}
@@ -58,7 +61,7 @@ function saveMenu() {
 			menuID:$("#menuID").val(),
 			parentID:selectedID(),
 			menuName:$("#menuName").val(),
-			actionPath:$("#actionPath").val(),
+			actionID:$("#actionID").val(),
 			imgCfg:$("#imgCfg").val()
 		},
 		success:function(resp) {

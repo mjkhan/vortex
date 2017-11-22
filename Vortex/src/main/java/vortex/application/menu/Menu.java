@@ -70,12 +70,12 @@ public class Menu implements CompositeElement {
 	}
 	
 	public String getAction() {
-		if (!isAvailable()) return null;
+		if (!isActive()) return null;
 		
 		if (actionPath != null)
 			return actionPath;
 		
-		Menu child = firstAvailableChild();
+		Menu child = activeChild();
 		return child != null ? child.getAction() : null;
 	}
 	
@@ -123,7 +123,7 @@ public class Menu implements CompositeElement {
 		return Status.codeOf(getStatus());
 	}
 	
-	public boolean isAvailable() {
+	public boolean isActive() {
 		return Status.ACTIVE.equals(status());
 	}
 	
@@ -160,9 +160,9 @@ public class Menu implements CompositeElement {
 		return children != null ? children : Collections.emptyList();
 	}
 	
-	private Menu firstAvailableChild() {
+	private Menu activeChild() {
 		for (Menu child: getChildren())
-			if (child.isAvailable())
+			if (child.isActive())
 				return child;
 		return null;
 	}

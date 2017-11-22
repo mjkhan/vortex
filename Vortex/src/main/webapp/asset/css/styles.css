@@ -125,7 +125,10 @@ button.add {
 
 .paging {width:100%; margin:.5em; padding:.5em; text-align:center;}
 .paging a {padding:.5em;}
-.paging .current {color:white; background-color:lightskyblue;}
+.paging .current {
+	border-radius:15px;
+	color:white; background-color:lightskyblue;
+}
 
 .infoForm {
 	width:100%;

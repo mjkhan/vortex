@@ -18,6 +18,8 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 		BoundedList<DataObject> users = userMapper.search(req);
 		return dataobject()
 			.set("users", users)
+			.set("totalSize", users.getTotalSize())
+			.set("fetchSize", users.getFetchSize())
 			.set("more", users.hasNext())
 			.set("next", users.getEnd() + 1);
 	}

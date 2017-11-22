@@ -25,6 +25,8 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		BoundedList<DataObject> groups = actionGroup.search(req);
 		return dataobject()
 			.set("groups", groups)
+			.set("totalSize", groups.getTotalSize())
+			.set("fetchSize", groups.getFetchSize())
 			.set("more", groups.hasNext())
 			.set("next", groups.getEnd() + 1);
 	}

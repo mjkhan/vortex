@@ -116,7 +116,7 @@ function setUsers(resp) {
 function addUsers(){
 	ajax({
 		url:"<c:url value='/user/select.do'/>",
-		data:{init:true, type:"radio"},
+		data:{init:true},
 		success:function(resp) {
 			dialog.show({
 				title:"사용자 선택",

@@ -34,9 +34,7 @@
 		</tr></c:set>
 	</tbody>
 </table>
-<div class="more">
-	<button onclick="" type="button">더 보기</button>
-</div>
+<div class="paging"></div>
 <script type="text/javascript">
 var userInfo = {
 	get:function(start){
@@ -57,8 +55,7 @@ var userInfo = {
 		});
 	},
 	set:function(resp, start){
-		var users = resp.users,
-			append = start > 0;
+		var users = resp.users;
 		$("#_userList").populate({
 			data:users,
 			tr:function(row){
@@ -67,18 +64,22 @@ var userInfo = {
 					.replace(/{userName}/g, row.USER_NAME)
 					.replace(/{alias}/g, row.ALIAS);
 			},
-			ifEmpty:"${vtx:jstring(notFound)}",
-			append:append
+			ifEmpty:"${vtx:jstring(notFound)}"
 		});
-
-		if (resp.more) {
-			$(".more button")
-				.removeAttr("onclick")
-				.attr("onclick", "userInfo.get(" + resp.next + ")");
-			$(".more").show();
-		} else {
-			$(".more").hide();
-		}
+		
+		$(".paging").paginate({
+			start:start,
+			fetchSize:resp.fetchSize,
+			totalSize:resp.totalSize,
+			links:5,
+			first:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">|◀</a>";},
+			previous:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">◀</a>";},
+			link:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">" + label + "</a>";},
+			current:function(index, label) {return "<a class=\"current\">" + label + "</a>";},
+			next:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">▶</a>";},
+			last:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">▶|</a>";},
+		});
+		
 		<c:if test="${'checkbox' == type}">
 		userInfo.value = function() {
 			var userIDs = checkbox("input[name='_userID']").value();
@@ -92,7 +93,7 @@ var userInfo = {
 		<c:if test="${'radio' == type}">
 		userInfo.value = function() {
 			var userID = $("input[name='_userID']:checked").val();
-			return elementsOf(user, "USER_ID", userID)[0];
+			return elementsOf(users, "USER_ID", userID)[0];
 		};
 		</c:if>
 		showOK(users && users.length);
@@ -102,8 +103,8 @@ var userInfo = {
 $(function(){
 	userInfo.set({
 		users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
-		more:${more},
-		next:${next}
+		fetchSize:${fetchSize},
+		totalSize:${totalSize}
 	}, 0);
 });
 </script>

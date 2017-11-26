@@ -83,11 +83,11 @@ var userInfo = {
 		<c:if test="${'checkbox' == type}">
 		userInfo.value = function() {
 			var userIDs = checkbox("input[name='_userID']").value();
-			log("userIDs: " + userIDs);
 			return elementsOf(users, "USER_ID", userIDs);
 		};
-		checkbox("#_toggleActions").onChange(function(checked){
-			userInfo.checked.check(checked);
+		checkbox("#_toggleUsers").onChange(function(checked){
+			//userInfo.checked.check(checked);
+			checkbox("input[type='checkbox'][name='_userID']").check(checked);
 		});
 		</c:if>
 		<c:if test="${'radio' == type}">

@@ -57,7 +57,7 @@ var actionInfo = {
 			return elementsOf(actions, "ACT_ID", actionIDs);
 		};
 		checkbox("#_toggleActions").onChange(function(checked){
-			actionInfo.checked.check(checked);
+			checkbox("input[type='checkbox'][name='_actionID']").check(checked);
 		});
 		</c:if>
 		<c:if test="${'radio' == type}">

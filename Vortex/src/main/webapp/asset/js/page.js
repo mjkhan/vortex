@@ -123,6 +123,7 @@ $.fn.message = function(msg) {
  *  onclose:function
  * }
  */
+
 var dialog = {
 	container:null,
 	onclose:null,

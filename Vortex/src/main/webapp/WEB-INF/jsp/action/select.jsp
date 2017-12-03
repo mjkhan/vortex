@@ -14,7 +14,10 @@
 </div>
 <table class="infoList">
 	<thead>
-		<tr><th width="10%"><c:if test="${'checkbox' == type}"><input id="_toggleActions" type="${type}" /></c:if></th>
+		<tr><th width="10%">
+				<c:if test="${'checkbox' == type}"><input id="_toggleActions" type="${type}" /></c:if>
+				<c:if test="${'radio' == type}">선택</c:if>
+			</th>
 			<th>이름</th>
 			<th>경로</th>
 		</tr>

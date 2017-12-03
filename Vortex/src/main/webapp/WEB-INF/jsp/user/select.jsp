@@ -18,7 +18,10 @@
 </div>
 <table class="infoList">
 	<thead>
-		<tr><th width="10%"><c:if test="${'checkbox' == type}"><input id="_toggleUsers" type="${type}" /></c:if></th>
+		<tr><th width="10%">
+				<c:if test="${'checkbox' == type}"><input id="_toggleUsers" type="${type}" /></c:if>
+				<c:if test="${'radio' == type}">선택</c:if>
+			</th>
 			<th width="20%">아이디</th>
 			<th width="30%">이름</th>
 			<th width="20%">별명</th>

@@ -50,7 +50,7 @@ public class ApplicationController extends AbstractObject {
 		return modelAndView(viewName).addAllObjects(map);
 	}
 
-	public static class Filter implements javax.servlet.Filter {
+	public static class Filter extends AbstractObject implements javax.servlet.Filter {
 
 		@Override
 		public void init(FilterConfig cfg) throws ServletException {}
@@ -59,13 +59,15 @@ public class ApplicationController extends AbstractObject {
 		public void doFilter(ServletRequest sreq, ServletResponse sresp, FilterChain chain) throws IOException, ServletException {
 			HttpServletRequest hreq = (HttpServletRequest)sreq;
 			String action = hreq.getRequestURI().replace(hreq.getContextPath(), "");
-			System.out.println("action:" + action);
+			Client client = new Client()
+				.setAction(action)
+				.setIpAddress(sreq.getRemoteAddr())
+				.setCurrent();
+			log().debug(() -> client + " set as current.");
 			HttpSession session = hreq.getSession(false);
 			if (session != null) {
-				boolean newsession = session.isNew();
-				String sessionID = session.getId();
-				System.out.println("new session:" + newsession);
-				System.out.println("session id:" + sessionID);
+				System.out.println("new session:" + session.isNew());
+				System.out.println("session id:" + session.getId());
 				System.out.println("JSESSIONID:" + Kookie.get(hreq).getValue("JSESSIONID"));
 			} else {
 				System.out.println("No session");
@@ -75,7 +77,11 @@ public class ApplicationController extends AbstractObject {
 		}
 		
 		@Override
-		public void destroy() {}
+		public void destroy() {
+			Client client = Client.release();
+			if (client != null)
+				log().debug(() -> client + " released.");
+		}
 	}
 	
 }

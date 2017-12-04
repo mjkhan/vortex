@@ -35,4 +35,8 @@ public class ApplicationService extends AbstractService implements ApplicationAc
 	protected User currentUser() {
 		return User.current();
 	}
+	
+	protected Client client() {
+		return Client.current();
+	}
 }

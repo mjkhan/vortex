@@ -7,6 +7,15 @@ $.fn.onEnterPress = function(handler) {
 	});
 }
 
+function labelFor(input) {
+	var selector = "label[for='{id}']",
+		id = "string" == typeof(input) ? input : input.attr("id");
+	if (!id)
+		throw "ID not found for the given input";
+	selector = selector.replace(/{id}/gi, id);
+	return $(selector).text();
+}
+
 function requiredEmpty(whenEmpty) {
 	var empty = false;
 	$("*[required]").each(function(){
@@ -17,8 +26,11 @@ function requiredEmpty(whenEmpty) {
 			if (whenEmpty)
 				whenEmpty(input);
 			else {
+				alert(labelFor(input) + "을(를) 입력하십시오.");
+/*
 				var label = $("label[for='" + input.attr("id") + "']").html();
 				alert(label + "을(를) 입력하십시오.");
+*/
 			}
 			input.focus();
 		}

@@ -1,5 +1,7 @@
 package vortex.application.access.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,19 @@ public class RoleMemberMapper extends AbstractMapper {
 	public BoundedList<Map<String, Object>> getActions(DataObject req) {
 		List<Map<String, Object>> list = selectList("roleMember.getActions", req);
 		return boundedList(list, req);
+	}
+	
+	public Map<String, List<String>> getMenuActionRoles() {
+		List<Map<String, Object>> list = selectList("roleMember.getMenuActionRoles");
+		Map<String, List<String>> rolesByAction = new HashMap<>();
+		list.forEach(row -> {
+			String action = (String)row.get("ACT_PATH");
+			List<String> roles = rolesByAction.get(action);
+			if (roles == null)
+				rolesByAction.put(action, roles = new ArrayList<>());
+			roles.add((String)row.get("ROLE_ID"));
+		});
+		return rolesByAction;
 	}
 	
 	public int addActions(String addedBy, String[] roleIDs, String... actionIDs) {

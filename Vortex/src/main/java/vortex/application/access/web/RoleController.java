@@ -120,37 +120,4 @@ public class RoleController extends ApplicationController {
 		   .set("userIDs", req.string("userIDs").split(","));
 		return modelAndView("jsonView", roleService.deleteUsers(req));
 	}
-
-	@RequestMapping("/menu/tree.do")
-	public ModelAndView getMenus(HttpServletRequest hreq) {
-		DataObject req = request(hreq),
-				   res = new DataObject();
-		String roleID = req.string("roleID");
-		boolean init = isEmpty(roleID);
-		if (init) {
-			List<DataObject> roles = roleService.getRolesFor(req.set("member", "action")).value("roles");
-			roleID = !isEmpty(roles) ? roles.get(0).string("ROLE_ID") : null;
-			res.set("roles", roles);
-		}
-		if (!isEmpty(roleID)) {
-
-		}
-		return modelAndView(init ? "role/menus" : "jsonView", res);
-	}
-
-	@RequestMapping("/menu/add.do")
-	public ModelAndView addMenus(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		req.set("roleIDs", req.string("roleIDs").split(","))
-		   .set("menuIDs", req.string("menuIDs").split(","));
-		return modelAndView("jsonView", roleService.addMenus(req));
-	}
-
-	@RequestMapping("/menu/delete.do")
-	public ModelAndView deleteMenus(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		req.set("roleIDs", req.string("roleIDs").split(","))
-		   .set("menuIDs", req.string("menuIDs").split(","));
-		return modelAndView("jsonView", roleService.deleteMenus(req));
-	}
 }

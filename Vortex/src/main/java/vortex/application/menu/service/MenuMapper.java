@@ -41,22 +41,27 @@ public class MenuMapper extends AbstractMapper {
 	}
 	
 	public boolean update(Menu menu) {
-		int affected = update("menu.update", menu);
-		return affected == 1;
+		return update("menu.update", menu) == 1;
 	}
 	
 	public boolean move(String parentID, String... menuIDs) {
 		if (isEmpty(menuIDs)) return false;
-		DataObject params = params().set("parentID", parentID).set("menuIDs", menuIDs);
-		int affected = update("menu.move", params);
-		return affected > 0;
+		return update(
+			"menu.move",
+			params()
+				.set("parentID", parentID)
+				.set("menuIDs", menuIDs)
+		) > 0;
 	}
 	
 	public boolean reorder(String parentID, String... menuIDs) {
 		if (isEmpty(menuIDs)) return false;
-		DataObject params = params().set("parentID", parentID).set("menuIDs", menuIDs);
-		int affected = update("menu.reorder", params);
-		return affected > 0;
+		return update(
+			"menu.reorder",
+			params()
+				.set("parentID", parentID)
+				.set("menuIDs", menuIDs)
+		) > 0;
 	}
 	
 	public boolean reorder(String parentID, String menuID, int offset) {

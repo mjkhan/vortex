@@ -28,17 +28,25 @@ function ifEmpty(v, nv) {
 		return nv;
 }
 
-function isNumber(v, strict) {
-	return strict ?
-		  !isNaN(v) :
-		  isEmpty(v) || !isNaN(v.replace(/,/gi, ""));
-}
-
-function numberFormat(x) {
-    var parts = x.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
-}
+var number = {
+	isValid:function(v, strict) {
+		return strict ?
+			!isNaN(v) :
+			isEmpty(v) || !isNaN(v.replace(/,/gi, ""));
+	},
+	format:function(v) {
+		if (isEmpty(v)) return s;
+		
+	    var parts = v.toString().split(".");
+	    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	    return parts.join(".");
+	},
+	parse:function(v) {
+		if (isEmpty(v))
+			return v;
+		return v.replace(/,/gi, "");
+	}
+};
 
 function elementsOf(array, name, values) {
 	if (!array || array.length < 1 || !values) return [];
@@ -46,7 +54,7 @@ function elementsOf(array, name, values) {
 	if ("string" == typeof(values))
 		values = values.split(",");
 	
-	var filter = function(e) {
+	var test = function(e) {
 		var v = e[name];
 		for (var i = 0; i < values.length; ++i) {
 			var value = values[i];
@@ -54,7 +62,7 @@ function elementsOf(array, name, values) {
 		}
 		return false;
 	};
-	return array.filter(filter);
+	return array.filter(test);
 }
 
 function valuesOf(array, name) {

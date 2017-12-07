@@ -22,11 +22,10 @@ public class CodeMapper extends AbstractMapper {
 		if (codes.isEmpty()) return Collections.emptyMap();
 		
 		LinkedHashMap<String, List<DataObject>> result = new LinkedHashMap<>();
-		codes.forEach(row -> {
-			String groupID = row.string("grp_id");
-			List<DataObject> tmp = result.computeIfAbsent(groupID, key -> new ArrayList<DataObject>());
-			tmp.add(row);
-		});
+		codes.forEach(row -> 
+			result.computeIfAbsent(row.string("grp_id"), key -> new ArrayList<DataObject>())
+				.add(row)
+		);
 	
 		return result;
 	}

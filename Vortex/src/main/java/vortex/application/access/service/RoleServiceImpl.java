@@ -120,4 +120,9 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 			.set("affected", affected)
 			.set("saved", affected > 0);
 	}
+
+	@Override
+	public boolean isPermitted(String userID, String action) {
+		return roleMemberMapper.isPermitted(userID, action);
+	}
 }

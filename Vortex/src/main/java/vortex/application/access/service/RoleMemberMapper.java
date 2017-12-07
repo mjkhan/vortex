@@ -21,13 +21,11 @@ public class RoleMemberMapper extends AbstractMapper {
 	public Map<String, List<String>> getMenuActionRoles() {
 		List<Map<String, Object>> list = selectList("roleMember.getMenuActionRoles");
 		Map<String, List<String>> rolesByAction = new HashMap<>();
-		list.forEach(row -> {
-			String action = (String)row.get("ACT_PATH");
-			List<String> roles = rolesByAction.get(action);
-			if (roles == null)
-				rolesByAction.put(action, roles = new ArrayList<>());
-			roles.add((String)row.get("ROLE_ID"));
-		});
+		list.forEach(row -> 
+			rolesByAction
+				.computeIfAbsent((String)row.get("ACT_PATH"), key -> new ArrayList<>())
+				.add((String)row.get("ROLE_ID"))
+		);
 		return rolesByAction;
 	}
 	
@@ -83,5 +81,14 @@ public class RoleMemberMapper extends AbstractMapper {
 	
 	public List<Role> getRoles(String userID) {
 		return selectList("role.getUserRoles", userID);
+	}
+	
+	public boolean isPermitted(String userID, String action) {
+		int count = selectOne(
+			"roleMember.countUserRolesForAction"
+		  , params().set("userID", userID)
+					.set("actionPath", action)
+		);
+		return count > 0;
 	}
 }

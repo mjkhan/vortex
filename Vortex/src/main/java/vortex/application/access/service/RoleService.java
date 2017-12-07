@@ -27,4 +27,6 @@ public interface RoleService extends ApplicationAccess {
 	public DataObject addUsers(DataObject req);
 	
 	public DataObject deleteUsers(DataObject req);
+	
+	public boolean isPermitted(String userID, String action);
 }

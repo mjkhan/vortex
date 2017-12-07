@@ -29,6 +29,20 @@ WHERE A.ACT_ID = B.ACT_ID AND B.ACT_ID = C.ACT_ID
 ORDER BY A.ACT_ID;
 </select>
 
+<!-- user role에 대해 허용된 action role 가져오기 -->
+<select id="countUserRolesForAction" parameterType="hashmap" resultType="int">
+SELECT COUNT(ROLE_ID) ROLE_CNT
+FROM TBL_ROLE_USER A
+WHERE USER_ID = #{userID}
+AND EXISTS (
+	SELECT ROLE_ID
+	FROM TBL_ACTION B, TBL_ROLE_ACTION C
+	WHERE ACT_PATH = #{actionPath}
+	AND B.ACT_ID = C.ACT_ID
+	AND ROLE_ID = A.ROLE_ID
+)
+</select>
+
 <!-- roleIDs의 역할에 actionIDs의 액션 추가 -->
 <insert id="addActions" parameterType="hashmap">
 INSERT INTO TBL_ROLE_ACTION (ROLE_ID, ACT_ID, INS_ID, INS_TIME)

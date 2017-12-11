@@ -1,6 +1,7 @@
 package vortex.support.data.hierarchy;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 import vortex.support.AbstractObject;
 
@@ -9,13 +10,14 @@ public class Stringify<T extends HierarchyElement> extends AbstractObject {
 	public static interface ToString<T extends HierarchyElement> {
 		public String get(T element, int level);
 	}
-	
+		
 	private ToString<T>
 		emptyString = (e, level) -> "",
 		beginElement = emptyString,
 		endElement = emptyString,
 		beginChildren = emptyString,
 		endChildren = emptyString;
+	private Predicate<T> proceed;
 		
 	public static final String indent(String s, int n) {
 		String result = "";
@@ -42,6 +44,11 @@ public class Stringify<T extends HierarchyElement> extends AbstractObject {
 	
 	public Stringify<T> endChildren(ToString<T> end) {
 		this.endChildren = end;
+		return this;
+	}
+	
+	public Stringify<T> proceed(Predicate<T> proceed) {
+		this.proceed = proceed;
 		return this;
 	}
 

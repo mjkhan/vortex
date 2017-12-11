@@ -15,18 +15,7 @@ public class RoleMemberMapper extends AbstractMapper {
 		List<Map<String, Object>> list = selectList("roleMember.getActions", req);
 		return boundedList(list, req);
 	}
-/*	
-	public Map<String, List<String>> getMenuActionRoles() {
-		List<Map<String, Object>> list = selectList("roleMember.getMenuActionRoles");
-		Map<String, List<String>> rolesByAction = new HashMap<>();
-		list.forEach(row -> 
-			rolesByAction
-				.computeIfAbsent((String)row.get("ACT_PATH"), key -> new ArrayList<>())
-				.add((String)row.get("ROLE_ID"))
-		);
-		return rolesByAction;
-	}
-*/	
+
 	public int addActions(String addedBy, String[] roleIDs, String... actionIDs) {
 		if (isEmpty(roleIDs) || isEmpty(actionIDs)) return 0;
 		

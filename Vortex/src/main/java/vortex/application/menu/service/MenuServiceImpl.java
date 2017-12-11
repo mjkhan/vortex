@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
 import vortex.application.menu.Menu;
+import vortex.application.menu.MenuContext;
 import vortex.support.data.DataObject;
 import vortex.support.data.hierarchy.Hierarchy;
 
@@ -19,6 +20,13 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	@Override
 	public Hierarchy<Menu> getTree() {
 		return menuMapper.getTree();
+	}
+
+	@Override
+	public MenuContext getMenuCotext() {
+		return new MenuContext()
+			.setMenus(getTree())
+			.setActionRoles(menuMapper.getMenuActionRoles());
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package vortex.application.menu.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +20,17 @@ public class MenuMapper extends AbstractMapper {
 	public Hierarchy<Menu> getTree() {
 		List<Menu> menus = selectList("menu.getTree");
 		return new HierarchyBuilder<Menu>().setElements(menus).build();
+	}
+	
+	public Map<String, List<String>> getMenuActionRoles() {
+		List<Map<String, Object>> list = selectList("roleMember.getMenuActionRoles");
+		Map<String, List<String>> rolesByAction = new HashMap<>();
+		list.forEach(row -> 
+			rolesByAction
+				.computeIfAbsent((String)row.get("ACT_PATH"), key -> new ArrayList<>())
+				.add((String)row.get("ROLE_ID"))
+		);
+		return rolesByAction;
 	}
 	
 	public List<DataObject> getMenus(String parentID) {

@@ -54,6 +54,7 @@ button.add {
 	color:white; background-color:purple;
 	text-align:center;
 }
+.mainTitle a {color:white; text-decoration:none;}
 .subTitle {
 	font-size:1em; font-weight:bold;
 	padding:.2em .5em;
@@ -64,6 +65,7 @@ button.add {
 	border-top:1px solid white; border-bottom:1px solid white;
 	list-style-type:none; overflow:hidden;
 }
+.menu a {text-decoration:none;}
 .menu li {
 	display:inline;
 	padding:.5em;

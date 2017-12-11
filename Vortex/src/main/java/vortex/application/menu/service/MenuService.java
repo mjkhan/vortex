@@ -4,11 +4,14 @@ import java.util.List;
 
 import vortex.application.ApplicationAccess;
 import vortex.application.menu.Menu;
+import vortex.application.menu.MenuContext;
 import vortex.support.data.DataObject;
 import vortex.support.data.hierarchy.Hierarchy;
 
 public interface MenuService extends ApplicationAccess {
 	public Hierarchy<Menu> getTree();
+	
+	public MenuContext getMenuCotext();
 	
 	public List<DataObject> getMenus(String parentID);
 	

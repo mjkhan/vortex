@@ -13,8 +13,8 @@
 <title></title>
 </head>
 <body>
-<header>
-	<div id="mainTitle" class="mainTitle">Vortex</div>
+<header><c:set var="wctx" scope="request">${pageContext.request.contextPath}</c:set>
+	<div id="mainTitle" class="mainTitle"><a href="${wctx}">Vortex</a></div>
 	<jsp:include page="menu.jsp"/>
 	<div id="subTitle" class="subTitle"></div>
 </header>

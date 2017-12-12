@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import vortex.support.data.Status;
 import vortex.support.data.hierarchy.CompositeElement;
@@ -164,6 +165,23 @@ public class Menu implements CompositeElement {
 		for (Menu child: getChildren())
 			if (child.isActive())
 				return child;
+		return null;
+	}
+	
+	public Menu getPermitted(Map<String, List<String>> actionRoles) {
+		if (!isActive()) return null;
+		if (actionPath != null) {
+			List<String> roles = actionRoles.get(actionPath);
+			return roles != null && !roles.isEmpty() ? this : null;
+		}
+		List<Menu> children = getChildren();
+		if (children.isEmpty()) return null;
+		
+		for (Menu child: children) {
+			Menu permitted = child.getPermitted(actionRoles);
+			if (permitted != null)
+				return permitted;
+		}
 		return null;
 	}
 	

@@ -5,21 +5,18 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <%	MenuService service = (MenuService)WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext()).getBean("menuService");
 	MenuContext mctx = service.getMenuCotext();
-	pageContext.setAttribute("tops", mctx.getMenus(0));
-%>
-<sec:authorize access="isAuthenticated()">
-<ul class="menu">
-	<c:forEach items="${tops}" var="menu">
-	<li><a href="/vortex${menu.action}">${menu.name}</a></li>
-	</c:forEach>
+	pageContext.setAttribute("tops", mctx.getMenus().topElements());
+%><sec:authorize access="isAuthenticated()">
+<ul class="menu"><c:forEach items="${tops}" var="menu">
+	<li><a href="/vortex${menu.action}">${menu.name}</a></li></c:forEach>
 	<li><a onclick="logout();">로그아웃</a></li>
 </ul>
 <vtx:script type="decl">
 function logout() {
 	if (!confirm("로그아웃 하시겠습니까?")) return;
 
-	var form = $("<form>").attr("action", "<c:url value='/logout'/>").attr("method", "post");
-	$("<input>").attr("name", "${_csrf.parameterName}").val("${_csrf.token}").attr("type", "hidden").appendTo(form);
+	var form = $("<form action=\"<c:url value='/logout'/>\", method=\"POST\">");
+	$("<input name=\"${_csrf.parameterName}\" value=\"${_csrf.token}\" type=\"hidden\">").appendTo(form);
 	form.appendTo("body").submit();
 }
 </vtx:script>

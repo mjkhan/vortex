@@ -13,12 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
+import vortex.application.menu.Menu;
+import vortex.application.menu.MenuContext;
+import vortex.application.menu.service.MenuService;
 import vortex.support.AbstractObject;
 import vortex.support.data.DataObject;
-import vortex.support.web.Kookie;
+import vortex.support.data.hierarchy.Hierarchy;
 
 public class ApplicationController extends AbstractObject {
 	@Autowired
@@ -47,37 +51,35 @@ public class ApplicationController extends AbstractObject {
 	}
 
 	public static class Filter extends AbstractObject implements javax.servlet.Filter {
+		private MenuService menuService;
 
 		@Override
-		public void init(FilterConfig cfg) throws ServletException {}
+		public void init(FilterConfig cfg) throws ServletException {
+			menuService = (MenuService)WebApplicationContextUtils.getRequiredWebApplicationContext(cfg.getServletContext()).getBean("menuService");
+		}
 
 		@Override
 		public void doFilter(ServletRequest sreq, ServletResponse sresp, FilterChain chain) throws IOException, ServletException {
 			HttpServletRequest hreq = (HttpServletRequest)sreq;
-			String action = hreq.getRequestURI().replace(hreq.getContextPath(), "");
 			Client client = new Client()
-				.setAction(action)
+				.setAction(hreq.getRequestURI().replace(hreq.getContextPath(), ""))
 				.setIpAddress(sreq.getRemoteAddr())
 				.setCurrent();
 			log().debug(() -> client + " set as current.");
 			HttpSession session = hreq.getSession(false);
-			if (session != null) {
-				System.out.println("new session:" + session.isNew());
-				System.out.println("session id:" + session.getId());
-				System.out.println("JSESSIONID:" + Kookie.get(hreq).getValue("JSESSIONID"));
-			} else {
-				System.out.println("No session");
-			}
+			hreq.setAttribute("newSession", session != null && session.isNew());
 			
+			MenuContext mctx = menuService.getMenuCotext();
+			if (mctx != null) {
+				hreq.setAttribute("menuContext", mctx);
+				Hierarchy<Menu> menus = mctx.getMenus();
+				hreq.setAttribute("menus", menus);
+				hreq.setAttribute("topMenus", menus.topElements());
+			}
 			chain.doFilter(sreq, sresp);
 		}
 		
 		@Override
-		public void destroy() {
-			Client client = Client.release();
-			if (client != null)
-				log().debug(() -> client + " released.");
-		}
+		public void destroy() {}
 	}
-	
 }

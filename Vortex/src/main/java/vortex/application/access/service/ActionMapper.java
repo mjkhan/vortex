@@ -16,16 +16,10 @@ public class ActionMapper extends AbstractMapper {
 	public Action getAction(String actionID) {
 		return selectOne("action.getAction", actionID);
 	}
-	
-	private String newID() {
-		return selectOne("action.newID");
-	}
-	
+
 	public String create(Action action) {
-		String id = newID();
-		action.setId(id);
 		insert("action.insert", action);
-		return id;
+		return action.getId();
 	}
 	
 	public int update(Action action) {

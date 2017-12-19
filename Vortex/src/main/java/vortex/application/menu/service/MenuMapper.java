@@ -40,16 +40,10 @@ public class MenuMapper extends AbstractMapper {
 	public Menu getMenu(String id) {
 		return selectOne("menu.getMenu", id);
 	}
-	
-	private String newId() {
-		return selectOne("menu.newID");
-	}
-	
+
 	public String create(Menu menu) {
-		String id = newId();
-		menu.setId(id);
 		insert("menu.insert", menu);
-		return id;
+		return menu.getId();
 	}
 	
 	public boolean update(Menu menu) {

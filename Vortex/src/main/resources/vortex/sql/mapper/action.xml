@@ -26,14 +26,12 @@ FROM TBL_ACTION
 WHERE ACT_ID = #{actionID}
 </select>
 
-<!-- 액션 아이디 가져오기 -->
-<select id="newID" resultType="string">
-SELECT LPAD(IFNULL((CAST(MAX(ACT_ID) AS UNSIGNED) + 1), 1), 5, '0') NEW_ID
-FROM TBL_ACTION;
-</select>
-
 <!-- 액션 정보 생성 -->
 <insert id="insert" parameterType="action">
+<selectKey keyProperty="id" order="BEFORE">
+SELECT LPAD(IFNULL((CAST(MAX(ACT_ID) AS UNSIGNED) + 1), 1), 5, '0') NEW_ID
+FROM TBL_ACTION;
+</selectKey>
 INSERT INTO TBL_ACTION (
 	ACT_ID,
 	GRP_ID,

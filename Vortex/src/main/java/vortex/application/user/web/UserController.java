@@ -38,7 +38,7 @@ public class UserController extends ApplicationController {
 		DataObject req = request(hreq);
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
-		return modelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView", userService.search(req));
+		return new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView", userService.search(req));
 	}
 	
 	@RequestMapping("/info.do")

@@ -12,7 +12,7 @@
 	<result property="status" column="STATUS"/>
 </resultMap>
 
-<!-- 사용자 목록 가져오기 -->
+<!-- 사용자 찾기 -->
 <select id="search" parameterType="hashmap" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
 	SELECT SQL_CALC_FOUND_ROWS *
@@ -31,11 +31,20 @@
 </if>
 </select>
 
-<!-- 사용자 가져오기 -->
-<select id="getUsers" parameterType="hashmap" resultMap="userRow">
+<sql id="users-by-id">
 SELECT *
 FROM TBL_USER
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
+</sql>
+
+<!-- ID별 사용자 가져오기 -->
+<select id="getUsers" parameterType="hashmap" resultMap="userRow">
+<include refid="users-by-id"/>
+</select>
+
+<!-- ID별 사용자 목록 -->
+<select id="userList" parameterType="hashmap" resultType="dataobject">
+<include refid="users-by-id"/>
 </select>
 
 <!-- 사용자 정보 생성 -->

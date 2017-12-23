@@ -42,28 +42,21 @@ public class MenuContext extends AbstractObject {
 		this.actionRoles = actionRoles;
 		return this;
 	}
-	
-	private List<String> getRolesFor(Menu menu) {
+
+	public String getPermittedAction(Menu menu) {
 		String actionPath = menu.getActionPath();
-		if (isEmpty(actionPath)) {
-			
+		if (!isEmpty(actionPath)) {
+			List<String> roles = actionRoles.get(actionPath);
+			List<String> userRoles = User.current().getRoleIDs();
+			boolean permitted = !Collections.disjoint(roles, userRoles);
+			return permitted ? actionPath : null;
+		} else {
+			for (Menu child: menu.getChildren()) {
+				String permittedAction = getPermittedAction(child);
+				if (!isEmpty(permittedAction))
+					return permittedAction;
+			}
+			return null;
 		}
-		List<String> roles = !isEmpty(actionPath) ? actionRoles.get(actionPath) : null;
-		return roles != null ? roles : Collections.emptyList();
-/*		
-		String action = menu.getAction();
-		List<String> roles = !isEmpty(action) ? actionRoles.get(action) : null;
-		return roles != null ? roles : Collections.emptyList();
-*/		
-	}
-	
-	public boolean isPermitted(User user, Menu menu) {
-		return !Collections.disjoint(user.getRoleIDs(), getRolesFor(menu));
-	}
-	
-	public boolean isPermitted(Menu menu) {
-		User user = User.current();
-		if (user == null) return false;
-		return isPermitted(user, menu);
 	}
 }

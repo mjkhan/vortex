@@ -68,6 +68,20 @@
 			<description><![CDATA[variable name to store the information as a page scoped variable]]></description>
 		</attribute>
     </tag>
+    
+    <tag>
+    	<name>permitted</name>
+    	<tag-class>vortex.application.menu.web.PermittedTag</tag-class>
+    	<body-content>JSP</body-content>
+		<description><![CDATA[ ]]></description>
+		<attribute>
+			<name>menu</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>vortex.application.menu.Menu</type>
+			<description><![CDATA[ ]]></description>
+		</attribute>
+    </tag>
 
     <tag>
 		<name>paginate</name>

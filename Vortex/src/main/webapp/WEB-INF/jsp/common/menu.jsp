@@ -4,7 +4,7 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <sec:authorize access="isAuthenticated()">
 <ul class="menu"><c:forEach items="${topMenus}" var="menu">
-	<li><a href="/vortex${menu.action}">${menu.name}</a></li></c:forEach>
+	<vtx:permitted menu="${menu}"><li><a href="<c:url value='${menuAction}'/>">${menuName}</a></li></vtx:permitted></c:forEach>
 	<li><a onclick="logout();">로그아웃</a></li>
 </ul>
 <vtx:script type="decl">

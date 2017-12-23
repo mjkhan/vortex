@@ -1,7 +1,5 @@
 package vortex.application.menu;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +15,7 @@ public class MenuContext extends AbstractObject {
 	public Hierarchy<Menu> getMenus() {
 		return menus;
 	}
-	
-	public List<Menu> getMenus(int level) {
-		Collection<Menu> tops = menus.topElements();
-		ArrayList<Menu> result = new ArrayList<>();
-		if (level == 0) {
-			result.addAll(tops);
-			return result;
-		}
-		
-		return null;
-	}
-	
+
 	public MenuContext setMenus(Hierarchy<Menu> menus) {
 		this.menus = menus;
 		return this;

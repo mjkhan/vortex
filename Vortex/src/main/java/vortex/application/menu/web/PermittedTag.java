@@ -19,6 +19,7 @@ public class PermittedTag extends VortexTag {
 		String action = mctx.getPermittedAction(menu);
 		boolean permitted = !isEmpty(action);
 		if (permitted) {
+			pageContext.setAttribute("menuID", menu.getId());
 			pageContext.setAttribute("menuName", menu.getName());
 			pageContext.setAttribute("menuAction", action);
 			pageContext.setAttribute("menuImage", menu.getImageConfig());
@@ -27,6 +28,7 @@ public class PermittedTag extends VortexTag {
 	}
 	@Override
 	public void release() {
+		pageContext.removeAttribute("menuID");
 		pageContext.removeAttribute("menuName");
 		pageContext.removeAttribute("menuAction");
 		pageContext.removeAttribute("menuImage");

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
@@ -42,43 +43,55 @@ public class UserController extends ApplicationController {
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getUser(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		return modelAndView("user/info", userService.getUser(req));
+	public ModelAndView getInfo(@RequestParam(required=false) String userID) {
+		return new ModelAndView("user/info")
+			.addObject("user", userService.getInfo(userID));
 	}
 	
 	@RequestMapping("/create.do")
 	public ModelAndView create(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		User user = new User();
-		user.setId(req.string("userID"));
-		setUser(user, req);
-		return modelAndView("jsonView", userService.create(req.set("user", user)));
+		return new ModelAndView("jsonView")
+			.addObject("saved",
+				userService.create(setUser(new User(), req))
+			);
 	}
 	
 	@RequestMapping("/update.do")
 	public ModelAndView update(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		User user = userService.getUser(req).value("user");
-		setUser(user, req);
-		return modelAndView("jsonView", userService.update(req.set("user", user)));
+		return new ModelAndView("jsonView")
+			.addObject("saved",
+				userService.update(setUser(userService.getUser(req.string("userID")), req))
+			);
 	}
 	
-	private void setUser(User user, DataObject req) {
+	private User setUser(User user, DataObject req) {
+		user.setId(req.string("userID"));
 		user.setName(req.string("userName"));
 		user.setAlias(req.string("alias"));
 		user.setPassword(req.string("password"));
+		return user;
 	}
 	
 	@RequestMapping("/setStatus.do")
 	public ModelAndView setStatus(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		return modelAndView("jsonView", userService.setStatus(req));
+		String status = notEmpty(req.string("status"), "status"),
+			   userID = notEmpty(req.string("userID"), "userID");
+		return new ModelAndView("jsonView")
+			.addObject("saved",
+				userService.setStatus(status, userID.split(","))
+			);
 	}
 	
 	@RequestMapping("/remove.do")
 	public ModelAndView remove(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		return modelAndView("jsonView", userService.remove(req));
+		String userID = notEmpty(req.string("userID"), "userID");
+		return new ModelAndView("jsonView")
+			.addObject("saved",
+				userService.remove(userID.split(","))
+			);
 	}
 }

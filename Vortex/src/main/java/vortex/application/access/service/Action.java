@@ -3,6 +3,12 @@ package vortex.application.access.service;
 import java.sql.Date;
 
 public class Action {
+	public static enum Permission {
+		GRANTED,
+		DENIED,
+		NOT_FOUND
+	};
+	
 	private String
 		id,
 		groupID,

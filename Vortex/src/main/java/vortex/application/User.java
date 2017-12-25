@@ -15,11 +15,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import vortex.support.data.Status;
 
 public class User implements UserDetails {
+	public static User get(Authentication authentication) {
+		Object obj = authentication != null ? authentication.getPrincipal() : null;
+		return obj instanceof User ? (User)obj : User.unknown;
+	}
+	
 	public static User current() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth == null)
-			return User.unknown;
-		return (User)auth.getPrincipal();
+		return get(SecurityContextHolder.getContext().getAuthentication());
 	}
 	
 	public void update() {

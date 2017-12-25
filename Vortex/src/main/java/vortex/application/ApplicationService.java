@@ -10,7 +10,7 @@ import vortex.application.code.service.CodeMapper;
 import vortex.support.data.DataObject;
 import vortex.support.database.AbstractService;
 
-public class ApplicationService extends AbstractService implements ApplicationAccess {
+public class ApplicationService extends AbstractService {
 	@Resource(name="sqlSession")
 	private SqlSessionFactory sqlSessionFactory;
 	@Autowired
@@ -22,11 +22,6 @@ public class ApplicationService extends AbstractService implements ApplicationAc
 	
 	@Autowired
 	protected CodeMapper codeMapper;
-	
-	@Override
-	public DataObject access(DataObject req) {
-		return null;
-	}
 	
 	protected DataObject dataobject() {
 		return new DataObject();

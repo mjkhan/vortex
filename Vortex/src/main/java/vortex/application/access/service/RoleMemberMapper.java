@@ -70,11 +70,11 @@ public class RoleMemberMapper extends AbstractMapper {
 		return selectList("role.getUserRoles", userID);
 	}
 	
-	public boolean isPermitted(String userID, String action) {
+	public boolean isPermitted(String userID, String actionPath) {
 		int count = selectOne(
 			"roleMember.countUserRolesForAction"
 		  , params().set("userID", userID)
-					.set("actionPath", action)
+					.set("actionPath", actionPath)
 		);
 		return count > 0;
 	}

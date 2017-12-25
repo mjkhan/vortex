@@ -1,5 +1,7 @@
 package vortex.application.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,50 +27,38 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 	}
 
 	@Override
-	public DataObject getUser(DataObject req) {
-		return dataobject()
-			.set("user", userMapper.getUser(req.string("userID")));
+	public DataObject getInfo(String userID) {
+		List<DataObject> info = userMapper.getInfo(userID);
+		return !isEmpty(info) ? info.get(0) : null;
+	}
+	
+	@Override
+	public User getUser(String userID) {
+		return userMapper.getUser(userID);
 	}
 
 	@Override
-	public DataObject create(DataObject req) {
-		User user = req.value("user");
-		int saved = userMapper.create(user);
-		return dataobject()
-			.set("saved", saved == 1);
+	public boolean create(User user) {
+		return userMapper.create(user) == 1;
 	}
 
 	@Override
-	public DataObject update(DataObject req) {
-		User user = req.value("user");
-		int saved = userMapper.update(user);
-		return dataobject()
-			.set("saved", saved == 1);
+	public boolean update(User user) {
+		return userMapper.update(user) == 1;
 	}
 
 	@Override
-	public DataObject setStatus(DataObject req) {
-		String status = req.string("status");
-		String[] userIDs = req.string("userID").split(",");
-		int saved = userMapper.setStatus(status, userIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+	public boolean setStatus(String status, String... userIDs) {
+		return userMapper.setStatus(status, userIDs) > 0;
 	}
 
 	@Override
-	public DataObject remove(DataObject req) {
-		String[] userIDs = req.string("userID").split(",");
-		int saved = userMapper.remove(userIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+	public boolean remove(String... userIDs) {
+		return userMapper.remove(userIDs) > 0;
 	}
 
 	@Override
-	public DataObject delete(DataObject req) {
-		String s = req.string("userID");
-		String[] userIDs = !isEmpty(s) ? s.split(",") : null;
-		int saved = userMapper.deleteUsers(userIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+	public boolean delete(String... userIDs) {
+		return userMapper.deleteUsers(userIDs) > 0;
 	}
 }

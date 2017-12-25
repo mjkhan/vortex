@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
 
 	<http pattern="/asset/**" security="none"/>
-	<http auto-config="true" use-expressions="true">
+	<http auto-config="true" use-expressions="true" access-decision-manager-ref="accessDecisionManager">
 		<csrf />
 
 		<intercept-url pattern="/user/login.do" access="permitAll" />
@@ -23,6 +23,17 @@
 		/>
 		<logout logout-success-url="/user/login.do"/>
 	</http>
+	
+	<beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter"/>
+				<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter"/>
+				<beans:bean class="vortex.application.access.service.ApplicationAccess"/>
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
 	
 	<authentication-manager>
 		<authentication-provider user-service-ref="authenticationService"/>

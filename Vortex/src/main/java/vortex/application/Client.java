@@ -8,6 +8,7 @@ public class Client extends AbstractObject {
 	private String
 		action,
 		ipAddress;
+	private boolean newSession;
 
 	public String getAction() {
 		return action;
@@ -33,6 +34,15 @@ public class Client extends AbstractObject {
 	
 	public Client setCurrent() {
 		current.set(this);
+		return this;
+	}
+	
+	public boolean inNewSession() {
+		return newSession;
+	}
+	
+	public Client setNewSession(boolean newSession) {
+		this.newSession = newSession;
 		return this;
 	}
 	

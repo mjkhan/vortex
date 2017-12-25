@@ -1,20 +1,22 @@
 package vortex.application.user.service;
 
-import vortex.application.ApplicationAccess;
+import vortex.application.User;
 import vortex.support.data.DataObject;
 
-public interface UserService extends ApplicationAccess {
+public interface UserService {
 	public DataObject search(DataObject req);
 	
-	public DataObject getUser(DataObject req);
+	public DataObject getInfo(String userID);
 	
-	public DataObject create(DataObject req);
+	public User getUser(String userID);
 	
-	public DataObject update(DataObject req);
+	public boolean create(User user);
 	
-	public DataObject setStatus(DataObject req);
+	public boolean update(User user);
 	
-	public DataObject remove(DataObject req);
+	public boolean setStatus(String status, String... userIDs);
 	
-	public DataObject delete(DataObject req);
+	public boolean remove(String... userIDs);
+	
+	public boolean delete(String... userIDs);
 }

@@ -31,20 +31,20 @@
 </if>
 </select>
 
-<sql id="users-by-id">
+<sql id="select-by-id">
 SELECT *
 FROM TBL_USER
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </sql>
 
-<!-- ID별 사용자 가져오기 -->
+<!-- ID별 User 가져오기 -->
 <select id="getUsers" parameterType="hashmap" resultMap="userRow">
-<include refid="users-by-id"/>
+<include refid="select-by-id"/>
 </select>
 
 <!-- ID별 사용자 목록 -->
-<select id="userList" parameterType="hashmap" resultType="dataobject">
-<include refid="users-by-id"/>
+<select id="getInfo" parameterType="hashmap" resultType="dataobject">
+<include refid="select-by-id"/>
 </select>
 
 <!-- 사용자 정보 생성 -->
@@ -89,9 +89,7 @@ WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{u
 <!-- userIDs의 사용자 정보를 삭제 -->
 <delete id="delete" parameterType="hashmap">
 DELETE FROM TBL_USER
-<if test="userIDs != null">
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
-</if>
 </delete>
 
 </mapper>

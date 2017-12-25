@@ -1,9 +1,8 @@
 package vortex.application.access.service;
 
-import vortex.application.ApplicationAccess;
 import vortex.support.data.DataObject;
 
-public interface RoleService extends ApplicationAccess {
+public interface RoleService {
 	public DataObject getRoles(DataObject req);
 	
 	public DataObject getRolesFor(DataObject req);
@@ -28,5 +27,5 @@ public interface RoleService extends ApplicationAccess {
 	
 	public DataObject deleteUsers(DataObject req);
 	
-	public boolean isPermitted(String userID, String action);
+	public Action.Permission getPermission(String userID, String action);
 }

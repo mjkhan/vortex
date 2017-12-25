@@ -26,6 +26,10 @@ public class UserMapper extends AbstractMapper {
 		return boundedList(list, params);
 	}
 	
+	public List<DataObject> getInfo(String... userIDs) {
+		return selectList("user.getInfo", params().set("userIDs", userIDs));
+	}
+	
 	public List<User> getUsers(String... userIDs) {
 		return selectList("user.getUsers", params().set("userIDs", userIDs));
 	}
@@ -36,15 +40,16 @@ public class UserMapper extends AbstractMapper {
 	}
 	
 	public int create(User user) {
-		return insert("user.insert", user);
+		return user != null ? insert("user.insert", user) : 0;
 	}
 	
 	public int update(User user) {
-		return update("user.update", user);
+		return user != null ? update("user.update", user) : 0;
 	}
 	
 	public int setStatus(String status, String... userIDs) {
-		return update(
+		return isEmpty(status) ? 0 :
+		update(
 			"user.setStatus",
 			params().set("status", status)
 					.set("userIDs", userIDs)

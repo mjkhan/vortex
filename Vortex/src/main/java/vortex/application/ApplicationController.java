@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,7 +37,7 @@ public class ApplicationController extends AbstractObject {
 			String name = names.nextElement();
 			req.put(name, hreq.getParameter(name));
 		}
-		return req;
+		return req.set("ajax", hreq.getAttribute("ajax"));
 	}
 	
 	protected ModelAndView modelAndView(String viewName) {
@@ -55,19 +56,24 @@ public class ApplicationController extends AbstractObject {
 
 		@Override
 		public void init(FilterConfig cfg) throws ServletException {
-			menuService = (MenuService)WebApplicationContextUtils.getRequiredWebApplicationContext(cfg.getServletContext()).getBean("menuService");
+			ApplicationContext actx = WebApplicationContextUtils.getRequiredWebApplicationContext(cfg.getServletContext());
+			menuService = (MenuService)actx.getBean("menuService");
 		}
 
 		@Override
 		public void doFilter(ServletRequest sreq, ServletResponse sresp, FilterChain chain) throws IOException, ServletException {
 			HttpServletRequest hreq = (HttpServletRequest)sreq;
-			Client client = new Client()
-				.setAction(hreq.getRequestURI().replace(hreq.getContextPath(), ""))
-				.setIpAddress(sreq.getRemoteAddr())
-				.setCurrent();
-			log().debug(() -> client + " set as current.");
+			hreq.setAttribute("ajax", "XMLHttpRequest".equals(hreq.getHeader("X-Requested-With")));
+
 			HttpSession session = hreq.getSession(false);
-			hreq.setAttribute("newSession", session != null && session.isNew());
+			hreq.setAttribute("client", 
+				new Client()
+					.setAction(hreq.getRequestURI().replace(hreq.getContextPath(), ""))
+					.setIpAddress(sreq.getRemoteAddr())
+					.setNewSession(session != null && session.isNew())
+					.setCurrent()
+			);
+			hreq.setAttribute("currentUser", User.current());
 			
 			MenuContext mctx = menuService.getMenuCotext();
 			if (mctx != null) {
@@ -76,6 +82,7 @@ public class ApplicationController extends AbstractObject {
 				hreq.setAttribute("menus", menus);
 				hreq.setAttribute("topMenus", menus.topElements());
 			}
+
 			chain.doFilter(sreq, sresp);
 		}
 		

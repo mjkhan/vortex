@@ -1,9 +1,8 @@
 package vortex.application.code.service;
 
-import vortex.application.ApplicationAccess;
 import vortex.support.data.DataObject;
 
-public interface CodeService extends ApplicationAccess {
+public interface CodeService {
 	public DataObject getGroups(DataObject req);
 	
 	public DataObject getGroup(DataObject req);

@@ -27,15 +27,6 @@
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
  
- 	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
- 
 	<filter>
 		<filter-name>vortexFilter</filter-name>
 		<filter-class>vortex.application.ApplicationController$Filter</filter-class>
@@ -43,10 +34,16 @@
 	<filter-mapping>
 		<filter-name>vortexFilter</filter-name>
 		<url-pattern>/</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>vortexFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+ 
+ 	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
    
 	<context-param>

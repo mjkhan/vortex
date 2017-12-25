@@ -11,7 +11,7 @@
 <script type="text/javascript">
 var wctx = {
 		path:"${pageContext.request.contextPath}",
-		debug:location.href.indexOf("localhost") > -1
+		debug:"${debug}" == "true"
 	},
 	csrf = {
 		header:"${_csrf.headerName}",

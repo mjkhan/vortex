@@ -9,7 +9,8 @@
 			<map>
 				<entry key="fetch" value="10"/>
 				
-				<entry key="loginAction" value="/user/login.do"/>
+				<entry key="permitAll" value="/user/login.do"/>
+				<entry key="debugDomain" value="localhost"/>
 			</map>
 		</property>
 <!-- 		

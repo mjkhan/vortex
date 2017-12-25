@@ -24,4 +24,6 @@ public interface ActionService {
 	public DataObject updateAction(DataObject req);
 	
 	public DataObject deleteActions(DataObject req);
+	
+	public Action.Permission getPermission(String userID, String actionPath);
 }

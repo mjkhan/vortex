@@ -53,17 +53,22 @@ public class ApplicationController extends AbstractObject {
 
 	public static class Filter extends AbstractObject implements javax.servlet.Filter {
 		private MenuService menuService;
+		private String debugDomain;
 
 		@Override
 		public void init(FilterConfig cfg) throws ServletException {
 			ApplicationContext actx = WebApplicationContextUtils.getRequiredWebApplicationContext(cfg.getServletContext());
 			menuService = (MenuService)actx.getBean("menuService");
+			debugDomain = ifEmpty(((EgovPropertyService)actx.getBean("propertiesService")).getString("debugDomain"), "");
 		}
 
 		@Override
 		public void doFilter(ServletRequest sreq, ServletResponse sresp, FilterChain chain) throws IOException, ServletException {
 			HttpServletRequest hreq = (HttpServletRequest)sreq;
 			hreq.setAttribute("ajax", "XMLHttpRequest".equals(hreq.getHeader("X-Requested-With")));
+			hreq.setAttribute("debug", debugDomain.contains(hreq.getServerName()));
+			
+			System.out.println("server: " + hreq.getServerName() + ", local: " + hreq.getLocalName());
 
 			HttpSession session = hreq.getSession(false);
 			hreq.setAttribute("client", 

@@ -12,8 +12,6 @@ import vortex.support.data.DataObject;
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
 	@Autowired
-	private ActionMapper actionMapper;
-	@Autowired
 	private RoleMapper roleMapper;
 	@Autowired
 	private RoleMemberMapper roleMemberMapper;
@@ -121,13 +119,5 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 		return dataobject()
 			.set("affected", affected)
 			.set("saved", affected > 0);
-	}
-	
-	@Override
-	public Action.Permission getPermission(String userID, String actionPath) {
-		return
-			properties.getString("loginAction").equals(actionPath) || roleMemberMapper.isPermitted(userID, actionPath) ? Action.Permission.GRANTED :
-			actionMapper.findAction(actionPath) != null ? Action.Permission.DENIED :
-			Action.Permission.NOT_FOUND;
 	}
 }

@@ -26,6 +26,4 @@ public interface RoleService {
 	public DataObject addUsers(DataObject req);
 	
 	public DataObject deleteUsers(DataObject req);
-	
-	public Action.Permission getPermission(String userID, String action);
 }

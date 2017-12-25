@@ -11,13 +11,18 @@ import vortex.support.data.DataObject;
 import vortex.support.database.AbstractService;
 
 public class ApplicationService extends AbstractService {
+	protected static EgovPropertyService properties;
+
 	@Resource(name="sqlSession")
 	private SqlSessionFactory sqlSessionFactory;
-	@Autowired
-	protected EgovPropertyService properties;
 	
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
 		this.sqlSessionFactory = sqlSessionFactory;
+	}
+	
+	@Autowired
+	public void setProperties(EgovPropertyService props) {
+		properties = props;
 	}
 	
 	@Autowired

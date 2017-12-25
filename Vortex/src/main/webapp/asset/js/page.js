@@ -10,8 +10,8 @@ $.fn.onEnterPress = function(handler) {
 function labelFor(input) {
 	var selector = "label[for='{id}']",
 		id = "string" == typeof(input) ? input : input.attr("id");
-	if (!id)
-		throw "ID not found for the given input";
+	if (!id) return "";
+	
 	selector = selector.replace(/{id}/gi, id);
 	return $(selector).text();
 }
@@ -36,6 +36,26 @@ function requiredEmpty(whenEmpty) {
 		}
 	});
 	return empty;
+}
+
+$.fn.validate = function(config) {
+	return this.each(function(){
+		var input = $(this),
+			val = input.val();
+		input.blur(function(){
+			if (config.test(val)) return;
+			if (config.onError)
+				config.onError();
+			else {
+				var label = labelFor(input);
+				if (label)
+					alert("올바른 " + label + "을(를) 입력하십시오.");
+				else
+					alert("잘못된 값이 입력됐습니다.");
+			}
+			setTimeout(function(){input.focus();}, 20);
+		})
+	});
 }
 /**config = {
  * 	data:[],

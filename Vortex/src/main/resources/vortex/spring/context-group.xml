@@ -18,5 +18,10 @@
     	<property name="sqlSessionFactory" ref="sqlSession"/>
     	<property name="groupType" value="002"/>
     </bean>
+
+    <bean id="roleGroup" class="vortex.application.group.GroupMapper">
+    	<property name="sqlSessionFactory" ref="sqlSession"/>
+    	<property name="groupType" value="003"/>
+    </bean>
     
 </beans>

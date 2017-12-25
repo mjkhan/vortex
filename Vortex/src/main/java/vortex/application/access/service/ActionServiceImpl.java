@@ -1,5 +1,8 @@
 package vortex.application.access.service;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,5 +138,17 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		int saved = actionMapper.deleteActions(null, actionIDs);
 		return dataobject()
 			.set("saved", saved > 0);
+	}
+	
+	private static List<String> permitAll;
+	
+	@Override
+	public Action.Permission getPermission(String userID, String actionPath) {
+		if (permitAll == null)
+			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
+		return
+			permitAll.contains(actionPath) || roleMemberMapper.isPermitted(userID, actionPath) ? Action.Permission.GRANTED :
+			actionMapper.findAction(actionPath) != null ? Action.Permission.DENIED :
+			Action.Permission.NOT_FOUND;
 	}
 }

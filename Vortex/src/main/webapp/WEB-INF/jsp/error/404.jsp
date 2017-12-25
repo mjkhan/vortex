@@ -3,12 +3,14 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="eheader.jsp"/>
 <%	pageContext.setAttribute("title", "알 수 없는 요청입니다.");
+	pageContext.setAttribute("msg", "요청 URL이 올바른지, TBL_ACTION에 등록된 액션 URL인지 확인하십시오.");
 %>
 <c:if test="${!ajax}">
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div style="width:100%; padding:2em;">
 <p>${title}</p>
 <p>${path}</p>
+<c:if test="${debug}"><p>${msg}</p></c:if>
 </div>
 <vtx:script type="docReady">
 	docTitle("오류: 404");
@@ -19,6 +21,7 @@
 <c:if test="${ajax}">{
 	"title":"${title}",
 	"path":"${path}",
+	<c:if test="${debug}">"msg":"${msg}",</c:if>
 	"status":404,
-	"handler":"alert('${title}\\n\\n${path}');"
+	"handler":"alert('${title}\\n\\n${path}<c:if test="${debug}">\\n\\n${msg}</c:if>');"
 }</c:if>

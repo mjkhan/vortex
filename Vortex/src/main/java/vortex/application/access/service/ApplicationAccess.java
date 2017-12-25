@@ -13,7 +13,7 @@ import vortex.support.AbstractObject;
 
 public class ApplicationAccess extends AbstractObject implements AccessDecisionVoter<Object> {
 	@Autowired
-	private RoleService roleService;
+	private ActionService actionService;
 	
 	@Override
 	public boolean supports(ConfigAttribute attribute) {
@@ -29,7 +29,7 @@ public class ApplicationAccess extends AbstractObject implements AccessDecisionV
 	public int vote(Authentication authentication, Object obj, Collection<ConfigAttribute> attributes) {
 		User user = User.get(authentication);
 		Client client = Client.current();
-		switch (roleService.getPermission(user.getId(), client.getAction())) {
+		switch (actionService.getPermission(user.getId(), client.getAction())) {
 		case GRANTED: return ACCESS_GRANTED;
 		case DENIED: return ACCESS_DENIED;
 		default: return ACCESS_ABSTAIN;

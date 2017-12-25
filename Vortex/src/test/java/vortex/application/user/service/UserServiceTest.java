@@ -24,9 +24,9 @@ public class UserServiceTest extends VortexTest {
 	@Test
 	public void create() {
 		User user = newUser(0);
-		userService.create(dataObject().set("user", user));
+		userService.create(user);
 		String id = user.getId();
-		User loaded = userService.getUser(dataObject().set("userID", id)).value("user");
+		User loaded = userService.getInfo(id).value("user");
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(user.getId(), loaded.getId());
 		Assert.assertEquals(user.getName(), loaded.getName());
@@ -36,16 +36,16 @@ public class UserServiceTest extends VortexTest {
 	@Test
 	public void update() {
 		User user = newUser(0);
-		userService.create(dataObject().set("user", user));
+		userService.create(user);
 		String id = user.getId();
-		User loaded = userService.getUser(dataObject().set("userID", id)).value("user");
+		User loaded = userService.getInfo(id).value("user");
 		
 		String name = "user name zero",
 			   alias = "alias zero";
 		loaded.setName(name);
 		loaded.setAlias(alias);
-		userService.update(dataObject().set("user", loaded));
-		loaded = userService.getUser(dataObject().set("userID", id)).value("user");
+		userService.update(loaded);
+		loaded = userService.getInfo(id).value("user");
 
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(id, loaded.getId());
@@ -56,7 +56,7 @@ public class UserServiceTest extends VortexTest {
 	@Test
 	public void search() {
 		for (int i = 0; i < 5; ++i) {
-			userService.create(dataObject().set("user", newUser(i)));
+			userService.create(newUser(i));
 		}
 		userService.search(dataObject());
 		userService.search(dataObject().set("field", "USER_NAME").set("value", "user"));
@@ -74,27 +74,26 @@ public class UserServiceTest extends VortexTest {
 		ArrayList<String> userIDs = new ArrayList<>();
 		for (int i = 0; i < 5; ++i) {
 			User user = newUser(i);
-			userService.create(dataObject().set("user", user));
+			userService.create(user);
 			userIDs.add(user.getId());
 		}
 		
 		String status = "998";
-		userService.setStatus(dataObject().set("status", status).set("userID", userIDs.get(0) + "," + userIDs.get(1)));
+		userService.setStatus(status, userIDs.get(0), userIDs.get(1));
 		for (int i = 0; i < 2; ++i) {
-			User user = userService.getUser(dataObject().set("userID", userIDs.get(i))).value("user");
+			User user = userService.getInfo(userIDs.get(i)).value("user");
 			Assert.assertEquals(status, user.getStatus());
 		}
 		
-		userService.remove(dataObject().set("userID", userIDs.get(2) + "," + userIDs.get(3) + "," + userIDs.get(4)));
+		userService.remove(userIDs.get(2), userIDs.get(3), userIDs.get(4));
 		for (int i = 2; i < 5; ++i) {
-			User user = userService.getUser(dataObject().set("userID", userIDs.get(i))).value("user");
+			User user = userService.getInfo(userIDs.get(i)).value("user");
 			Assert.assertEquals("999", user.getStatus());
 		}
 	}
 	
 	@After
 	public void tearDown() {
-		userService.delete(dataObject());
+		userService.delete();
 	}
-
 }

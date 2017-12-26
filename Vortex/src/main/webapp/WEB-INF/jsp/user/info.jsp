@@ -16,11 +16,17 @@
 		<td><input id="password" value="${user.PASSWD}" type="password" required maxlength="32" /></td>
 	</tr>
 <c:if test="${!create}">
+	<tr><th>등록자</th>
+		<td>${user.INS_ID}</td>
+	</tr>
 	<tr><th>등록시간</th>
-		<td><fmt:formatDate value="${user.INS_TIME}" pattern="yy-MM-dd hh:mm"/></td>
+		<td><fmt:formatDate value="${user.INS_TIME}" pattern="yy-MM-dd HH:mm"/></td>
+	</tr>
+	<tr><th>수정자</th>
+		<td>${user.UPD_ID}</td>
 	</tr>
 	<tr><th>수정시간</th>
-		<td><fmt:formatDate value="${user.UPD_TIME}" pattern="yy-MM-dd hh:mm"/></td>
+		<td><fmt:formatDate value="${user.UPD_TIME}" pattern="yy-MM-dd HH:mm"/></td>
 	</tr>
 	<tr><th>상태</th>
 		<td>${user.STATUS}</td>

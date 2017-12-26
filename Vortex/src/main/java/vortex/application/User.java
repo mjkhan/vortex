@@ -39,6 +39,8 @@ public class User implements UserDetails {
 		name,
 		alias,
 		password,
+		createdBy,
+		modifiedBy,
 		status;
 	private Date
 		createdAt,
@@ -101,12 +103,28 @@ public class User implements UserDetails {
 		notSealed().password = password;
 	}
 	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
 	
 	public void setCreatedAt(Date createdAt) {
 		notSealed().createdAt = createdAt;
+	}
+	
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+	
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
 	}
 	
 	public Date getLastModified() {

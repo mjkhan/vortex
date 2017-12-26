@@ -7,7 +7,9 @@
 	<result property="name" column="USER_NAME"/>
 	<result property="alias" column="ALIAS"/>
 	<result property="password" column="PASSWD"/>
+	<result property="createdBy" column="INS_ID"/>
 	<result property="createdAt" column="INS_TIME"/>
+	<result property="modifiedBy" column="UPD_ID"/>
 	<result property="lastModified" column="UPD_TIME"/>
 	<result property="status" column="STATUS"/>
 </resultMap>
@@ -48,40 +50,46 @@ WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{u
 </select>
 
 <!-- 사용자 정보 생성 -->
-<insert id="insert" parameterType="user">
+<insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_USER (
 	USER_ID,
 	USER_NAME,
 	ALIAS,
 	PASSWD,
+	INS_ID,
 	INS_TIME,
+	UPD_ID,
 	UPD_TIME,
 	STATUS
 ) VALUES (
-	#{id},
-	#{name},
-	#{alias},
-	#{password},
+	#{user.id},
+	#{user.name},
+	#{user.alias},
+	#{user.password},
+	#{currentUser.id},
 	CURRENT_TIMESTAMP,
+	#{currentUser.id},
 	CURRENT_TIMESTAMP,
 	'001'
 )
 </insert>
 
 <!-- 사용자 정보 수정 -->
-<update id="update" parameterType="user">
+<update id="update" parameterType="hashmap">
 UPDATE TBL_USER SET
-	USER_NAME = #{name},
-	ALIAS = #{alias},
-	PASSWD = #{password},
+	USER_NAME = #{user.name},
+	ALIAS = #{user.alias},
+	PASSWD = #{user.password},
+	UPD_ID = #{currentUser.id}
 	UPD_TIME = CURRENT_TIMESTAMP
-WHERE USER_ID = #{id}
+WHERE USER_ID = #{user.id}
 </update>
 
 <!-- 사용자 상태 변경 -->
 <update id="setStatus" parameterType="hashmap">
 UPDATE TBL_USER SET
 	STATUS = #{status},
+	UPD_ID = #{currentUser.id}
 	UPD_TIME = CURRENT_TIMESTAMP
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </update>

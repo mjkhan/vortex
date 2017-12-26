@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.application.DataMapper;
 import vortex.application.User;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
-import vortex.support.database.AbstractMapper;
 
 @Repository("userMapper")
-public class UserMapper extends AbstractMapper {
+public class UserMapper extends DataMapper {
 	
 	public BoundedList<DataObject> search(DataObject req) {
 		log().debug(() -> "Searching Users...");
@@ -40,11 +40,18 @@ public class UserMapper extends AbstractMapper {
 	}
 	
 	public int create(User user) {
-		return user != null ? insert("user.insert", user) : 0;
+		User currentUser = currentUser();
+		if (currentUser.isUnknown())
+			currentUser = user;
+		return user != null ? insert("user.insert",
+			params(false)
+				.set("user", user)
+				.set("currentUser", currentUser)
+		) : 0;
 	}
 	
 	public int update(User user) {
-		return user != null ? update("user.update", user) : 0;
+		return user != null ? update("user.update", params().set("user", user)) : 0;
 	}
 	
 	public int setStatus(String status, String... userIDs) {

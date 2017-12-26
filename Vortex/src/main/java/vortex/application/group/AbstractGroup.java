@@ -57,18 +57,6 @@ public abstract class AbstractGroup {
 		this.modifiedBy = modifiedBy;
 	}
 	
-	public Status status() {
-		return Status.codeOf(status);
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-	
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -83,6 +71,18 @@ public abstract class AbstractGroup {
 	
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
+	}
+	
+	public Status status() {
+		return Status.codeOf(status);
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override

@@ -2,12 +2,12 @@ package vortex.application.group;
 
 import java.util.List;
 
+import vortex.application.DataMapper;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
-import vortex.support.database.AbstractMapper;
 
-public class GroupMapper extends AbstractMapper {
+public class GroupMapper extends DataMapper {
 	private String groupType;
 	
 	public void setGroupType(String groupType) {
@@ -24,6 +24,14 @@ public class GroupMapper extends AbstractMapper {
 		return boundedList(list, params);
 	}
 	
+	public DataObject getInfo(String groupID) {
+		return selectOne(
+			"group.getInfo"
+			,params().set("groupType", groupType)
+					 .set("groupID", groupID)
+		);
+	}
+	
 	public Group getGroup(String groupID) {
 		return selectOne(
 			"group.getGroup"
@@ -32,26 +40,29 @@ public class GroupMapper extends AbstractMapper {
 		);
 	}
 	
-	public String create(Group group) {
+	public int create(Group group) {
+		if (group == null)
+			return 0;
+		
 		group.setType(groupType);
-		String id = group.getId();
-		if (isEmpty(id))
-			group.setId(id = selectOne("group.newID", groupType));
-		insert("group.insert", group);
-		return id;
+		return insert("group.insert", params(true).set("group", group));
 	}
 	
 	public int update(Group group) {
+		if (group == null)
+			return 0;
+		
 		group.setType(groupType);
-		return update("group.update", group);
+		return update("group.update", params(true).set("group", group));
 	}
 	
 	public int setStatus(String status, String... groupIDs) {
 		return update(
 			"group.setStatus"
-		   , params().set("groupType", groupType)
-		   			 .set("groupIDs", groupIDs)
-		   			 .set("status", status)
+		   , params(true)
+		   		.set("groupType", groupType)
+		   		.set("groupIDs", groupIDs)
+		   		.set("status", status)
 		);
 	}
 	
@@ -71,22 +82,22 @@ public class GroupMapper extends AbstractMapper {
 			);
 	}
 	
-	public int addMembers(String createdBy, String[] groupIDs, String memberType, String... memberIDs) {
+	public int addMembers(String[] groupIDs, String memberType, String... memberIDs) {
 		if (isEmpty(memberIDs)) return 0;
 		
 		return insert(
 			"group.addMembers"
-		   , params().set("groupType", groupType)
-		   			 .set("groupIDs", groupIDs)
-		   			 .set("memberType", memberType)
-		   			 .set("memberIDs", memberIDs)
-		   			 .set("createdBy", createdBy)
+		   , params(true)
+		   		.set("groupType", groupType)
+		   		.set("groupIDs", groupIDs)
+		   		.set("memberType", memberType)
+		   		.set("memberIDs", memberIDs)
 		);
 	}
 	
-	public int addMembers(String createdBy, String groupID, String memberType, String... memberIDs) {
+	public int addMembers(String groupID, String memberType, String... memberIDs) {
 		String[] groupIDs = {groupID};
-		return addMembers(createdBy, groupIDs, memberType, memberIDs);
+		return addMembers(groupIDs, memberType, memberIDs);
 	}
 	
 	public int deleteMembers(String[] groupIDs, String memberType, String... memberIDs) {

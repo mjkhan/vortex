@@ -44,22 +44,23 @@ public class UserMapper extends DataMapper {
 		if (currentUser.isUnknown())
 			currentUser = user;
 		return user != null ? insert("user.insert",
-			params(false)
+			params()
 				.set("user", user)
 				.set("currentUser", currentUser)
 		) : 0;
 	}
 	
 	public int update(User user) {
-		return user != null ? update("user.update", params().set("user", user)) : 0;
+		return user != null ? update("user.update", params(true).set("user", user)) : 0;
 	}
 	
 	public int setStatus(String status, String... userIDs) {
 		return isEmpty(status) ? 0 :
 		update(
 			"user.setStatus",
-			params().set("status", status)
-					.set("userIDs", userIDs)
+			params(true)
+				.set("status", status)
+				.set("userIDs", userIDs)
 		);
 	}
 	

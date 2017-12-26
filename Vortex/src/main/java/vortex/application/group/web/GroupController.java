@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
@@ -23,35 +24,41 @@ public class GroupController extends ApplicationController {
 		DataObject req = request(hreq);
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
-		return modelAndView(!req.bool("ajax") ? "group/list" : "jsonView", groupService.getGroups(req)); 
+		return new ModelAndView(!req.bool("ajax") ? "group/list" : "jsonView")
+			.addAllObjects(groupService.getGroups(req)); 
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getGroup(HttpServletRequest hreq) {
-		return modelAndView("group/info", groupService.getGroup(request(hreq))); 
+	public ModelAndView getGroup(@RequestParam(required=false) String groupID) {
+		return new ModelAndView("group/info")
+			.addObject("group", groupService.getInfo(groupID)); 
 	}
 	
 	@RequestMapping("/create.do")
 	public ModelAndView createGroup(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		Group group = new Group();
-		group.setId(req.string("groupID"));
 		group.setName(req.string("groupName"));
 		group.setDescription(req.string("description"));
-		return modelAndView("jsonView", groupService.createGroup(req.set("group", group)));
+		Group saved = groupService.create(group);
+		return new ModelAndView("jsonView")
+			.addObject("saved", saved != null)
+			.addObject("groupID", saved.getId());
 	}
 	
 	@RequestMapping("/update.do")
 	public ModelAndView updateGroup(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		Group group = groupService.getGroup(req).value("group");
+		Group group = groupService.getGroup(req.string("groupID"));
 		group.setName(req.string("groupName"));
 		group.setDescription(req.string("description"));
-		return modelAndView("jsonView", groupService.updateGroup(req.set("group", group)));
+		return new ModelAndView("jsonView")
+			.addObject("saved", groupService.update(group));
 	}
 	
 	@RequestMapping("/delete.do")
-	public ModelAndView deleteGroup(HttpServletRequest hreq) {
-		return modelAndView("jsonView", groupService.deleteGroups(request(hreq)));
+	public ModelAndView deleteGroup(@RequestParam String groupID) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", groupService.deleteGroups(groupID.split(",")));
 	}
 }

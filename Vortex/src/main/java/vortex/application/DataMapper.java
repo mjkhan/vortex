@@ -10,7 +10,7 @@ public class DataMapper extends AbstractMapper {
 	
 	@Override
 	protected DataObject params() {
-		return params(true);
+		return params(false);
 	}
 	
 	protected DataObject params(boolean currentUser) {

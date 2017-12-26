@@ -41,63 +41,71 @@
 	<if test="order != null">ORDER BY #{order}</if>
 </if>
 </select>
-	
-<!-- 그룹 가져오기 -->
-<select id="getGroup" parameterType="hashmap" resultMap="groupRow">
+
+<sql id="select-by-id">
 SELECT *
 FROM TBL_GROUP
 WHERE GRP_TYPE = #{groupType}
 AND GRP_ID = #{groupID}
+</sql>
+	
+<!-- ID별 그룹 정보 가져오기 -->
+<select id="getInfo" parameterType="hashmap" resultType="dataobject">
+<include refid="select-by-id"/>
 </select>
-
-<!-- 새 그룹 아이디 가져오기 -->
-<select id="newID" parameterType="string" resultType="string">
-SELECT LPAD(IFNULL(CAST(MAX(GRP_ID) AS UNSIGNED) + 1, 1), 3, '0') NEW_ID
-FROM TBL_GROUP
-WHERE GRP_TYPE = #{groupType}
+	
+<!-- ID별 Group 가져오기 -->
+<select id="getGroup" parameterType="hashmap" resultMap="groupRow">
+<include refid="select-by-id"/>
 </select>
 
 <!-- 그룹 정보 생성 -->
-<insert id="insert" parameterType="group">
+<insert id="insert" parameterType="hashmap">
+<selectKey keyProperty="group.id" resultType="string" order="BEFORE">
+SELECT LPAD(IFNULL(CAST(MAX(GRP_ID) AS UNSIGNED) + 1, 1), 3, '0') NEW_ID
+FROM TBL_GROUP
+WHERE GRP_TYPE = #{group.type}
+</selectKey>
 INSERT INTO TBL_GROUP (
-	GRP_TYPE,
-	GRP_ID,
-	GRP_NAME,
-	DESCRP,
-	INS_ID,
-	INS_TIME,
-	UPD_ID,
-	UPD_TIME,
-	STATUS
+	GRP_TYPE
+  , GRP_ID
+  , GRP_NAME
+  , DESCRP
+  , INS_ID
+  , INS_TIME
+  , UPD_ID
+  , UPD_TIME
+  , STATUS
 ) VALUES (
-	#{type},
-	#{id},
-	#{name},
-	#{description},
-	#{createdBy},
-	CURRENT_TIMESTAMP,
-	#{modifiedBy},
-	CURRENT_TIMESTAMP,
-	'001'
+	#{group.type}
+  , #{group.id}
+  , #{group.name}
+  , #{group.description}
+  , #{currentUser.id}
+  , CURRENT_TIMESTAMP
+  , #{currentUser.id}
+  , CURRENT_TIMESTAMP
+  , '001'
 )
 </insert>
 
 <!-- 그룹 정보 수정 -->
-<update id="update" parameterType="group">
+<update id="update" parameterType="hashmap">
 UPDATE TBL_GROUP SET
-	GRP_NAME = #{name},
-	DESCRP = #{description},
-	UPD_ID = #{modifiedBy},
-	UPD_TIME = CURRENT_TIMESTAMP
-WHERE GRP_TYPE = #{type}
-AND GRP_ID = #{id}
+	GRP_NAME = #{group.name}
+  , DESCRP = #{group.description}
+  , UPD_ID = #{currentUser.id}
+  , UPD_TIME = CURRENT_TIMESTAMP
+WHERE GRP_TYPE = #{group.type}
+AND GRP_ID = #{group.id}
 </update>
 
 <!-- groupIDs의 그룹 정보의 상태를 status로 변경 -->
 <update id="setStatus" parameterType="hashmap">
 UPDATE TBL_GROUP SET
-	STATUS = #{status},
-	UPD_TIME = CURRENT_TIMESTAMP
+	STATUS = #{status}
+  , UPD_ID = #{currentUser.id}
+  , UPD_TIME = CURRENT_TIMESTAMP
 WHERE GRP_TYPE = #{groupType}
 <if test="groupIDs != null">
 AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
@@ -116,7 +124,7 @@ AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{gr
 <!-- groupIDs의 그룹에 소속원 정보를 추가 -->
 <insert id="addMembers" parameterType="hashmap">
 INSERT INTO TBL_GROUP_MEMBER(GRP_TYPE, GRP_ID, MB_TYPE, MB_ID, INS_ID, INS_TIME)
-SELECT #{groupType}, GRP_ID, #{memberType}, MB_ID, #{createdBy}, CURRENT_TIMESTAMP
+SELECT #{groupType}, GRP_ID, #{memberType}, MB_ID, #{currentUser.id}, CURRENT_TIMESTAMP
 FROM (
 <foreach collection="groupIDs" item="groupID" separator=" UNION">SELECT #{groupID} GRP_ID</foreach>
 ) A, (

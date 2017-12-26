@@ -1,17 +1,20 @@
 package vortex.application.group.service;
 
+import vortex.application.group.Group;
 import vortex.support.data.DataObject;
 
 public interface GroupService {
 	public DataObject getGroups(DataObject req);
 	
-	public DataObject getGroup(DataObject req);
+	public DataObject getInfo(String groupID);
 	
-	public DataObject createGroup(DataObject req);
+	public Group getGroup(String groupID);
 	
-	public DataObject updateGroup(DataObject req);
+	public Group create(Group group);
 	
-	public DataObject removeGroups(DataObject req);
+	public boolean update(Group group);
 	
-	public DataObject deleteGroups(DataObject req);
+	public boolean removeGroups(String... groupIDs);
+	
+	public boolean deleteGroups(String... groupIDs);
 }

@@ -25,6 +25,6 @@
 	"path":"${path}",
 	"title":"${title}",
 	"name":"${name}",
-	"message":"${message}",
+	"message":"${vtx:jstring(message)}",
 	"status":500
 }</c:if>

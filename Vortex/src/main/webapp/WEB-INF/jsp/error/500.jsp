@@ -22,9 +22,9 @@
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>
 </c:if>
 <c:if test="${ajax}">{
-	"path":"${path}",
-	"title":"${title}",
-	"name":"${name}",
-	"message":"${message}",
-	"status":500
+	"path":"${path}"
+  , "title":"${title}"
+  , "name":"${name}"
+  , "message":"${vtx:jstring(message)}"
+  , "status":500
 }</c:if>

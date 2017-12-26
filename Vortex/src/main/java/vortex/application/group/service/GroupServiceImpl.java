@@ -22,50 +22,35 @@ public class GroupServiceImpl extends ApplicationService implements GroupService
 			.set("more", groups.hasNext())
 			.set("next", groups.getEnd() + 1);
 	}
-
+	
 	@Override
-	public DataObject getGroup(DataObject req) {
-		String groupID = req.string("groupID");
-		return dataobject()
-			.set("group", genericGroup.getGroup(groupID));
+	public DataObject getInfo(String groupID) {
+		return genericGroup.getInfo(groupID);
 	}
 
 	@Override
-	public DataObject createGroup(DataObject req) {
-		Group group = req.value("group");
-		String userID = currentUser().getId();
-		group.setCreatedBy(userID);
-		group.setModifiedBy(userID);
-		String groupID = genericGroup.create(group);
-		return dataobject()
-			.set("saved", true)
-			.set("groupID", groupID);
+	public Group getGroup(String groupID) {
+		return genericGroup.getGroup(groupID);
 	}
 
 	@Override
-	public DataObject updateGroup(DataObject req) {
-		Group group = req.value("group");
-		group.setModifiedBy(currentUser().getId());
-		int saved = genericGroup.update(group);
-		return dataobject()
-			.set("saved", saved == 1);
+	public Group create(Group group) {
+		genericGroup.create(group);
+		return group;
 	}
 
 	@Override
-	public DataObject removeGroups(DataObject req) {
-		String[] groupIDs = req.notEmpty("groupID").string("groupID").split(",");
-		int saved = genericGroup.remove(groupIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+	public boolean update(Group group) {
+		return genericGroup.update(group) == 1;
 	}
 
 	@Override
-	public DataObject deleteGroups(DataObject req) {
-		String s = req.string("groupID");
-		String[] groupIDs = !isEmpty(s) ? s.split(",") : null;
-		int saved = genericGroup.deleteGroups(groupIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+	public boolean removeGroups(String... groupIDs) {
+		return genericGroup.remove(groupIDs) > 0;
 	}
 
+	@Override
+	public boolean deleteGroups(String... groupIDs) {
+		return genericGroup.deleteGroups(groupIDs) > 0;
+	}
 }

@@ -47,7 +47,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		String userID = currentUser().getId();
 		group.setCreatedBy(userID);
 		group.setModifiedBy(userID);
-		boolean saved = actionGroup.create(group) == 1;
+		boolean saved = actionGroup.create(group);
 		return dataobject()
 			.set("saved", saved)
 			.set("groupID", saved ? group.getId() : null);
@@ -58,9 +58,8 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		Group group = req.value("group");
 		String userID = currentUser().getId();
 		group.setModifiedBy(userID);
-		int saved = actionGroup.update(group);
 		return dataobject()
-			.set("saved", saved == 1);
+			.set("saved", actionGroup.update(group));
 	}
 
 	@Override

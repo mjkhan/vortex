@@ -13,47 +13,56 @@
 	
 <!-- 그룹별 코드 목록 가져오기 -->
 <select id="getCodes" parameterType="hashmap" resultType="dataobject">
-	SELECT * FROM TBL_CMN_CODE
-	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
-	ORDER BY GRP_ID, CD_ID
+SELECT * FROM TBL_CMN_CODE
+WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+ORDER BY GRP_ID, CD_ID
 </select>
-	
-<!-- 코드 가져오기 -->
-<select id="getCode" parameterType="hashmap" resultMap="codeRow">
+
+<sql id="select-by-id">
 SELECT *
 FROM TBL_CMN_CODE
 WHERE GRP_ID = #{groupID}
 AND CD_ID = #{code}
+</sql>
+
+<!-- 코드 정보 가져오기 -->
+<select id="getInfo" parameterType="hashmap" resultType="dataobject">
+<include refid="select-by-id"/>
+</select>
+
+<!-- Code 가져오기 -->
+<select id="getCode" parameterType="hashmap" resultMap="codeRow">
+<include refid="select-by-id"/>
 </select>
 
 <!-- 코드 정보 생성 -->
-<insert id="insert" parameterType="code">
+<insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_CMN_CODE (
-	GRP_ID,
-	CD_ID,
-	CD_VAL,
-	DESCRP,
-	UPD_ID,
-	UPD_TIME
+	GRP_ID
+  , CD_ID
+  , CD_VAL
+  , DESCRP
+  , UPD_ID
+  , UPD_TIME
 ) VALUES (
-	#{groupID},
-	#{code},
-	#{value},
-	#{description},
-	#{modifiedBy},
-	CURRENT_TIMESTAMP
+	#{code.groupID}
+  , #{code.code}
+  , #{code.value}
+  , #{code.description}
+  , #{currentUser.id}
+  , CURRENT_TIMESTAMP
 )
 </insert>
 
 <!-- 코드 정보 수정 -->
-<update id="update" parameterType="group">
+<update id="update" parameterType="hashmap">
 UPDATE TBL_CMN_CODE SET
-	CD_VAL = #{value},
-	DESCRP = #{description},
-	UPD_ID = #{modifiedBy},
-	UPD_TIME = CURRENT_TIMESTAMP
-WHERE GRP_ID = #{groupID}
-AND CD_ID = #{code}
+	CD_VAL = #{code.value}
+  , DESCRP = #{code.description}
+  , UPD_ID = #{currentUser.id}
+  , UPD_TIME = CURRENT_TIMESTAMP
+WHERE GRP_ID = #{code.groupID}
+AND CD_ID = #{code.code}
 </update>
 
 <!-- groupIDs의 코드 정보를 삭제 -->

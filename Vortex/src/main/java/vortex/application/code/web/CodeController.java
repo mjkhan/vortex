@@ -88,7 +88,7 @@ public class CodeController extends ApplicationController {
 		code.setCode(req.string("code"));
 		code.setValue(req.string("value"));
 		code.setDescription(req.string("description"));
-		return modelAndView("jsonView", codeService.createCode(req.set("code", code)));
+		return modelAndView("jsonView", codeService.create(code));
 	}
 	
 	@RequestMapping("/update.do")

@@ -39,12 +39,12 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 
 	@Override
 	public boolean create(User user) {
-		return userMapper.create(user) == 1;
+		return userMapper.create(user);
 	}
 
 	@Override
 	public boolean update(User user) {
-		return userMapper.update(user) == 1;
+		return userMapper.update(user);
 	}
 
 	@Override

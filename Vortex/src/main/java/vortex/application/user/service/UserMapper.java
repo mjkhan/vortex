@@ -39,19 +39,23 @@ public class UserMapper extends DataMapper {
 		return !users.isEmpty() ? users.get(0) : null;
 	}
 	
-	public int create(User user) {
+	public boolean create(User user) {
+		if (user == null) return false;
+		
 		User currentUser = currentUser();
 		if (currentUser.isUnknown())
 			currentUser = user;
-		return user != null ? insert("user.insert",
+		return insert("user.insert",
 			params()
 				.set("user", user)
 				.set("currentUser", currentUser)
-		) : 0;
+		) == 1;
 	}
 	
-	public int update(User user) {
-		return user != null ? update("user.update", params(true).set("user", user)) : 0;
+	public boolean update(User user) {
+		if (user == null) return false;
+		
+		return update("user.update", params(true).set("user", user)) == 1;
 	}
 	
 	public int setStatus(String status, String... userIDs) {

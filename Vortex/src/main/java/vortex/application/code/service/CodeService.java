@@ -1,29 +1,35 @@
 package vortex.application.code.service;
 
+import java.util.List;
+import java.util.Map;
+
+import vortex.application.group.Group;
 import vortex.support.data.DataObject;
 
 public interface CodeService {
-	public DataObject getGroups(DataObject req);
+	public DataObject searchGroups(DataObject req);
 	
-	public DataObject getGroup(DataObject req);
+	public Group getGroup(String groupID);
 	
-	public DataObject createGroup(DataObject req);
+	public DataObject getGroupInfo(String groupID);
 	
-	public DataObject updateGroup(DataObject req);
+	public boolean create(Group group);
 	
-	public DataObject removeGroups(DataObject req);
+	public boolean update(Group group);
 	
-	public DataObject deleteGroups(DataObject req);
+	public int removeGroups(String... groupIDs);
+	
+	public int deleteGroups(String... groupIDs);
 	
 	public DataObject getCodes(DataObject req);
 	
-	public DataObject getCodesOf(DataObject req);
+	public Map<String, List<DataObject>> getCodesOf(String... groupIDs);
 	
-	public DataObject getCode(DataObject req);
+	public Code getCode(String groupID, String code);
 	
-	public DataObject createCode(DataObject req);
+	public boolean create(Code req);
 	
-	public DataObject updateCode(DataObject req);
+	public boolean update(Code req);
 	
-	public DataObject deleteCodes(DataObject req);
+	public int deleteCodes(String groupID, String... codes);
 }

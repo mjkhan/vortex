@@ -2,13 +2,16 @@ package vortex.application.code.service;
 
 import java.sql.Date;
 
+import vortex.support.data.Status;
+
 public class Code {
 	private String
 		groupID,
 		code,
 		value,
 		description,
-		modifiedBy;
+		modifiedBy,
+		status;
 	private Date lastModified;
 	
 	public String getGroupID() {
@@ -57,6 +60,18 @@ public class Code {
 	
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
+	}
+	
+	public Status status() {
+		return Status.codeOf(status);
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override

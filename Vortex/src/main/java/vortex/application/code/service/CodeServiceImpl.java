@@ -1,5 +1,8 @@
 package vortex.application.code.service;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -16,116 +19,84 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	private GroupMapper codeGroup;
 	
 	@Override
-	public DataObject getGroups(DataObject req) {
+	public DataObject searchGroups(DataObject req) {
 		BoundedList<DataObject> groups = codeGroup.search(req);
 		return dataobject()
 			.set("groups", groups)
 			.set("more", groups.hasNext())
 			.set("next", groups.getEnd() + 1);
 	}
-
+	
 	@Override
-	public DataObject getGroup(DataObject req) {
-		String groupID = req.string("groupID");
-		return dataobject()
-			.set("group", codeGroup.getGroup(groupID));
+	public DataObject getGroupInfo(String groupID) {
+		return codeGroup.getInfo(groupID);
 	}
 
 	@Override
-	public DataObject createGroup(DataObject req) {
-		Group group = req.value("group");
-		String userID = currentUser().getId();
-		group.setCreatedBy(userID);
-		group.setModifiedBy(userID);
-		boolean saved = codeGroup.create(group) == 1;
-		return dataobject()
-			.set("saved", saved)
-			.set("groupID", saved ? group.getId() : null);
+	public Group getGroup(String groupID) {
+		return codeGroup.getGroup(groupID);
 	}
 
 	@Override
-	public DataObject updateGroup(DataObject req) {
-		Group group = req.value("group");
-		group.setModifiedBy(currentUser().getId());
-		int saved = codeGroup.update(group);
-		return dataobject()
-			.set("saved", saved == 1);
+	public boolean create(Group group) {
+		return codeGroup.create(group);
 	}
 
 	@Override
-	public DataObject removeGroups(DataObject req) {
-		String[] groupIDs = req.notEmpty("groupID").string("groupID").split(",");
+	public boolean update(Group group) {
+		return codeGroup.update(group);
+	}
+
+	@Override
+	public int removeGroups(String... groupIDs) {
+		int affected = 0;
 		for (String groupID: groupIDs)
-			codeMapper.deleteCodes(groupID);
-		int saved = codeGroup.remove(groupIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+			affected += codeMapper.deleteCodes(groupID);
+		return affected += codeGroup.remove(groupIDs);
 	}
 
 	@Override
-	public DataObject deleteGroups(DataObject req) {
-		String s = req.string("groupID");
-		String[] groupIDs = !isEmpty(s) ? s.split(",") : null;
+	public int deleteGroups(String... groupIDs) {
+		int affected = 0;
 		if (isEmpty(groupIDs))
-			codeMapper.deleteCodes(null);
+			affected += codeMapper.deleteCodes(null);
 		else {
 			for (String groupID: groupIDs)
-				codeMapper.deleteCodes(groupID);
+				affected += codeMapper.deleteCodes(groupID);
 		}
-		int saved = codeGroup.deleteGroups(groupIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+		return affected += codeGroup.deleteGroups(groupIDs);
 	}
 
 	@Override
 	public DataObject getCodes(DataObject req) {
+		//TODO:페이징 처리 추가
 		String[] groupIDs = req.string("groupID").split(",");
 		return dataobject()
 			.set("codes", codeMapper.getCodes(groupIDs));
 	}
 
 	@Override
-	public DataObject getCodesOf(DataObject req) {
-		String[] groupIDs = req.string("groupID").split(",");
-		return dataobject()
-			.set("codes", codeMapper.getCodesOf(groupIDs));
+	public Map<String, List<DataObject>> getCodesOf(String... groupIDs) {
+		return codeMapper.getCodesOf(groupIDs);
 	}
 
 	@Override
-	public DataObject getCode(DataObject req) {
-		String groupID = req.string("groupID"),
-			   code = req.string("code");
-		return dataobject()
-			.set("code", codeMapper.getCode(groupID, code));
+	public Code getCode(String groupID, String code) {
+		return codeMapper.getCode(groupID, code);
 	}
 
 	@Override
-	public DataObject createCode(DataObject req) {
-		Code code = req.value("code");
-		code.setModifiedBy(currentUser().getId());
-		int saved = codeMapper.create(code);
-		return dataobject()
-			.set("saved", saved == 1);
+	public boolean create(Code code) {
+		return codeMapper.create(code);
 	}
 
 	@Override
-	public DataObject updateCode(DataObject req) {
-		Code code = req.value("code");
-		code.setModifiedBy(currentUser().getId());
-		int saved = codeMapper.update(code);
-		return dataobject()
-			.set("saved", saved == 1);
+	public boolean update(Code code) {
+		return codeMapper.update(code);
 	}
 
 	@Override
-	public DataObject deleteCodes(DataObject req) {
-		String groupID = req.string("groupID"),
-			   code = req.string("code");
-		int saved = codeMapper.deleteCodes(
-			groupID,
-			!isEmpty(code) ? code.split(",") : null
-			);
-		return dataobject()
-			.set("saved", saved > 0);
+	public int deleteCodes(String groupID, String... codes) {
+		return codeMapper.deleteCodes(groupID, codes);
 	}
 }

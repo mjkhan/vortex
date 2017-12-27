@@ -35,12 +35,12 @@ public class GroupServiceImpl extends ApplicationService implements GroupService
 
 	@Override
 	public boolean create(Group group) {
-		return genericGroup.create(group) == 1;
+		return genericGroup.create(group);
 	}
 
 	@Override
 	public boolean update(Group group) {
-		return genericGroup.update(group) == 1;
+		return genericGroup.update(group);
 	}
 
 	@Override

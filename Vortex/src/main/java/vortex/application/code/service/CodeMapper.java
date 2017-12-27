@@ -8,11 +8,11 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.application.DataMapper;
 import vortex.support.data.DataObject;
-import vortex.support.database.AbstractMapper;
 
 @Repository("codeMapper")
-public class CodeMapper extends AbstractMapper {
+public class CodeMapper extends DataMapper {
 	public List<DataObject> getCodes(String... groupIDs) {
 		return selectList("code.getCodes", params().set("groupIDs", groupIDs));
 	}
@@ -30,6 +30,14 @@ public class CodeMapper extends AbstractMapper {
 		return result;
 	}
 	
+	public DataObject getInfo(String groupID, String code) {
+		return selectOne(
+			"code.getInfo"
+		   , params().set("groupID", groupID)
+		   			 .set("code", code)
+		);
+	}
+	
 	public Code getCode(String groupID, String code) {
 		return selectOne(
 			"code.getCode"
@@ -38,12 +46,14 @@ public class CodeMapper extends AbstractMapper {
 		);
 	}
 	
-	public int create(Code code) {
-		return insert("code.insert", code);
+	public boolean create(Code code) {
+		return code != null ? insert("code.insert", params(true).set("code", code)) == 1
+			 : false;
 	}
 	
-	public int update(Code code) {
-		return update("code.update", code);
+	public boolean update(Code code) {
+		return code != null ? update("code.update", params(true).set("code", code)) == 1
+			 : false;
 	}
 	
 	public int deleteCodes(String groupID, String... codes) {

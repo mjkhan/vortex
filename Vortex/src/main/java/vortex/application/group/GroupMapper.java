@@ -40,20 +40,18 @@ public class GroupMapper extends DataMapper {
 		);
 	}
 	
-	public int create(Group group) {
-		if (group == null)
-			return 0;
+	public boolean create(Group group) {
+		if (group == null) return false;
 		
 		group.setType(groupType);
-		return insert("group.insert", params(true).set("group", group));
+		return insert("group.insert", params(true).set("group", group)) == 1;
 	}
 	
-	public int update(Group group) {
-		if (group == null)
-			return 0;
+	public boolean update(Group group) {
+		if (group == null) return false;
 		
 		group.setType(groupType);
-		return update("group.update", params(true).set("group", group));
+		return update("group.update", params(true).set("group", group)) == 1;
 	}
 	
 	public int setStatus(String status, String... groupIDs) {

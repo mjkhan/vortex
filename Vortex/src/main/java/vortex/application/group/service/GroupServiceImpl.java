@@ -34,9 +34,8 @@ public class GroupServiceImpl extends ApplicationService implements GroupService
 	}
 
 	@Override
-	public Group create(Group group) {
-		genericGroup.create(group);
-		return group;
+	public boolean create(Group group) {
+		return genericGroup.create(group) == 1;
 	}
 
 	@Override

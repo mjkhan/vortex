@@ -68,8 +68,6 @@ public class ApplicationController extends AbstractObject {
 			hreq.setAttribute("ajax", "XMLHttpRequest".equals(hreq.getHeader("X-Requested-With")));
 			hreq.setAttribute("debug", debugDomain.contains(hreq.getServerName()));
 			
-			System.out.println("server: " + hreq.getServerName() + ", local: " + hreq.getLocalName());
-
 			HttpSession session = hreq.getSession(false);
 			hreq.setAttribute("client", 
 				new Client()

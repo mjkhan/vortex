@@ -40,10 +40,10 @@ public class GroupController extends ApplicationController {
 		Group group = new Group();
 		group.setName(req.string("groupName"));
 		group.setDescription(req.string("description"));
-		Group saved = groupService.create(group);
+		boolean saved = groupService.create(group);
 		return new ModelAndView("jsonView")
-			.addObject("saved", saved != null)
-			.addObject("groupID", saved.getId());
+			.addObject("saved", saved)
+			.addObject("groupID", saved ? group.getId() : "");
 	}
 	
 	@RequestMapping("/update.do")

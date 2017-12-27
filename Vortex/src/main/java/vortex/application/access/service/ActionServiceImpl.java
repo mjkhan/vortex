@@ -47,10 +47,10 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		String userID = currentUser().getId();
 		group.setCreatedBy(userID);
 		group.setModifiedBy(userID);
-		String groupID = actionGroup.create(group);
+		boolean saved = actionGroup.create(group) == 1;
 		return dataobject()
-			.set("saved", true)
-			.set("groupID", groupID);
+			.set("saved", saved)
+			.set("groupID", saved ? group.getId() : null);
 	}
 
 	@Override

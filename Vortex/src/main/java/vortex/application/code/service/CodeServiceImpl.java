@@ -37,10 +37,10 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 		String userID = currentUser().getId();
 		group.setCreatedBy(userID);
 		group.setModifiedBy(userID);
-		String groupID = codeGroup.create(group);
+		boolean saved = codeGroup.create(group) == 1;
 		return dataobject()
-			.set("saved", true)
-			.set("groupID", groupID);
+			.set("saved", saved)
+			.set("groupID", saved ? group.getId() : null);
 	}
 
 	@Override

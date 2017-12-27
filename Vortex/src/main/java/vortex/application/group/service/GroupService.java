@@ -10,7 +10,7 @@ public interface GroupService {
 	
 	public Group getGroup(String groupID);
 	
-	public Group create(Group group);
+	public boolean create(Group group);
 	
 	public boolean update(Group group);
 	

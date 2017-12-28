@@ -36,7 +36,7 @@ WHERE ACT_ID = #{actionID}
 <include refid="select-by-id"/>
 </select>
 	
-<!-- 액션 찾기 -->
+<!-- Action 찾기 -->
 <select id="findAction" parameterType="string" resultMap="actionRow">
 SELECT *
 FROM TBL_ACTION

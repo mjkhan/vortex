@@ -13,6 +13,7 @@ import vortex.application.group.Group;
 import vortex.application.group.GroupMapper;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
+import vortex.support.data.Status;
 
 @Service("actionService")
 public class ActionServiceImpl extends ApplicationService implements ActionService {
@@ -35,61 +36,44 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 
 	@Override
-	public DataObject getGroup(DataObject req) {
-		String groupID = req.string("groupID");
-		return dataobject()
-			.set("group", actionGroup.getGroup(groupID));
+	public DataObject getGroupInfo(String groupID) {
+		return actionGroup.getInfo(groupID);
 	}
 
 	@Override
-	public DataObject createGroup(DataObject req) {
-		Group group = req.value("group");
-		String userID = currentUser().getId();
-		group.setCreatedBy(userID);
-		group.setModifiedBy(userID);
-		boolean saved = actionGroup.create(group);
-		return dataobject()
-			.set("saved", saved)
-			.set("groupID", saved ? group.getId() : null);
+	public Group getGroup(String groupID) {
+		return actionGroup.getGroup(groupID);
 	}
 
 	@Override
-	public DataObject updateGroup(DataObject req) {
-		Group group = req.value("group");
-		String userID = currentUser().getId();
-		group.setModifiedBy(userID);
-		return dataobject()
-			.set("saved", actionGroup.update(group));
+	public boolean create(Group group) {
+		return actionGroup.create(group);
 	}
 
 	@Override
-	public DataObject removeGroups(DataObject req) {
-		String[] groupIDs = req.string("groupID").split(",");
-		
-		roleMemberMapper.deleteActionsOfGroups(groupIDs);
+	public boolean update(Group group) {
+		return actionGroup.update(group);
+	}
+	
+	@Override
+	public int setGroupStatus(String status, String... groupIDs) {
+		int affected = roleMemberMapper.deleteActionsOfGroups(groupIDs);
 		for (String groupID: groupIDs) {
-			actionMapper.deleteActions(groupID);
+			affected += actionMapper.setStatus(status, groupID);
 		}
-		int saved = actionGroup.remove(groupIDs);
-		return dataobject()
-				.set("saved", saved > 0);
+		return affected += actionGroup.setStatus(status, groupIDs);
 	}
 
 	@Override
-	public DataObject deleteGroups(DataObject req) {
-		String s = req.string("groupID");
-		String[] groupIDs = !isEmpty(s) ? s.split(",") : null;
-		
-		roleMemberMapper.deleteActionsOfGroups(groupIDs);
-		if (isEmpty(s)) {
-			actionMapper.deleteActions(null);
+	public int deleteGroups(String... groupIDs) {
+		int affected = roleMemberMapper.deleteActionsOfGroups(groupIDs);
+		if (isEmpty(groupIDs)) {
+			affected += actionMapper.deleteActions(null);
 		} else {
 			for (String groupID: groupIDs)
-				actionMapper.deleteActions(groupID);
+				affected += actionMapper.deleteActions(groupID);
 		}
-		int saved = actionGroup.deleteGroups(groupIDs);
-		return dataobject()
-				.set("saved", saved > 0);
+		return affected += actionGroup.deleteGroups(groupIDs);
 	}
 
 	@Override
@@ -100,43 +84,39 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 
 	@Override
-	public DataObject getAction(DataObject req) {
-		String actionID = req.string("actionID");
-		return dataobject()
-			.set("action", actionMapper.getAction(actionID));
+	public DataObject getInfo(String actionID) {
+		return actionMapper.getInfo(actionID);
 	}
 
 	@Override
-	public DataObject createAction(DataObject req) {
-		Action action = req.value("action");
-		String userID = currentUser().getId();
-		action.setModifiedBy(userID);
-
-		String id = actionMapper.create(action);
-		return dataobject()
-			.set("actionID", id)
-			.set("saved", !isEmpty(id));
+	public Action getAction(String actionID) {
+		return actionMapper.getAction(actionID);
 	}
 
 	@Override
-	public DataObject updateAction(DataObject req) {
-		Action action = req.value("action");
-		String userID = currentUser().getId();
-		action.setModifiedBy(userID);
-
-		int saved = actionMapper.update(action);
-		return dataobject()
-			.set("saved", saved == 1);
+	public boolean create(Action action) {
+		return actionMapper.create(action);
 	}
 
 	@Override
-	public DataObject deleteActions(DataObject req) {
-		String actionID = req.string("actionID");
-		String[] actionIDs = !isEmpty(actionID) ? actionID.split(",") : null;
-		roleMemberMapper.deleteActions(null, actionIDs);
-		int saved = actionMapper.deleteActions(null, actionIDs);
-		return dataobject()
-			.set("saved", saved > 0);
+	public boolean update(Action action) {
+		return actionMapper.update(action);
+	}
+
+	@Override
+	public int setStatus(String status, String... actionIDs) {
+		int affected = 0;
+		if (Status.REMOVED.code().equals(status))
+			affected += roleMemberMapper.deleteActions(null, actionIDs);
+		return affected += actionMapper.setStatus(status, null, actionIDs);
+	}
+
+	@Override
+	public int deleteActions(String groupID, String... actionIDs) {
+		if (isEmpty(actionIDs))
+			return deleteGroups(groupID);
+		return roleMemberMapper.deleteActions(null, actionIDs)
+			 + actionMapper.deleteActions(null, actionIDs);
 	}
 	
 	private static List<String> permitAll;

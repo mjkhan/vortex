@@ -11,7 +11,7 @@
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getGroups();" type="button">찾기</button>
-		 <button onclick="newGroup();" type="button" class="add">추가</button>
+		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeGroups();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -26,7 +26,7 @@
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">액션 그룹을 찾지 못했습니다.</td></c:set>
 		<c:set var="groupRow"><tr>
 			<td><input name="groupID" value="{groupID}" type="checkbox" /></td>
-				<td><a onclick="getGroup('{groupID}')">{groupID}</a></td>
+				<td><a onclick="getInfo('{groupID}')">{groupID}</a></td>
 				<td>{groupName}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
@@ -93,19 +93,10 @@ function closeGroup() {
 	showList();
 }
 
-function newGroup() {
+function getInfo(groupID) {
 	ajax({
 		url:"<c:url value='/action/group/info.do'/>",
-		success:function(resp) {
-			showList(false);
-			$("#groupDetail").html(resp).fadeIn();
-		}
-	});
-}
-
-function getGroup(groupID) {
-	ajax({
-		url:"<c:url value='/action/group/info.do'/>?groupID=" + groupID,
+		data:{groupID:groupID},
 		success:function(resp) {
 			showList(false);
 			$("#groupDetail").html(resp).fadeIn();

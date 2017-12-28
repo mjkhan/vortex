@@ -30,7 +30,7 @@ public class GroupController extends ApplicationController {
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getGroup(@RequestParam(required=false) String groupID) {
+	public ModelAndView getInfo(@RequestParam(required=false) String groupID) {
 		return new ModelAndView("group/info")
 			.addObject("group", groupService.getInfo(groupID)); 
 	}

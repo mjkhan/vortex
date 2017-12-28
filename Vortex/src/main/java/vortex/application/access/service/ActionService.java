@@ -1,29 +1,45 @@
 package vortex.application.access.service;
 
+import vortex.application.group.Group;
 import vortex.support.data.DataObject;
+import vortex.support.data.Status;
 
 public interface ActionService {
 	public DataObject getGroups(DataObject req);
 	
-	public DataObject getGroup(DataObject req);
+	public DataObject getGroupInfo(String groupID);
 	
-	public DataObject createGroup(DataObject req);
+	public Group getGroup(String groupID);
 	
-	public DataObject updateGroup(DataObject req);
+	public boolean create(Group group);
 	
-	public DataObject removeGroups(DataObject req);
+	public boolean update(Group group);
 	
-	public DataObject deleteGroups(DataObject req);
+	public int setGroupStatus(String status, String... groupIDs);
+	
+	public default int removeGroups(String... groupIDs) {
+		return setGroupStatus(Status.REMOVED.code(), groupIDs);
+	}
+	
+	public int deleteGroups(String... groupIDs);
 	
 	public DataObject getActions(DataObject req);
 	
-	public DataObject getAction(DataObject req);
+	public DataObject getInfo(String actionID);
 	
-	public DataObject createAction(DataObject req);
+	public Action getAction(String actionID);
 	
-	public DataObject updateAction(DataObject req);
+	public boolean create(Action action);
 	
-	public DataObject deleteActions(DataObject req);
+	public boolean update(Action action);
+	
+	public int setStatus(String status, String... actionIDs);
+	
+	public default int removeActions(String... actionIDs) {
+		return setStatus(Status.REMOVED.code(), actionIDs);
+	}
+	
+	public int deleteActions(String groupID, String... actionIDs);
 	
 	public Action.Permission getPermission(String userID, String actionPath);
 }

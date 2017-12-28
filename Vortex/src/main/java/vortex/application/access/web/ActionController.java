@@ -6,7 +6,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
@@ -26,36 +28,33 @@ public class ActionController extends ApplicationController {
 		DataObject req = request(hreq);
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
-		return modelAndView(!req.bool("ajax") ? "action/group/list" : "jsonView", actionService.getGroups(req)); 
+		return new ModelAndView(!req.bool("ajax") ? "action/group/list" : "jsonView")
+			.addAllObjects(actionService.getGroups(req)); 
 	}
 	
 	@RequestMapping("/group/info.do")
-	public ModelAndView getGroup(HttpServletRequest hreq) {
-		return modelAndView("action/group/info", actionService.getGroup(request(hreq))); 
+	public ModelAndView getGroupInfo(@RequestParam(required=false) String groupID) {
+		return new ModelAndView("action/group/info")
+			.addObject("group", actionService.getGroupInfo(groupID)); 
 	}
 	
 	@RequestMapping("/group/create.do")
-	public ModelAndView createGroup(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		Group group = new Group();
-		group.setId(req.string("groupID"));
-		group.setName(req.string("groupName"));
-		group.setDescription(req.string("description"));
-		return modelAndView("jsonView", actionService.createGroup(req.set("group", group)));
+	public ModelAndView create(@ModelAttribute Group group) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", actionService.create(group))
+			.addObject("groupID", group.getId());
 	}
 	
 	@RequestMapping("/group/update.do")
-	public ModelAndView updateGroup(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		Group group = actionService.getGroup(req).value("group");
-		group.setName(req.string("groupName"));
-		group.setDescription(req.string("description"));
-		return modelAndView("jsonView", actionService.updateGroup(req.set("group", group)));
+	public ModelAndView update(@ModelAttribute Group group) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", actionService.update(group));
 	}
 	
 	@RequestMapping("/group/delete.do")
-	public ModelAndView deleteGroup(HttpServletRequest hreq) {
-		return modelAndView("jsonView", actionService.deleteGroups(request(hreq)));
+	public ModelAndView deleteGroup(@RequestParam String groupID) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", actionService.deleteGroups(groupID.split(",")) > 0);
 	}
 	
 	@RequestMapping("/select.do")
@@ -85,33 +84,26 @@ public class ActionController extends ApplicationController {
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getAction(HttpServletRequest hreq) {
-		return modelAndView("action/info", actionService.getAction(request(hreq)));
+	public ModelAndView getInfo(@RequestParam(required=false) String actionID) {
+		return new ModelAndView("action/info")
+			.addObject("action", actionService.getInfo(actionID));
 	}
 	
 	@RequestMapping("/create.do")
-	public ModelAndView createAction(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		Action action = new Action();
-		action.setGroupID(req.string("groupID"));
-		action.setName(req.string("actionName"));
-		action.setPath(req.string("actionPath"));
-		action.setDescription(req.string("description"));
-		return modelAndView("jsonView", actionService.createAction(req.set("action", action)));
+	public ModelAndView create(@ModelAttribute Action action) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", actionService.create(action));
 	}
 	
 	@RequestMapping("/update.do")
-	public ModelAndView updateCode(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		Action action = actionService.getAction(req).value("action");
-		action.setName(req.string("actionName"));
-		action.setPath(req.string("actionPath"));
-		action.setDescription(req.string("description"));
-		return modelAndView("jsonView", actionService.updateAction(req.set("action", action)));
+	public ModelAndView update(@ModelAttribute Action action) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", actionService.update(action));
 	}
 	
 	@RequestMapping("/delete.do")
-	public ModelAndView deleteActions(HttpServletRequest hreq) {
-		return modelAndView("jsonView", actionService.deleteActions(request(hreq)));
+	public ModelAndView deleteActions(@RequestParam(required=false) String groupID, @RequestParam(required=false) String actionID) {
+		return new ModelAndView("jsonView")
+			.addObject("saved" , actionService.deleteActions(groupID, ifEmpty(actionID, "").split(",")) > 0);
 	}
 }

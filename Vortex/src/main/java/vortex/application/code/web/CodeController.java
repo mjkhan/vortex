@@ -23,7 +23,7 @@ public class CodeController extends ApplicationController {
 	@Resource(name="codeService")
 	private CodeService codeService;
 	
-	@RequestMapping("/group.do")
+	@RequestMapping("/group/list.do")
 	public ModelAndView searchGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		req.set("start", req.number("start").intValue())

@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,31 +50,17 @@ public class UserController extends ApplicationController {
 	}
 	
 	@RequestMapping("/create.do")
-	public ModelAndView create(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
+	public ModelAndView create(@ModelAttribute User user) {
 		return new ModelAndView("jsonView")
-			.addObject("saved",
-				userService.create(setUser(new User(), req))
-			);
+			.addObject("saved", userService.create(user));
 	}
-	
+
 	@RequestMapping("/update.do")
-	public ModelAndView update(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
+	public ModelAndView update(@ModelAttribute User user) {
 		return new ModelAndView("jsonView")
-			.addObject("saved",
-				userService.update(setUser(userService.getUser(req.string("userID")), req))
-			);
+			.addObject("saved", userService.update(user));
 	}
-	
-	private User setUser(User user, DataObject req) {
-		user.setId(req.string("userID"));
-		user.setName(req.string("userName"));
-		user.setAlias(req.string("alias"));
-		user.setPassword(req.string("password"));
-		return user;
-	}
-	
+
 	@RequestMapping("/setStatus.do")
 	public ModelAndView setStatus(HttpServletRequest hreq) {
 		DataObject req = request(hreq);

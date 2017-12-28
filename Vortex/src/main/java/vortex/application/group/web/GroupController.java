@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,11 +36,7 @@ public class GroupController extends ApplicationController {
 	}
 	
 	@RequestMapping("/create.do")
-	public ModelAndView createGroup(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		Group group = new Group();
-		group.setName(req.string("groupName"));
-		group.setDescription(req.string("description"));
+	public ModelAndView create(@ModelAttribute Group group) {
 		boolean saved = groupService.create(group);
 		return new ModelAndView("jsonView")
 			.addObject("saved", saved)
@@ -47,18 +44,14 @@ public class GroupController extends ApplicationController {
 	}
 	
 	@RequestMapping("/update.do")
-	public ModelAndView updateGroup(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		Group group = groupService.getGroup(req.string("groupID"));
-		group.setName(req.string("groupName"));
-		group.setDescription(req.string("description"));
+	public ModelAndView update(@ModelAttribute Group group) {
 		return new ModelAndView("jsonView")
 			.addObject("saved", groupService.update(group));
 	}
 	
 	@RequestMapping("/delete.do")
-	public ModelAndView deleteGroup(@RequestParam String groupID) {
+	public ModelAndView delete(@RequestParam String groupID) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", groupService.deleteGroups(groupID.split(",")));
+			.addObject("saved", groupService.delete(groupID.split(",")));
 	}
 }

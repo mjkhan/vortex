@@ -14,7 +14,7 @@ public interface GroupService {
 	
 	public boolean update(Group group);
 	
-	public boolean removeGroups(String... groupIDs);
+	public boolean remove(String... groupIDs);
 	
-	public boolean deleteGroups(String... groupIDs);
+	public boolean delete(String... groupIDs);
 }

@@ -9,9 +9,9 @@ import vortex.support.data.DataObject;
 public interface CodeService {
 	public DataObject searchGroups(DataObject req);
 	
-	public Group getGroup(String groupID);
+	public DataObject getInfo(String groupID);
 	
-	public DataObject getGroupInfo(String groupID);
+	public Group getGroup(String groupID);
 	
 	public boolean create(Group group);
 	
@@ -25,11 +25,15 @@ public interface CodeService {
 	
 	public Map<String, List<DataObject>> getCodesOf(String... groupIDs);
 	
+	public DataObject getInfo(String groupID, String code);
+	
 	public Code getCode(String groupID, String code);
 	
 	public boolean create(Code req);
 	
 	public boolean update(Code req);
+	
+	public int removeCodes(String groupID, String... codes);
 	
 	public int deleteCodes(String groupID, String... codes);
 }

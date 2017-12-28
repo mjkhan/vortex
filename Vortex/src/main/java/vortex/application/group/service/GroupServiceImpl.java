@@ -44,12 +44,12 @@ public class GroupServiceImpl extends ApplicationService implements GroupService
 	}
 
 	@Override
-	public boolean removeGroups(String... groupIDs) {
+	public boolean remove(String... groupIDs) {
 		return genericGroup.remove(groupIDs) > 0;
 	}
 
 	@Override
-	public boolean deleteGroups(String... groupIDs) {
+	public boolean delete(String... groupIDs) {
 		return genericGroup.deleteGroups(groupIDs) > 0;
 	}
 }

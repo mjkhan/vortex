@@ -14,7 +14,6 @@ import vortex.support.data.Status;
 public class UserMapper extends DataMapper {
 	
 	public BoundedList<DataObject> search(DataObject req) {
-		log().debug(() -> "Searching Users...");
 		DataObject params = ifEmpty(req, this::params);
 		
 		if (isEmpty(req.get("field")))
@@ -22,8 +21,7 @@ public class UserMapper extends DataMapper {
 		if (isEmpty(req.get("value")))
 			req.remove("value");
 		
-		List<DataObject> list = selectList("user.search", params);
-		return boundedList(list, params);
+		return boundedList(selectList("user.search", params), params);
 	}
 	
 	public List<DataObject> getInfo(String... userIDs) {

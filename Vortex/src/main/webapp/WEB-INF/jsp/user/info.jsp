@@ -44,8 +44,8 @@ function saveUser() {
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/user/create.do'/></c:if><c:if test='${!create}'><c:url value='/user/update.do'/></c:if>",
 		data:{
-			userID:$("#userID").val(),
-			userName:$("#userName").val(),
+			id:$("#userID").val(),
+			name:$("#userName").val(),
 			alias:$("#alias").val(),
 			password:$("#password").val()
 		},

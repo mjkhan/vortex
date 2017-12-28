@@ -140,13 +140,22 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 	
 	private static List<String> permitAll;
+	private static Boolean checkAccessPermission;
 	
 	@Override
 	public Action.Permission getPermission(String userID, String actionPath) {
+		if (checkAccessPermission == null)
+			checkAccessPermission = "enable".equalsIgnoreCase(properties.getString("accessPermission"));
+		if (!checkAccessPermission)
+			return Action.Permission.GRANTED;
+		
 		if (permitAll == null)
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
+		if (permitAll.contains(actionPath)) return Action.Permission.GRANTED;
+		
+		log().debug(() -> "Getting permission for " + userID + "to " + actionPath);
 		return
-			permitAll.contains(actionPath) || roleMemberMapper.isPermitted(userID, actionPath) ? Action.Permission.GRANTED :
+			roleMemberMapper.isPermitted(userID, actionPath) ? Action.Permission.GRANTED :
 			actionMapper.findAction(actionPath) != null ? Action.Permission.DENIED :
 			Action.Permission.NOT_FOUND;
 	}

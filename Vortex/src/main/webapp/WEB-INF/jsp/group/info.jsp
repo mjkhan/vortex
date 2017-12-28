@@ -41,8 +41,8 @@ function saveGroup() {
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/group/create.do'/></c:if><c:if test='${!create}'><c:url value='/group/update.do'/></c:if>",
 		data:{
-			groupID:$("#groupID").val(),
-			groupName:$("#groupName").val(),
+			id:$("#groupID").val(),
+			name:$("#groupName").val(),
 			description:$("#description").val()
 		},
 		success:function(resp) {

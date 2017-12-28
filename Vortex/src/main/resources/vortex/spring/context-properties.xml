@@ -7,10 +7,11 @@
 	<bean name="propertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
 		<property name="properties">
 			<map>
-				<entry key="fetch" value="10"/>
-				
-				<entry key="permitAll" value="/user/login.do"/>
 				<entry key="debugDomain" value="localhost"/>
+				<entry key="accessPermission" value="disable"/>
+				<entry key="permitAll" value="/user/login.do"/>
+				
+				<entry key="fetch" value="10"/>
 			</map>
 		</property>
 <!-- 		

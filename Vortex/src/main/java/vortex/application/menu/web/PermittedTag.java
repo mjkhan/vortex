@@ -23,6 +23,8 @@ public class PermittedTag extends VortexTag {
 			pageContext.setAttribute("menuName", menu.getName());
 			pageContext.setAttribute("menuAction", action);
 			pageContext.setAttribute("menuImage", menu.getImageConfig());
+			boolean current = false; //TODO:현재 선택 메뉴 판단
+			pageContext.setAttribute("currentMenu", current);
 		}
 		return permitted ? EVAL_BODY_INCLUDE : SKIP_BODY;
 	}
@@ -32,6 +34,7 @@ public class PermittedTag extends VortexTag {
 		pageContext.removeAttribute("menuName");
 		pageContext.removeAttribute("menuAction");
 		pageContext.removeAttribute("menuImage");
+		pageContext.removeAttribute("currentMenu");
 		menu = null;
 		super.release();
 	}

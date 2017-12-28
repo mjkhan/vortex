@@ -7,7 +7,7 @@
 		<select id="groupID" onchange="getCodes();"><c:forEach items="${groups}" var="group">
 			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
 		 </select>
-		 <button onclick="newCode();" type="button" class="add">추가</button>
+		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button id="btnRemove" onclick="removeCodes();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -22,7 +22,7 @@
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">코드를 찾지 못했습니다.</td></c:set>
 		<c:set var="codeRow"><tr>
 				<td><input name="code" value="{code}" type="checkbox" /></td>
-				<td><a onclick="getCode('{code}')">{code}</a></td>
+				<td><a onclick="getInfo('{code}')">{code}</a></td>
 				<td>{value}</td>
 				<td>{updTime}</td>
 			</tr></c:set>
@@ -84,19 +84,10 @@ function showDetail(show) {
 	}
 }
 
-function newCode() {
+function getInfo(code) {
 	ajax({
-		url:"<c:url value='/code/info.do'/>?" + toQuery({groupID:$("#groupID").val()}),
-		success:function(resp) {
-			$("#codeDetail").html(resp);
-			showDetail();
-		}
-	});
-}
-
-function getCode(code) {
-	ajax({
-		url:"<c:url value='/code/info.do'/>?" + toQuery({groupID:$("#groupID").val(), code:code}),
+		url:"<c:url value='/code/info.do'/>",
+		data:{groupID:$("#groupID").val(), code:code},
 		success:function(resp) {
 			$("#codeDetail").html(resp);
 			showDetail();

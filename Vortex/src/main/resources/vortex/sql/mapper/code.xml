@@ -9,13 +9,24 @@
 	<result property="description" column="DESCRP"/>
 	<result property="modifiedBy" column="UPD_ID"/>
 	<result property="lastModified" column="UPD_TIME"/>
+	<result property="status" column="STATUS"/>
 </resultMap>
 	
 <!-- 그룹별 코드 목록 가져오기 -->
 <select id="getCodes" parameterType="hashmap" resultType="dataobject">
-SELECT * FROM TBL_CMN_CODE
-WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
-ORDER BY GRP_ID, CD_ID
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS *
+	FROM TBL_CMN_CODE
+	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+	ORDER BY GRP_ID, CD_ID
+	LIMIT #{start}, #{fetch} 
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
+	SELECT *
+	FROM TBL_CMN_CODE
+	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+	ORDER BY GRP_ID, CD_ID
+</if>
 </select>
 
 <sql id="select-by-id">
@@ -44,6 +55,7 @@ INSERT INTO TBL_CMN_CODE (
   , DESCRP
   , UPD_ID
   , UPD_TIME
+  , STATUS
 ) VALUES (
 	#{code.groupID}
   , #{code.code}
@@ -51,6 +63,7 @@ INSERT INTO TBL_CMN_CODE (
   , #{code.description}
   , #{currentUser.id}
   , CURRENT_TIMESTAMP
+  , '001'
 )
 </insert>
 
@@ -63,6 +76,18 @@ UPDATE TBL_CMN_CODE SET
   , UPD_TIME = CURRENT_TIMESTAMP
 WHERE GRP_ID = #{code.groupID}
 AND CD_ID = #{code.code}
+</update>
+
+<!-- 코드 상태 변경 -->
+<update id="setStatus" parameterType="hashmap">
+UPDATE TBL_CMN_CODE SET
+	STATUS = #{status}
+  , UPD_ID = #{currentUser.id}
+  , UPD_TIME = CURRENT_TIMESTAMP
+WHERE GRP_ID = #{groupID}
+<if test="codes != null">
+AND CD_ID IN (<foreach collection="codes" item="code" separator=", ">#{code}</foreach>)
+</if>
 </update>
 
 <!-- groupIDs의 코드 정보를 삭제 -->

@@ -26,7 +26,7 @@ public class UserServiceTest extends VortexTest {
 		User user = newUser(0);
 		userService.create(user);
 		String id = user.getId();
-		User loaded = userService.getInfo(id).value("user");
+		User loaded = userService.getUser(id);
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(user.getId(), loaded.getId());
 		Assert.assertEquals(user.getName(), loaded.getName());
@@ -38,14 +38,14 @@ public class UserServiceTest extends VortexTest {
 		User user = newUser(0);
 		userService.create(user);
 		String id = user.getId();
-		User loaded = userService.getInfo(id).value("user");
+		User loaded = userService.getUser(id);
 		
 		String name = "user name zero",
 			   alias = "alias zero";
 		loaded.setName(name);
 		loaded.setAlias(alias);
 		userService.update(loaded);
-		loaded = userService.getInfo(id).value("user");
+		loaded = userService.getUser(id);
 
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(id, loaded.getId());

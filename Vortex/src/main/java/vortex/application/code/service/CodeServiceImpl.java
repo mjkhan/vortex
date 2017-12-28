@@ -28,7 +28,7 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	}
 	
 	@Override
-	public DataObject getGroupInfo(String groupID) {
+	public DataObject getInfo(String groupID) {
 		return codeGroup.getInfo(groupID);
 	}
 
@@ -51,7 +51,7 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	public int removeGroups(String... groupIDs) {
 		int affected = 0;
 		for (String groupID: groupIDs)
-			affected += codeMapper.deleteCodes(groupID);
+			affected += codeMapper.remove(groupID);
 		return affected += codeGroup.remove(groupIDs);
 	}
 
@@ -69,15 +69,19 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 
 	@Override
 	public DataObject getCodes(DataObject req) {
-		//TODO:페이징 처리 추가
-		String[] groupIDs = req.string("groupID").split(",");
+		
 		return dataobject()
-			.set("codes", codeMapper.getCodes(groupIDs));
+			.set("codes", codeMapper.getCodes(req));
 	}
 
 	@Override
 	public Map<String, List<DataObject>> getCodesOf(String... groupIDs) {
 		return codeMapper.getCodesOf(groupIDs);
+	}
+	
+	@Override
+	public DataObject getInfo(String groupID, String code) {
+		return codeMapper.getInfo(groupID, code);
 	}
 
 	@Override
@@ -93,6 +97,11 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	@Override
 	public boolean update(Code code) {
 		return codeMapper.update(code);
+	}
+	
+	@Override
+	public int removeCodes(String groupID, String... codes) {
+		return codeMapper.remove(groupID, codes);
 	}
 
 	@Override

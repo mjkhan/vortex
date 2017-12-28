@@ -2,6 +2,8 @@ package vortex.application.access.service;
 
 import java.sql.Date;
 
+import vortex.support.data.Status;
+
 public class Action {
 	public static enum Permission {
 		GRANTED,
@@ -15,7 +17,8 @@ public class Action {
 		name,
 		path,
 		description,
-		modifiedBy;
+		modifiedBy,
+		status;
 	private Date lastModified;
 	
 	public String getId() {
@@ -72,6 +75,18 @@ public class Action {
 	
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
+	}
+	
+	public Status status() {
+		return Status.codeOf(status);
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override

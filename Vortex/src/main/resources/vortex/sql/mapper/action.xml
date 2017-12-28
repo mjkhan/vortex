@@ -10,6 +10,7 @@
 	<result property="description" column="DESCRP"/>
 	<result property="modifiedBy" column="UPD_ID"/>
 	<result property="lastModified" column="UPD_TIME"/>
+	<result property="status" column="STATUS"/>
 </resultMap>
 	
 <!-- 그룹별 액션 목록 가져오기 -->
@@ -18,12 +19,21 @@ SELECT * FROM TBL_ACTION
 WHERE GRP_ID = #{groupID}
 ORDER BY ACT_ID
 </select>
-	
-<!-- 액션 가져오기 -->
-<select id="getAction" parameterType="string" resultMap="actionRow">
+
+<sql id="select-by-id">
 SELECT *
 FROM TBL_ACTION
 WHERE ACT_ID = #{actionID}
+</sql>
+
+<!-- 액션 정보 가져오기 -->
+<select id="getInfo" parameterType="string" resultType="dataobject">
+<include refid="select-by-id"/>
+</select>
+	
+<!-- Action 가져오기 -->
+<select id="getAction" parameterType="string" resultMap="actionRow">
+<include refid="select-by-id"/>
 </select>
 	
 <!-- 액션 찾기 -->
@@ -34,49 +44,67 @@ WHERE ACT_PATH = #{actionPath}
 </select>
 
 <!-- 액션 정보 생성 -->
-<insert id="insert" parameterType="action">
+<insert id="insert" parameterType="hashmap">
 <selectKey keyProperty="id" order="BEFORE">
 SELECT LPAD(IFNULL((CAST(MAX(ACT_ID) AS UNSIGNED) + 1), 1), 5, '0') NEW_ID
 FROM TBL_ACTION;
 </selectKey>
 INSERT INTO TBL_ACTION (
-	ACT_ID,
-	GRP_ID,
-	ACT_NAME,
-	ACT_PATH,
-	DESCRP,
-	UPD_ID,
-	UPD_TIME
+	ACT_ID
+  , GRP_ID
+  , ACT_NAME
+  , ACT_PATH
+  , DESCRP
+  , UPD_ID
+  , UPD_TIME
+  , STATUS
 ) VALUES (
-	#{id},
-	#{groupID},
-	#{name},
-	#{path},
-	#{description},
-	#{modifiedBy},
-	CURRENT_TIMESTAMP
+	#{action.id}
+  , #{action.groupID}
+  , #{action.name}
+  , #{action.path}
+  , #{action.description}
+  , #{currentUser.id}
+  , CURRENT_TIMESTAMP
+  , '001'
 )
 </insert>
 
 <!-- 액션 정보 수정 -->
-<update id="update" parameterType="action">
+<update id="update" parameterType="hashmap">
 UPDATE TBL_ACTION SET
-	ACT_NAME = #{name},
-	ACT_PATH = #{path},
-	DESCRP = #{description},
-	UPD_ID = #{modifiedBy},
+	ACT_NAME = #{action.name},
+	ACT_PATH = #{action.path},
+	DESCRP = #{action.description},
+	UPD_ID = #{currentUser.id},
 	UPD_TIME = CURRENT_TIMESTAMP
 WHERE ACT_ID = #{id}
+</update>
+
+<!-- 액션 상태 변경 -->
+<update id="setStatus" parameterType="hashmap">
+UPDATE TBL_ACTION SET
+	STATUS = #{status}
+  , UPD_ID = #{currentUser.id}
+  , UPD_TIME = CURRENT_TIMESTAMP
+WHERE 1 = 1
+<if test="groupID != null">
+AND GRP_ID = #{groupID}
+</if>
+<if test="actionIDs != null">
+AND ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
+</if>
 </update>
 
 <!-- groupID의 액션 정보를 삭제 -->
 <delete id="delete" parameterType="hashmap">
 DELETE FROM TBL_ACTION
-<if test="groupID != null">WHERE GRP_ID = #{groupID}</if>
+WHERE 1 = 1
+<if test="groupID != null">
+AND GRP_ID = #{groupID}
+</if>
 <if test="actionIDs != null">
-	<if test="groupID != null">AND </if>
-	<if test="groupID == null">WHERE </if>
-	ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
+AND ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
 </if>
 </delete>
 

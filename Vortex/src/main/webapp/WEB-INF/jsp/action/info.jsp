@@ -5,22 +5,25 @@
 <table class="infoForm">
 <c:if test="${!create}">
 	<tr><th><label for="actionID">아이디</label></th>
-		<td><input id="actionID" value="${action.id}" type="text" readonly /></td>
+		<td><input id="actionID" value="${action.ACT_ID}" type="text" readonly /></td>
 	</tr>
 </c:if>
 	<tr><th><label for="actionName">이름</label></th>
-		<td><input id="actionName" value="${action.name}" type="text" required maxlength="32" /></td>
+		<td><input id="actionName" value="${action.ACT_NAME}" type="text" required maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="actionPath">경로</label></th>
-		<td><input id="actionPath" value="${action.path}" type="text" required maxlength="32" /></td>
+		<td><input id="actionPath" value="${action.ACT_PATH}" type="text" required maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="descrption">설명</label></th>
-		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${action.description}</textarea>
+		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${action.DESCRP}</textarea>
 		</td>
 	</tr>
 <c:if test="${!create}">
+	<tr><th>수정자</th>
+		<td>${action.UPD_ID}</td>
+	</tr>
 	<tr><th>수정시간</th>
-		<td><fmt:formatDate value="${action.lastModified}" pattern="yy-MM-dd HH:mm"/></td>
+		<td><fmt:formatDate value="${action.UPD_TIME}" pattern="yy-MM-dd HH:mm"/></td>
 	</tr>
 </c:if>
 </table>
@@ -36,22 +39,25 @@ function saveAction() {
 		url:"<c:if test='${create}'><c:url value='/action/create.do'/></c:if><c:if test='${!create}'><c:url value='/action/update.do'/></c:if>",
 		data:{
 			groupID:$("#groupID").val(),
-			actionID:$("#actionID").val(),
-			actionName:$("#actionName").val(),
-			actionPath:$("#actionPath").val(),
+			id:$("#actionID").val(),
+			name:$("#actionName").val(),
+			path:$("#actionPath").val(),
 			description:$("#description").val()
 		},
 		success:function(resp) {
 			if (resp.saved) {
 				afterSave = getActions;
 				alert("저장됐습니다.");
-				getAction(resp.actionID || $("#actionID").val());
+				getInfo(resp.actionID || $("#actionID").val());
 			} else {
 				alert("저장하지 못했습니다.");
 			}
 		}
 	});
 }
-$("#actionName").focus();
-$(".infoForm input:not([readonly])").onEnterPress(saveAction);
+
+$(function(){
+	$("#actionName").focus();
+	$(".infoForm input:not([readonly])").onEnterPress(saveAction);
+});
 </script>

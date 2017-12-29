@@ -45,7 +45,7 @@ WHERE ACT_PATH = #{actionPath}
 
 <!-- 액션 정보 생성 -->
 <insert id="insert" parameterType="hashmap">
-<selectKey keyProperty="id" order="BEFORE">
+<selectKey keyProperty="action.id" resultType="string" order="BEFORE">
 SELECT LPAD(IFNULL((CAST(MAX(ACT_ID) AS UNSIGNED) + 1), 1), 5, '0') NEW_ID
 FROM TBL_ACTION;
 </selectKey>
@@ -78,7 +78,7 @@ UPDATE TBL_ACTION SET
 	DESCRP = #{action.description},
 	UPD_ID = #{currentUser.id},
 	UPD_TIME = CURRENT_TIMESTAMP
-WHERE ACT_ID = #{id}
+WHERE ACT_ID = #{action.id}
 </update>
 
 <!-- 액션 상태 변경 -->

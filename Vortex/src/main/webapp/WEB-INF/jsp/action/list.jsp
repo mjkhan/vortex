@@ -7,7 +7,7 @@
 		<select id="groupID" onchange="getActions();"><c:forEach items="${groups}" var="group">
 			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
 		 </select>
-		 <button onclick="newAction();" type="button" class="add">추가</button>
+		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeActions();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -22,7 +22,7 @@
 			<c:set var="notFound"><tr><td colspan="4" class="notFound">액션정보를 찾지 못했습니다.</td></c:set>
 			<c:set var="actionRow"><tr>
 				<td><input name="actionID" value="{actionID}" type="checkbox" /></td>
-				<td><a onclick="getAction('{actionID}')">{actionName}</a></td>
+				<td><a onclick="getInfo('{actionID}')">{actionName}</a></td>
 				<td>{actionPath}</td>
 				<td>{updTime}</td>
 			</tr></c:set>
@@ -82,17 +82,7 @@ function closeAction() {
 	showList();
 }
 
-function newAction() {
-	ajax({
-		url:"<c:url value='/action/info.do'/>?" + toQuery({groupID:$("#groupID").val()}),
-		success:function(resp) {
-			showList(false);
-			$("#actionDetail").html(resp).fadeIn();
-		}
-	});
-}
-
-function getAction(actionID) {
+function getInfo(actionID) {
 	ajax({
 		url:"<c:url value='/action/info.do'/>?" + toQuery({groupID:$("#groupID").val(), actionID:actionID}),
 		success:function(resp) {

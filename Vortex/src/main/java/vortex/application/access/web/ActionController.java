@@ -92,7 +92,8 @@ public class ActionController extends ApplicationController {
 	@RequestMapping("/create.do")
 	public ModelAndView create(@ModelAttribute Action action) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", actionService.create(action));
+			.addObject("saved", actionService.create(action))
+			.addObject("actionID", action.getId());
 	}
 	
 	@RequestMapping("/update.do")

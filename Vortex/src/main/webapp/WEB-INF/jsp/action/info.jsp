@@ -58,6 +58,11 @@ function saveAction() {
 
 $(function(){
 	$("#actionName").focus();
+	$("#actionPath").validate({
+		test:function(v){
+			return v.match(/^[0-9a-zA-Z/.]+$/);
+		}
+	});
 	$(".infoForm input:not([readonly])").onEnterPress(saveAction);
 });
 </script>

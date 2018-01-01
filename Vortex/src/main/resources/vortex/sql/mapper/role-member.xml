@@ -46,7 +46,7 @@ AND EXISTS (
 <!-- roleIDs의 역할에 actionIDs의 액션 추가 -->
 <insert id="addActions" parameterType="hashmap">
 INSERT INTO TBL_ROLE_ACTION (ROLE_ID, ACT_ID, INS_ID, INS_TIME)
-SELECT ROLE_ID, ACT_ID, #{addedBy}, CURRENT_TIMESTAMP
+SELECT ROLE_ID, ACT_ID, #{currentUser.id}, CURRENT_TIMESTAMP
 FROM (
 	<foreach collection="roleIDs" item="roleID" separator=" UNION">SELECT #{roleID} ROLE_ID</foreach>
 ) A, (
@@ -88,7 +88,7 @@ WHERE ACT_ID IN (
 <!-- roleID에 설정된 사용자 정보 가져오기 -->
 <select id="getUsers" parameterType="hashmap" resultType="hashmap">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
-	SELECT SQL_CALC_FOUND_ROWS A.USER_ID, USER_NAME, ALIAS, INS_ID, A.INS_TIME
+	SELECT SQL_CALC_FOUND_ROWS A.USER_ID, USER_NAME, ALIAS, A.INS_ID, A.INS_TIME
 	FROM TBL_ROLE_USER A, TBL_USER B
 	WHERE ROLE_ID = #{roleID}
 	AND STATUS &lt;&gt; '999'
@@ -97,7 +97,7 @@ WHERE ACT_ID IN (
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 필요 시 -->
-	SELECT A.USER_ID, USER_NAME, ALIAS, INS_ID, A.INS_TIME
+	SELECT A.USER_ID, USER_NAME, ALIAS, A.INS_ID, A.INS_TIME
 	FROM TBL_ROLE_USER A, TBL_USER B
 	WHERE ROLE_ID = #{roleID}
 	AND STATUS &lt;&gt; '999'
@@ -109,7 +109,7 @@ WHERE ACT_ID IN (
 <!-- roleIDs의 역할에 userIDs의 사용자 추가 -->
 <insert id="addUsers" parameterType="hashmap">
 INSERT INTO TBL_ROLE_USER (ROLE_ID, USER_ID, INS_ID, INS_TIME)
-SELECT ROLE_ID, USER_ID, #{addedBy}, CURRENT_TIMESTAMP
+SELECT ROLE_ID, USER_ID, #{currentUser.id}, CURRENT_TIMESTAMP
 FROM (
 	<foreach collection="roleIDs" item="roleID" separator=" UNION">SELECT #{roleID} ROLE_ID</foreach>
 ) A, (

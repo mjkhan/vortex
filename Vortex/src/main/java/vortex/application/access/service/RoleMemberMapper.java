@@ -5,25 +5,25 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.application.DataMapper;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
-import vortex.support.database.AbstractMapper;
 
 @Repository("roleMemberMapper")
-public class RoleMemberMapper extends AbstractMapper {	
+public class RoleMemberMapper extends DataMapper {	
 	public BoundedList<Map<String, Object>> getActions(DataObject req) {
 		List<Map<String, Object>> list = selectList("roleMember.getActions", req);
 		return boundedList(list, req);
 	}
 
-	public int addActions(String addedBy, String[] roleIDs, String... actionIDs) {
+	public int addActions(String[] roleIDs, String... actionIDs) {
 		if (isEmpty(roleIDs) || isEmpty(actionIDs)) return 0;
 		
 		return insert(
 			"roleMember.addActions"
-		   , params().set("roleIDs", roleIDs)
-		   			 .set("actionIDs", actionIDs)
-		   			 .set("addedBy", addedBy)
+		   , params(true)
+		   	.set("roleIDs", roleIDs)
+		   	.set("actionIDs", actionIDs)
 		);
 	}
 	
@@ -47,14 +47,14 @@ public class RoleMemberMapper extends AbstractMapper {
 		return boundedList(list, req);
 	}
 
-	public int addUsers(String addedBy, String[] roleIDs, String... userIDs) {
+	public int addUsers(String[] roleIDs, String... userIDs) {
 		if (isEmpty(roleIDs) || isEmpty(userIDs)) return 0;
 		
 		return insert(
 			"roleMember.addUsers"
-		   , params().set("roleIDs", roleIDs)
-		   			 .set("userIDs", userIDs)
-		   			 .set("addedBy", addedBy)
+		   , params(true)
+		   	.set("roleIDs", roleIDs)
+		   	.set("userIDs", userIDs)
 		);
 	}
 	

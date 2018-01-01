@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.application.DataMapper;
 import vortex.support.data.DataObject;
-import vortex.support.database.AbstractMapper;
 
 @Repository("roleMapper")
-public class RoleMapper extends AbstractMapper {
+public class RoleMapper extends DataMapper {
 	public List<DataObject> getRoles() {
 		return selectList("role.getRoles");
 	}
@@ -17,17 +17,20 @@ public class RoleMapper extends AbstractMapper {
 		return selectList("role.getRolesForMember", params().set("member", member));
 	}
 	
+	public DataObject getInfo(String roleID) {
+		return selectOne("role.getInfo", roleID);
+	}
+	
 	public Role getRole(String roleID) {
 		return selectOne("role.getRole", roleID);
 	}
 
-	public String create(Role role) {
-		insert("role.insert", role);
-		return role.getId();
+	public boolean create(Role role) {
+		return role != null ? insert("role.insert", params(true).set("role", role)) == 1 : false;
 	}
 	
-	public int update(Role role) {
-		return update("role.update", role);
+	public boolean update(Role role) {
+		return role != null ? update("role.update", params(true).set("role", role)) == 1 : false;
 	}
 	
 	public int remove(String... roleIDs) {

@@ -7,13 +7,15 @@ public interface RoleService {
 	
 	public DataObject getRolesFor(DataObject req);
 	
-	public DataObject getRole(DataObject req);
+	public DataObject getInfo(String roleID);
 	
-	public DataObject create(DataObject req);
+	public Role getRole(String roleID);
 	
-	public DataObject update(DataObject req);
+	public boolean create(Role role);
 	
-	public DataObject delete(DataObject req);
+	public boolean update(Role role);
+	
+	public int delete(String... roleIDs);
 	
 	public DataObject getActions(DataObject req);
 	

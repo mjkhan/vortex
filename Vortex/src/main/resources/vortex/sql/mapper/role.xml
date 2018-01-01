@@ -39,15 +39,24 @@ FROM TBL_ROLE) A
 ORDER BY SRT_ORD, ROLE_ID
 </select>
 
-<!-- 역할 가져오기 -->
-<select id="getRole" parameterType="string" resultMap="roleRow">
+<sql id="select-by-id">
 SELECT *
 FROM TBL_ROLE
 WHERE ROLE_ID = #{roleID}
+</sql>
+
+<!-- 역할 정보 가져오기 -->
+<select id="getInfo" parameterType="string" resultType="dataobject">
+<include refid="select-by-id"/>
+</select>
+
+<!-- Role 가져오기 -->
+<select id="getRole" parameterType="string" resultMap="roleRow">
+<include refid="select-by-id"/>
 </select>
 
 <!-- 역할 정보 생성 -->
-<insert id="insert" parameterType="role">
+<insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_ROLE (
 	ROLE_ID,
 	ROLE_NAME,
@@ -55,22 +64,22 @@ INSERT INTO TBL_ROLE (
 	UPD_ID,
 	UPD_TIME
 ) VALUES (
-	#{id},
-	#{name},
-	#{description},
-	#{modifiedBy},
+	#{role.id},
+	#{role.name},
+	#{role.description},
+	#{currentUser.id},
 	CURRENT_TIMESTAMP
 )
 </insert>
 
 <!-- 역할 정보 수정 -->
-<update id="update" parameterType="role">
+<update id="update" parameterType="hashmap">
 UPDATE TBL_ROLE SET
-	ROLE_NAME = #{name},
-	DESCRP = #{description},
-	UPD_ID = #{modifiedBy},
+	ROLE_NAME = #{role.name},
+	DESCRP = #{role.description},
+	UPD_ID = #{currentUser.id},
 	UPD_TIME = CURRENT_TIMESTAMP
-WHERE ROLE_ID = #{id}
+WHERE ROLE_ID = #{role.id}
 </update>
 
 <!-- roleIDs의 역할 정보를 삭제 -->

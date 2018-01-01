@@ -40,10 +40,10 @@ function requiredEmpty(whenEmpty) {
 
 $.fn.validate = function(config) {
 	return this.each(function(){
-		var input = $(this),
-			val = input.val();
+		var input = $(this);
 		input.blur(function(){
-			if (config.test(val)) return;
+			var val = input.val();
+			if (isEmpty(val) || config.test(val)) return;
 			if (config.onError)
 				config.onError();
 			else {

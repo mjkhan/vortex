@@ -11,7 +11,7 @@
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getRoles();" type="button">찾기</button>
-		 <button onclick="newRole();" type="button" class="add">추가</button>
+		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeRoles();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -26,7 +26,7 @@
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">ROLE을 찾지 못했습니다.</td></c:set>
 		<c:set var="roleRow"><tr>
 			<td><input name="roleID" value="{roleID}" type="checkbox" /></td>
-				<td><a onclick="getRole('{roleID}')">{roleID}</a></td>
+				<td><a onclick="getInfo('{roleID}')">{roleID}</a></td>
 				<td>{roleName}</td>
 				<td>{updTime}</td>
 			</tr></c:set>
@@ -91,19 +91,10 @@ function showDetail(show) {
 	}
 }
 
-function newRole() {
+function getInfo(roleID) {
 	ajax({
 		url:"<c:url value='/role/info.do'/>",
-		success:function(resp) {
-			$("#roleDetail").html(resp);
-			showDetail();
-		}
-	});
-}
-
-function getRole(roleID) {
-	ajax({
-		url:"<c:url value='/role/info.do'/>?roleID=" + roleID,
+		data:{roleID:roleID},
 		success:function(resp) {
 			$("#roleDetail").html(resp);
 			showDetail();

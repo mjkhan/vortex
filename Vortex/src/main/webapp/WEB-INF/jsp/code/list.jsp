@@ -26,9 +26,11 @@
 <vtx:script type="decl">
 var checkedCodes,
 	currentCodes,
+	getInfo,
 	afterSave;
 
 function getCodes(groupID, start) {
+	setGroupName(groupName(groupID));
 	ajax({
 		url:"<c:url value='/code/list.do'/>"
 	   ,data:{
@@ -38,6 +40,13 @@ function getCodes(groupID, start) {
 	   ,success:setCodeList
 	});
 	currentCodes = function(){getCodes(groupID, start);};
+	getInfo = function(code) {
+		ajax({
+			url:"<c:url value='/code/info.do'/>"
+		   ,data:{groupID:groupID, code:code}
+		   ,success:setDetail
+		});
+	};
 }
 
 function removeCodes() {
@@ -59,16 +68,7 @@ function removeCodes() {
 	});
 }
 
-function getInfo(code) {
-	ajax({
-		url:"<c:url value='/code/info.do'/>"
-	   ,data:{groupID:$("#groupID").val(), code:code}
-	   ,success:setDetail
-	});
-}
-
 function setCodeList(resp) {
-	$("#codeGroup").html(groupName(groupID));
 	$("#codeList").populate({
 		data:resp.codes,
 		tr:function(row){

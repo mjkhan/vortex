@@ -2,10 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="eheader.jsp"/>
-<%	Throwable cause = (Throwable)request.getAttribute("error");
-	pageContext.setAttribute("title", "요청수행 중 오류가 발생했습니다.");
-	pageContext.setAttribute("name", cause.getClass().getName());
-	pageContext.setAttribute("message", cause.getMessage());
+<%	pageContext.setAttribute("title", "요청수행 중 오류가 발생했습니다.");
+	Throwable cause = (Throwable)request.getAttribute("error");
+	if (cause != null) {
+		pageContext.setAttribute("name", cause.getClass().getName());
+		pageContext.setAttribute("message", cause.getMessage());
+	}
 %>
 <c:if test="${!ajax}">
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>

@@ -4,11 +4,11 @@
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="common-codes" style="width:100%; display:flex; flex-flow:wrap;">
 	<div id="codeGroups">
-		<h1>코드 그룹</h1>
+		<h1 style="padding-top:.5em;">코드 그룹</h1>
 		<jsp:include page="/WEB-INF/jsp/code/group/list.jsp"/>
 	</div>
 	<div id="codes">
-		<h1 id="codeGroup"></h1>
+		<h1 id="codeGroup" style="padding-top:.5em;"></h1>
 		<jsp:include page="/WEB-INF/jsp/code/list.jsp"/>
 	</div>
 </div>
@@ -16,6 +16,10 @@
 <vtx:script type="decl">
 function showDetail(show) {
 	if (show == false) {
+		if (afterSave) {
+			afterSave();
+			afterSave = null;
+		};
 		$("#detailInfo").hide();
 		$("#common-codes").fadeIn();
 	} else {
@@ -27,6 +31,10 @@ function showDetail(show) {
 function setDetail(content) {
 	$("#detailInfo").html(content);
 	showDetail();
+}
+
+function setGroupName(name) {
+	$("#codeGroup").html(name);
 }
 </vtx:script>
 <vtx:script type="docReady">

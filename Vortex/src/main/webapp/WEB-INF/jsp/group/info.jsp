@@ -50,7 +50,7 @@ function saveGroup() {
 				<c:if test='${create}'>afterSave = searchGroups;</c:if>
 				<c:if test='${!create}'>afterSave = currentGroups;</c:if>
 				alert("저장됐습니다.");
-				getGroup(resp.groupID || $("#groupID").val());
+				getInfo(resp.groupID || $("#groupID").val());
 			} else {
 				alert("저장하지 못했습니다.");
 			}

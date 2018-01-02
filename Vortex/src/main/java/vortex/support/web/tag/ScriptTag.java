@@ -63,7 +63,7 @@ public class ScriptTag extends VortexTag {
 	}
 	
 	private void setScript(String script) {
-		hreq().setAttribute(type, getScript() + script.trim());
+		hreq().setAttribute(type, getScript() + script);
 	}
 	
 	private void writeScript() throws Exception {

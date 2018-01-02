@@ -48,7 +48,10 @@ function searchGroups(start) {
 		   ,value:value
 		   ,start:start
 		}
-	   ,success:setGroupList
+	   ,success:function(resp) {
+	   		setGroupList(resp);
+	   		setCodeList(resp);
+	   	}
 	});
 	currentGroups = function(){searchGroups(start);};
 }
@@ -84,6 +87,8 @@ function setGroupList(resp) {
 		var found = elementsOf(resp.groups, "GRP_ID", groupID);
 		return found ? found[0].GRP_NAME : "";
 	};
+	setGroupName(groupName(resp.groups.length > 0 ? resp.groups[0].GRP_ID : null));
+	
 	$("#groupList").populate({
 		data:resp.groups
 	   ,tr:function(row){
@@ -106,9 +111,9 @@ function setGroupList(resp) {
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
 		.onChange(function(checked){
 			if (checked)
-				$(".showOnCheck").fadeIn();
+				$("#codeGroups .showOnCheck").fadeIn();
 			else
-				$(".showOnCheck").fadeOut();
+				$("#codeGroups .showOnCheck").fadeOut();
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
 }

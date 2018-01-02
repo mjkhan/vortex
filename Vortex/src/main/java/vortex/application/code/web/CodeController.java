@@ -29,7 +29,7 @@ public class CodeController extends ApplicationController {
 			req.set("start", req.number("start").intValue())
 			   .set("fetch", properties.getInt("fetch"))
 		);
-		ModelAndView mv = new ModelAndView(!req.bool("ajax") ? "code/group/list" : "jsonView")
+		ModelAndView mv = new ModelAndView(!req.bool("ajax") ? "code/common-codes" : "jsonView")
 			.addObject("groups", groups)
 			.addObject("totalGroups", groups.getTotalSize())
 			.addObject("groupStart", req.get("start"))

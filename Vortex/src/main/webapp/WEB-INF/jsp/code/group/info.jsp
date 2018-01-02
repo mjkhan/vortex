@@ -47,7 +47,7 @@ function saveGroup() {
 		},
 		success:function(resp) {
 			if (resp.saved) {
-				<c:if test='${create}'>afterSave = getGroups;</c:if>
+				<c:if test='${create}'>afterSave = searchGroups;</c:if>
 				<c:if test='${!create}'>afterSave = currentGroups;</c:if>
 				alert("저장됐습니다.");
 				getInfo(resp.groupID || $("#groupID").val());

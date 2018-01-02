@@ -1,7 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
+<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
+<div id="searchCodes" style="width:100%;">
 	<div class="inputArea">
+		<select id="groupID" onchange="getCodes();"><c:forEach items="${groups}" var="group">
+			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
+		 </select>
 		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button id="btnRemove" onclick="removeCodes();" type="button" class="showOnCheck">삭제</button>
 	</div>
@@ -23,21 +28,27 @@
 			</tr></c:set>
 		</tbody>
 	</table>
+</div>
+<div id="codeDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
 var checkedCodes,
 	currentCodes,
 	afterSave;
 
-function getCodes(groupID, start) {
+function docTitle(title) {
+	document.title = title ? "Vortex - " + title : "Vortex";
+}
+
+function getCodes() {
 	ajax({
-		url:"<c:url value='/code/list.do'/>"
-	   ,data:{
-	   		groupID:groupID
-	   	   ,start:start
-	   }
-	   ,success:setCodeList
+		url:"<c:url value='/code/list.do'/>",
+		data:{
+			groupID:$("#groupID").val()
+		},
+		success:function(resp) {
+			setCodeList(resp);
+		}
 	});
-	currentCodes = function(){getCodes(groupID, start);};
 }
 
 function removeCodes() {
@@ -59,16 +70,32 @@ function removeCodes() {
 	});
 }
 
+function showDetail(show) {
+	if (show != false) {
+		$("#searchCodes").hide();
+		$("#codeDetail").fadeIn();
+	} else {
+		if (afterSave) {
+			afterSave();
+			afterSave = null;
+		}
+		$("#codeDetail").hide();
+		$("#searchCodes").fadeIn();
+	}
+}
+
 function getInfo(code) {
 	ajax({
-		url:"<c:url value='/code/info.do'/>"
-	   ,data:{groupID:$("#groupID").val(), code:code}
-	   ,success:setDetail
+		url:"<c:url value='/code/info.do'/>",
+		data:{groupID:$("#groupID").val(), code:code},
+		success:function(resp) {
+			$("#codeDetail").html(resp);
+			showDetail();
+		}
 	});
 }
 
 function setCodeList(resp) {
-	$("#codeGroup").html(groupName(groupID));
 	$("#codeList").populate({
 		data:resp.codes,
 		tr:function(row){
@@ -83,26 +110,20 @@ function setCodeList(resp) {
 	checkedCodes = checkbox("input[type='checkbox'][name='code']")
 		.onChange(function(checked){
 			if (checked)
-				$("#codes .showOnCheck").fadeIn();
+				$(".showOnCheck").fadeIn();
 			else
-				$("#codes .showOnCheck").fadeOut();
+				$(".showOnCheck").fadeOut();
 		});
-	checkbox("#codes #toggleChecks").onChange(function(checked){checkedCodes.check(checked);});
+	checkbox("#toggleChecks").onChange(function(checked){checkedCodes.check(checked);});
 	$(".showOnCheck").fadeOut();
-	$("#codes .paging").setPaging({
-	    start:resp.codeStart
-	   ,fetchSize:resp.fetch
-	   ,totalSize:resp.totalCodes
-	   ,func:"getCodes"
-	});
 }
 </vtx:script>
 <vtx:script type="docReady">
+	docTitle("공통 코드");
+	subTitle("공통 코드");
 	setCodeList({
 		codes:<vtx:json data="${codes}" mapper="${objectMapper}"/>
-	   ,totalCodes:${totalCodes}
-	   ,codeStart:${codeStart}
-	   ,fetch:${fetch}
 	});
 	currentCodes = getCodes;
 </vtx:script>
+<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

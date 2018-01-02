@@ -7,6 +7,7 @@
 <script src="<c:url value='/asset/js/jquery-3.2.1.min.js'/>" type="text/javascript"></script>
 <script src="<c:url value='/asset/js/base.js'/>" type="text/javascript"></script>
 <script src="<c:url value='/asset/js/page.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/asset/js/vortex.js'/>" type="text/javascript"></script>
 <vtx:script type="src" write="true"/>
 <script type="text/javascript">
 var wctx = {

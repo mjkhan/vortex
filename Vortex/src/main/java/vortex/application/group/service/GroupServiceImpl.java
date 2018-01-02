@@ -14,15 +14,12 @@ import vortex.support.data.DataObject;
 public class GroupServiceImpl extends ApplicationService implements GroupService {
 	@Resource(name="genericGroup")
 	private GroupMapper genericGroup;
-	@Override
-	public DataObject getGroups(DataObject req) {
-		BoundedList<DataObject> groups = genericGroup.search(req);
-		return dataobject()
-			.set("groups", groups)
-			.set("more", groups.hasNext())
-			.set("next", groups.getEnd() + 1);
-	}
 	
+	@Override
+	public BoundedList<DataObject> searchGroups(DataObject req) {
+		return genericGroup.search(req);
+	}
+
 	@Override
 	public DataObject getInfo(String groupID) {
 		return genericGroup.getInfo(groupID);

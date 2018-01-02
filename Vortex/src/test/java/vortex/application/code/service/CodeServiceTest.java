@@ -34,25 +34,27 @@ public class CodeServiceTest extends VortexTest {
 	
 	@Test
 	public void createGroup() {
-		String groupID = codeService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
-		Group group = codeService.getGroup(dataObject().set("groupID", groupID)).value("group");
-		Assert.assertNotNull(group);
-		Assert.assertEquals(groupID, group.getId());
+		Group group = newGroup(0);
+		codeService.create(group);
+		Group saved = codeService.getGroup(group.getId());
+		Assert.assertNotNull(saved);
+		Assert.assertEquals(group.getId(), saved.getId());
 	}
 	
 	@Test
 	public void updateGroup() {
-		String groupID = codeService.createGroup(dataObject().set("group", newGroup(0))).string("groupID");
-		Group group = codeService.getGroup(dataObject().set("groupID", groupID)).value("group");
-		Assert.assertNotNull(group);
-		Assert.assertEquals(groupID, group.getId());
+		Group group = newGroup(0);
+		codeService.create(group);
+		Group saved = codeService.getGroup(group.getId());
+		Assert.assertNotNull(saved);
+		Assert.assertEquals(saved.getId(), group.getId());
 		
 		String name = "new group name";
-		group.setName(name);
-		codeService.updateGroup(dataObject().set("group", group));
-		group = codeService.getGroup(dataObject().set("groupID", groupID)).value("group");
-		Assert.assertNotNull(group);
-		Assert.assertEquals(name, group.getName());
+		saved.setName(name);
+		codeService.update(saved);
+		saved = codeService.getGroup(group.getId());
+		Assert.assertNotNull(saved);
+		Assert.assertEquals(name, saved.getName());
 	}
 	
 	@Test

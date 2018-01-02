@@ -27,17 +27,17 @@ function requiredEmpty(whenEmpty) {
 				whenEmpty(input);
 			else {
 				alert(labelFor(input) + "을(를) 입력하십시오.");
-/*
-				var label = $("label[for='" + input.attr("id") + "']").html();
-				alert(label + "을(를) 입력하십시오.");
-*/
 			}
 			input.focus();
 		}
 	});
 	return empty;
 }
-
+/**config = {
+ * 	test:function(v){...}
+ * ,onError:function(input){...} //Optional
+ * }
+ */
 $.fn.validate = function(config) {
 	return this.each(function(){
 		var input = $(this);
@@ -45,7 +45,7 @@ $.fn.validate = function(config) {
 			var val = input.val();
 			if (isEmpty(val) || config.test(val)) return;
 			if (config.onError)
-				config.onError();
+				config.onError(input);
 			else {
 				var label = labelFor(input);
 				if (label)
@@ -155,7 +155,6 @@ $.fn.message = function(msg) {
  *  onclose:function
  * }
  */
-
 var dialog = {
 	container:null,
 	onclose:null,
@@ -303,8 +302,11 @@ $.fn.paginate = function(config) {
 	return this.each(function(){
 		var tag = paginate(config),
 			container = $(this);
-		container.html(tag);
-		if (!tag && config.hideIfEmpty != false)
-			container.hide();
+		if (tag)
+			container.html(tag).show();
+		else {
+			if (config.hideIfEmpty != false)
+				container.hide();
+		}
 	});
 }

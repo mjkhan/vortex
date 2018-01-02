@@ -30,7 +30,7 @@ public class GroupMapperTest extends VortexTest {
 		String user = "test user";
 		group.setCreatedBy(user);
 		group.setModifiedBy(user);
-		id = groupMapper.create(group);
+		groupMapper.create(group);
 		
 		Group loaded = groupMapper.getGroup(id);
 		Assert.assertEquals(name, loaded.getName());
@@ -46,7 +46,8 @@ public class GroupMapperTest extends VortexTest {
 		String user = "test user";
 		group.setCreatedBy(user);
 		group.setModifiedBy(user);
-		String id = groupMapper.create(group);
+		groupMapper.create(group);
+		String id = group.getId();
 		
 		Group loaded = groupMapper.getGroup(id);
 		Assert.assertEquals(name, loaded.getName());
@@ -62,7 +63,8 @@ public class GroupMapperTest extends VortexTest {
 		String user = "test user";
 		group.setCreatedBy(user);
 		group.setModifiedBy(user);
-		String id = groupMapper.create(group);
+		groupMapper.create(group);
+		String id = group.getId();
 		
 		Group loaded = groupMapper.getGroup(id);
 		Assert.assertEquals(name, loaded.getName());
@@ -85,13 +87,15 @@ public class GroupMapperTest extends VortexTest {
 		group0.setName("테스트 그룹0");
 		group0.setCreatedBy(user);
 		group0.setModifiedBy(user);
-		String id0 = groupMapper.create(group0);
+		groupMapper.create(group0);
+		String id0 = group0.getId();
 
 		Group group1 = new Group();
 		group1.setName("테스트 그룹0");
 		group1.setCreatedBy(user);
 		group1.setModifiedBy(user);
-		String id1 = groupMapper.create(group1);
+		groupMapper.create(group1);
+		String id1 = group1.getId();
 		
 		groupMapper.setStatus(Status.INACTIVE.code(), id0);
 		group0 = groupMapper.getGroup(id0);
@@ -116,13 +120,15 @@ public class GroupMapperTest extends VortexTest {
 		group0.setName("테스트 그룹0");
 		group0.setCreatedBy(user);
 		group0.setModifiedBy(user);
-		String id0 = groupMapper.create(group0);
+		groupMapper.create(group0);
+		String id0 = group0.getId();
 
 		Group group1 = new Group();
 		group1.setName("테스트 그룹0");
 		group1.setCreatedBy(user);
 		group1.setModifiedBy(user);
-		String id1 = groupMapper.create(group1);
+		groupMapper.create(group1);
+		String id1 = group1.getId();
 		
 		groupMapper.remove(id0, id1);
 		
@@ -140,13 +146,15 @@ public class GroupMapperTest extends VortexTest {
 		group0.setName("테스트 그룹0");
 		group0.setCreatedBy(user);
 		group0.setModifiedBy(user);
-		String id0 = groupMapper.create(group0);
+		groupMapper.create(group0);
+		String id0 = group0.getId();
 
 		Group group1 = new Group();
 		group1.setName("테스트 그룹0");
 		group1.setCreatedBy(user);
 		group1.setModifiedBy(user);
-		String id1 = groupMapper.create(group1);
+		groupMapper.create(group1);
+		String id1 = group1.getId();
 		
 		String[] groupIDs = {id0, id1};
 		
@@ -164,13 +172,15 @@ public class GroupMapperTest extends VortexTest {
 		group0.setName("테스트 그룹0");
 		group0.setCreatedBy(user);
 		group0.setModifiedBy(user);
-		String id0 = groupMapper.create(group0);
+		groupMapper.create(group0);
+		String id0 = group0.getId();
 
 		Group group1 = new Group();
 		group1.setName("테스트 그룹0");
 		group1.setCreatedBy(user);
 		group1.setModifiedBy(user);
-		String id1 = groupMapper.create(group1);
+		groupMapper.create(group1);
+		String id1 = group1.getId();
 		
 		String[] groupIDs = {id0, id1};
 		String memberType = "010",
@@ -197,13 +207,15 @@ public class GroupMapperTest extends VortexTest {
 		group0.setName("테스트 그룹0");
 		group0.setCreatedBy(user);
 		group0.setModifiedBy(user);
-		String id0 = groupMapper.create(group0);
+		groupMapper.create(group0);
+		String id0 = group0.getId();
 
 		Group group1 = new Group();
 		group1.setName("테스트 그룹0");
 		group1.setCreatedBy(user);
 		group1.setModifiedBy(user);
-		String id1 = groupMapper.create(group1);
+		groupMapper.create(group1);
+		String id1 = group1.getId();
 		
 		String[] groupIDs = {id0, id1};
 		String memberType = "010",

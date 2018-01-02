@@ -1,10 +1,11 @@
 package vortex.application.group.service;
 
 import vortex.application.group.Group;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 public interface GroupService {
-	public DataObject getGroups(DataObject req);
+	public BoundedList<DataObject> searchGroups(DataObject req);
 	
 	public DataObject getInfo(String groupID);
 	

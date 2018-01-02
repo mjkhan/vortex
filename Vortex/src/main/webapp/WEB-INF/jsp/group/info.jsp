@@ -47,7 +47,7 @@ function saveGroup() {
 		},
 		success:function(resp) {
 			if (resp.saved) {
-				<c:if test='${create}'>afterSave = getGroups;</c:if>
+				<c:if test='${create}'>afterSave = searchGroups;</c:if>
 				<c:if test='${!create}'>afterSave = currentGroups;</c:if>
 				alert("저장됐습니다.");
 				getGroup(resp.groupID || $("#groupID").val());
@@ -57,7 +57,8 @@ function saveGroup() {
 		}
 	});
 }
-<c:if test="${create}">$("#groupID").focus();</c:if>
-<c:if test="${!create}">$("#groupName").focus();</c:if>
-$(".infoForm input:not([readonly])").onEnterPress(saveGroup);
+$(function(){
+	$("#groupName").focus();
+	$(".infoForm input:not([readonly])").onEnterPress(saveGroup);
+});
 </script>

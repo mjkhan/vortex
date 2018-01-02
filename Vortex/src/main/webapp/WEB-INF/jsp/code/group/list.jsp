@@ -32,9 +32,7 @@
 			</tr></c:set>
 		</tbody>
 	</table>
-	<div class="more">
-		<button type="button">더 보기</button>
-	</div>
+	<div class="paging"></div>
 </div>
 <div id="groupDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
@@ -48,15 +46,13 @@ function getGroups(start) {
 	if (value && !field)
 		return alert("검색조건을 선택하십시오.");
 	ajax({
-		url:"<c:url value='/code/group.do'/>",
-		data:{
+		url:"<c:url value='/code/group/list.do'/>"
+	   ,data:{
 			field:field,
 			value:value,
-			start:start || 0
-		},
-		success:function(resp) {
-			setGroupList(resp);
+			start:start
 		}
+	   ,success:setGroupList
 	});
 	currentGroups = function(){getGroups(start);};
 }
@@ -102,30 +98,25 @@ function getInfo(groupID) {
 	});
 }
 
-function setGroupList(resp, start) {
-	var append = start > 0;
+function setGroupList(resp) {
 	$("#groupList").populate({
-		data:resp.groups,
-		tr:function(row){
+		data:resp.groups
+	   ,tr:function(row){
 			return "${vtx:jstring(groupRow)}"
 				.replace(/{groupID}/g, row.GRP_ID)
 				.replace(/{groupName}/g, row.GRP_NAME)
 				.replace(/{insTime}/g, row.INS_TIME);
-		},
-		ifEmpty:"${vtx:jstring(notFound)}",
-		append:append
+		}
+	   ,ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
-	if (!append)
-		$(".showOnCheck").fadeOut();
-	if (resp.more) {
-		$(".more button")
-			.removeAttr("onclick")
-			.attr("onclick", "getGroups(" + resp.next + ")");
-		$(".more").show();
-	} else {
-		$(".more").hide();
-	}
+	$(".showOnCheck").fadeOut();
+	$(".paging").setPaging({
+	    start:resp.groupStart
+	   ,fetchSize:resp.fetch
+	   ,totalSize:resp.totalGroups
+	   ,func:"getGroups"
+	});
 	
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
 		.onChange(function(checked){
@@ -142,10 +133,11 @@ function setGroupList(resp, start) {
 	subTitle("코드그룹 정보");
 	$("#value").onEnterPress(getGroups);
 	setGroupList({
-		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
-		more:${more},
-		next:${next}
-	}, 0);
+		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>
+	   ,totalGroups:${totalGroups}
+	   ,groupStart:${groupStart}
+	   ,fetch:${fetch}
+	});
 	currentGroups = getGroups;
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

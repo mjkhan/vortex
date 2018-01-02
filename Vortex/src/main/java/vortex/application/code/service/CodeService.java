@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import vortex.application.group.Group;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 public interface CodeService {
-	public DataObject searchGroups(DataObject req);
+	public BoundedList<DataObject> searchGroups(DataObject req);
 	
 	public DataObject getInfo(String groupID);
 	
@@ -21,7 +22,7 @@ public interface CodeService {
 	
 	public int deleteGroups(String... groupIDs);
 	
-	public DataObject getCodes(DataObject req);
+	public BoundedList<DataObject> getCodes(DataObject req);
 	
 	public Map<String, List<DataObject>> getCodesOf(String... groupIDs);
 	

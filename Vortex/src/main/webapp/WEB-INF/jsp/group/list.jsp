@@ -10,8 +10,8 @@
 			<option value="GRP_NAME">이름</option>
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
-		 <button onclick="getGroups();" type="button">찾기</button>
-		 <button onclick="newGroup();" type="button" class="add">추가</button>
+		 <button onclick="searchGroups();" type="button">찾기</button>
+		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeGroups();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -26,15 +26,13 @@
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">데이터 그룹을 찾지 못했습니다.</td></c:set>
 		<c:set var="groupRow"><tr>
 			<td><input name="groupID" value="{groupID}" type="checkbox" /></td>
-				<td><a onclick="getGroup('{groupID}')">{groupID}</a></td>
+				<td><a onclick="getInfo('{groupID}')">{groupID}</a></td>
 				<td>{groupName}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
 		</tbody>
 	</table>
-	<div class="more">
-		<button type="button">더 보기</button>
-	</div>
+	<div class="paging"></div>
 </div>
 <div id="groupDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
@@ -42,32 +40,60 @@ var checkedGroups,
 	currentGroups,
 	afterSave;
 
-function getGroups(start) {
-	var field = $("#field").val(),
-		value = $("#value").val();
+function searchGroups(start) {
+	var field = $("#field").val()
+	   ,value = $("#value").val();
 	if (value && !field)
 		return alert("검색조건을 선택하십시오.");
 	ajax({
-		url:"<c:url value='/group/list.do'/>",
-		data:{
-			field:field,
-			value:value,
-			start:start || 0
-		},
-		success:function(resp) {
-			setGroupList(resp);
+		url:"<c:url value='/group/list.do'/>"
+	   ,data:{
+			field:field
+		   ,value:value
+		   ,start:start
 		}
+	   ,success:setGroupList
 	});
-	currentGroups = function(){getGroups(start);};
+	currentGroups = function(){searchGroups(start);};
+}
+
+function setGroupList(resp) {
+	$("#groupList").populate({
+		data:resp.groups
+	   ,tr:function(row){
+			return "${vtx:jstring(groupRow)}"
+				.replace(/{groupID}/g, row.GRP_ID)
+				.replace(/{groupName}/g, row.GRP_NAME)
+				.replace(/{insTime}/g, row.INS_TIME);
+		}
+	   ,ifEmpty:"${vtx:jstring(notFound)}"
+	});
+
+	$(".showOnCheck").fadeOut();
+	$(".paging").setPaging({
+		start:resp.start
+	   ,fetchSize:resp.fetch
+	   ,totalSize:resp.totalSize
+	   ,func:"searchGroups"
+	});
+
+	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
+		.onChange(function(checked){
+			if (checked)
+				$(".showOnCheck").fadeIn();
+			else
+				$(".showOnCheck").fadeOut();
+		});
+	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
 }
 
 function removeGroups() {
 	if (!confirm("선택한 그룹을 삭제하시겠습니까?")) return;
 
 	ajax({
-		url:"<c:url value='/group/delete.do'/>",
-		data:{groupID:checkedGroups.values().join(",")},
-		success:function(resp) {
+		url:"<c:url value='/group/delete.do'/>"
+	   ,data:{groupID:checkedGroups.values().join(",")}
+	   ,success:function(resp) {
 			if (resp.saved) {
 				currentGroups();
 			} else {
@@ -91,70 +117,27 @@ function showDetail(show) {
 	}
 }
 
-function newGroup() {
+function getInfo(groupID) {
 	ajax({
-		url:"<c:url value='/group/info.do'/>",
-		success:function(resp) {
+		url:"<c:url value='/group/info.do'/>"
+	   ,data:{groupID:groupID}
+	   ,success:function(resp) {
 			$("#groupDetail").html(resp);
 			showDetail();
 		}
 	});
-}
-
-function getGroup(groupID) {
-	ajax({
-		url:"<c:url value='/group/info.do'/>?groupID=" + groupID,
-		success:function(resp) {
-			$("#groupDetail").html(resp);
-			showDetail();
-		}
-	});
-}
-
-function setGroupList(resp, start) {
-	var append = start > 0;
-	$("#groupList").populate({
-		data:resp.groups,
-		tr:function(row){
-			return "${vtx:jstring(groupRow)}"
-				.replace(/{groupID}/g, row.GRP_ID)
-				.replace(/{groupName}/g, row.GRP_NAME)
-				.replace(/{insTime}/g, row.INS_TIME);
-		},
-		ifEmpty:"${vtx:jstring(notFound)}",
-		append:append
-	});
-
-	if (!append)
-		$(".showOnCheck").fadeOut();
-	if (resp.more) {
-		$(".more button")
-			.removeAttr("onclick")
-			.attr("onclick", "getGroups(" + resp.next + ")");
-		$(".more").show();
-	} else {
-		$(".more").hide();
-	}
-	
-	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
-		.onChange(function(checked){
-			if (checked)
-				$(".showOnCheck").fadeIn();
-			else
-				$(".showOnCheck").fadeOut();
-		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
 }
 </vtx:script>
 <vtx:script type="docReady">
 	docTitle("데이터 그룹 정보");
 	subTitle("데이터 그룹 정보");
-	$("#value").onEnterPress(getGroups);
+	$("#value").onEnterPress(searchGroups);
 	setGroupList({
-		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
-		more:${more},
-		next:${next}
-	}, 0);
-	currentGroups = getGroups;
+		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>
+	   ,totalSize:${totalSize}
+	   ,start:${start}
+	   ,fetch:${fetch}
+	});
+	currentGroups = searchGroups;
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

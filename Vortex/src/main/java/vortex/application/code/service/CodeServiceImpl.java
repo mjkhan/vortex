@@ -19,12 +19,8 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	private GroupMapper codeGroup;
 	
 	@Override
-	public DataObject searchGroups(DataObject req) {
-		BoundedList<DataObject> groups = codeGroup.search(req);
-		return dataobject()
-			.set("groups", groups)
-			.set("more", groups.hasNext())
-			.set("next", groups.getEnd() + 1);
+	public BoundedList<DataObject> searchGroups(DataObject req) {
+		return codeGroup.search(req);
 	}
 	
 	@Override
@@ -68,10 +64,8 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	}
 
 	@Override
-	public DataObject getCodes(DataObject req) {
-		
-		return dataobject()
-			.set("codes", codeMapper.getCodes(req));
+	public BoundedList<DataObject> getCodes(DataObject req) {
+		return codeMapper.getCodes(req);
 	}
 
 	@Override

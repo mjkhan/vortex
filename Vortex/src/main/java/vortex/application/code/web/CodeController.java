@@ -1,10 +1,8 @@
 package vortex.application.code.web;
 
-import java.util.List;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,21 +13,37 @@ import vortex.application.ApplicationController;
 import vortex.application.code.service.Code;
 import vortex.application.code.service.CodeService;
 import vortex.application.group.Group;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Controller
 @RequestMapping("/code")
 public class CodeController extends ApplicationController {
-	@Resource(name="codeService")
+	@Autowired
 	private CodeService codeService;
 	
 	@RequestMapping("/group/list.do")
 	public ModelAndView searchGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		req.set("start", req.number("start").intValue())
-		   .set("fetch", properties.getInt("fetch"));
-		return new ModelAndView(!req.bool("ajax") ? "code/group/list" : "jsonView")
-			.addAllObjects(codeService.searchGroups(req)); 
+		BoundedList<DataObject> groups = codeService.searchGroups(
+			req.set("start", req.number("start").intValue())
+			   .set("fetch", properties.getInt("fetch"))
+		);
+		ModelAndView mv = new ModelAndView(!req.bool("ajax") ? "code/group/list" : "jsonView")
+			.addObject("groups", groups)
+			.addObject("totalGroups", groups.getTotalSize())
+			.addObject("groupStart", req.get("start"))
+			.addObject("fetch", req.get("fetch"));
+		if (!groups.isEmpty()) {
+			BoundedList<DataObject> codes = codeService.getCodes(
+				req.set("groupID", groups.get(0).get("grp_id"))
+				   .set("start", 0)
+			);
+			mv.addObject("codes", codes)
+			  .addObject("totalCodes", codes.getTotalSize())
+			  .addObject("codeStart", 0);
+		}
+		return mv; 
 	}
 	
 	@RequestMapping("/group/info.do")
@@ -60,6 +74,15 @@ public class CodeController extends ApplicationController {
 	@RequestMapping("/list.do")
 	public ModelAndView getCodes(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
+		BoundedList<DataObject> codes = codeService.getCodes(
+			req.set("start", req.number("start").intValue())
+			   .set("fetch",  properties.getInt("fetch"))
+		);
+		return new ModelAndView("jsonView")
+			.addObject("codes", codes)
+			.addObject("totalCodes", codes.getTotalSize())
+			.addObject("codeStart", req.get("start"));
+/*
 		String groupID = req.string("groupID");
 		boolean init = isEmpty(groupID);
 		ModelAndView mav = new ModelAndView(init ? "code/list" : "jsonView");
@@ -72,6 +95,7 @@ public class CodeController extends ApplicationController {
 			}
 		}
 		return mav.addObject("codes", codeService.getCodes(req).value("codes"));
+*/		
 	}
 	
 	@RequestMapping("/info.do")

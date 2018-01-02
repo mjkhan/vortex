@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import vortex.application.ApplicationController;
 import vortex.application.group.Group;
 import vortex.application.group.service.GroupService;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Controller
@@ -21,12 +22,17 @@ public class GroupController extends ApplicationController {
 	private GroupService groupService;
 	
 	@RequestMapping("/list.do")
-	public ModelAndView getGroups(HttpServletRequest hreq) {
+	public ModelAndView searchGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		req.set("start", req.number("start").intValue())
-		   .set("fetch", properties.getInt("fetch"));
+		BoundedList<DataObject> groups = groupService.searchGroups(
+			req.set("start", req.number("start").intValue())
+			   .set("fetch", properties.getInt("fetch"))
+		);
 		return new ModelAndView(!req.bool("ajax") ? "group/list" : "jsonView")
-			.addAllObjects(groupService.getGroups(req)); 
+				.addObject("groups", groups)
+				.addObject("totalSize", groups.getTotalSize())
+				.addObject("start", req.get("start"))
+				.addObject("fetch", req.get("fetch"));
 	}
 	
 	@RequestMapping("/info.do")

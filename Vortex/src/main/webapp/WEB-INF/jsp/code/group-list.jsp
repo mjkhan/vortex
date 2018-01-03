@@ -109,7 +109,7 @@ function setGroupList(resp) {
 	    start:resp.groupStart
 	   ,fetchSize:resp.fetch
 	   ,totalSize:resp.totalGroups
-	   ,func:"searchGroups"
+	   ,func:"searchGroups({index})"
 	});
 	
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")

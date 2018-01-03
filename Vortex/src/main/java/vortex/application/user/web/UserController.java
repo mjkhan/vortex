@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import vortex.application.ApplicationController;
 import vortex.application.User;
 import vortex.application.user.service.UserService;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Controller
@@ -40,7 +41,13 @@ public class UserController extends ApplicationController {
 		DataObject req = request(hreq);
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
-		return new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView", userService.search(req));
+		BoundedList<DataObject> users = userService.search(req);
+		return new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView")
+			.addObject("users", users)
+			.addObject("totalSize", users.getTotalSize())
+			.addObject("fetchSize", req.get("fetch"))
+			.addObject("more", users.hasNext())
+			.addObject("next", users.getEnd() + 1);
 	}
 	
 	@RequestMapping("/info.do")

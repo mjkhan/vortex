@@ -68,24 +68,24 @@ WHERE GRP_TYPE = #{group.type}
 </selectKey>
 INSERT INTO TBL_GROUP (
 	GRP_TYPE
-  , GRP_ID
-  , GRP_NAME
-  , DESCRP
-  , INS_ID
-  , INS_TIME
-  , UPD_ID
-  , UPD_TIME
-  , STATUS
+   ,GRP_ID
+   ,GRP_NAME
+   ,DESCRP
+   ,INS_ID
+   ,INS_TIME
+   ,UPD_ID
+   ,UPD_TIME
+   ,STATUS
 ) VALUES (
 	#{group.type}
-  , #{group.id}
-  , #{group.name}
-  , #{group.description}
-  , #{currentUser.id}
-  , CURRENT_TIMESTAMP
-  , #{currentUser.id}
-  , CURRENT_TIMESTAMP
-  , '001'
+   ,#{group.id}
+   ,#{group.name}
+   ,#{group.description}
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,'001'
 )
 </insert>
 
@@ -93,9 +93,9 @@ INSERT INTO TBL_GROUP (
 <update id="update" parameterType="hashmap">
 UPDATE TBL_GROUP SET
 	GRP_NAME = #{group.name}
-  , DESCRP = #{group.description}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,DESCRP = #{group.description}
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE GRP_TYPE = #{group.type}
 AND GRP_ID = #{group.id}
 </update>
@@ -104,8 +104,8 @@ AND GRP_ID = #{group.id}
 <update id="setStatus" parameterType="hashmap">
 UPDATE TBL_GROUP SET
 	STATUS = #{status}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE GRP_TYPE = #{groupType}
 <if test="groupIDs != null">
 AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)

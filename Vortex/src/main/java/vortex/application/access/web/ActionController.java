@@ -26,15 +26,21 @@ public class ActionController extends ApplicationController {
 	@RequestMapping("/group/list.do")
 	public ModelAndView getGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		req.set("start", req.number("start").intValue())
-		   .set("fetch", properties.getInt("fetch"));
-		return new ModelAndView(!req.bool("ajax") ? "action/group/list" : "jsonView")
-			.addAllObjects(actionService.getGroups(req)); 
+		List<DataObject> groups = actionService.getGroups(
+			req.set("start", req.number("start").intValue())
+			   .set("fetch", properties.getInt("fetch"))
+		);
+		ModelAndView mv = new ModelAndView(!req.bool("ajax") ? "action/actions" : "jsonView")
+			.addObject("groups", groups);
+		if (!groups.isEmpty()) {
+			mv.addObject("actions", actionService.getActions(groups.get(0).string("grp_id")));
+		}
+		return mv;
 	}
 	
 	@RequestMapping("/group/info.do")
 	public ModelAndView getGroupInfo(@RequestParam(required=false) String groupID) {
-		return new ModelAndView("action/group/info")
+		return new ModelAndView("action/group-info")
 			.addObject("group", actionService.getGroupInfo(groupID)); 
 	}
 	
@@ -58,34 +64,23 @@ public class ActionController extends ApplicationController {
 	}
 	
 	@RequestMapping("/select.do")
-	public ModelAndView select(HttpServletRequest hreq) {
-		return search(hreq, "action/select");
+	public ModelAndView select(@RequestParam(required=false) String groupID) {
+		return search(groupID, isEmpty(groupID) ? "action/select" : "jsonView");
 	}
 	
 	@RequestMapping("/list.do")
-	public ModelAndView getActions(HttpServletRequest hreq) {
-		return search(hreq, "action/list");
+	public ModelAndView getActions(@RequestParam(required=false) String groupID) {
+		return search(groupID, "jsonView");
 	}
 
-	private ModelAndView search(HttpServletRequest hreq, String initView) {
-		DataObject req = request(hreq);
-		String groupID = req.string("groupID");
-		boolean init = isEmpty(groupID);
-		ModelAndView mav = new ModelAndView(init ? initView : "jsonView");
-		if (init) {
-			List<DataObject> groups = actionService.getGroups(req).value("groups");
-			mav.addObject("groups", groups);
-			if (!groups.isEmpty()) {
-				groupID = groups.get(0).string("grp_id");
-				req.set("groupID", groupID);
-			}
-		}
-		return mav.addObject("actions", actionService.getActions(req).value("actions"));
+	private ModelAndView search(String groupID, String viewName) {
+		ModelAndView mav = new ModelAndView(viewName);
+		return mav.addObject("actions", actionService.getActions(groupID));
 	}
 	
 	@RequestMapping("/info.do")
 	public ModelAndView getInfo(@RequestParam(required=false) String actionID) {
-		return new ModelAndView("action/info")
+		return new ModelAndView("action/action-info")
 			.addObject("action", actionService.getInfo(actionID));
 	}
 	

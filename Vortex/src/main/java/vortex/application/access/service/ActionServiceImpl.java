@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import vortex.application.ApplicationService;
 import vortex.application.group.Group;
 import vortex.application.group.GroupMapper;
-import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
 
@@ -25,14 +24,16 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private RoleMemberMapper roleMemberMapper;
 
 	@Override
-	public DataObject getGroups(DataObject req) {
-		BoundedList<DataObject> groups = actionGroup.search(req);
+	public List<DataObject> getGroups(DataObject req) {
+		return actionGroup.search(req);
+/*		
 		return dataobject()
 			.set("groups", groups)
 			.set("totalSize", groups.getTotalSize())
 			.set("fetchSize", groups.getFetchSize())
 			.set("more", groups.hasNext())
 			.set("next", groups.getEnd() + 1);
+*/		
 	}
 
 	@Override
@@ -77,10 +78,8 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 
 	@Override
-	public DataObject getActions(DataObject req) {
-		String groupID = req.string("groupID");
-		return dataobject()
-			.set("actions", actionMapper.getActions(groupID));
+	public List<DataObject> getActions(String groupID) {
+		return actionMapper.getActions(groupID);
 	}
 
 	@Override

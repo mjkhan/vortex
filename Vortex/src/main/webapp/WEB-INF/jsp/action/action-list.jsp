@@ -1,13 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
-<div id="searchActions" style="width:100%;">
 	<div class="inputArea">
-		<select id="groupID" onchange="getActions();"><c:forEach items="${groups}" var="group">
-			<option value="${group.grp_id}">${group.grp_name}</option></c:forEach>
-		 </select>
-		 <button onclick="getInfo();" type="button" class="add">추가</button>
+		 <button onclick="getInfo();" type="button">추가</button>
 		 <button onclick="removeActions();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -23,27 +18,22 @@
 			<c:set var="actionRow"><tr>
 				<td><input name="actionID" value="{actionID}" type="checkbox" /></td>
 				<td><a onclick="getInfo('{actionID}')">{actionName}</a></td>
-				<td>{actionPath}</td>
+				<td><a href="{actionUrl}">{actionPath}</a></td>
 				<td>{updTime}</td>
 			</tr></c:set>
 		</tbody>
 	</table>
-</div>
-<div id="actionDetail" style="padding:1em 0;"></div>
 <vtx:script type="decl">
 var checkedActions,
-	currentActions,
-	afterSave;
+	currentActions;
 
 function getActions() {
 	ajax({
 		url:"<c:url value='/action/list.do'/>",
 		data:{
-			groupID:$("#groupID").val()
+			groupID:currentGroup.GRP_ID
 		},
-		success:function(resp) {
-			setActionList(resp);
-		}
+		success:setActionList
 	});
 }
 
@@ -53,7 +43,7 @@ function removeActions() {
 	ajax({
 		url:"<c:url value='/action/delete.do'/>",
 		data:{
-			groupID:$("#groupID").val(),
+			groupID:currentGroup.GRP_ID,
 			actionID:checkedActions.values().join(",")
 		},
 		success:function(resp) {
@@ -66,29 +56,14 @@ function removeActions() {
 	});
 }
 
-function showList(show) {
-	if (show == false)
-		$("#searchActions").hide();
-	else
-		$("#searchActions").fadeIn();
-}
-
-function closeAction() {
-	if (afterSave) {
-		afterSave();
-		afterSave = null;
-	}
-	$("#actionDetail").hide();
-	showList();
-}
-
 function getInfo(actionID) {
 	ajax({
-		url:"<c:url value='/action/info.do'/>?" + toQuery({groupID:$("#groupID").val(), actionID:actionID}),
-		success:function(resp) {
-			showList(false);
-			$("#actionDetail").html(resp).fadeIn();
-		}
+		url:"<c:url value='/action/info.do'/>"
+	   ,data:{
+	   		groupID:currentGroup.GRP_ID
+	   	   ,actionID:actionID
+	    }
+	   ,success:setDetail
 	});
 }
 
@@ -100,28 +75,26 @@ function setActionList(resp) {
 				.replace(/{actionID}/g, row.ACT_ID)
 				.replace(/{actionName}/g, row.ACT_NAME)
 				.replace(/{actionPath}/g, row.ACT_PATH)
+				.replace(/{actionUrl}/g, wctx.path + row.ACT_PATH)
 				.replace(/{updTime}/g, row.UPD_TIME);
 		},
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
-	checkedActions = checkbox("input[type='checkbox'][name='actionID']")
+	checkedActions = checkbox("#actions input[type='checkbox'][name='actionID']")
 		.onChange(function(checked){
 			if (checked)
-				$(".showOnCheck").fadeIn();
+				$("#actions .showOnCheck").fadeIn();
 			else
-				$(".showOnCheck").fadeOut();
+				$("#actions .showOnCheck").fadeOut();
 		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedActions.check(checked);});
-	$(".showOnCheck").fadeOut();
+	checkbox("#actions #toggleChecks").onChange(function(checked){checkedActions.check(checked);});
+	$("#actions .showOnCheck").fadeOut();
 }
 </vtx:script>
 <vtx:script type="docReady">
-	docTitle("액션 정보");
-	subTitle("액션 정보");
 	setActionList({
 		actions:<vtx:json data="${actions}" mapper="${objectMapper}"/>
 	});
 	currentActions = getActions;
 </vtx:script>
-<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

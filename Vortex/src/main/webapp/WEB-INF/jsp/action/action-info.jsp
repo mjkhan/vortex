@@ -29,7 +29,7 @@
 </table>
 <div class="inputArea">
 	<button onclick="saveAction();" type="button">저장</button>
-	<button onclick="closeAction();" type="button">닫기</button>
+	<button onclick="showDetail(false);" type="button">닫기</button>
 </div>
 <script type="text/javascript">
 function saveAction() {
@@ -38,7 +38,7 @@ function saveAction() {
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/action/create.do'/></c:if><c:if test='${!create}'><c:url value='/action/update.do'/></c:if>",
 		data:{
-			groupID:$("#groupID").val(),
+			groupID:currentGroup.GRP_ID,
 			id:$("#actionID").val(),
 			name:$("#actionName").val(),
 			path:$("#actionPath").val(),

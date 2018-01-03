@@ -1,10 +1,11 @@
 package vortex.application.user.service;
 
 import vortex.application.User;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 public interface UserService {
-	public DataObject search(DataObject req);
+	public BoundedList<DataObject> search(DataObject req);
 	
 	public DataObject getInfo(String userID);
 	

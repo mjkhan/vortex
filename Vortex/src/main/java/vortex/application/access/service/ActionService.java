@@ -1,11 +1,13 @@
 package vortex.application.access.service;
 
+import java.util.List;
+
 import vortex.application.group.Group;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
 
 public interface ActionService {
-	public DataObject getGroups(DataObject req);
+	public List<DataObject> getGroups(DataObject req);
 	
 	public DataObject getGroupInfo(String groupID);
 	
@@ -23,7 +25,7 @@ public interface ActionService {
 	
 	public int deleteGroups(String... groupIDs);
 	
-	public DataObject getActions(DataObject req);
+	public List<DataObject> getActions(String groupID);
 	
 	public DataObject getInfo(String actionID);
 	

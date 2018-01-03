@@ -51,33 +51,33 @@ FROM TBL_ACTION;
 </selectKey>
 INSERT INTO TBL_ACTION (
 	ACT_ID
-  , GRP_ID
-  , ACT_NAME
-  , ACT_PATH
-  , DESCRP
-  , UPD_ID
-  , UPD_TIME
-  , STATUS
+   ,GRP_ID
+   ,ACT_NAME
+   ,ACT_PATH
+   ,DESCRP
+   ,UPD_ID
+   ,UPD_TIME
+   ,STATUS
 ) VALUES (
 	#{action.id}
-  , #{action.groupID}
-  , #{action.name}
-  , #{action.path}
-  , #{action.description}
-  , #{currentUser.id}
-  , CURRENT_TIMESTAMP
-  , '001'
+   ,#{action.groupID}
+   ,#{action.name}
+   ,#{action.path}
+   ,#{action.description}
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,'001'
 )
 </insert>
 
 <!-- 액션 정보 수정 -->
 <update id="update" parameterType="hashmap">
 UPDATE TBL_ACTION SET
-	ACT_NAME = #{action.name},
-	ACT_PATH = #{action.path},
-	DESCRP = #{action.description},
-	UPD_ID = #{currentUser.id},
-	UPD_TIME = CURRENT_TIMESTAMP
+	ACT_NAME = #{action.name}
+   ,ACT_PATH = #{action.path}
+   ,DESCRP = #{action.description}
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE ACT_ID = #{action.id}
 </update>
 
@@ -85,8 +85,8 @@ WHERE ACT_ID = #{action.id}
 <update id="setStatus" parameterType="hashmap">
 UPDATE TBL_ACTION SET
 	STATUS = #{status}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE 1 = 1
 <if test="groupID != null">
 AND GRP_ID = #{groupID}

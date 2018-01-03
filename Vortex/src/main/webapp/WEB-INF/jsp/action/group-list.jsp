@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
-<div id="searchGroups" style="width:100%;">
 	<div class="inputArea">
 		<select id="field">
 			<option value="">검색조건</option>
@@ -11,7 +9,7 @@
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getGroups();" type="button">찾기</button>
-		 <button onclick="getInfo();" type="button" class="add">추가</button>
+		 <button onclick="getGroupInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeGroups();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -26,21 +24,17 @@
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">액션 그룹을 찾지 못했습니다.</td></c:set>
 		<c:set var="groupRow"><tr>
 			<td><input name="groupID" value="{groupID}" type="checkbox" /></td>
-				<td><a onclick="getInfo('{groupID}')">{groupID}</a></td>
-				<td>{groupName}</td>
+				<td><a onclick="getGroupInfo('{groupID}');">{groupID}</a></td>
+				<td><a onclick="getGroupActions('{groupID}');">{groupName}</a></td>
 				<td>{insTime}</td>
 			</tr></c:set>
 		</tbody>
 	</table>
-	<div class="more">
-		<button type="button">더 보기</button>
-	</div>
-</div>
-<div id="groupDetail" style="padding:1em 0;"></div>
 <vtx:script type="decl">
-var checkedGroups,
-	currentGroups,
-	afterSave;
+var getGroup,
+	currentGroup,
+	checkedGroups,
+	currentGroups;
 
 function getGroups(start) {
 	var field = $("#field").val(),
@@ -70,6 +64,7 @@ function removeGroups() {
 		success:function(resp) {
 			if (resp.saved) {
 				currentGroups();
+				getActions();
 			} else {
 				alert("저장하지 못했습니다.");
 			}
@@ -77,35 +72,31 @@ function removeGroups() {
 	});
 }
 
-function showList(show) {
-	if (show == false)
-		$("#searchGroups").hide();
-	else
-		$("#searchGroups").fadeIn();
-}
-
-function closeGroup() {
-	if (afterSave) {
-		afterSave();
-		afterSave = null;
-	}
-	$("#groupDetail").hide();
-	showList();
-}
-
-function getInfo(groupID) {
+function getGroupInfo(groupID) {
 	ajax({
 		url:"<c:url value='/action/group/info.do'/>",
 		data:{groupID:groupID},
-		success:function(resp) {
-			showList(false);
-			$("#groupDetail").html(resp).fadeIn();
-		}
+		success:setDetail
 	});
 }
 
-function setGroupList(resp, start) {
-	var append = start > 0;
+function getGroupActions(groupID) {
+	currentGroup = getGroup(groupID);
+	setGroupName(currentGroup.GRP_NAME);
+	getActions();
+}
+
+function setGroupList(resp) {
+	getGroup = function(groupID) {
+		var groups = resp.groups;
+		if (!groups || groups.length < 1) return {};
+		if (!groupID) return groups[0];
+		var found = elementsOf(groups, "GRP_ID", groupID);
+		return found ? found[0] : {};
+	};
+	currentGroup = getGroup();
+	setGroupName(currentGroup.GRP_NAME);
+
 	$("#groupList").populate({
 		data:resp.groups,
 		tr:function(row){
@@ -114,40 +105,25 @@ function setGroupList(resp, start) {
 				.replace(/{groupName}/g, row.GRP_NAME)
 				.replace(/{insTime}/g, row.INS_TIME);
 		},
-		ifEmpty:"${vtx:jstring(notFound)}",
-		append:append
+		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
-	if (!append)
-		$(".showOnCheck").fadeOut();
-	if (resp.more) {
-		$(".more button")
-			.removeAttr("onclick")
-			.attr("onclick", "getGroups(" + resp.next + ")");
-		$(".more").show();
-	} else {
-		$(".more").hide();
-	}
+	$("#actionGroups .showOnCheck").fadeOut();
 	
-	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
+	checkedGroups = checkbox("#actionGroups input[type='checkbox'][name='groupID']")
 		.onChange(function(checked){
 			if (checked)
-				$(".showOnCheck").fadeIn();
+				$("#actionGroups .showOnCheck").fadeIn();
 			else
-				$(".showOnCheck").fadeOut();
+				$("#actionGroups .showOnCheck").fadeOut();
 		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
+	checkbox("#actionGroups #toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
 }
 </vtx:script>
 <vtx:script type="docReady">
-	docTitle("액션 그룹 정보");
-	subTitle("액션 그룹 정보");
 	$("#value").onEnterPress(getGroups);
 	setGroupList({
-		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>,
-		more:${more},
-		next:${next}
-	}, 0);
+		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>
+	});
 	currentGroups = getGroups;
 </vtx:script>
-<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

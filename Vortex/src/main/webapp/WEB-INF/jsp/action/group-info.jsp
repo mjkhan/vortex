@@ -32,7 +32,7 @@
 </table>
 <div class="inputArea">
 	<button onclick="saveGroup();" type="button">저장</button>
-	<button onclick="closeGroup();" type="button">닫기</button>
+	<button onclick="showDetail(false);" type="button">닫기</button>
 </div>
 <script type="text/javascript">
 function saveGroup() {
@@ -50,14 +50,15 @@ function saveGroup() {
 				<c:if test='${create}'>afterSave = getGroups;</c:if>
 				<c:if test='${!create}'>afterSave = currentGroups;</c:if>
 				alert("저장됐습니다.");
-				getInfo(resp.groupID || $("#groupID").val());
+				getGroupInfo(resp.groupID || $("#groupID").val());
 			} else {
 				alert("저장하지 못했습니다.");
 			}
 		}
 	});
 }
-<c:if test="${create}">$("#groupID").focus();</c:if>
-<c:if test="${!create}">$("#groupName").focus();</c:if>
-$(".infoForm input:not([readonly])").onEnterPress(saveGroup);
+$(function(){
+	$("#groupName").focus();
+	$(".infoForm input:not([readonly])").onEnterPress(saveGroup);
+});
 </script>

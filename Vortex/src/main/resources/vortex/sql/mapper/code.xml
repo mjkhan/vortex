@@ -50,20 +50,20 @@ AND CD_ID = #{code}
 <insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_CMN_CODE (
 	GRP_ID
-  , CD_ID
-  , CD_VAL
-  , DESCRP
-  , UPD_ID
-  , UPD_TIME
-  , STATUS
+   ,CD_ID
+   ,CD_VAL
+   ,DESCRP
+   ,UPD_ID
+   ,UPD_TIME
+   ,STATUS
 ) VALUES (
 	#{code.groupID}
-  , #{code.code}
-  , #{code.value}
-  , #{code.description}
-  , #{currentUser.id}
-  , CURRENT_TIMESTAMP
-  , '001'
+   ,#{code.code}
+   ,#{code.value}
+   ,#{code.description}
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,'001'
 )
 </insert>
 
@@ -71,9 +71,9 @@ INSERT INTO TBL_CMN_CODE (
 <update id="update" parameterType="hashmap">
 UPDATE TBL_CMN_CODE SET
 	CD_VAL = #{code.value}
-  , DESCRP = #{code.description}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,DESCRP = #{code.description}
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE GRP_ID = #{code.groupID}
 AND CD_ID = #{code.code}
 </update>
@@ -82,8 +82,8 @@ AND CD_ID = #{code.code}
 <update id="setStatus" parameterType="hashmap">
 UPDATE TBL_CMN_CODE SET
 	STATUS = #{status}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE GRP_ID = #{groupID}
 <if test="codes != null">
 AND CD_ID IN (<foreach collection="codes" item="code" separator=", ">#{code}</foreach>)

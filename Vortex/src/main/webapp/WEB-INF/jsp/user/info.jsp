@@ -62,7 +62,10 @@ function saveUser() {
 		}
 	});
 }
-<c:if test="${create}">$("#userID").focus();</c:if>
-<c:if test="${!create}">$("#userName").focus();</c:if>
-$(".infoForm input:not([readonly])").onEnterPress(saveUser);
+
+$(function(){
+	<c:if test="${create}">$("#userID").focus();</c:if>
+	<c:if test="${!create}">$("#userName").focus();</c:if>
+	$(".infoForm input:not([readonly])").onEnterPress(saveUser);
+});
 </script>

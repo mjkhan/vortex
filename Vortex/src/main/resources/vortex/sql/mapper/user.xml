@@ -53,24 +53,24 @@ WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{u
 <insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_USER (
 	USER_ID
-  , USER_NAME
-  , ALIAS
-  , PASSWD
-  , INS_ID
-  , INS_TIME
-  , UPD_ID
-  , UPD_TIME
-  , STATUS
+   ,USER_NAME
+   ,ALIAS
+   ,PASSWD
+   ,INS_ID
+   ,INS_TIME
+   ,UPD_ID
+   ,UPD_TIME
+   ,STATUS
 ) VALUES (
 	#{user.id}
-  , #{user.name}
-  , #{user.alias}
-  , #{user.password}
-  , #{currentUser.id}
-  , CURRENT_TIMESTAMP
-  , #{currentUser.id}
-  , CURRENT_TIMESTAMP
-  , '001'
+   ,#{user.name}
+   ,#{user.alias}
+   ,#{user.password}
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,'001'
 )
 </insert>
 
@@ -78,10 +78,10 @@ INSERT INTO TBL_USER (
 <update id="update" parameterType="hashmap">
 UPDATE TBL_USER SET
 	USER_NAME = #{user.name}
-  , ALIAS = #{user.alias}
-  , PASSWD = #{user.password}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,ALIAS = #{user.alias}
+   ,PASSWD = #{user.password}
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE USER_ID = #{user.id}
 </update>
 
@@ -89,8 +89,8 @@ WHERE USER_ID = #{user.id}
 <update id="setStatus" parameterType="hashmap">
 UPDATE TBL_USER SET
 	STATUS = #{status}
-  , UPD_ID = #{currentUser.id}
-  , UPD_TIME = CURRENT_TIMESTAMP
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </update>
 

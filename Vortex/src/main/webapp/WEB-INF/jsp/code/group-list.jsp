@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
-<div id="searchGroups" style="width:100%;">
 	<div class="inputArea">
 		<select id="field">
 			<option value="">검색조건</option>
@@ -10,8 +8,8 @@
 			<option value="GRP_NAME">이름</option>
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
-		 <button onclick="getGroups();" type="button">찾기</button>
-		 <button onclick="getInfo();" type="button" class="add">추가</button>
+		 <button onclick="searchGroups();" type="button">찾기</button>
+		 <button onclick="getGroupInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeGroups();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -26,21 +24,21 @@
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">공통코드 그룹을 찾지 못했습니다.</td></c:set>
 		<c:set var="groupRow"><tr>
 			<td><input name="groupID" value="{groupID}" type="checkbox" /></td>
-				<td><a onclick="getInfo('{groupID}')">{groupID}</a></td>
-				<td>{groupName}</td>
+				<td><a onclick="getGroupInfo('{groupID}')" title="그룹정보 보기">{groupID}</a></td>
+				<td><a onclick="getGroupCodes('{groupID}')" title="코드목록 보기">{groupName}</a></td>
 				<td>{insTime}</td>
 			</tr></c:set>
 		</tbody>
 	</table>
 	<div class="paging"></div>
-</div>
-<div id="groupDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
-var checkedGroups,
+var getGroup,
+	currentGroup,
+	checkedGroups,
 	currentGroups,
 	afterSave;
 
-function getGroups(start) {
+function searchGroups(start) {
 	var field = $("#field").val(),
 		value = $("#value").val();
 	if (value && !field)
@@ -48,13 +46,16 @@ function getGroups(start) {
 	ajax({
 		url:"<c:url value='/code/group/list.do'/>"
 	   ,data:{
-			field:field,
-			value:value,
-			start:start
+			field:field
+		   ,value:value
+		   ,start:start
 		}
-	   ,success:setGroupList
+	   ,success:function(resp) {
+	   		setGroupList(resp);
+	   		setCodeList(resp);
+	   	}
 	});
-	currentGroups = function(){getGroups(start);};
+	currentGroups = function(){searchGroups(start);};
 }
 
 function removeGroups() {
@@ -73,32 +74,25 @@ function removeGroups() {
 	});
 }
 
-function showDetail(show) {
-	if (show != false) {
-		$("#searchGroups").hide();
-		$("#groupDetail").fadeIn();
-	} else {
-		if (afterSave) {
-			afterSave();
-			afterSave = null;
-		}
-		$("#groupDetail").hide();
-		$("#searchGroups").fadeIn();
-	}
-}
-
-function getInfo(groupID) {
+function getGroupInfo(groupID) {
 	ajax({
 		url:"<c:url value='/code/group/info.do'/>",
 		data:{groupID:groupID},
-		success:function(resp) {
-			$("#groupDetail").html(resp);
-			showDetail();
-		}
+		success:setDetail
 	});
 }
 
 function setGroupList(resp) {
+	getGroup = function(groupID) {
+		var groups = resp.groups;
+		if (!groups || groups.length < 1) return {};
+		if (!groupID) return groups[0];
+		var found = elementsOf(groups, "GRP_ID", groupID);
+		return found ? found[0] : {};
+	};
+	currentGroup = getGroup();
+	setGroupName(currentGroup.GRP_NAME);
+	
 	$("#groupList").populate({
 		data:resp.groups
 	   ,tr:function(row){
@@ -110,34 +104,37 @@ function setGroupList(resp) {
 	   ,ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
-	$(".showOnCheck").fadeOut();
-	$(".paging").setPaging({
+	$("#codeGroups .showOnCheck").fadeOut();
+	$("#codeGroups .paging").setPaging({
 	    start:resp.groupStart
 	   ,fetchSize:resp.fetch
 	   ,totalSize:resp.totalGroups
-	   ,func:"getGroups"
+	   ,func:"searchGroups"
 	});
 	
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
 		.onChange(function(checked){
 			if (checked)
-				$(".showOnCheck").fadeIn();
+				$("#codeGroups .showOnCheck").fadeIn();
 			else
-				$(".showOnCheck").fadeOut();
+				$("#codeGroups .showOnCheck").fadeOut();
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
 }
+
+function getGroupCodes(groupID) {
+	currentGroup = getGroup(groupID);
+	setGroupName(currentGroup.GRP_NAME);
+	getCodes();
+}
 </vtx:script>
 <vtx:script type="docReady">
-	docTitle("코드그룹 정보");
-	subTitle("코드그룹 정보");
-	$("#value").onEnterPress(getGroups);
+	$("#value").onEnterPress(searchGroups);
 	setGroupList({
 		groups:<vtx:json data="${groups}" mapper="${objectMapper}"/>
 	   ,totalGroups:${totalGroups}
 	   ,groupStart:${groupStart}
 	   ,fetch:${fetch}
 	});
-	currentGroups = getGroups;
+	currentGroups = searchGroups;
 </vtx:script>
-<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

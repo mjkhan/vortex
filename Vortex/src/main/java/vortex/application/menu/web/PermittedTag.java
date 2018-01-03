@@ -2,6 +2,7 @@ package vortex.application.menu.web;
 
 import javax.servlet.jsp.JspException;
 
+import vortex.application.Client;
 import vortex.application.menu.Menu;
 import vortex.application.menu.MenuContext;
 import vortex.support.web.tag.VortexTag;
@@ -17,16 +18,15 @@ public class PermittedTag extends VortexTag {
 	public int doStartTag() throws JspException {
 		MenuContext mctx = (MenuContext)hreq().getAttribute("menuContext");
 		String action = mctx.getPermittedAction(menu);
-		boolean permitted = !isEmpty(action);
-		if (permitted) {
-			pageContext.setAttribute("menuID", menu.getId());
-			pageContext.setAttribute("menuName", menu.getName());
-			pageContext.setAttribute("menuAction", action);
-			pageContext.setAttribute("menuImage", menu.getImageConfig());
-			boolean current = false; //TODO:현재 선택 메뉴 판단
-			pageContext.setAttribute("currentMenu", current);
-		}
-		return permitted ? EVAL_BODY_INCLUDE : SKIP_BODY;
+		if (isEmpty(action)) return SKIP_BODY;
+		
+		pageContext.setAttribute("menuID", menu.getId());
+		pageContext.setAttribute("menuName", menu.getName());
+		pageContext.setAttribute("menuAction", action);
+		pageContext.setAttribute("menuImage", menu.getImageConfig());
+		boolean current = action.equals(Client.current().getAction()); //TODO:현재 선택 메뉴 판단
+		pageContext.setAttribute("currentMenu", current);
+		return EVAL_BODY_INCLUDE;
 	}
 	@Override
 	public void release() {

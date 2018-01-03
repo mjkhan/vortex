@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="create">${empty code}</c:set>
+<h1 id="codeGroup" style="padding-bottom:.5em;"></h1>
 <table class="infoForm">
 	<tr><th><label for="code">코드</label></th>
 		<td><input id="code" value="${code.CD_ID}" type="text" required maxlength="32" <c:if test="${!create}">readonly</c:if>/></td>
@@ -33,10 +34,10 @@ function saveCode() {
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/code/create.do'/></c:if><c:if test='${!create}'><c:url value='/code/update.do'/></c:if>",
 		data:{
-			groupID:$("#groupID").val(),
-			code:$("#code").val(),
-			value:$("#value").val(),
-			description:$("#description").val()
+			groupID:"${param.groupID}",
+			code:$("#detailInfo #code").val(),
+			value:$("#detailInfo #value").val(),
+			description:$("#detailInfo #description").val()
 		},
 		success:function(resp) {
 			if (resp.saved) {
@@ -51,8 +52,9 @@ function saveCode() {
 }
 
 $(function(){
+	$("#detailInfo #codeGroup").html(currentGroup.GRP_NAME);
 	<c:if test="${create}">$("#code").focus();</c:if>
 	<c:if test="${!create}">$("#value").focus();</c:if>
-	$(".infoForm input:not([readonly])").onEnterPress(saveCode);
+	$("#detailInfo .infoForm input:not([readonly])").onEnterPress(saveCode);
 });
 </script>

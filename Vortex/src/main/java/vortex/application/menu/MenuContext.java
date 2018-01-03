@@ -33,7 +33,7 @@ public class MenuContext extends AbstractObject {
 	public String getPermittedAction(Menu menu) {
 		String actionPath = menu.getActionPath();
 		if (!isEmpty(actionPath)) {
-			List<String> roles = ifEmpty(actionRoles.get(actionPath), Collections.emptyList());
+			List<String> roles = ifEmpty(actionRoles.get(actionPath), () -> Collections.emptyList());
 			List<String> userRoles = User.current().getRoleIDs();
 			boolean permitted = !Collections.disjoint(roles, userRoles);
 			return permitted ? actionPath : null;

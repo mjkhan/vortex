@@ -48,7 +48,7 @@ public class CodeController extends ApplicationController {
 	
 	@RequestMapping("/group/info.do")
 	public ModelAndView getInfo(@RequestParam(required=false) String groupID) {
-		return new ModelAndView("code/group/info")
+		return new ModelAndView("code/group-info")
 			.addObject("group", codeService.getInfo(groupID)); 
 	}
 	
@@ -82,25 +82,11 @@ public class CodeController extends ApplicationController {
 			.addObject("codes", codes)
 			.addObject("totalCodes", codes.getTotalSize())
 			.addObject("codeStart", req.get("start"));
-/*
-		String groupID = req.string("groupID");
-		boolean init = isEmpty(groupID);
-		ModelAndView mav = new ModelAndView(init ? "code/list" : "jsonView");
-		if (init) {
-			List<DataObject> groups = codeService.searchGroups(req).value("groups");
-			mav.addObject("groups", groups);
-			if (!groups.isEmpty()) {
-				groupID = groups.get(0).string("grp_id");
-				req.set("groupID", groupID);
-			}
-		}
-		return mav.addObject("codes", codeService.getCodes(req).value("codes"));
-*/		
 	}
 	
 	@RequestMapping("/info.do")
 	public ModelAndView getInfo(@RequestParam String groupID, @RequestParam(required=false) String code) {
-		return new ModelAndView("code/info")
+		return new ModelAndView("code/code-info")
 			.addObject("code", codeService.getInfo(groupID, code));
 	}
 	

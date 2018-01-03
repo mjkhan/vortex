@@ -72,7 +72,11 @@ button.add {
 }
 .menu a {text-decoration:none;}
 .menu .current {
-	color:white; background-color:lightskyblue;
+	background-color:lightskyblue;
+}
+.menu .current a {
+	color:white;
+	font-weight:bold;
 }
 
 .dialogModal {

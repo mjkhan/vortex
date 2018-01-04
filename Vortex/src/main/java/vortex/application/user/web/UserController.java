@@ -45,6 +45,7 @@ public class UserController extends ApplicationController {
 		return new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView")
 			.addObject("users", users)
 			.addObject("totalSize", users.getTotalSize())
+			.addObject("start", req.get("start"))
 			.addObject("fetchSize", req.get("fetch"))
 			.addObject("more", users.hasNext())
 			.addObject("next", users.getEnd() + 1);

@@ -75,6 +75,8 @@ function saveMenu() {
 		}
 	});
 }
-$("#menuName").focus();
-$(".infoForm input:not([readonly])").onEnterPress(saveMenu);
+$(function(){
+	$("#menuName").focus();
+	$(".infoForm input:not([readonly])").onEnterPress(saveMenu);
+});
 </script>

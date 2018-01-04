@@ -152,9 +152,67 @@ $.fn.message = function(msg) {
 /**options = {
  * 	title:"...",
  *  content:"... ",
- *  onclose:function
+ *  beforeOK:"name of the function that returns the user selection",
+ *  onOK:function(info)
  * }
  */
+function dialog(options) {
+	var id = new Date();
+	id = ["dlg", id.getFullYear(), id.getMonth() + 1, id.getDay(), id.getHours(), id.getMinutes(), id.getSeconds()].join("");
+	var	dlg = {
+		options:options,
+		container:null,
+		showOK:function(show){
+			if (show == false)
+				$("#" + id + "Ok").hide();
+			else
+				$("#" + id + "Ok").show();
+		},
+		render:function() {
+			if (dlg.options.override)
+				dlg.container.html(dlg.options.content);
+			else {
+				$("#" + id + "Title").html(dlg.options.title || "Vortex");
+				$("#" + id + "Content").html(dlg.options.content);
+			}
+			var ok = !isEmpty(dlg.options.onOK);
+			if (ok)
+				$("#" + id + "Ok").off("click").on("click", function(){
+					if (window[dlg.options.beforeOK]) {
+						var selected = window[dlg.options.beforeOK]();
+						if (!selected) return;
+						
+						dlg.options.onOK(selected);
+						dlg.close();
+					} else {
+						dlg.close();
+					}
+				});
+			else
+				dlg.showOK(false);
+			dlg.container.show();
+		},
+		show:function() {
+			if (!dlg.container) {
+				dlg.container = $("<div id='" + id + "' class='dialogModal'>").appendTo("body");
+				ajax({
+					url:wctx.path + "/asset/html/dialog.html",
+					success:function(resp) {
+						dlg.container.html(resp.replace(/{dlg}/g, id));
+						dlg.render();
+					}
+				});
+			} else
+				dlg.render();
+			return dlg;
+		},
+		close:function() {
+			dlg.container.fadeOut();
+		}
+	};
+	return dlg.show();
+}
+
 var popup = {
 	container:null,
 	onclose:null,

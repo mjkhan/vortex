@@ -118,6 +118,33 @@ function addUsers(){
 		url:"<c:url value='/user/select.do'/>",
 		data:{init:true},
 		success:function(resp) {
+			dialog({
+				title:"사용자 선택",
+				content:resp,
+				beforeOK:"selectedUsers",
+				onOK:function(selected){
+					var userIDs = valuesOf(selected, "USER_ID").join(",");
+					if (!userIDs)
+						return alert("사용자를 선택하십시오.");
+					
+					ajax({
+						url:"<c:url value='/role/user/add.do'/>",
+						data:{
+							roleIDs:checkedRoles.value().join(","),
+							userIDs:userIDs
+						},
+						success:function(resp){
+							if (!resp.saved)
+								return alert("저장되지 않았습니다.");
+							if (currentUsers)
+								currentUsers();
+							else
+								location.reload();
+						}
+					});
+				}
+			});
+<%-- 
 			popup.show({
 				title:"사용자 선택",
 				content:resp,
@@ -144,6 +171,7 @@ function addUsers(){
 					});
 				}
 			});
+ --%>
 		}
 	});
 }

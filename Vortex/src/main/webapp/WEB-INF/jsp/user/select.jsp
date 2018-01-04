@@ -14,7 +14,7 @@
 		<option value="ALIAS">별명</option>
 	</select>
 	<input id="_value" type="search" placeholder="검색어" style="width:40%;"/>
-	<button onclick="userInfo.get(0);" type="button">찾기</button>
+	<button onclick="_searchUsers();" type="button">찾기</button>
 </div>
 <table class="infoList">
 	<thead>
@@ -39,6 +39,61 @@
 </table>
 <div class="paging"></div>
 <script type="text/javascript">
+var selectedUsers;
+
+function _searchUsers(start) {
+	var field = $("#_field").val(),
+		value = $("#_value").val();
+	if (value && !field)
+		return alert("검색조건을 선택하십시오.");
+	ajax({
+		url:"<c:url value='/user/select.do'/>",
+		data:{
+			field:field,
+			value:value,
+			start:start || 0
+		},
+		success:_setUsers
+	});
+}
+
+function _setUsers(resp) {
+	var users = resp.users;
+	$("#_userList").populate({
+		data:users,
+		tr:function(row){
+			return "${vtx:jstring(userRow)}"
+				.replace(/{userID}/g, row.USER_ID)
+				.replace(/{userName}/g, row.USER_NAME)
+				.replace(/{alias}/g, row.ALIAS);
+		},
+		ifEmpty:"${vtx:jstring(notFound)}"
+	});
+	log(JSON.stringify(resp));
+	
+	$(".paging").setPaging({
+		start:resp.start,
+		fetchSize:resp.fetchSize,
+		totalSize:resp.totalSize,
+		func:"_searchUsers({index})"
+	});
+	<c:if test="${'checkbox' == type}">
+	selectedUsers = function() {
+		var userIDs = checkbox("input[name='_userID']").value();
+		return elementsOf(users, "USER_ID", userIDs);
+	};
+	checkbox("#_toggleUsers").onChange(function(checked){
+		checkbox("input[type='checkbox'][name='_userID']").check(checked);
+	});
+	</c:if>
+	<c:if test="${'radio' == type}">
+	selectedUsers = function() {
+		var userID = $("input[name='_userID']:checked").val();
+		return elementsOf(users, "USER_ID", userID)[0];
+	};
+	</c:if>
+}
+
 var userInfo = {
 	get:function(start){
 		var field = $("#_field").val(),
@@ -70,17 +125,10 @@ var userInfo = {
 			ifEmpty:"${vtx:jstring(notFound)}"
 		});
 		
-		$(".paging").paginate({
+		$(".paging").setPaging({
 			start:start,
 			fetchSize:resp.fetchSize,
 			totalSize:resp.totalSize,
-			links:5,
-			first:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">|◀</a>";},
-			previous:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">◀</a>";},
-			link:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">" + label + "</a>";},
-			current:function(index, label) {return "<a class=\"current\">" + label + "</a>";},
-			next:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">▶</a>";},
-			last:function(index, label) {return "<a onclick=\"userInfo.get(" + index + ")\">▶|</a>";},
 		});
 		
 		<c:if test="${'checkbox' == type}">

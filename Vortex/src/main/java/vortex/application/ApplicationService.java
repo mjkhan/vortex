@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import vortex.application.code.service.CodeMapper;
@@ -38,5 +39,9 @@ public class ApplicationService extends AbstractService {
 	
 	protected Client client() {
 		return Client.current();
+	}
+	
+	protected AccessDeniedException denyAccess(String msg) {
+		return new AccessDeniedException(msg);
 	}
 }

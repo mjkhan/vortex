@@ -64,8 +64,17 @@ public class ActionController extends ApplicationController {
 	}
 	
 	@RequestMapping("/select.do")
-	public ModelAndView select(@RequestParam(required=false) String groupID) {
-		return search(groupID, isEmpty(groupID) ? "action/select" : "jsonView");
+	public ModelAndView select(HttpServletRequest hreq) {
+		String groupID = hreq.getParameter("groupID");
+		boolean init = isEmpty(groupID);
+		List<DataObject> groups = null;
+		if (init) {
+			groups = actionService.getGroups(request(hreq));
+			if (!groups.isEmpty())
+				groupID = groups.get(0).string("GRP_ID");
+		}
+		return search(groupID, init ? "action/select" : "jsonView")
+			.addObject("groups", groups != null ? groups : null);
 	}
 	
 	@RequestMapping("/list.do")

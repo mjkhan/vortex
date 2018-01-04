@@ -7,7 +7,7 @@
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss,SSS} %5p [%c{1}] %m%n" />
         </Console>
-		<RollingFile name="file" fileName="./logs/vortex.log" filePattern="./logs/vortex-%d{yyyy-MM-dd}.log" append="false">
+		<RollingFile name="file" fileName="./logs/vortex.log" filePattern="./logs/vortex-%d{yy-MM-dd}.log" append="false">
 			<PatternLayout pattern="%d{yy-MM-dd HH:mm:ss,SSS} %5p [%c{1}] %m%n"/>
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>

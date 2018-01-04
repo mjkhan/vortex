@@ -35,7 +35,7 @@ function setAction(){
 		url:"<c:url value='/action/select.do'/>",
 		data:{type:"radio"},
 		success:function(resp) {
-			dialog.show({
+			popup.show({
 				title:"액션 선택",
 				content:resp,
 				onOK:function(){
@@ -45,7 +45,7 @@ function setAction(){
 					$("#actionID").val(selected.ACT_ID);
 					$("#actionPath").val(selected.ACT_PATH);
 
-					dialog.close();
+					popup.close();
 				}
 			});
 		}
@@ -58,11 +58,11 @@ function saveMenu() {
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/menu/create.do'/></c:if><c:if test='${!create}'><c:url value='/menu/update.do'/></c:if>",
 		data:{
-			menuID:$("#menuID").val(),
+			id:$("#menuID").val(),
 			parentID:selectedID(),
-			menuName:$("#menuName").val(),
+			name:$("#menuName").val(),
 			actionID:$("#actionID").val(),
-			imgCfg:$("#imgCfg").val()
+			imageConfig:$("#imgCfg").val()
 		},
 		success:function(resp) {
 			if (resp.saved) {

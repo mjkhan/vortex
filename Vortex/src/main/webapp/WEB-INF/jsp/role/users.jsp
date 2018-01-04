@@ -118,7 +118,7 @@ function addUsers(){
 		url:"<c:url value='/user/select.do'/>",
 		data:{init:true},
 		success:function(resp) {
-			dialog.show({
+			popup.show({
 				title:"사용자 선택",
 				content:resp,
 				onOK:function(){
@@ -126,7 +126,7 @@ function addUsers(){
 					if (!userIDs)
 						return alert("사용자를 선택하십시오.");
 					
-					dialog.close();
+					popup.close();
 					ajax({
 						url:"<c:url value='/role/user/add.do'/>",
 						data:{

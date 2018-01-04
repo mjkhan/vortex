@@ -155,39 +155,39 @@ $.fn.message = function(msg) {
  *  onclose:function
  * }
  */
-var dialog = {
+var popup = {
 	container:null,
 	onclose:null,
 	render:function(options) {
-		dialog.container.addClass("dialogModal");
+		popup.container.addClass("dialogModal");
 		if (options.override)
-			dialog.container.html(options.content);
+			popup.container.html(options.content);
 		else {
 			$("#_dlgTitle").html(options.title || "Vortex");
 			$("#_dlgContent").html(options.content);
 		}
 		if (options.onOK)
 			$("#_ok").off("click").on("click", options.onOK);
-		dialog.container.show();
+		popup.container.show();
 	},
 	show:function(options) {
-		dialog.onclose = options.onclose;
-		if (!dialog.container) {
-			dialog.container = $("<div>").appendTo("body");
+		popup.onclose = options.onclose;
+		if (!popup.container) {
+			popup.container = $("<div>").appendTo("body");
 			ajax({
-				url:wctx.path + "/asset/html/dialog.html",
+				url:wctx.path + "/asset/html/popup.html",
 				success:function(resp) {
-					dialog.container.html(resp);
-					dialog.render(options);
+					popup.container.html(resp);
+					popup.render(options);
 				}
 			});
 		} else
-			dialog.render(options);
+			popup.render(options);
 	},
 	close:function() {
-		dialog.container.fadeOut();
-		if (dialog.onclose)
-			dialog.onclose();
+		popup.container.fadeOut();
+		if (popup.onclose)
+			popup.onclose();
 	}
 };
 /**

@@ -16,7 +16,7 @@ public interface MenuService {
 	
 	public Menu getMenu(String id);
 	
-	public String create(Menu menu);
+	public boolean create(Menu menu);
 	
 	public boolean update(Menu menu);
 	

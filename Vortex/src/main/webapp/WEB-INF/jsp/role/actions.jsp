@@ -118,7 +118,7 @@ function addActions(){
 	ajax({
 		url:"<c:url value='/action/select.do'/>",
 		success:function(resp) {
-			dialog.show({
+			popup.show({
 				title:"액션 선택",
 				content:resp,
 				onOK:function(){
@@ -126,7 +126,7 @@ function addActions(){
 					if (!actionIDs)
 						return alert("액션을 선택하십시오.");
 
-					dialog.close();
+					popup.close();
 					ajax({
 						url:"<c:url value='/role/action/add.do'/>",
 						data:{

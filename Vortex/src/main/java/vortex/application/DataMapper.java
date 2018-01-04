@@ -1,5 +1,7 @@
 package vortex.application;
 
+import org.springframework.security.access.AccessDeniedException;
+
 import vortex.support.data.DataObject;
 import vortex.support.database.AbstractMapper;
 
@@ -18,5 +20,9 @@ public class DataMapper extends AbstractMapper {
 		if (currentUser)
 			p.put("currentUser", currentUser());
 		return p;
+	}
+	
+	protected AccessDeniedException denyAccess(String msg) {
+		return new AccessDeniedException(msg);
 	}
 }

@@ -8,15 +8,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import vortex.application.DataMapper;
 import vortex.application.menu.Menu;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
 import vortex.support.data.hierarchy.Hierarchy;
 import vortex.support.data.hierarchy.HierarchyBuilder;
-import vortex.support.database.AbstractMapper;
 
 @Repository("menuMapper")
-public class MenuMapper extends AbstractMapper {
+public class MenuMapper extends DataMapper {
 	public Hierarchy<Menu> getTree() {
 		List<Menu> menus = selectList("menu.getTree");
 		return new HierarchyBuilder<Menu>().setElements(menus).build();
@@ -41,46 +41,45 @@ public class MenuMapper extends AbstractMapper {
 		return selectOne("menu.getMenu", id);
 	}
 
-	public String create(Menu menu) {
-		insert("menu.insert", menu);
-		return menu.getId();
+	public boolean create(Menu menu) {
+		return menu != null ? insert("menu.insert", params(true).set("menu", menu)) == 1 : false;
 	}
 	
 	public boolean update(Menu menu) {
-		return update("menu.update", menu) == 1;
+		return menu != null ? update("menu.update", params(true).set("menu", menu)) == 1 : false;
 	}
 	
-	public boolean move(String parentID, String... menuIDs) {
-		if (isEmpty(menuIDs)) return false;
+	public int move(String parentID, String... menuIDs) {
+		if (isEmpty(menuIDs)) return 0;
 		return update(
 			"menu.move",
 			params()
 				.set("parentID", parentID)
 				.set("menuIDs", menuIDs)
-		) > 0;
+		);
 	}
 	
-	public boolean reorder(String parentID, String... menuIDs) {
-		if (isEmpty(menuIDs)) return false;
+	public int reorder(String parentID, String... menuIDs) {
+		if (isEmpty(menuIDs)) return 0;
 		return update(
 			"menu.reorder",
-			params()
+			params(true)
 				.set("parentID", parentID)
 				.set("menuIDs", menuIDs)
-		) > 0;
+		);
 	}
 	
-	public boolean reorder(String parentID, String menuID, int offset) {
-		if (offset == 0) return false;
+	public int reorder(String parentID, String menuID, int offset) {
+		if (offset == 0) return 0;
 		List<DataObject> menus = getMenus(parentID);
-		if (menus.isEmpty()) return false;
+		if (menus.isEmpty()) return 0;
 
 		DataObject menuInfo = menus.stream().filter(row -> menuID.equals(row.get("menu_id"))).findFirst().get();
 		int index = !isEmpty(menuInfo) ? menus.indexOf(menuInfo) : -1;
-		if (index < 0) return false;
+		if (index < 0) return 0;
 		
 		int target = Math.min(Math.max(0, index + offset), menus.size() - 1);
-		if (index == target) return false;
+		if (index == target) return 0;
 
 //		Collections.swap(menus, index, target);
 		menus.add(target, menus.remove(index));
@@ -102,17 +101,16 @@ public class MenuMapper extends AbstractMapper {
 		return IDs.toArray(new String[IDs.size()]);
 	}
 	
-	public boolean setStatus(String modifiedBy, String status, String... menuIDs) {
-		String[] IDs = getAllIDs(menuIDs);
-		DataObject params = params()
-			.set("menuIDs", IDs)
+	public int setStatus(String status, String... menuIDs) {
+		return update(
+			"menu.setStatus"
+			,params(true)
+			.set("menuIDs", getAllIDs(menuIDs))
 			.set("status", status)
-			.set("modifiedBy", modifiedBy);
-		int affected = update("menu.setStatus", params);
-		return affected > 0;
+		);
 	}
 	
-	public boolean delete(String modifiedBy, String... menuIDs) {
-		return setStatus(modifiedBy, Status.REMOVED.code(), menuIDs);
+	public int delete(String... menuIDs) {
+		return setStatus(Status.REMOVED.code(), menuIDs);
 	}
 }

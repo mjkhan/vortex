@@ -2,11 +2,13 @@ package vortex.application.menu.web;
 
 import java.util.Collection;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
@@ -18,13 +20,14 @@ import vortex.support.data.hierarchy.Stringify;
 @Controller
 @RequestMapping("/menu")
 public class MenuController extends ApplicationController {
-	@Resource(name="menuService")
+	@Autowired
 	private MenuService menuService;
 	
 	@RequestMapping("/tree.do")
 	public ModelAndView getTree(HttpServletRequest hreq) {
 		boolean reload = "true".equals(hreq.getParameter("reload"));
-		return modelAndView(!reload ? "menu/tree" : "jsonView").addObject("menus", toString(menuService.getTree()));
+		return new ModelAndView(!reload ? "menu/tree" : "jsonView")
+			.addObject("menus", toString(menuService.getTree()));
 	}
 	
 	private String toString(Hierarchy<Menu> menus) {
@@ -42,80 +45,45 @@ public class MenuController extends ApplicationController {
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getMenu(HttpServletRequest hreq) {
-		String menuID = hreq.getParameter("menuID");
-		return modelAndView("menu/info").addObject("menu", menuService.getMenu(menuID));
+	public ModelAndView getInfo(@RequestParam(required=false) String menuID) {
+		return new ModelAndView("menu/info")
+			.addObject("menu", menuService.getMenu(menuID));
 	}
 	
 	@RequestMapping("/create.do")
-	public ModelAndView create(HttpServletRequest hreq) {
-		String parentID = hreq.getParameter("parentID"),
-			   menuName = hreq.getParameter("menuName"),
-			   actionID = hreq.getParameter("actionID"),
-//			   actionPath = hreq.getParameter("actionPath"),
-			   imgCfg = hreq.getParameter("imgCfg");
-		Menu menu = new Menu();
-		menu.setParentID(parentID);
-		menu.setName(menuName);
-		menu.setActionID(actionID);
-//		menu.setActionPath(actionPath);
-		menu.setImageConfig(imgCfg);
-		String menuID = menuService.create(menu);
-		return modelAndView("jsonView")
-			.addObject("saved", true)
-			.addObject("menuID", menuID);
+	public ModelAndView create(@ModelAttribute Menu menu) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", menuService.create(menu))
+			.addObject("menuID", menu.getId());
 	}
 	
 	@RequestMapping("/update.do")
-	public ModelAndView update(HttpServletRequest hreq) {
-		String menuID = hreq.getParameter("menuID"),
-			   menuName = hreq.getParameter("menuName"),
-			   actionID = hreq.getParameter("actionID"),
-//			   actionPath = hreq.getParameter("actionPath"),
-			   imgCfg = hreq.getParameter("imgCfg");
-		Menu menu = menuService.getMenu(menuID);
-		menu.setName(menuName);
-		menu.setActionID(actionID);
-//		menu.setActionPath(actionPath);
-		menu.setImageConfig(imgCfg);
-		boolean saved = menuService.update(menu);
-		return modelAndView("jsonView")
-			.addObject("saved", saved);
+	public ModelAndView update(@ModelAttribute Menu menu) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", menuService.update(menu));
 	}
 	
 	@RequestMapping("/move.do")
-	public ModelAndView move(HttpServletRequest hreq) {
-		String menuID = hreq.getParameter("menuID"),
-			   parentID = hreq.getParameter("parentID");
-		boolean saved = menuService.move(parentID, menuID.split(","));
-		return modelAndView("jsonView")
-			.addObject("saved", saved);
+	public ModelAndView move(@RequestParam String menuID, @RequestParam String parentID) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", menuService.move(parentID, menuID.split(",")));
 	}
 	
 	@RequestMapping("/reorder.do")
-	public ModelAndView reorder(HttpServletRequest hreq) {
-		String menuID = hreq.getParameter("menuID"),
-			   parentID = hreq.getParameter("parentID");
-		int offset = Integer.parseInt(ifEmpty(hreq.getParameter("offset"), "0"));
-		boolean saved = menuService.reorder(parentID, menuID, offset);
-		return modelAndView("jsonView")
-			.addObject("saved", saved);
+	public ModelAndView reorder(@RequestParam String menuID, @RequestParam String parentID, @RequestParam int offset) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", menuService.reorder(parentID, menuID, offset));
 	}
 	
 	@RequestMapping("/setStatus.do")
-	public ModelAndView setStatus(HttpServletRequest hreq) {
-		String menuID = hreq.getParameter("menuID"),
-			   status = hreq.getParameter("status");
-		boolean saved = menuService.setStatus(status, menuID.split(","));
-		return modelAndView("jsonView")
-			.addObject("saved", saved);
+	public ModelAndView setStatus(@RequestParam String menuID, @RequestParam String status) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", menuService.setStatus(status, menuID.split(",")));
 	}
 	
 	@RequestMapping("/delete.do")
-	public ModelAndView delete(HttpServletRequest hreq) {
-		String menuID = hreq.getParameter("menuID");
-		boolean saved = menuService.delete(menuID.split(","));
-		return modelAndView("jsonView")
-			.addObject("saved", saved);
+	public ModelAndView delete(@RequestParam String menuID) {
+		return new ModelAndView("jsonView")
+			.addObject("saved", menuService.delete(menuID.split(",")));
 	}
 }

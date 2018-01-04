@@ -23,6 +23,7 @@
 			</tr></c:set>
 		</tbody>
 	</table>
+	<div class="paging"></div>
 <vtx:script type="decl">
 var checkedCodes,
 	currentCodes,
@@ -93,7 +94,7 @@ function setCodeList(resp) {
 	    start:resp.codeStart
 	   ,fetchSize:resp.fetch
 	   ,totalSize:resp.totalCodes
-	   ,func:"getCodes"
+	   ,func:"getCodes({index})"
 	});
 }
 </vtx:script>

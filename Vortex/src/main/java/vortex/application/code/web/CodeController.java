@@ -73,12 +73,22 @@ public class CodeController extends ApplicationController {
 	
 	@RequestMapping("/list.do")
 	public ModelAndView getCodes(HttpServletRequest hreq) {
+		return searchCodes(request(hreq).set("viewName", "jsonView"));
+	}
+	
+	@RequestMapping("/select.do")
+	public ModelAndView select(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
+		String viewName = req.bool("init") ? "code/select" : "jsonView";
+		return searchCodes(req.set("viewName", viewName));
+	}
+	
+	private ModelAndView searchCodes(DataObject req) {
 		BoundedList<DataObject> codes = codeService.getCodes(
 			req.set("start", req.number("start").intValue())
 			   .set("fetch",  properties.getInt("fetch"))
 		);
-		return new ModelAndView("jsonView")
+		return new ModelAndView(req.string("viewName"))
 			.addObject("codes", codes)
 			.addObject("totalCodes", codes.getTotalSize())
 			.addObject("codeStart", req.get("start"));

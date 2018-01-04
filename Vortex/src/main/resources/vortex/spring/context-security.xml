@@ -24,6 +24,10 @@
 		<logout logout-success-url="/user/login.do"/>
 	</http>
 	
+	<authentication-manager>
+		<authentication-provider user-service-ref="authenticationService"/>
+	</authentication-manager>
+	
 	<beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
 		<beans:constructor-arg>
 			<beans:list>
@@ -34,9 +38,5 @@
 			</beans:list>
 		</beans:constructor-arg>
 	</beans:bean>
-	
-	<authentication-manager>
-		<authentication-provider user-service-ref="authenticationService"/>
-	</authentication-manager>
 
 </beans:beans>

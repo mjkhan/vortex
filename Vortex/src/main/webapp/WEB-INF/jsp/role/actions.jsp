@@ -118,15 +118,11 @@ function addActions(){
 	ajax({
 		url:"<c:url value='/action/select.do'/>",
 		success:function(resp) {
-			popup.show({
+			dialog({
 				title:"액션 선택",
 				content:resp,
-				onOK:function(){
-					var actionIDs = valuesOf(actionInfo.value(), "ACT_ID").join(",");
-					if (!actionIDs)
-						return alert("액션을 선택하십시오.");
-
-					popup.close();
+				onOK:function(selected){
+					var actionIDs = valuesOf(selected, "ACT_ID").join(",");
 					ajax({
 						url:"<c:url value='/role/action/add.do'/>",
 						data:{

@@ -121,12 +121,9 @@ function addUsers(){
 			dialog({
 				title:"사용자 선택",
 				content:resp,
-				beforeOK:"selectedUsers",
 				onOK:function(selected){
 					var userIDs = valuesOf(selected, "USER_ID").join(",");
-					if (!userIDs)
-						return alert("사용자를 선택하십시오.");
-					
+
 					ajax({
 						url:"<c:url value='/role/user/add.do'/>",
 						data:{
@@ -144,34 +141,6 @@ function addUsers(){
 					});
 				}
 			});
-<%-- 
-			popup.show({
-				title:"사용자 선택",
-				content:resp,
-				onOK:function(){
-					var userIDs = valuesOf(userInfo.value(), "USER_ID").join(",");
-					if (!userIDs)
-						return alert("사용자를 선택하십시오.");
-					
-					popup.close();
-					ajax({
-						url:"<c:url value='/role/user/add.do'/>",
-						data:{
-							roleIDs:checkedRoles.value().join(","),
-							userIDs:userIDs
-						},
-						success:function(resp){
-							if (!resp.saved)
-								return alert("저장되지 않았습니다.");
-							if (currentUsers)
-								currentUsers();
-							else
-								location.reload();
-						}
-					});
-				}
-			});
- --%>
 		}
 	});
 }

@@ -35,17 +35,12 @@ function setAction(){
 		url:"<c:url value='/action/select.do'/>",
 		data:{type:"radio"},
 		success:function(resp) {
-			popup.show({
+			dialog({
 				title:"액션 선택",
 				content:resp,
-				onOK:function(){
-					var selected = actionInfo.value();
-					if (!selected)
-						return alert("액션을 선택하십시오.");
+				onOK:function(selected){
 					$("#actionID").val(selected.ACT_ID);
 					$("#actionPath").val(selected.ACT_PATH);
-
-					popup.close();
 				}
 			});
 		}

@@ -52,8 +52,8 @@ $.fn.validate = function(config) {
 					alert("올바른 " + label + "을(를) 입력하십시오.");
 				else
 					alert("잘못된 값이 입력됐습니다.");
+				setTimeout(function(){input.focus();}, 20);
 			}
-			setTimeout(function(){input.focus();}, 20);
 		})
 	});
 }
@@ -152,8 +152,7 @@ $.fn.message = function(msg) {
 /**options = {
  * 	title:"...",
  *  content:"... ",
- *  beforeOK:"name of the function that returns the user selection",
- *  onOK:function(info)
+ *  onOK:function(selected)
  * }
  */
 function dialog(options) {
@@ -178,9 +177,9 @@ function dialog(options) {
 			var ok = !isEmpty(dlg.options.onOK);
 			if (ok)
 				$("#" + id + "Ok").off("click").on("click", function(){
-					if (window[dlg.options.beforeOK]) {
-						var selected = window[dlg.options.beforeOK]();
-						if (!selected) return;
+					if (window.userSelection) {
+						var selected = userSelection();
+						if (isEmpty(selected)) return;
 						
 						dlg.options.onOK(selected);
 						dlg.close();
@@ -193,61 +192,22 @@ function dialog(options) {
 			dlg.container.show();
 		},
 		show:function() {
-			if (!dlg.container) {
-				dlg.container = $("<div id='" + id + "' class='dialogModal'>").appendTo("body");
-				ajax({
-					url:wctx.path + "/asset/html/dialog.html",
-					success:function(resp) {
-						dlg.container.html(resp.replace(/{dlg}/g, id));
-						dlg.render();
-					}
-				});
-			} else
-				dlg.render();
+			dlg.container = $("<div id='" + id + "' class='dialogModal'>").appendTo("body");
+			ajax({
+				url:wctx.path + "/asset/html/dialog.html",
+				success:function(resp) {
+					dlg.container.html(resp.replace(/{dlg}/g, id));
+					dlg.render();
+				}
+			});
 			return dlg;
 		},
 		close:function() {
-			dlg.container.fadeOut();
+			dlg.container.fadeOut().remove();
 		}
 	};
 	return dlg.show();
 }
-
-var popup = {
-	container:null,
-	onclose:null,
-	render:function(options) {
-		popup.container.addClass("dialogModal");
-		if (options.override)
-			popup.container.html(options.content);
-		else {
-			$("#_dlgTitle").html(options.title || "Vortex");
-			$("#_dlgContent").html(options.content);
-		}
-		if (options.onOK)
-			$("#_ok").off("click").on("click", options.onOK);
-		popup.container.show();
-	},
-	show:function(options) {
-		popup.onclose = options.onclose;
-		if (!popup.container) {
-			popup.container = $("<div>").appendTo("body");
-			ajax({
-				url:wctx.path + "/asset/html/popup.html",
-				success:function(resp) {
-					popup.container.html(resp);
-					popup.render(options);
-				}
-			});
-		} else
-			popup.render(options);
-	},
-	close:function() {
-		popup.container.fadeOut();
-		if (popup.onclose)
-			popup.onclose();
-	}
-};
 /**
  * @param config
  * {start:0,

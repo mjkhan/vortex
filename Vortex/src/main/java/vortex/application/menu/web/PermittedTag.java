@@ -19,13 +19,16 @@ public class PermittedTag extends VortexTag {
 		MenuContext mctx = (MenuContext)hreq().getAttribute("menuContext");
 		String action = mctx.getPermittedAction(menu);
 		if (isEmpty(action)) return SKIP_BODY;
-		
+
 		pageContext.setAttribute("menuID", menu.getId());
 		pageContext.setAttribute("menuName", menu.getName());
 		pageContext.setAttribute("menuAction", action);
 		pageContext.setAttribute("menuImage", menu.getImageConfig());
-		boolean current = action.equals(Client.current().getAction()); //TODO:현재 선택 메뉴 판단
-		pageContext.setAttribute("currentMenu", current);
+		String clientAction = Client.current().getAction();
+		pageContext.setAttribute("currentMenu",
+			action.equals(clientAction) ||
+			mctx.hasAction(menu.getChildren(), clientAction)
+		);
 		return EVAL_BODY_INCLUDE;
 	}
 	@Override

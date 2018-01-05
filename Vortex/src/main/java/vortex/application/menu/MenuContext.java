@@ -46,4 +46,14 @@ public class MenuContext extends AbstractObject {
 			return null;
 		}
 	}
+	
+	public boolean hasAction(List<Menu> menus, String action) {
+		for (Menu menu: menus) {
+			if (action.equals(menu.getActionPath()))
+				return true;
+			if (hasAction(menu.getChildren(), action))
+				return true;
+		}
+		return false;
+	}
 }

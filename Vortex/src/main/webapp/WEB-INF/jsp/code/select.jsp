@@ -15,7 +15,7 @@
 	<tbody id="_codeList">
 	<c:set var="notFound"><tr><td colspan="3" class="notFound">코드를 찾지 못했습니다.</td></c:set>
 	<c:set var="codeRow"><tr>
-			<td><input name="_code" value="{code}" type="{type}" /></td>
+			<td><input name="_code" value="{code}" type="${type}"/></td>
 			<td>{code}</td>
 			<td>{value}</td>
 		</tr></c:set>
@@ -29,10 +29,10 @@ function _getCodes(start) {
 	ajax({
 		url:"<c:url value='/code/select.do'/>"
 	   ,data:{
-	   		groupID:currentGroup.GRP_ID
+	   		groupID:"${param.groupID}"
 	   	   ,start:start
 	   }
-	   ,success:setCodeList
+	   ,success:_setCodeList
 	});
 }
 
@@ -76,7 +76,7 @@ function _setCodeList(resp) {
 }
 
 $(function(){
-	setCodeList({
+	_setCodeList({
 		codes:<vtx:json data="${codes}" mapper="${objectMapper}"/>
 	   ,totalCodes:${totalCodes}
 	   ,codeStart:${codeStart}

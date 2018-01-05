@@ -91,7 +91,8 @@ public class CodeController extends ApplicationController {
 		return new ModelAndView(req.string("viewName"))
 			.addObject("codes", codes)
 			.addObject("totalCodes", codes.getTotalSize())
-			.addObject("codeStart", req.get("start"));
+			.addObject("codeStart", req.get("start"))
+			.addObject("fetch", req.get("fetch"));
 	}
 	
 	@RequestMapping("/info.do")

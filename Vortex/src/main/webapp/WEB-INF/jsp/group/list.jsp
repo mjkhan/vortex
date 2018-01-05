@@ -74,7 +74,7 @@ function setGroupList(resp) {
 		start:resp.start
 	   ,fetchSize:resp.fetch
 	   ,totalSize:resp.totalSize
-	   ,func:"searchGroups"
+	   ,func:"searchGroups({index})"
 	});
 
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")

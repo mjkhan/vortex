@@ -53,7 +53,7 @@ public class User implements UserDetails {
 		return UNKNOWN.equals(getId());
 	}
 	
-	public List<String> getRoleIDs() {
+	public List<String> getRoleIDs() {//TODO:authority 관련 수정?
 		if (roleIDs == null) {
 			roleIDs = new ArrayList<>();
 			roleIDs.add("all");

@@ -70,13 +70,19 @@
     </tag>
     
     <tag>
-    	<name>permitted</name>
-    	<tag-class>vortex.application.menu.web.PermittedTag</tag-class>
+    	<name>granted</name>
+    	<tag-class>vortex.application.menu.web.GrantedTag</tag-class>
     	<body-content>JSP</body-content>
 		<description><![CDATA[ ]]></description>
 		<attribute>
+			<name>permission</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[ ]]></description>
+		</attribute>
+		<attribute>
 			<name>menu</name>
-			<required>true</required>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>vortex.application.menu.Menu</type>
 			<description><![CDATA[ ]]></description>

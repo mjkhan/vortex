@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="permission">
+
+<resultMap id="pmsRow" type="permission">
+	<id property="id" column="PMS_ID"/>
+	<result property="name" column="PMS_NAME"/>
+	<result property="description" column="DESCRP"/>
+	<result property="modifiedBy" column="UPD_ID"/>
+	<result property="lastModified" column="UPD_TIME"/>
+</resultMap>
+
+<!-- 권한 목록 가져오기 -->
+<select id="search" resultType="dataobject">
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS *
+	FROM TBL_PERMISSION
+	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
+	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">PMS_ID</if>
+	LIMIT #{start}, #{fetch} 
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
+	SELECT *
+	FROM TBL_PERMISSION
+	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
+	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">PMS_ID</if>
+</if>
+</select>
+
+<sql id="select-by-id">
+SELECT *
+FROM TBL_PERMISSION
+WHERE PMS_ID = #{pmsID}
+</sql>
+
+<!-- 권한 정보 가져오기 -->
+<select id="getInfo" parameterType="string" resultType="dataobject">
+<include refid="select-by-id"/>
+</select>
+
+<!-- Permission 가져오기 -->
+<select id="getPermission" parameterType="string" resultMap="pmsRow">
+<include refid="select-by-id"/>
+</select>
+
+<!-- 권한 정보 생성 -->
+<insert id="insert" parameterType="hashmap">
+INSERT INTO TBL_PERMISSION (
+	PMS_ID,
+	PMS_NAME,
+	DESCRP,
+	UPD_ID,
+	UPD_TIME
+) VALUES (
+	#{permission.id},
+	#{permission.name},
+	#{permission.description},
+	#{currentUser.id},
+	CURRENT_TIMESTAMP
+)
+</insert>
+
+<!-- 권한 정보 수정 -->
+<update id="update" parameterType="hashmap">
+UPDATE TBL_PERMISSION SET
+	PMS_NAME = #{permission.name},
+	DESCRP = #{permission.description},
+	UPD_ID = #{currentUser.id},
+	UPD_TIME = CURRENT_TIMESTAMP
+WHERE ROLE_ID = #{permission.id}
+</update>
+
+<!-- 권한 정보 삭제 -->
+<delete id="delete" parameterType="hashmap">
+DELETE FROM TBL_PERMISSION
+<if test="roleIDs != null">
+WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
+</if>
+</delete>
+
+<!-- 액션 추가 -->
+<insert id="addActions" parameterType="hashmap">
+INSERT INTO TBL_PMS_ACTION (PMS_ID, ACT_ID, INS_ID, INS_TIME)
+SELECT PMS_ID, ACT_ID, #{currentUser.id}, CURRENT_TIMESTAMP
+FROM (
+	<foreach collection="permissionIDs" item="permissionID" separator=" UNION">SELECT #{permissionID} PMS_ID</foreach>
+) A, (
+	<foreach collection="actionIDs" item="actionID" separator=" UNION">SELECT #{actionID} ACT_ID</foreach>
+) B
+WHERE NOT EXISTS (
+	SELECT PMS_ID, ACT_ID
+	FROM TBL_PMS_ACTION C
+	WHERE C.PMS_ID = A.PMS_ID
+	AND C.ACT_ID = B.ACT_ID
+)
+</insert>
+
+<!-- 액션 삭제 -->
+<delete id="deleteActions" parameterType="hashmap">
+DELETE FROM TBL_PMS_ACTION
+WHERE 1 = 1
+<if test="permissionIDs != null">
+AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
+</if>
+<if test="actionIDs != null">
+AND	ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
+</if>
+</delete>
+
+
+</mapper>

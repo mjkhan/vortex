@@ -46,9 +46,7 @@ public class UserController extends ApplicationController {
 			.addObject("users", users)
 			.addObject("totalSize", users.getTotalSize())
 			.addObject("start", req.get("start"))
-			.addObject("fetchSize", req.get("fetch"))
-			.addObject("more", users.hasNext())
-			.addObject("next", users.getEnd() + 1);
+			.addObject("fetchSize", req.get("fetch"));
 	}
 	
 	@RequestMapping("/info.do")

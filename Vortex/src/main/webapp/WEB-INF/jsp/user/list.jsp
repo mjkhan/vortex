@@ -12,7 +12,7 @@
 		 </select>
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getUsers(0);" type="button">찾기</button>
-		 <button onclick="newUser();" type="button" class="add">추가</button>
+		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeUsers();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -28,16 +28,14 @@
 			<c:set var="notFound"><tr><td colspan="5" class="notFound">사용자를 찾지 못했습니다.</td></c:set>
 			<c:set var="userRow"><tr>
 				<td><input name="userID" value="{userID}" type="checkbox" /></td>
-				<td><a onclick="getUser('{userID}')">{userID}</a></td>
+				<td><a onclick="getInfo('{userID}')">{userID}</a></td>
 				<td>{userName}</td>
 				<td>{alias}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
 		</tbody>
 	</table>
-	<div class="more">
-		<button type="button">더 보기</button>
-	</div>
+	<div class="paging"></div>
 </div>
 <div id="userDetail" class="hidden" style="padding:1em 0;"></div>
 <vtx:script type="decl">
@@ -94,17 +92,7 @@ function showDetail(show) {
 	}
 }
 
-function newUser() {
-	ajax({
-		url:"<c:url value='/user/info.do'/>",
-		success:function(resp) {
-			$("#userDetail").html(resp);
-			showDetail();
-		}
-	});
-}
-
-function getUser(userID) {
+function getInfo(userID) {
 	ajax({
 		url:"<c:url value='/user/info.do'/>?userID=" + userID,
 		success:function(resp) {
@@ -114,8 +102,7 @@ function getUser(userID) {
 	});
 }
 
-function setUserList(resp, start) {
-	var append = start > 0;
+function setUserList(resp) {
 	$("#userList").populate({
 		data:resp.users,
 		tr:function(row){
@@ -125,21 +112,10 @@ function setUserList(resp, start) {
 				.replace(/{alias}/g, row.ALIAS)
 				.replace(/{insTime}/g, row.INS_TIME);
 		},
-		ifEmpty:"${vtx:jstring(notFound)}",
-		append:append
+		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
-	if (!append)
-		$(".showOnCheck").fadeOut();
-	if (resp.more) {
-		$(".more button")
-			.removeAttr("onclick")
-			.attr("onclick", "getUsers(" + resp.next + ")");
-		$(".more").show();
-	} else {
-		$(".more").hide();
-	}
-	
+	$(".showOnCheck").fadeOut();
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
 		.onChange(function(checked){
 			if (checked)
@@ -148,6 +124,13 @@ function setUserList(resp, start) {
 				$(".showOnCheck").fadeOut();
 		});
 	checkbox("#toggleChecks").onChange(function(checked){checkedUsers.check(checked);});
+	
+	$(".paging").setPaging({
+	    start:resp.start
+	   ,fetchSize:resp.fetchSize
+	   ,totalSize:resp.totalSize
+	   ,func:"getUsers({index})"
+	});
 }
 </vtx:script>
 <vtx:script type="docReady">
@@ -156,9 +139,10 @@ function setUserList(resp, start) {
 	$("#value").onEnterPress(getUsers);
 	setUserList({
 		users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
-		more:${more},
-		next:${next}
-	}, 0);
+		start:${start},
+		fetchSize:${fetchSize},
+		totalSize:${totalSize}
+	});
 	currentUsers = getUsers;
 </vtx:script>
 <jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

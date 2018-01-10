@@ -13,19 +13,23 @@
 <!-- 권한 목록 가져오기 -->
 <select id="search" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
-	SELECT SQL_CALC_FOUND_ROWS *
-	FROM TBL_PERMISSION
-	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
-	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
-	ORDER BY <if test="order != null">#{order}</if><if test="order == null">PMS_ID</if>
+	SELECT SQL_CALC_FOUND_ROWS * FROM (
+		SELECT 0 SRT_ORD, 'all' PMS_ID, '모두' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP UNION
+		SELECT 1 SRT_ORD, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP UNION
+		SELECT 2 SRT_ORD, PMS_ID, PMS_NAME, DESCRP FROM TBL_PERMISSION
+	) A WHERE 1 = 1
+	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">SRT_ORD, PMS_ID</if>
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
-	SELECT *
-	FROM TBL_PERMISSION
-	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
-	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
-	ORDER BY <if test="order != null">#{order}</if><if test="order == null">PMS_ID</if>
+	SELECT * FROM (
+		SELECT 0 SRT_ORD, 'all' PMS_ID, '모두' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP UNION
+		SELECT 1 SRT_ORD, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP UNION
+		SELECT 2 SRT_ORD, PMS_ID, PMS_NAME, DESCRP FROM TBL_PERMISSION
+	) A WHERE 1 = 1
+	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">SRT_ORD, PMS_ID</if>
 </if>
 </select>
 
@@ -75,7 +79,7 @@ WHERE ROLE_ID = #{permission.id}
 <!-- 권한 정보 삭제 -->
 <delete id="delete" parameterType="hashmap">
 DELETE FROM TBL_PERMISSION
-<if test="roleIDs != null">
+<if test="permissionIDs != null">
 WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>
 </delete>

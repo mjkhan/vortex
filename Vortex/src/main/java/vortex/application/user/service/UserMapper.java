@@ -13,13 +13,11 @@ import vortex.support.data.Status;
 @Repository("userMapper")
 public class UserMapper extends DataMapper {
 	
-	public BoundedList<DataObject> search(DataObject req) {
-		DataObject params = ifEmpty(req, this::params);
-		
-		if (isEmpty(req.get("field")))
-			req.remove("field");
-		if (isEmpty(req.get("value")))
-			req.remove("value");
+	public BoundedList<DataObject> search(DataObject params) {
+		if (isEmpty(params.get("searchTerms"))) {
+			params.remove("searchBy");
+			params.remove("searchTerms");
+		}
 		
 		return boundedList(selectList("user.search", params), params);
 	}
@@ -51,9 +49,8 @@ public class UserMapper extends DataMapper {
 	}
 	
 	public boolean update(User user) {
-		if (user == null) return false;
-		
-		return update("user.update", params(true).set("user", user)) == 1;
+		return user == null ? false :
+			update("user.update", params(true).set("user", user)) == 1;
 	}
 	
 	public int setStatus(String status, String... userIDs) {

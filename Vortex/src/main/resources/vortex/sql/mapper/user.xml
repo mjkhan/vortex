@@ -20,7 +20,7 @@
 	SELECT SQL_CALC_FOUND_ROWS *
 	FROM TBL_USER
 	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
-	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
+	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
 	ORDER BY <if test="order != null">#{order}</if><if test="order == null">USER_ID</if>
 	LIMIT #{start}, #{fetch} 
 </if>
@@ -28,7 +28,7 @@
 	SELECT *
 	FROM TBL_USER
 	WHERE STATUS <if test="status == null">&lt;&gt; '999'</if><if test="status != null">= #{status}</if>
-	<if test="field != null and value != null">AND ${field} LIKE CONCAT(#{value}, '%')</if>
+	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
 	ORDER BY <if test="order != null">#{order}</if><if test="order == null">USER_ID</if>
 </if>
 </select>
@@ -39,13 +39,13 @@ FROM TBL_USER
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </sql>
 
-<!-- ID별 User 가져오기 -->
-<select id="getUsers" parameterType="hashmap" resultMap="userRow">
+<!-- ID별 사용자 목록 -->
+<select id="getInfo" parameterType="hashmap" resultType="dataobject">
 <include refid="select-by-id"/>
 </select>
 
-<!-- ID별 사용자 목록 -->
-<select id="getInfo" parameterType="hashmap" resultType="dataobject">
+<!-- ID별 User 가져오기 -->
+<select id="getUser" parameterType="hashmap" resultMap="userRow">
 <include refid="select-by-id"/>
 </select>
 

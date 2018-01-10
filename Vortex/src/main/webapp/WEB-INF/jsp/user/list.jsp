@@ -4,13 +4,13 @@
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="searchUsers" style="width:100%;">
 	<div class="inputArea">
-		<select id="field">
+		<select id="searchBy">
 			<option value="">검색조건</option>
 			<option value="USER_ID">아이디</option>
 			<option value="USER_NAME">이름</option>
 			<option value="ALIAS">별명</option>
 		 </select>
-		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
+		 <input id="searchTerms" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getUsers(0);" type="button">찾기</button>
 		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeUsers();" type="button" class="showOnCheck">삭제</button>

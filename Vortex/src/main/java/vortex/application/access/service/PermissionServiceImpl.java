@@ -24,7 +24,7 @@ public class PermissionServiceImpl extends ApplicationService implements Permiss
 
 	@Override
 	public Permission getPermission(String permissionID) {
-		return permissionMapper.getObject(permissionID);
+		return permissionMapper.getPermission(permissionID);
 	}
 
 	@Override

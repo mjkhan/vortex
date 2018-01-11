@@ -43,9 +43,13 @@ var number = {
 	},
 	parse:function(v) {
 		if (isEmpty(v))
-			return v;
+			return "0";
 		return v.replace(/,/gi, "");
-	}
+	},
+	get:function(id) {
+		var v = $("#" + id).val();
+		return number.parse(v);
+	} 
 };
 
 function elementsOf(array, name, values) {

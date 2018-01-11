@@ -14,6 +14,12 @@ public class GroupMapper extends DataMapper {
 		this.groupType = groupType;
 	}
 	
+	@Override
+	protected DataObject params(boolean currentUser) {
+		return super.params(currentUser)
+					.set("groupType", groupType);
+	}
+	
 	public BoundedList<DataObject> search(DataObject req) {
 		DataObject params = ifEmpty(req, this::params);
 		if (isEmpty(req.get("field")))
@@ -27,16 +33,14 @@ public class GroupMapper extends DataMapper {
 	public DataObject getInfo(String groupID) {
 		return selectOne(
 			"group.getInfo"
-			,params().set("groupType", groupType)
-					 .set("groupID", groupID)
+			,params().set("groupID", groupID)
 		);
 	}
 	
 	public Group getGroup(String groupID) {
 		return selectOne(
 			"group.getGroup"
-			,params().set("groupType", groupType)
-					 .set("groupID", groupID)
+			,params().set("groupID", groupID)
 		);
 	}
 	
@@ -58,7 +62,6 @@ public class GroupMapper extends DataMapper {
 		return update(
 			"group.setStatus"
 		   , params(true)
-		   		.set("groupType", groupType)
 		   		.set("groupIDs", groupIDs)
 		   		.set("status", status)
 		);
@@ -75,8 +78,7 @@ public class GroupMapper extends DataMapper {
 			deleteMembers(groupIDs, null)
 		  + delete(
 				"group.delete"
-			   , params().set("groupType", groupType)
-			   			 .set("groupIDs", groupIDs)
+			   , params().set("groupIDs", groupIDs)
 			);
 	}
 	
@@ -86,7 +88,6 @@ public class GroupMapper extends DataMapper {
 		return insert(
 			"group.addMembers"
 		   , params(true)
-		   		.set("groupType", groupType)
 		   		.set("groupIDs", groupIDs)
 		   		.set("memberType", memberType)
 		   		.set("memberIDs", memberIDs)
@@ -101,8 +102,7 @@ public class GroupMapper extends DataMapper {
 	public int deleteMembers(String[] groupIDs, String memberType, String... memberIDs) {
 		return delete(
 			"group.deleteMembers"
-		   , params().set("groupType", groupType)
-		   			 .set("groupIDs", !isEmpty(groupIDs) ? groupIDs : null)
+		   , params().set("groupIDs", !isEmpty(groupIDs) ? groupIDs : null)
 		   			 .set("memberType", memberType)
 		   			 .set("memberIDs", !isEmpty(memberIDs) ? memberIDs : null)
 		);
@@ -118,8 +118,7 @@ public class GroupMapper extends DataMapper {
 		
 		return update(
 			"group.reorderMembers"
-		   , params().set("groupType", groupType)
-		   			 .set("groupID", groupID)
+		   , params().set("groupID", groupID)
 		   			 .set("memberType", memberType)
 		   			 .set("memberIDs", memberIDs)
 		);

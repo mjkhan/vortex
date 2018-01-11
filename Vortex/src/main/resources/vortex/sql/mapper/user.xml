@@ -45,7 +45,7 @@ WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{u
 </select>
 
 <!-- ID별 User 가져오기 -->
-<select id="getUser" parameterType="hashmap" resultMap="userRow">
+<select id="getUsers" parameterType="hashmap" resultMap="userRow">
 <include refid="select-by-id"/>
 </select>
 

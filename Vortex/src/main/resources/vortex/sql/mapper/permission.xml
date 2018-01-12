@@ -4,6 +4,7 @@
 
 <resultMap id="pmsRow" type="permission">
 	<id property="id" column="PMS_ID"/>
+	<result property="groupID" column="GRP_ID"/>
 	<result property="name" column="PMS_NAME"/>
 	<result property="description" column="DESCRP"/>
 	<result property="modifiedBy" column="UPD_ID"/>
@@ -52,28 +53,31 @@ WHERE PMS_ID = #{pmsID}
 <!-- 권한 정보 생성 -->
 <insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_PERMISSION (
-	PMS_ID,
-	PMS_NAME,
-	DESCRP,
-	UPD_ID,
-	UPD_TIME
+	PMS_ID
+   ,GRP_ID
+   ,PMS_NAME
+   ,DESCRP
+   ,UPD_ID
+   ,UPD_TIME
 ) VALUES (
-	#{permission.id},
-	#{permission.name},
-	#{permission.description},
-	#{currentUser.id},
-	CURRENT_TIMESTAMP
+	#{permission.id}
+   ,#{permission.groupID}
+   ,#{permission.name}
+   ,#{permission.description}
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
 )
 </insert>
 
 <!-- 권한 정보 수정 -->
 <update id="update" parameterType="hashmap">
 UPDATE TBL_PERMISSION SET
-	PMS_NAME = #{permission.name},
-	DESCRP = #{permission.description},
-	UPD_ID = #{currentUser.id},
-	UPD_TIME = CURRENT_TIMESTAMP
-WHERE ROLE_ID = #{permission.id}
+	GRP_ID = #{permission.groupID}
+   ,PMS_NAME = #{permission.name}
+   ,DESCRP = #{permission.description}
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
+WHERE PMS_ID = #{permission.id}
 </update>
 
 <!-- 권한 정보 삭제 -->

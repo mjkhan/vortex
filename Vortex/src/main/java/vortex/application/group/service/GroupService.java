@@ -5,7 +5,7 @@ import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 public interface GroupService {
-	public BoundedList<DataObject> searchGroups(DataObject req);
+	public BoundedList<DataObject> search(DataObject req);
 	
 	public DataObject getInfo(String groupID);
 	

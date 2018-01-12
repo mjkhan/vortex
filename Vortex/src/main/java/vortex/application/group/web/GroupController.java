@@ -21,18 +21,28 @@ public class GroupController extends ApplicationController {
 	@Resource(name="groupService")
 	private GroupService groupService;
 	
-	@RequestMapping("/list.do")
-	public ModelAndView searchGroups(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		BoundedList<DataObject> groups = groupService.searchGroups(
+	private ModelAndView search(DataObject req) {
+		BoundedList<DataObject> groups = groupService.search(
 			req.set("start", req.number("start").intValue())
 			   .set("fetch", properties.getInt("fetch"))
 		);
-		return new ModelAndView(!req.bool("ajax") ? "group/list" : "jsonView")
+		return new ModelAndView(req.string("viewName"))
 				.addObject("groups", groups)
 				.addObject("totalSize", groups.getTotalSize())
 				.addObject("start", req.get("start"))
 				.addObject("fetch", req.get("fetch"));
+	}
+	
+	@RequestMapping("/list.do")
+	public ModelAndView search(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		return search(req.set("viewName", !req.bool("ajax") ? "group/list" : "jsonView"));
+	}
+	
+	@RequestMapping("/select.do")
+	public ModelAndView select(HttpServletRequest hreq) {
+		DataObject req = request(hreq); //TODO: select viewName 결정
+		return search(req.set("viewName", !req.bool("ajax") ? "group/select" : "jsonView"));
 	}
 	
 	@RequestMapping("/info.do")

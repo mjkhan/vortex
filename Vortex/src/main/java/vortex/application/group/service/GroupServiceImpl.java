@@ -16,7 +16,7 @@ public class GroupServiceImpl extends ApplicationService implements GroupService
 	private GroupMapper genericGroup;
 	
 	@Override
-	public BoundedList<DataObject> searchGroups(DataObject req) {
+	public BoundedList<DataObject> search(DataObject req) {
 		return genericGroup.search(req);
 	}
 

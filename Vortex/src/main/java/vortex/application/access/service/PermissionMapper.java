@@ -45,11 +45,23 @@ public class PermissionMapper extends DataMapper {
 
 	public int delete(String... permissionIDs) {
 		return
-			deleteActions(permissionIDs, null)
+			deleteActions(null, permissionIDs)
 		  + delete(
 				"permission.delete"
 			   , params().set("permissionIDs", permissionIDs)
 			);
+	}
+	
+	public BoundedList<DataObject> getActions(String permissionID, int start, int fetch) {
+		DataObject params = params().set("permissionID", permissionID);
+		if (fetch > 0)
+			params.set("start", start)
+				  .set("fetch", fetch);
+		return boundedList(selectList(
+			"permission.getActions"
+		   , params)
+		   , start, fetch
+		);
 	}
 	
 	public int addActions(String[] permissionIDs, String[] actionIDs) {
@@ -68,16 +80,21 @@ public class PermissionMapper extends DataMapper {
 			0;
 	}
 	
-	public int deleteActions(String[] permissionIDs, String[] actionIDs) {
+	private int deleteActions(String[] groupIDs, String[] permissionIDs, String[] actionIDs) {
 		return delete(
 			"permission.deleteActions"
 		   ,params()
-		   	.set("permissionIDs", ifEmpty(permissionIDs, () -> null))
+		   	.set("groupIDs", ifEmpty(groupIDs, () -> null))
 		   	.set("actionIDs", ifEmpty(actionIDs, () -> null))
+		   	.set("permissionIDs", ifEmpty(permissionIDs, () -> null))
 		);
 	}
 	
 	public int deleteActions(String permissionID, String... actionIDs) {
-		return deleteActions(new String[]{permissionID}, actionIDs);
+		return deleteActions(null, new String[]{permissionID}, actionIDs);
+	}
+	
+	public int deleteActions(String... groupIDs) {
+		return deleteActions(groupIDs, null, null);
 	}
 }

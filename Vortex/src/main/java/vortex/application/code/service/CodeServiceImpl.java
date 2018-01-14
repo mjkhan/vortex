@@ -1,8 +1,5 @@
 package vortex.application.code.service;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -67,12 +64,12 @@ public class CodeServiceImpl extends ApplicationService implements CodeService {
 	public BoundedList<DataObject> getCodes(DataObject req) {
 		return codeMapper.getCodes(req);
 	}
-
+/*
 	@Override
 	public Map<String, List<DataObject>> getCodesOf(String... groupIDs) {
 		return codeMapper.getCodesOf(groupIDs);
 	}
-	
+*/	
 	@Override
 	public DataObject getInfo(String groupID, String code) {
 		return codeMapper.getInfo(groupID, code);

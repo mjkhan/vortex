@@ -36,6 +36,11 @@ public class PermissionServiceImpl extends ApplicationService implements Permiss
 	public boolean update(Permission permission) {
 		return permissionMapper.update(permission);
 	}
+	
+	@Override
+	public BoundedList<DataObject> getActions(String permissionID, int start, int fetch) {
+		return permissionMapper.getActions(permissionID, start, fetch);
+	}
 
 	@Override
 	public int addActions(String permissionID, String... actionIDs) {

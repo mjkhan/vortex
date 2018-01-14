@@ -1,10 +1,6 @@
 package vortex.application.code.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -24,20 +20,13 @@ public class CodeMapper extends DataMapper {
 		params.put("groupIDs", groupID.split(","));
 		return boundedList(selectList("code.getCodes", params), params);
 	}
-	
+/*	
 	public Map<String, List<DataObject>> getCodesOf(String... groupIDs) {
-		List<DataObject> codes = getCodes(groupIDs);
-		if (codes.isEmpty()) return Collections.emptyMap();
-		
-		LinkedHashMap<String, List<DataObject>> result = new LinkedHashMap<>();
-		codes.forEach(row -> 
-			result.computeIfAbsent(row.string("grp_id"), key -> new ArrayList<DataObject>())
-				.add(row)
+		return getCodes(groupIDs).stream().collect(
+			Collectors.groupingBy(row -> row.string("grp_id"))
 		);
-	
-		return result;
 	}
-	
+*/	
 	public DataObject getInfo(String groupID, String code) {
 		return selectOne(
 			"code.getInfo"

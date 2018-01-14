@@ -27,21 +27,23 @@ AND CD_ID = #{code}
 </select>
 
 <!-- 코드 정보 생성 -->
-<insert id="insert" parameterType="code">
+<insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_CMN_CODE (
-	GRP_ID,
-	CD_ID,
-	CD_VAL,
-	DESCRP,
-	UPD_ID,
-	UPD_TIME
+	GRP_ID
+   ,CD_ID
+   ,CD_VAL
+   ,DESCRP
+   ,UPD_ID
+   ,UPD_TIME
+   ,STATUS
 ) VALUES (
-	#{groupID},
-	#{code},
-	#{value},
-	#{description},
-	#{modifiedBy},
-	CURRENT_TIMESTAMP
+	#{code.groupID}
+   ,#{code.code}
+   ,#{code.value}
+   ,#{code.description}
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
+   ,'001'
 )
 </insert>
 

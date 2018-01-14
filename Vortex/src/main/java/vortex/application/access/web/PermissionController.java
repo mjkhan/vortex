@@ -23,7 +23,7 @@ public class PermissionController extends ApplicationController {
 	
 	@RequestMapping("/list.do")
 	public ModelAndView search(HttpServletRequest hreq) {
-		return search(hreq, "permission/list");
+		return search(hreq, "permission/permission-action");
 	}
 	
 	@RequestMapping("/select.do")
@@ -33,14 +33,21 @@ public class PermissionController extends ApplicationController {
 
 	private ModelAndView search(HttpServletRequest hreq, String initView) {
 		DataObject req = request(hreq);
-		req.set("start", req.number("start").intValue())
-		   .set("fetch", properties.getInt("fetch"));
+		int start = req.number("start").intValue(),
+			fetch = properties.getInt("fetch");
+		req.set("start", start)
+		   .set("fetch", fetch);
 		BoundedList<DataObject> permissions = permissionService.search(req);
-		return new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView")
+		ModelAndView mv = new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView");
+		if (!permissions.isEmpty()) {
+			String permissionID = permissions.get(0).string("pms_id");
+			mv.addObject("actions", permissionService.getActions(permissionID, start, fetch));
+		}
+		return mv
 			.addObject("permissions", permissions)
-			.addObject("totalSize", permissions.getTotalSize())
-			.addObject("start", req.get("start"))
-			.addObject("fetchSize", req.get("fetch"));
+			.addObject("totalPermissions", permissions.getTotalSize())
+			.addObject("permissionStart", req.get("start"))
+			.addObject("fetch", req.get("fetch"));
 	}
 	
 	@RequestMapping("/info.do")
@@ -59,6 +66,15 @@ public class PermissionController extends ApplicationController {
 	public ModelAndView update(@ModelAttribute Permission permission) {
 		return new ModelAndView("jsonView")
 			.addObject("saved", permissionService.update(permission));
+	}
+	
+	public ModelAndView getActions(String permissionID) {
+		BoundedList<DataObject> actions = permissionService.getActions(permissionID, 0, 0);
+		return new ModelAndView("jsonView")
+			.addObject("actions", actions)
+			.addObject("totalActions", actions.getTotalSize())
+			.addObject("actionStart", actions.getStart())
+			.addObject("fetch", properties.getInt("fetch"));
 	}
 	
 	@RequestMapping("/action/add.do")

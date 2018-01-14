@@ -22,7 +22,7 @@ public class CodeServiceTest extends VortexTest {
 		group.setModifiedBy(userID);
 		return group;
 	}
-	
+
 	private Code newCode(String group, String code, String value, String user) {
 		Code obj = new Code();
 		obj.setGroupID(group);
@@ -31,7 +31,7 @@ public class CodeServiceTest extends VortexTest {
 		obj.setModifiedBy(user);
 		return obj;
 	}
-	
+	/*	
 	@Test
 	public void createGroup() {
 		Group group = newGroup(0);
@@ -78,7 +78,8 @@ public class CodeServiceTest extends VortexTest {
 			   code = "code0",
 			   value = "value0";
 		Code code0 = newCode(group, code, value, "test user");
-		codeService.createCode(dataObject().set("code", code0));
+		codeService.create(code0);
+		codeService.create(code0);
 		Code loaded = codeService.getCode(dataObject().set("groupID", group).set("code", code)).value("code");
 		Assert.assertNotNull(loaded);
 		Assert.assertEquals(value, loaded.getValue());
@@ -143,18 +144,18 @@ public class CodeServiceTest extends VortexTest {
 		List<DataObject> codes = codeService.getCodes(req.set("groupID", groupIDs)).value("codes");
 		Assert.assertEquals(6, codes.size());
 	}
-	
+*/	
 	@Test
 	public void getCodesOf() {
-		String groupIDs = "001,002,003";
+		String groupIDs = "901,902,903";
 		String[] groups = groupIDs.split(",");
 		DataObject req = dataObject();
 		for (String group: groups) {
-			codeService.createCode(req.set("code", newCode(group, group + "-code0", group + "-value0", "test user")));
-			codeService.createCode(req.set("code", newCode(group, group + "-code1", group + "-value1", "test user")));
+			codeService.create(newCode(group, group + "-code0", group + "-value0", "test user"));
+			codeService.create(newCode(group, group + "-code1", group + "-value1", "test user"));
 		}
 		
-		Map<String, List<DataObject>> codes = codeService.getCodesOf(req.set("groupID", groupIDs)).value("codes");
+		Map<String, List<DataObject>> codes = Code.byGroup(codeService.getCodes(groupIDs.split(",")));
 		for (String group: groups) {
 			List<DataObject> codeValues = codes.get(group);
 			Assert.assertEquals(2, codeValues.size());
@@ -169,6 +170,6 @@ public class CodeServiceTest extends VortexTest {
 	@After
 	public void teardown() {
 		DataObject req = dataObject();
-		codeService.deleteGroups(req.set("groupID", "001,002,003"));
+//		codeService.deleteGroups(req.set("groupID", "001,002,003"));
 	}
 }

@@ -15,22 +15,22 @@
 <select id="search" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
 	SELECT SQL_CALC_FOUND_ROWS * FROM (
-		SELECT 0 SRT_ORD, 'all' PMS_ID, '모두' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP UNION
-		SELECT 1 SRT_ORD, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP UNION
-		SELECT 2 SRT_ORD, PMS_ID, PMS_NAME, DESCRP FROM TBL_PERMISSION
+		SELECT '000' GRP_ID, 'all' PMS_ID, '모두' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT '000' GRP_ID, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT GRP_ID, PMS_ID, PMS_NAME, DESCRP, UPD_TIME FROM TBL_PERMISSION
 	) A WHERE 1 = 1
 	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
-	ORDER BY <if test="order != null">#{order}</if><if test="order == null">SRT_ORD, PMS_ID</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">GRP_ID, PMS_ID</if>
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
 	SELECT * FROM (
-		SELECT 0 SRT_ORD, 'all' PMS_ID, '모두' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP UNION
-		SELECT 1 SRT_ORD, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP UNION
-		SELECT 2 SRT_ORD, PMS_ID, PMS_NAME, DESCRP FROM TBL_PERMISSION
+		SELECT '000' GRP_ID, , 'all' PMS_ID, '모두' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT '000' GRP_ID, , 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT GRP_ID, PMS_ID, PMS_NAME, DESCRP, UPD_TIME FROM TBL_PERMISSION
 	) A WHERE 1 = 1
 	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
-	ORDER BY <if test="order != null">#{order}</if><if test="order == null">SRT_ORD, PMS_ID</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">GRP_ID, PMS_ID</if>
 </if>
 </select>
 
@@ -88,6 +88,24 @@ WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separat
 </if>
 </delete>
 
+<select id="getActions" parameterType="hashmap" resultType="dataobject">
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS A.*, GRP_ID, ACT_NAME, ACT_PATH
+	FROM TBL_PMS_ACTION A, TBL_ACTION B
+	WHERE PMS_ID = #{permissionID}
+	AND A.ACT_ID = B.ACT_ID
+	ORDER BY A.ACT_ID
+	LIMIT #{start}, #{fetch} 
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
+	SELECT A.*, GRP_ID, ACT_NAME, ACT_PATH
+	FROM TBL_PMS_ACTION A, TBL_ACTION B
+	WHERE PMS_ID = #{permissionID}
+	AND A.ACT_ID = B.ACT_ID
+	ORDER BY A.ACT_ID
+</if>
+</select>
+
 <!-- 액션 추가 -->
 <insert id="addActions" parameterType="hashmap">
 INSERT INTO TBL_PMS_ACTION (PMS_ID, ACT_ID, INS_ID, INS_TIME)
@@ -109,6 +127,9 @@ WHERE NOT EXISTS (
 <delete id="deleteActions" parameterType="hashmap">
 DELETE FROM TBL_PMS_ACTION
 WHERE 1 = 1
+<if test="groupIDs != null">
+AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+</if>
 <if test="permissionIDs != null">
 AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>
@@ -116,6 +137,5 @@ AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator
 AND	ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
 </if>
 </delete>
-
 
 </mapper>

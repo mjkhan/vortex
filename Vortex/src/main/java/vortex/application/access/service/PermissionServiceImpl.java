@@ -38,8 +38,8 @@ public class PermissionServiceImpl extends ApplicationService implements Permiss
 	}
 	
 	@Override
-	public BoundedList<DataObject> getActions(String permissionID, int start, int fetch) {
-		return permissionMapper.getActions(permissionID, start, fetch);
+	public BoundedList<DataObject> getActions(DataObject req) {
+		return permissionMapper.getActions(req);
 	}
 
 	@Override

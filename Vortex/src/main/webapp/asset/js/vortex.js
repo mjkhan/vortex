@@ -1,3 +1,7 @@
+function url(path) {
+	return wctx.path + path;
+}
+
 $.fn.setPaging = function(config) {
 	config.links = 5;
 	config.first = function(index, label) {return "<a onclick='{func};'>|◀</a>".replace(/{func}/, config.func.replace(/{index}/, 0));};
@@ -16,5 +20,21 @@ $.fn.setPaging = function(config) {
 			if (config.hideIfEmpty != false)
 				container.hide();
 		}
+	});
+}
+
+function selectGroup(config) {
+	ajax({
+		url:url("/group/select.do")
+	   ,type:"GET"
+	   ,data:{
+		   init: true,
+		   groupType:config.groupType,
+		   item:config.item
+	   }
+	   ,success:function(resp) {
+		   config.content = resp;
+		   dialog(config);
+	   }
 	});
 }

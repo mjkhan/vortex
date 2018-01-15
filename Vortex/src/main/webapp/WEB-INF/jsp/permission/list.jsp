@@ -22,10 +22,10 @@
 		</thead>
 		<tbody id="permissionList">
 		<c:set var="notFound"><tr><td colspan="4" class="notFound">권한을 찾지 못했습니다.</td></c:set>
-		<c:set var="pmsRow"><tr>
-			<td><input name="permissionID" value="{permissionID}" type="checkbox" /></td>
+		<c:set var="pmsRow"><tr {builtin}>
+				<td><input name="permissionID" value="{permissionID}" type="checkbox" /></td>
 				<td><a onclick="getInfo('{permissionID}')" title="권한정보 보기">{permissionID}</a></td>
-				<td><a onclick="getActions('{permissionID}')" title="액션목록 보기">{permissionName}</a></td>
+				<td><a onclick="getActionsOf('{permissionID}')" title="액션목록 보기">{permissionName}</a></td>
 				<td>{updTime}</td>
 			</tr></c:set>
 		</tbody>
@@ -50,12 +50,7 @@ function search(start) {
 		   ,searchTerms:value
 		   ,start:start
 		}
-	   ,success:function(resp) {
-	   		setPermissionList(resp);
-<%-- 
-	   		setCodeList(resp);
- --%>
-	   	}
+	   ,success:setPermissionList
 	});
 	currentPermissions = function(){search(start);};
 }
@@ -98,13 +93,20 @@ function setPermissionList(resp) {
 	$("#permissionList").populate({
 		data:resp.permissions
 	   ,tr:function(row){
+	   		var pmsID = row.PMS_ID,
+	   			builtin = pmsID == 'all' || pmsID == 'authenticated';
 			return "${vtx:jstring(pmsRow)}"
-				.replace(/{permissionID}/g, row.PMS_ID)
+				.replace(/{permissionID}/g, pmsID)
 				.replace(/{permissionName}/g, row.PMS_NAME)
-				.replace(/{updTime}/g, row.UPD_TIME);
+				.replace(/{updTime}/g, row.UPD_TIME)
+				.replace(/{builtin}/g, !builtin ? "" : "builtin=\"true\"");
 		}
 	   ,ifEmpty:"${vtx:jstring(notFound)}"
 	});
+	
+	var builtin = $("#permissionList tr[builtin='true']");
+	builtin.find("input[name='permissionID']").hide();
+	builtin.find("td a[onclick^='getInfo']").removeAttr("onclick");
 
 	$("#permission-actions .showOnCheck").fadeOut();
 	$("#permission-actions .paging").setPaging({
@@ -117,16 +119,17 @@ function setPermissionList(resp) {
 	checkedPermissions = checkbox("input[type='checkbox'][name='permissionID']")
 		.onChange(function(checked){
 			if (checked)
-				$("#permission-actions .showOnCheck").fadeIn();
+				$("#permissions .showOnCheck").fadeIn();
 			else
-				$("#permission-actions .showOnCheck").fadeOut();
+				$("#permissions .showOnCheck").fadeOut();
 		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedPermissions.check(checked);});
+	checkbox("#permissions #toggleChecks").onChange(function(checked){checkedPermissions.check(checked);});
 }
 
-function getActions(permissionID) {
+function getActionsOf(permissionID) {
 	currentPermission = getPermission(permissionID);
 	setPermissionName(currentPermission.PMS_NAME);
+	getActions();
 }
 </vtx:script>
 <vtx:script type="docReady">

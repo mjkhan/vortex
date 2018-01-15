@@ -14,7 +14,7 @@ public interface PermissionService {
 	
 	public boolean update(Permission permission);
 	
-	public BoundedList<DataObject> getActions(String permissionID, int start, int fetch);
+	public BoundedList<DataObject> getActions(DataObject req);
 	
 	public int addActions(String permissionID, String... actionIDs);
 	

@@ -41,7 +41,10 @@ public class PermissionController extends ApplicationController {
 		ModelAndView mv = new ModelAndView(req.bool("init") || !req.bool("ajax") ? initView : "jsonView");
 		if (!permissions.isEmpty()) {
 			String permissionID = permissions.get(0).string("pms_id");
-			mv.addObject("actions", permissionService.getActions(permissionID, start, fetch));
+			BoundedList<DataObject> actions = permissionService.getActions(req.set("permissionID", permissionID));
+			mv.addObject("actions", actions)
+			  .addObject("totalActions", actions.getTotalSize())
+			  .addObject("actionStart", 0);
 		}
 		return mv
 			.addObject("permissions", permissions)
@@ -68,8 +71,10 @@ public class PermissionController extends ApplicationController {
 			.addObject("saved", permissionService.update(permission));
 	}
 	
-	public ModelAndView getActions(String permissionID) {
-		BoundedList<DataObject> actions = permissionService.getActions(permissionID, 0, 0);
+	@RequestMapping("/action/list.do")
+	public ModelAndView getActions(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		BoundedList<DataObject> actions = permissionService.getActions(req);
 		return new ModelAndView("jsonView")
 			.addObject("actions", actions)
 			.addObject("totalActions", actions.getTotalSize())

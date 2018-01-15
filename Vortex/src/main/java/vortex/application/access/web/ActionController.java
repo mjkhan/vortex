@@ -38,6 +38,16 @@ public class ActionController extends ApplicationController {
 		return mv;
 	}
 	
+	public ModelAndView selectGroup(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		List<DataObject> groups = actionService.getGroups(
+			req.set("start", req.number("start").intValue())
+			   .set("fetch", properties.getInt("fetch"))
+		);
+		return new ModelAndView(req.bool("init") ? "action/group-select" : "jsonView")
+			.addObject("groups", groups);
+	}
+	
 	@RequestMapping("/group/info.do")
 	public ModelAndView getGroupInfo(@RequestParam(required=false) String groupID) {
 		return new ModelAndView("action/group-info")

@@ -66,6 +66,9 @@ public class AbstractMapper extends EgovAbstractMapper {
 	 * @return BoundedList
 	 */
 	protected <E> BoundedList<E> boundedList(List<E> list, DataObject req) {
+		req.putIfAbsent("start", 0);
+		req.putIfAbsent("fetch", 0);
+		
 		int start = req.number("start").intValue(),
 			fetch = req.number("fetch").intValue();
 		return boundedList(list, start, fetch);

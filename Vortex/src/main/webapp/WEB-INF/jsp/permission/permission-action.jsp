@@ -4,14 +4,12 @@
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="permission-actions" style="width:100%; display:flex; flex-flow:wrap;">
 	<div id="permissions">
-		<h1 style="padding-top:.5em;">권한 정보</h1>
+		<h1 style="padding-top:.5em;">권한 목록</h1>
 		<jsp:include page="/WEB-INF/jsp/permission/list.jsp"/>
 	</div>
 	<div id="actions">
 		<h1 id="pmsName" style="padding-top:.5em;"></h1>
-<%-- 		
-		<jsp:include page="/WEB-INF/jsp/code/code-list.jsp"/>
- --%>		
+		<jsp:include page="/WEB-INF/jsp/permission/action-list.jsp"/>
 	</div>
 </div>
 <div id="detailInfo" class="hidden" style="padding:1em 0;"></div>

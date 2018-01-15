@@ -41,8 +41,8 @@ public class GroupController extends ApplicationController {
 	
 	@RequestMapping("/select.do")
 	public ModelAndView select(HttpServletRequest hreq) {
-		DataObject req = request(hreq); //TODO: select viewName 결정
-		return search(req.set("viewName", !req.bool("ajax") ? "group/select" : "jsonView"));
+		DataObject req = request(hreq);
+		return search(req.set("viewName", req.bool("init") ? "group/select" : "jsonView"));
 	}
 	
 	@RequestMapping("/info.do")

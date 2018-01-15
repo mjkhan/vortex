@@ -52,15 +52,14 @@ public class PermissionMapper extends DataMapper {
 			);
 	}
 	
-	public BoundedList<DataObject> getActions(String permissionID, int start, int fetch) {
-		DataObject params = params().set("permissionID", permissionID);
-		if (fetch > 0)
-			params.set("start", start)
-				  .set("fetch", fetch);
-		return boundedList(selectList(
+	public BoundedList<DataObject> getActions(DataObject req) {
+		DataObject params = params();
+		params.putAll(req);
+		return boundedList(
+			selectList(
 			"permission.getActions"
 		   , params)
-		   , start, fetch
+		   , params
 		);
 	}
 	

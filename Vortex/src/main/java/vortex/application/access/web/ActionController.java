@@ -38,6 +38,7 @@ public class ActionController extends ApplicationController {
 		return mv;
 	}
 	
+	@RequestMapping("/group/select.do")
 	public ModelAndView selectGroup(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
 		List<DataObject> groups = actionService.getGroups(

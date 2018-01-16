@@ -22,19 +22,3 @@ $.fn.setPaging = function(config) {
 		}
 	});
 }
-
-function selectGroup(config) {
-	ajax({
-		url:url("/group/select.do")
-	   ,type:"GET"
-	   ,data:{
-		   init: true,
-		   groupType:config.groupType,
-		   item:config.item
-	   }
-	   ,success:function(resp) {
-		   config.content = resp;
-		   dialog(config);
-	   }
-	});
-}

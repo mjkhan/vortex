@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 	<div class="inputArea">
-		 <button onclick="getInfo();" type="button">추가</button>
-		 <button id="btnRemove" onclick="removeCodes();" type="button" class="showOnCheck">삭제</button>
+		 <button onclick="addActions();" type="button">추가</button>
+		 <button id="btnRemove" onclick="removeActions();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
@@ -34,20 +34,48 @@ function getActions(start) {
 		url:"<c:url value='/permission/action/list.do'/>"
 	   ,data:{
 	   		permissionID:currentPermission.PMS_ID
-	   	   ,start:start
+	   	   ,start:start || 0
 	   }
 	   ,success:setActionList
 	});
 	currentActions = function(){getActions(start);};
 }
 
-function removeCodes() {
-	if (!confirm("선택한 코드를 삭제하시겠습니까?")) return;
+function addActions() {
+	ajax({
+		url:"<c:url value='/action/select.do'/>"
+	   ,data:{init:true}
+	   ,success:function(resp){
+	   		dialog({
+	   			title:"액션 선택",
+	   			content:resp,
+	   			onOK:function(selected) {
+	   				ajax({
+	   					url:"<c:url value='/permission/action/add.do'/>"
+	   				   ,data:{
+	   				   		permissionID:currentPermission.PMS_ID,
+	   				   		actionID:valuesOf(selected, "ACT_ID").join()
+	   				    }
+	   				   ,success:function(resp) {
+	   				   		if (resp.saved)
+	   				   			getActions();
+	   				   		else
+	   				   			alert("저장하지 못했습니다.");
+	   				    }
+	   				});
+	   			}
+	   		});
+	   }
+	});
+}
+
+function removeActions() {
+	if (!confirm("선택한 액션을 삭제하시겠습니까?")) return;
 
 	ajax({
 		url:"<c:url value='/permission/action/delete.do'/>",
 		data:{
-			pmsID:currentPermission.PMS_ID,
+			permissionID:currentPermission.PMS_ID,
 			actionID:checkedActions.values().join(",")
 		},
 		success:function(resp) {

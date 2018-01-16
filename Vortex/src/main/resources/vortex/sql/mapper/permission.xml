@@ -35,9 +35,10 @@
 </select>
 
 <sql id="select-by-id">
-SELECT *
-FROM TBL_PERMISSION
+SELECT A.*, GRP_NAME
+FROM TBL_PERMISSION A, TBL_GROUP B
 WHERE PMS_ID = #{pmsID}
+AND GRP_TYPE = '002' AND A.GRP_ID = B.GRP_ID
 </sql>
 
 <!-- 권한 정보 가져오기 -->
@@ -94,7 +95,7 @@ WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separat
 	FROM TBL_PMS_ACTION A, TBL_ACTION B
 	WHERE PMS_ID = #{permissionID}
 	AND A.ACT_ID = B.ACT_ID
-	ORDER BY A.ACT_ID
+	ORDER BY GRP_ID, A.ACT_ID
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
@@ -102,7 +103,7 @@ WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separat
 	FROM TBL_PMS_ACTION A, TBL_ACTION B
 	WHERE PMS_ID = #{permissionID}
 	AND A.ACT_ID = B.ACT_ID
-	ORDER BY A.ACT_ID
+	ORDER BY GRP_ID, A.ACT_ID
 </if>
 </select>
 

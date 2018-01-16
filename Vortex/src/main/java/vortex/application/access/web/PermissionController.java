@@ -54,9 +54,9 @@ public class PermissionController extends ApplicationController {
 	}
 	
 	@RequestMapping("/info.do")
-	public ModelAndView getInfo(@RequestParam(required=false) String pmsID) {
+	public ModelAndView getInfo(@RequestParam(required=false) String permissionID) {
 		return new ModelAndView("permission/info")
-			.addObject("permission", permissionService.getInfo(pmsID));
+			.addObject("permission", permissionService.getInfo(permissionID));
 	}
 	
 	@RequestMapping("/create.do")
@@ -73,30 +73,31 @@ public class PermissionController extends ApplicationController {
 	
 	@RequestMapping("/action/list.do")
 	public ModelAndView getActions(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
+		DataObject req = request(hreq)
+			.set("fetch", properties.getInt("fetch"));
 		BoundedList<DataObject> actions = permissionService.getActions(req);
 		return new ModelAndView("jsonView")
 			.addObject("actions", actions)
 			.addObject("totalActions", actions.getTotalSize())
 			.addObject("actionStart", actions.getStart())
-			.addObject("fetch", properties.getInt("fetch"));
+			.addObject("fetch", req.get("fetch"));
 	}
 	
 	@RequestMapping("/action/add.do")
-	public ModelAndView addActions(@RequestParam String pmsID, @RequestParam String actionID) {
+	public ModelAndView addActions(@RequestParam String permissionID, @RequestParam String actionID) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", permissionService.addActions(pmsID, actionID.split(",")) > 0);
+			.addObject("saved", permissionService.addActions(permissionID, actionID.split(",")) > 0);
 	}
 	
 	@RequestMapping("/action/delete.do")
-	public ModelAndView deleteActions(@RequestParam String pmsID, @RequestParam String actionID) {
+	public ModelAndView deleteActions(@RequestParam String permissionID, @RequestParam String actionID) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", permissionService.deleteActions(pmsID, actionID.split(",")) > 0);
+			.addObject("saved", permissionService.deleteActions(permissionID, actionID.split(",")) > 0);
 	}
 	
 	@RequestMapping("/delete.do")
-	public ModelAndView remove(@RequestParam String pmsID) {
+	public ModelAndView remove(@RequestParam String permissionID) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", permissionService.delete(pmsID.split(",")) > 0);
+			.addObject("saved", permissionService.delete(permissionID.split(",")) > 0);
 	}
 }

@@ -45,7 +45,7 @@ public class PermissionMapper extends DataMapper {
 
 	public int delete(String... permissionIDs) {
 		return
-			deleteActions(null, permissionIDs)
+			deleteActions(null, permissionIDs, null)
 		  + delete(
 				"permission.delete"
 			   , params().set("permissionIDs", permissionIDs)

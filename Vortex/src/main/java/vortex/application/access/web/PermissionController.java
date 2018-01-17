@@ -75,6 +75,8 @@ public class PermissionController extends ApplicationController {
 	public ModelAndView getActions(HttpServletRequest hreq) {
 		DataObject req = request(hreq)
 			.set("fetch", properties.getInt("fetch"));
+		req.set("start", req.number("start").intValue());
+		
 		BoundedList<DataObject> actions = permissionService.getActions(req);
 		return new ModelAndView("jsonView")
 			.addObject("actions", actions)

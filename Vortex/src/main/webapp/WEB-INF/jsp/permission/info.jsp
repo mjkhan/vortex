@@ -4,7 +4,7 @@
 <c:set var="create">${empty permission}</c:set>
 <table class="infoForm">
 	<tr><th><label for="permissionID">아이디</label></th>
-		<td><input id="permissionID" value="${permission.PMS_ID}" type="text" ${create ? 'required' : 'readonly'}/></td>
+		<td><input id="permissionID" value="${permission.PMS_ID}" type="text" ${create ? 'required  maxlength="32"' : 'readonly'}/></td>
 	</tr>
 	<tr><th><label for="permissionName">이름</label></th>
 		<td><input id="permissionName" value="${permission.PMS_NAME}" type="text" required maxlength="64" /></td>

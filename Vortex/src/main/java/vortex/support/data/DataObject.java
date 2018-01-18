@@ -1,11 +1,7 @@
 package vortex.support.data;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import vortex.support.Assert;
 
@@ -18,9 +14,9 @@ import vortex.support.Assert;
 public class DataObject extends GenericMap<Object> {
 	private static final long serialVersionUID = 1L;
 	
-	public static <T> DataObject from(Collection<T> objs, Function<T, String> keyMapper, Function<T, Object> valueMapper) {
+	public static <T> DataObject from(Iterable<T> objs, Function<T, String> keyMapper, Function<T, Object> valueMapper) {
 		DataObject result = new DataObject();
-		if (objs != null) {
+		if (!isEmpty(objs)) {
 			objs.forEach(obj -> {
 				if (obj == null) return;
 				String key = keyMapper.apply(obj);
@@ -30,10 +26,7 @@ public class DataObject extends GenericMap<Object> {
 		}
 		return result;
 	}
-	
-	public static Map<String, List<DataObject>> groupBy(Collection<DataObject> objs, Function<DataObject, String> groupMapper) {
-		return objs.stream().collect(Collectors.groupingBy(groupMapper));
-	}
+
 	/**DataObject를 생성한다.
 	 */
 	public DataObject() {

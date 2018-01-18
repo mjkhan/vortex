@@ -1,8 +1,13 @@
 package vortex.support.data;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**String 키와  T값의 Map으로 편의성 메소드들을 추가하였다.<br />
  * {@link #caseSensitiveKey(boolean) 키의 대소문자 구분여부}를 지정할 수 있다.<br />
@@ -11,6 +16,12 @@ import java.util.function.Function;
  * @param <T> 값의 타입
  */
 public class GenericMap<T> extends LinkedHashMap<String, T> {
+	public static <E> Map<String, List<E>> groupBy(Collection<E> objs, Function<E, String> groupMapper) {
+		return objs != null ?
+			objs.stream().collect(Collectors.groupingBy(groupMapper)) :
+			Collections.emptyMap();
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	private boolean caseSensitiveKey = true;

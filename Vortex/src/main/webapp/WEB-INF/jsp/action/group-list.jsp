@@ -44,12 +44,13 @@ function getGroups(start) {
 	ajax({
 		url:"<c:url value='/action/group/list.do'/>",
 		data:{
-			field:field,
-			value:value,
+			searchBy:field,
+			searchTerms:value,
 			start:start || 0
 		},
 		success:function(resp) {
 			setGroupList(resp);
+			setActionList(resp);
 		}
 	});
 	currentGroups = function(){getGroups(start);};

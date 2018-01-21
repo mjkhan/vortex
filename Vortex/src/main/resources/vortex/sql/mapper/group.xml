@@ -20,8 +20,8 @@
 	SELECT SQL_CALC_FOUND_ROWS *
 	FROM TBL_GROUP
 	WHERE GRP_TYPE = #{groupType}
-	<if test="field != null and value != null">
-	AND ${field} LIKE CONCAT(#{value}, '%')
+	<if test="searchBy != null and searchTerms != null">
+	AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')
 	</if>
 	<if test="status == null">AND STATUS &lt;&gt; '999'</if> 
 	<if test="status != null">AND STATUS = #{status}</if> 
@@ -32,8 +32,8 @@
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
 	SELECT * FROM TBL_GROUP
 	WHERE GRP_TYPE = #{groupType}
-	<if test="field != null and value != null">
-	AND #{field} LIKE CONCAT(#{value}, '%')
+	<if test="searchBy != null and searchTerms != null">
+	AND #{searchBy} LIKE CONCAT(#{searchTerms}, '%')
 	</if>
 	<if test="status == null">AND STATUS &lt;&gt; '999'</if> 
 	<if test="status != null">AND STATUS = #{status}</if> 

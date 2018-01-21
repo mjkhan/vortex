@@ -48,8 +48,8 @@ function searchGroups(start) {
 	ajax({
 		url:"<c:url value='/group/list.do'/>"
 	   ,data:{
-			field:field
-		   ,value:value
+			searchBy:field
+		   ,searchTerms:value
 		   ,start:start
 		}
 	   ,success:setGroupList

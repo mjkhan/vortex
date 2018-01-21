@@ -33,7 +33,7 @@
 	SELECT * FROM TBL_GROUP
 	WHERE GRP_TYPE = #{groupType}
 	<if test="searchBy != null and searchTerms != null">
-	AND #{searchBy} LIKE CONCAT(#{searchTerms}, '%')
+	AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')
 	</if>
 	<if test="status == null">AND STATUS &lt;&gt; '999'</if> 
 	<if test="status != null">AND STATUS = #{status}</if> 
@@ -145,7 +145,7 @@ WHERE NOT EXISTS (
 DELETE FROM TBL_GROUP_MEMBER
 WHERE GRP_TYPE = #{groupType}
 <if test="groupIDs != null">AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)</if>
-<if test="mbType != null">AND MB_TYPE = #{memberType}</if>
+<if test="memberType != null">AND MB_TYPE = #{memberType}</if>
 <if test="memberIDs != null">AND MB_ID IN (<foreach collection="memberIDs" item="memberID" separator=", ">#{memberID}</foreach>)</if>
 </delete>
 

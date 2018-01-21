@@ -7,80 +7,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
+import vortex.application.group.Group;
+import vortex.application.group.GroupMapper;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
 	@Autowired
-	private RoleMapper roleMapper;
-	@Autowired
 	private RoleMemberMapper roleMemberMapper;
-
-	@Override
-	public DataObject getRoles(DataObject req) {
-		return dataobject()
-			.set("roles", roleMapper.getRoles());
-	}
-
-	@Override
-	public DataObject getRolesFor(DataObject req) {
-		return dataobject()
-			.set("roles", roleMapper.getRolesFor(req.string("member")));
-	}
+	@Autowired
+	private GroupMapper roleGroup;
 	
 	@Override
+	public BoundedList<DataObject> search(DataObject req) {
+		return roleGroup.search(req);
+	}
+
+	@Override
 	public DataObject getInfo(String roleID) {
-		return roleMapper.getInfo(roleID);
+		return roleGroup.getInfo(roleID);
 	}
 
 	@Override
-	public Role getRole(String roleID) {
-		return roleMapper.getRole(roleID);
+	public Group getRole(String roleID) {
+		return roleGroup.getGroup(roleID);
+	}
+	@Override
+	public boolean create(Group role) {
+		return roleGroup.create(role);
 	}
 
 	@Override
-	public boolean create(Role role) {
-		return roleMapper.create(role);
-	}
-
-	@Override
-	public boolean update(Role role) {
-		return roleMapper.update(role);
+	public boolean update(Group role) {
+		return roleGroup.update(role);
 	}
 
 	@Override
 	public int delete(String... roleIDs) {
-		return
-			roleMemberMapper.deleteActions(roleIDs)
-		  + roleMemberMapper.deleteUsers(roleIDs)
-		  + roleMapper.remove(roleIDs);
-	}
-
-	@Override
-	public DataObject getActions(DataObject req) {
-		List<Map<String, Object>> actions = roleMemberMapper.getActions(req);
-		return dataobject()
-			.set("actions", actions);
-	}
-
-	@Override
-	public DataObject addActions(DataObject req) {
-		String[] roleIDs = req.value("roleIDs"),
-				 actionIDs = req.value("actionIDs");
-		int affected = roleMemberMapper.addActions(roleIDs, actionIDs);
-		return dataobject()
-			.set("affected", affected)
-			.set("saved", affected > 0);
-	}
-
-	@Override
-	public DataObject deleteActions(DataObject req) {
-		String[] roleIDs = req.value("roleIDs"),
-				 actionIDs = req.value("actionIDs");
-		int affected = roleMemberMapper.deleteActions(roleIDs, actionIDs);
-		return dataobject()
-			.set("affected", affected)
-			.set("saved", affected > 0);
+		return roleGroup.deleteGroups(roleIDs);
 	}
 
 	@Override
@@ -105,6 +70,33 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 		String[] roleIDs = req.value("roleIDs"),
 				 userIDs = req.value("userIDs");
 		int affected = roleMemberMapper.deleteUsers(roleIDs, userIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject getActions(DataObject req) {
+		List<Map<String, Object>> actions = roleMemberMapper.getActions(req);
+		return dataobject()
+			.set("actions", actions);
+	}
+
+	@Override
+	public DataObject addActions(DataObject req) {
+		String[] roleIDs = req.value("roleIDs"),
+				 actionIDs = req.value("actionIDs");
+		int affected = roleMemberMapper.addActions(roleIDs, actionIDs);
+		return dataobject()
+			.set("affected", affected)
+			.set("saved", affected > 0);
+	}
+
+	@Override
+	public DataObject deleteActions(DataObject req) {
+		String[] roleIDs = req.value("roleIDs"),
+				 actionIDs = req.value("actionIDs");
+		int affected = roleMemberMapper.deleteActions(roleIDs, actionIDs);
 		return dataobject()
 			.set("affected", affected)
 			.set("saved", affected > 0);

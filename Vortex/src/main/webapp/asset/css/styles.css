@@ -144,3 +144,13 @@ button.add {
 .infoForm th {width:35%; background-color:#e7efff; border-bottom:1px solid white;}
 .infoForm th, .infoForm td {padding:.5em;}
 .infoForm td input {width:100%;}
+
+.tab {display:flex; padding:0;}
+.tab li {
+	list-style:none; border:1px solid lightgrey; min-width:80px; padding:.3em;
+}
+.tab .current {
+	background-color:lightskyblue; color:white;
+	border:2px solid purple;
+	font-weight:bold;
+}

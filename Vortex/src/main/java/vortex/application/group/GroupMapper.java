@@ -22,10 +22,10 @@ public class GroupMapper extends DataMapper {
 	
 	public BoundedList<DataObject> search(DataObject req) {
 		DataObject params = ifEmpty(req, this::params);
-		if (isEmpty(req.get("field")))
-			req.remove("field");
-		if (isEmpty(req.get("value")))
-			req.remove("value");
+		if (isEmpty(req.get("searchBy")))
+			req.remove("searchBy");
+		if (isEmpty(req.get("searchTerms")))
+			req.remove("searchTerms");
 		List<DataObject> list = selectList("group.search", params.set("groupType", groupType));
 		return boundedList(list, params);
 	}
@@ -69,13 +69,13 @@ public class GroupMapper extends DataMapper {
 	
 	public int remove(String... groupIDs) {
 		return 
-			deleteMembers(groupIDs, null)
+			deleteMembers(groupIDs, null, (String[])null)
 		  + setStatus(Status.REMOVED.code(), groupIDs);
 	}
 	
 	public int deleteGroups(String... groupIDs) {
 		return
-			deleteMembers(groupIDs, null)
+			deleteMembers(groupIDs, null, (String[])null)
 		  + delete(
 				"group.delete"
 			   , params().set("groupIDs", groupIDs)
@@ -102,9 +102,9 @@ public class GroupMapper extends DataMapper {
 	public int deleteMembers(String[] groupIDs, String memberType, String... memberIDs) {
 		return delete(
 			"group.deleteMembers"
-		   , params().set("groupIDs", !isEmpty(groupIDs) ? groupIDs : null)
-		   			 .set("memberType", memberType)
-		   			 .set("memberIDs", !isEmpty(memberIDs) ? memberIDs : null)
+		   , params().set("groupIDs", ifEmpty(groupIDs, null))
+		   			 .set("memberType", ifEmpty(memberType, null))
+		   			 .set("memberIDs", ifEmpty(memberIDs, null))
 		);
 	}
 	

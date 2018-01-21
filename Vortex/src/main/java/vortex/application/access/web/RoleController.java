@@ -1,7 +1,5 @@
 package vortex.application.access.web;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
-import vortex.application.access.service.Role;
 import vortex.application.access.service.RoleService;
+import vortex.application.group.Group;
+import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 @Controller
@@ -23,10 +22,16 @@ public class RoleController extends ApplicationController {
 	private RoleService roleService;
 
 	@RequestMapping("/list.do")
-	public ModelAndView getRoles(HttpServletRequest hreq) {
+	public ModelAndView search(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		return new ModelAndView(!req.bool("ajax") ? "role/list" : "jsonView")
-			.addAllObjects(roleService.getRoles(req));
+		req.set("start", req.number("start").intValue())
+		   .set("fetch", properties.getInt("fetch"));
+		BoundedList<DataObject> roles = roleService.search(req);
+		return new ModelAndView(!req.bool("ajax") ? "role/roles" : "jsonView")
+			.addObject("roles", roles)
+			.addObject("totalRoles", roles.getTotalSize())
+			.addObject("roleStart", roles.getStart())
+			.addObject("fetch", req.get("fetch"));
 	}
 
 	@RequestMapping("/info.do")
@@ -36,14 +41,14 @@ public class RoleController extends ApplicationController {
 	}
 
 	@RequestMapping("/create.do")
-	public ModelAndView create(@ModelAttribute Role role) {
+	public ModelAndView create(@ModelAttribute Group role) {
 		return new ModelAndView("jsonView")
 			.addObject("saved", roleService.create(role))
 			.addObject("roleID", role.getId());
 	}
 
 	@RequestMapping("/update.do")
-	public ModelAndView update(@ModelAttribute Role role) {
+	public ModelAndView update(@ModelAttribute Group role) {
 		return new ModelAndView("jsonView")
 			.addObject("saved", roleService.update(role));
 	}
@@ -53,7 +58,7 @@ public class RoleController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("saved", roleService.delete(roleID.split(",")) > 0);
 	}
-
+/*
 	@RequestMapping("/action/list.do")
 	public ModelAndView getActions(HttpServletRequest hreq) {
 		DataObject req = request(hreq),
@@ -70,7 +75,7 @@ public class RoleController extends ApplicationController {
 		}
 		return modelAndView(init ? "role/actions" : "jsonView", res);
 	}
-
+*/
 	@RequestMapping("/action/add.do")
 	public ModelAndView addActions(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -86,7 +91,7 @@ public class RoleController extends ApplicationController {
 		   .set("actionIDs", req.string("actionIDs").split(","));
 		return modelAndView("jsonView", roleService.deleteActions(req));
 	}
-
+/*
 	@RequestMapping("/user/list.do")
 	public ModelAndView getUsers(HttpServletRequest hreq) {
 		DataObject req = request(hreq),
@@ -103,7 +108,7 @@ public class RoleController extends ApplicationController {
 		}
 		return modelAndView(init ? "role/users" : "jsonView", res);
 	}
-
+*/
 	@RequestMapping("/user/add.do")
 	public ModelAndView addUsers(HttpServletRequest hreq) {
 		DataObject req = request(hreq);

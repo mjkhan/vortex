@@ -26,7 +26,7 @@
 	<c:set var="roleRow"><tr>
 		<td><input name="roleID" value="{roleID}" type="checkbox" /></td>
 			<td><a onclick="getInfo('{roleID}')">{roleID}</a></td>
-			<td><a onclick="">{roleName}</a></td>
+			<td><a onclick="getMembers('{roleID}')">{roleName}</a></td>
 			<td>{updTime}</td>
 		</tr></c:set>
 	</tbody>
@@ -39,11 +39,14 @@
 		<li id="permissionTab" onclick="getPermissions();">권한</li>
 	</ul>
 </div>
+<div id="members">
+</div>
 <vtx:script type="decl">
 var getRole,
 	currentRole,
 	checkedRoles,
 	currentRoles,
+	currentMembers,
 	afterSave;
 
 function search(start) {
@@ -142,13 +145,21 @@ function getUsers(start) {
 	currentMembers = function() {getUsers(start);};
 }
 
+function setUserList(resp) {}
+
 function getPermissions(start) {
 	$(".tab li").removeClass("current");
 	$("#permissionTab").addClass("current");
 	currentMembers = function() {getPermissions(start);};
 }
 
-var currentMembers = getUsers;
+function setPermissionList(resp) {}
+
+function getMembers(roleID) {
+	currentRole = getRole(roleID);
+	setRoleName(currentRole.GRP_NAME);
+	currentMembers();
+}
 </vtx:script>
 <vtx:script type="docReady">
 $("#value").onEnterPress(search);
@@ -159,4 +170,11 @@ setRoleList({
 	fetch:${fetch}
 });
 currentRoles = search;
+setUserList({
+	users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
+	totalUsers:${totalRoles},
+	userStart:${roleStart},
+	fetch:${fetch}
+});
+currentMembers = getUsers;
 </vtx:script>

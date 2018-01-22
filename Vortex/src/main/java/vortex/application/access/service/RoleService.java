@@ -5,6 +5,10 @@ import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
 public interface RoleService {
+	public static final String
+		USER = "000",
+		PERMISSION = "001";
+
 	public BoundedList<DataObject> search(DataObject req);
 
 	public DataObject getInfo(String roleID);

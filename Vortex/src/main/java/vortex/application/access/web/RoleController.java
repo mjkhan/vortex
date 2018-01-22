@@ -27,11 +27,20 @@ public class RoleController extends ApplicationController {
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
 		BoundedList<DataObject> roles = roleService.search(req);
-		return new ModelAndView(!req.bool("ajax") ? "role/roles" : "jsonView")
+		ModelAndView mv = new ModelAndView(!req.bool("ajax") ? "role/roles" : "jsonView")
 			.addObject("roles", roles)
 			.addObject("totalRoles", roles.getTotalSize())
-			.addObject("roleStart", roles.getStart())
-			.addObject("fetch", req.get("fetch"));
+			.addObject("roleStart", roles.getStart());
+		if (!roles.isEmpty()) {
+			req.set("groupID", roles.get(0).string("GRP_ID"))
+			   .set("start", 0);
+			switch (ifEmpty(req.string("memberType"), RoleService.USER)) {
+			case RoleService.USER: getUsers(req, mv); break;
+			case RoleService.PERMISSION: getPermissions(req, mv); break;
+			}
+		}
+		
+		return mv.addObject("fetch", properties.getInt("fetch"));
 	}
 
 	@RequestMapping("/info.do")
@@ -58,18 +67,20 @@ public class RoleController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("saved", roleService.delete(roleID.split(",")) > 0);
 	}
-
-	@RequestMapping("/user/list.do")
-	public ModelAndView getUsers(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
+	
+	private ModelAndView getUsers(DataObject req, ModelAndView mv) {
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
 		BoundedList<DataObject> users = roleService.getUsers(req);
-		return new ModelAndView("jsonView")
-			.addObject("users", users)
-			.addObject("totalUsers", users.getTotalSize())
-			.addObject("userStart", users.getStart())
-			.addObject("fetch", users.getFetchSize());
+		return mv.addObject("users", users)
+		  .addObject("totalUsers", users.getTotalSize())
+		  .addObject("userStart", users.getStart())
+		  .addObject("fetch", users.getFetchSize());
+	}
+
+	@RequestMapping("/user/list.do")
+	public ModelAndView getUsers(HttpServletRequest hreq) {
+		return getUsers(request(hreq), new ModelAndView("jsonView"));
 	}
 
 	@RequestMapping("/user/add.do")
@@ -87,18 +98,21 @@ public class RoleController extends ApplicationController {
 			.addObject("affected", affected)
 			.addObject("saved", affected > 0);
 	}
-
-	@RequestMapping("/permission/list.do")
-	public ModelAndView getPermissions(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
+	
+	private ModelAndView getPermissions(DataObject req, ModelAndView mv) {
 		req.set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
 		BoundedList<DataObject> permissions = roleService.getPermissions(req);
-		return new ModelAndView("jsonView")
+		return mv
 			.addObject("permissions", permissions)
 			.addObject("totalPermissions", permissions.getTotalSize())
 			.addObject("permissionStart", permissions.getStart())
 			.addObject("fetch", permissions.getFetchSize());
+	}
+
+	@RequestMapping("/permission/list.do")
+	public ModelAndView getPermissions(HttpServletRequest hreq) {
+		return getPermissions(request(hreq), new ModelAndView("jsonView"));
 	}
 
 	@RequestMapping("/permission/add.do")

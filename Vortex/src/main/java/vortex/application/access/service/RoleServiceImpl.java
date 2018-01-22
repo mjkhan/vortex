@@ -11,9 +11,6 @@ import vortex.support.data.DataObject;
 
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
-	private static final String
-		USER = "000",
-		PERMISSION = "001";
 	@Autowired
 	private RoleMemberMapper roleMemberMapper; //TODO:DELETE
 	@Autowired

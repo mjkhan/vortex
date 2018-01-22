@@ -17,15 +17,15 @@ public interface RoleService {
 
 	public int delete(String... roleIDs);
 	
-	public DataObject getUsers(DataObject req);
+	public BoundedList<DataObject> getUsers(DataObject req);
 	
-	public DataObject addUsers(DataObject req);
+	public int addUsers(String[] roleIDs, String[] userIDs);
 	
-	public DataObject deleteUsers(DataObject req);
+	public int deleteUsers(String[] roleIDs, String[] userIDs);
 	
-	public DataObject getActions(DataObject req);
+	public BoundedList<DataObject> getPermissions(DataObject req);
 	
-	public DataObject addActions(DataObject req);
+	public int addPermissions(String[] roleIDs, String[] permissionIDs);
 	
-	public DataObject deleteActions(DataObject req);
+	public int deletePermissions(String[] roleIDs, String[] permissionIDs);
 }

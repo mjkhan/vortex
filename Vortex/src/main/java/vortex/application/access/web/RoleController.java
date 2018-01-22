@@ -58,70 +58,62 @@ public class RoleController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("saved", roleService.delete(roleID.split(",")) > 0);
 	}
-/*
-	@RequestMapping("/action/list.do")
-	public ModelAndView getActions(HttpServletRequest hreq) {
-		DataObject req = request(hreq),
-				   res = new DataObject();
-		String roleID = req.string("roleID");
-		boolean init = isEmpty(roleID);
-		if (init) {
-			List<DataObject> roles = roleService.getRolesFor(req.set("member", "action")).value("roles");
-			roleID = !isEmpty(roles) ? roles.get(0).string("ROLE_ID") : null;
-			res.set("roles", roles);
-		}
-		if (!isEmpty(roleID)) {
-			res.set("actions", roleService.getActions(req.set("roleID", roleID)).value("actions"));
-		}
-		return modelAndView(init ? "role/actions" : "jsonView", res);
-	}
-*/
-	@RequestMapping("/action/add.do")
-	public ModelAndView addActions(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		req.set("roleIDs", req.string("roleIDs").split(","))
-		   .set("actionIDs", req.string("actionIDs").split(","));
-		return modelAndView("jsonView", roleService.addActions(req));
-	}
 
-	@RequestMapping("/action/delete.do")
-	public ModelAndView deleteActions(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		req.set("roleIDs", req.string("roleIDs").split(","))
-		   .set("actionIDs", req.string("actionIDs").split(","));
-		return modelAndView("jsonView", roleService.deleteActions(req));
-	}
-/*
 	@RequestMapping("/user/list.do")
 	public ModelAndView getUsers(HttpServletRequest hreq) {
-		DataObject req = request(hreq),
-				   res = new DataObject();
-		String roleID = req.string("roleID");
-		boolean init = isEmpty(roleID);
-		if (init) {
-			List<DataObject> roles = roleService.getRoles(req).value("roles");
-			roleID = !isEmpty(roles) ? roles.get(0).string("ROLE_ID") : null;
-			res.set("roles", roles);
-		}
-		if (!isEmpty(roleID)) {
-			res.set("users", roleService.getUsers(req.set("roleID", roleID)).value("users"));
-		}
-		return modelAndView(init ? "role/users" : "jsonView", res);
-	}
-*/
-	@RequestMapping("/user/add.do")
-	public ModelAndView addUsers(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		req.set("roleIDs", req.string("roleIDs").split(","))
-		   .set("userIDs", req.string("userIDs").split(","));
-		return modelAndView("jsonView", roleService.addUsers(req));
+		req.set("start", req.number("start").intValue())
+		   .set("fetch", properties.getInt("fetch"));
+		BoundedList<DataObject> users = roleService.getUsers(req);
+		return new ModelAndView("jsonView")
+			.addObject("users", users)
+			.addObject("totalUsers", users.getTotalSize())
+			.addObject("userStart", users.getStart())
+			.addObject("fetch", users.getFetchSize());
+	}
+
+	@RequestMapping("/user/add.do")
+	public ModelAndView addUsers(@RequestParam String roleID, @RequestParam String userID) {
+		int affected = roleService.addUsers(roleID.split(","), userID.split(","));
+		return new ModelAndView("jsonView")
+			.addObject("affected", affected)
+			.addObject("saved", affected > 0);
 	}
 
 	@RequestMapping("/user/delete.do")
-	public ModelAndView deleteUsers(HttpServletRequest hreq) {
+	public ModelAndView deleteUsers(@RequestParam String roleID, @RequestParam String userID) {
+		int affected = roleService.deleteUsers(roleID.split(","), userID.split(","));
+		return new ModelAndView("jsonView")
+			.addObject("affected", affected)
+			.addObject("saved", affected > 0);
+	}
+
+	@RequestMapping("/permission/list.do")
+	public ModelAndView getPermissions(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		req.set("roleIDs", req.string("roleIDs").split(","))
-		   .set("userIDs", req.string("userIDs").split(","));
-		return modelAndView("jsonView", roleService.deleteUsers(req));
+		req.set("start", req.number("start").intValue())
+		   .set("fetch", properties.getInt("fetch"));
+		BoundedList<DataObject> permissions = roleService.getPermissions(req);
+		return new ModelAndView("jsonView")
+			.addObject("permissions", permissions)
+			.addObject("totalPermissions", permissions.getTotalSize())
+			.addObject("permissionStart", permissions.getStart())
+			.addObject("fetch", permissions.getFetchSize());
+	}
+
+	@RequestMapping("/permission/add.do")
+	public ModelAndView addPermissions(@RequestParam String roleID, @RequestParam String permissionID) {
+		int affected = roleService.addPermissions(roleID.split(","), permissionID.split(","));
+		return new ModelAndView("jsonView")
+			.addObject("affected", affected)
+			.addObject("saved", affected > 0);
+	}
+
+	@RequestMapping("/permission/delete.do")
+	public ModelAndView deletePermissions(@RequestParam String roleID, @RequestParam String permissionID) {
+		int affected = roleService.deletePermissions(roleID.split(","), permissionID.split(","));
+		return new ModelAndView("jsonView")
+			.addObject("affected", affected)
+			.addObject("saved", affected > 0);
 	}
 }

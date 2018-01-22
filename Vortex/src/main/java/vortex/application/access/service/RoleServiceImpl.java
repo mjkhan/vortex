@@ -1,8 +1,5 @@
 package vortex.application.access.service;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +11,11 @@ import vortex.support.data.DataObject;
 
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
+	private static final String
+		USER = "000",
+		PERMISSION = "001";
 	@Autowired
-	private RoleMemberMapper roleMemberMapper;
+	private RoleMemberMapper roleMemberMapper; //TODO:DELETE
 	@Autowired
 	private GroupMapper roleGroup;
 	
@@ -49,56 +49,38 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 	}
 
 	@Override
-	public DataObject getUsers(DataObject req) {
-		List<Map<String, Object>> users = roleMemberMapper.getUsers(req);
-		return dataobject()
-			.set("users", users);
+	public BoundedList<DataObject> getUsers(DataObject req) {
+		return roleGroup.getMembers(
+			"getUsers"
+		   , req.set("memberType", USER)
+		);
 	}
 
 	@Override
-	public DataObject addUsers(DataObject req) {
-		String[] roleIDs = req.value("roleIDs"),
-				 userIDs = req.value("userIDs");
-		int affected = roleMemberMapper.addUsers(roleIDs, userIDs);
-		return dataobject()
-			.set("affected", affected)
-			.set("saved", affected > 0);
+	public int addUsers(String[] roleIDs, String[] userIDs) {
+		return roleGroup.addMembers(roleIDs, USER, userIDs);
 	}
 
 	@Override
-	public DataObject deleteUsers(DataObject req) {
-		String[] roleIDs = req.value("roleIDs"),
-				 userIDs = req.value("userIDs");
-		int affected = roleMemberMapper.deleteUsers(roleIDs, userIDs);
-		return dataobject()
-			.set("affected", affected)
-			.set("saved", affected > 0);
+	public int deleteUsers(String[] roleIDs, String[] userIDs) {
+		return roleGroup.deleteMembers(roleIDs, USER, userIDs);
 	}
 
 	@Override
-	public DataObject getActions(DataObject req) {
-		List<Map<String, Object>> actions = roleMemberMapper.getActions(req);
-		return dataobject()
-			.set("actions", actions);
+	public BoundedList<DataObject> getPermissions(DataObject req) {
+		return roleGroup.getMembers(
+			"getPermissions"
+		   , req.set("memberType", PERMISSION)
+		);
 	}
 
 	@Override
-	public DataObject addActions(DataObject req) {
-		String[] roleIDs = req.value("roleIDs"),
-				 actionIDs = req.value("actionIDs");
-		int affected = roleMemberMapper.addActions(roleIDs, actionIDs);
-		return dataobject()
-			.set("affected", affected)
-			.set("saved", affected > 0);
+	public int addPermissions(String[] roleIDs, String[] permissionIDs) {
+		return roleGroup.addMembers(roleIDs, PERMISSION, permissionIDs);
 	}
 
 	@Override
-	public DataObject deleteActions(DataObject req) {
-		String[] roleIDs = req.value("roleIDs"),
-				 actionIDs = req.value("actionIDs");
-		int affected = roleMemberMapper.deleteActions(roleIDs, actionIDs);
-		return dataobject()
-			.set("affected", affected)
-			.set("saved", affected > 0);
+	public int deletePermissions(String[] roleIDs, String[] permissionIDs) {
+		return roleGroup.deleteMembers(roleIDs, PERMISSION, permissionIDs);
 	}
 }

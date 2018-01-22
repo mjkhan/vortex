@@ -158,4 +158,50 @@ AND GRP_ID = #{groupID}
 AND MB_TYPE = #{memberType}
 </update>
 
+<!-- role의 사용자 목록 가져오기-->
+<select id="getUsers" parameterType="hashmap" resultType="dataobject">
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS USER_ID, USER_NAME, A.INS_ID, A.INS_TIME
+	FROM TBL_GROUP_MEMBER A, TBL_USER B
+	WHERE GRP_TYPE = #{groupType}
+	AND GRP_ID = #{groupID}
+	AND MB_TYPE = #{memberType}
+	AND MB_ID = USER_ID
+	ORDER BY SRT_ORD
+	LIMIT #{start}, #{fetch}
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
+	SELECT USER_ID, USER_NAME, A.INS_ID, A.INS_TIME
+	FROM TBL_GROUP_MEMBER A, TBL_USER B
+	WHERE GRP_TYPE = #{groupType}
+	AND GRP_ID = #{groupID}
+	AND MB_TYPE = #{memberType}
+	AND MB_ID = USER_ID
+	ORDER BY SRT_ORD
+</if>
+</select>
+
+<!-- role의 권한 목록 가져오기-->
+<select id="getPermissions" parameterType="hashmap" resultType="dataobject">
+<if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
+	SELECT SQL_CALC_FOUND_ROWS PMS_ID, PMS_NAME, A.INS_ID, A.INS_TIME
+	FROM TBL_GROUP_MEMBER A, TBL_PERMISSION B
+	WHERE GRP_TYPE = #{groupType}
+	AND A.GRP_ID = #{groupID}
+	AND MB_TYPE = #{memberType}
+	AND MB_ID = PMS_ID
+	ORDER BY SRT_ORD, B.GRP_ID, PMS_ID
+	LIMIT #{start}, #{fetch}
+</if>
+<if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
+	SELECT PMS_ID, PMS_NAME, A.INS_ID, A.INS_TIME
+	FROM TBL_GROUP_MEMBER A, TBL_PERMISSION B
+	WHERE GRP_TYPE = #{groupType}
+	AND A.GRP_ID = #{groupID}
+	AND MB_TYPE = #{memberType}
+	AND MB_ID = PMS_ID
+	ORDER BY SRT_ORD, B.GRP_ID, PMS_ID
+</if>
+</select>
+
 </mapper>

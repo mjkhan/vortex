@@ -82,6 +82,15 @@ public class GroupMapper extends DataMapper {
 			);
 	}
 	
+	public BoundedList<DataObject> getMembers(String queryID, DataObject req) {
+		if (!queryID.contains("."))
+			queryID = "group." + queryID;
+		return boundedList(
+			selectList(queryID, req)
+		  , req
+		);
+	}
+	
 	public int addMembers(String[] groupIDs, String memberType, String... memberIDs) {
 		if (isEmpty(memberIDs)) return 0;
 		

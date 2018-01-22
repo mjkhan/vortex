@@ -1,29 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
-<jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
-<div style="width:100%; margin-top:.1em;">
-	<table class="infoList">
-		<thead>
-			<tr><th width="10%"><input id="toggleRoles" type="checkbox" /></th>
-				<th width="30%">아이디</th>
-				<th width="60%">이름</th>
-			</tr>
-		</thead>
-		<tbody id="roleList">
-		<c:set var="notFound"><tr><td colspan="3" class="notFound">ROLE을 찾지 못했습니다.</td></c:set>
-		<c:set var="roleRow"><tr>
-			<td><input name="roleID" value="{roleID}" type="checkbox" /></td>
-				<td><a onclick="getUsers('{roleID}')">{roleID}</a></td>
-				<td>{roleName}</td>
-			</tr></c:set>
-		</tbody>
-	</table>
-</div>
-<div id="roleUsers" style="padding:1em 0;">
-	<div id="userTitle" class="subTitle">사용자 정보</div>
+<div id="users" style="padding:1em 0;">
 	<div class="inputArea">
-		 <button id="btnAdd" onclick="addUsers();" type="button" class="add hidden">추가</button>
+		 <button id="btnAdd" onclick="addUsers();" type="button">추가</button>
 		 <button id="btnRemove" onclick="deleteUsers();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">
@@ -35,7 +15,7 @@
 			</tr>
 		</thead>
 		<tbody id="userList">
-		<c:set var="userNotFound"><tr><td colspan="4" class="notFound">사용자정보를 찾지 못했습니다.</td></c:set>
+		<c:set var="userNotFound"><tr><td colspan="4" class="notFound">사용자 정보를 찾지 못했습니다.</td></c:set>
 		<c:set var="userRow"><tr>
 			<td><input name="userID" value="{userID}" type="checkbox" /></td>
 				<td>{userID}</td>
@@ -44,52 +24,25 @@
 			</tr></c:set>
 		</tbody>
 	</table>
+	<div id="userPages"></div>
 </div>
 <vtx:script type="decl">
-var checkedRoles,
-	checkedUsers,
+var checkedUsers,
 	currentUsers;
 
-function setUserTitle(roleID) {
-	$("#userTitle").html(roleID + " 사용자 정보");
-}
-
-function setRoles(resp) {
-	$("#roleList").populate({
-		data:resp.roles,
-		tr:function(row){
-			return "${vtx:jstring(roleRow)}"
-				.replace(/{roleID}/g, row.ROLE_ID)
-				.replace(/{roleName}/g, row.ROLE_NAME);
-		},
-		ifEmpty:"${vtx:jstring(notFound)}"
-	});
-
-	checkedRoles = checkbox("input[type='checkbox'][name='roleID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#btnAdd").fadeIn();
-			else {
-				$("#btnAdd").fadeOut();
-				checkbox("#toggleUsers").check(false);
-			}
-		});
-	checkbox("#toggleRoles").onChange(function(checked){
-		checkedRoles.check(checked);
-	});
-}
-
-function getUsers(roleID) {
+function getUsers(start) {
 	ajax({
 		url:"<c:url value='/role/user/list.do'/>",
-		data:{roleID:roleID},
-		success:setUsers
+		data:{
+			roleID:currentRole.GRP_ID,
+			start:start
+		},
+		success:setUserList
 	});
-	setUserTitle(roleID);
 	currentUsers = function(){getUsers(roleID);};
 }
 
-function setUsers(resp) {
+function setUserLis(resp) {
 	$("#userList").populate({
 		data:resp.users,
 		tr:function(row){
@@ -127,8 +80,8 @@ function addUsers(){
 					ajax({
 						url:"<c:url value='/role/user/add.do'/>",
 						data:{
-							roleIDs:checkedRoles.value().join(","),
-							userIDs:userIDs
+							roleID:checkedRoles.value().join(","),
+							userID:userIDs
 						},
 						success:function(resp){
 							if (!resp.saved)
@@ -152,8 +105,8 @@ function deleteUsers(){
 	ajax({
 		url:"<c:url value='/role/user/delete.do'/>",
 		data:{
-			roleIDs:checkedRoles.value().join(","),
-			userIDs:userIDs.join(","),
+			roleID:checkedRoles.value().join(","),
+			userID:userIDs.join(","),
 		},
 		success:function(resp){
 			if (!resp.saved)
@@ -167,11 +120,10 @@ function deleteUsers(){
 }
 </vtx:script>
 <vtx:script type="docReady">
-	docTitle("ROLE 사용자 정보");
-	subTitle("ROLE 정보");
-	setRoles({roles:<vtx:json data="${roles}" mapper="${objectMapper}"/>});
 	setUsers({
-		users:<vtx:json data="${users}" mapper="${objectMapper}"/>
+		users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
+		totalUsers:${totalUsers},
+		userStart:${userStart},
+		fetch:${fetch}
 	});
 </vtx:script>
-<jsp:include page="/WEB-INF/jsp/common/footer.jsp"/>

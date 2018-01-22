@@ -142,7 +142,17 @@ function setRoleList(resp) {
 function getUsers(start) {
 	$(".tab li").removeClass("current");
 	$("#userTab").addClass("current");
-	currentMembers = function() {getUsers(start);};
+	ajax({
+		url:"<c:url value='/role/user/list.do'/>",
+		data:{
+			groupID:currentRole.GRP_ID,
+			start:start || 0
+		},
+		success:function(resp){
+			setUserList(resp);
+			currentMembers = function() {getUsers(start);};
+		}
+	});
 }
 
 function setUserList(resp) {}
@@ -150,7 +160,17 @@ function setUserList(resp) {}
 function getPermissions(start) {
 	$(".tab li").removeClass("current");
 	$("#permissionTab").addClass("current");
-	currentMembers = function() {getPermissions(start);};
+	ajax({
+		url:"<c:url value='/role/permission/list.do'/>",
+		data:{
+			groupID:currentRole.GRP_ID,
+			start:start || 0
+		},
+		success:function(resp){
+			setPermissionList(resp);
+			currentMembers = function() {getPermissions(start);};
+		}
+	});
 }
 
 function setPermissionList(resp) {}

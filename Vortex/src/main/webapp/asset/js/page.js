@@ -33,6 +33,24 @@ function requiredEmpty(whenEmpty) {
 	});
 	return empty;
 }
+
+$.fn.requiredEmpty = function(whenEmpty) {
+	var empty = false;
+	this.each(function(){
+		var input = $(this),
+			value = input.val();
+		if (empty = isEmpty(value)) {
+			if (whenEmpty)
+				whenEmpty(input);
+			else {
+				alert(labelFor(input) + "을(를) 입력하십시오.");
+			}
+			input.focus();
+			return false;
+		}
+	});
+	return empty;
+}
 /**config = {
  * 	test:function(v){...}
  * ,onError:function(input){...} //Optional
@@ -52,7 +70,6 @@ $.fn.validate = function(config) {
 					alert("올바른 " + label + "을(를) 입력하십시오.");
 				else
 					alert("잘못된 값이 입력됐습니다.");
-				setTimeout(function(){input.focus();}, 20);
 			}
 		})
 	});

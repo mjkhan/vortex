@@ -51,17 +51,21 @@ function setUserList(resp) {
 		},
 		ifEmpty:"${vtx:jstring(userNotFound)}"
 	});
+	
+	var showOnCheck = function(show) {
+		if (show)
+			$("#btnDelUsers").fadeIn();
+		else
+			$("#btnDelUsers").fadeOut();
+	};
 
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#btnDelUsers").fadeIn();
-			else
-				$("#btnDelUsers").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#toggleUsers")
 		.onChange(function(checked){checkedUsers.check(checked);})
 		.check(false);
+	if (resp.totalUsers < 1)
+		showOnCheck(false);
 	
 	$("#moreUsers").setPaging({
 		start:resp.userStart,

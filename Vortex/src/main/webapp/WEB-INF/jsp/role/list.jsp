@@ -142,20 +142,23 @@ function setRoleList(resp) {
 	   ,func:"window.search({index})"
 	});
 	
+	var showOnCheck = function(show) {
+		if (show)
+			$("#roleArea .showOnCheck").fadeIn();
+		else
+			$("#roleArea .showOnCheck").fadeOut();
+	};
+	
 	checkedRoles = checkbox("input[type='checkbox'][name='roleID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#roleArea .showOnCheck").fadeIn();
-			else
-				$("#roleArea .showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#toggleRoles")
 		.onChange(function(checked){checkedRoles.check(checked);})
 		.check(false);
 		
-	if (resp.totalRoles < 1)
+	if (resp.totalRoles < 1) {
+		showOnCheck(false);
 		$("#members").hide();
-	else
+	} else
 		$("#members").show();
 }
 

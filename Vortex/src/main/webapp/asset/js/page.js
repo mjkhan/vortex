@@ -146,9 +146,7 @@ function checkbox(selector) {
 				});
 				handler(checked > 0);
 			};
-			objs.target.each(function(){
-				$(this).change(function(){watch();});
-			});
+			objs.target.each(function(){$(this).change(watch);});
 			return objs;
 		}
 	};

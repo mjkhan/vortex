@@ -48,17 +48,21 @@ function setPermissionList(resp) {
 		},
 		ifEmpty:"${vtx:jstring(permissionNotFound)}"
 	});
+	
+	var showOnCheck = function(show) {
+		if (show)
+			$("#btnDelPermissions").fadeIn();
+		else
+			$("#btnDelPermissions").fadeOut();
+	};
 
 	checkedPermissions = checkbox("input[type='checkbox'][name='permissionID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#btnDelPermissions").fadeIn();
-			else
-				$("#btnDelPermissions").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#togglePermissions")
 		.onChange(function(checked){checkedPermissions.check(checked);})
 		.check(false);
+	if (resp.totalPermissions < 1)
+		showOnCheck(false);
 	
 	$("#morePermissions").setPaging({
 		start:resp.permissionStart,

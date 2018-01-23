@@ -134,7 +134,7 @@ function checkbox(selector) {
 			return checked;
 		},
 		check:function(checked) {
-			objs.target.each(function(){$(this).prop("checked", checked).change();});
+			objs.target.each(function(){$(this).prop("checked", checked ? true : false).change();});
 			return objs;
 		},
 		onChange: function(handler) {
@@ -144,7 +144,7 @@ function checkbox(selector) {
 					if ($(this).is(":checked"))
 						++checked;
 				});
-				handler(checked);
+				handler(checked > 0);
 			};
 			objs.target.each(function(){
 				$(this).change(function(){watch();});

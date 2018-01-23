@@ -32,7 +32,7 @@ public class RoleController extends ApplicationController {
 			.addObject("totalRoles", roles.getTotalSize())
 			.addObject("roleStart", roles.getStart());
 		if (!roles.isEmpty()) {
-			req.set("groupID", roles.get(0).string("GRP_ID"))
+			req.set("roleID", roles.get(0).string("GRP_ID"))
 			   .set("start", 0);
 			switch (ifEmpty(req.string("memberType"), RoleService.USER)) {
 			case RoleService.USER: getUsers(req, mv); break;

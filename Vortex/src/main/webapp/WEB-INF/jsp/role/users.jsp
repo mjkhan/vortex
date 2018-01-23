@@ -52,7 +52,7 @@ function setUserList(resp) {
 		ifEmpty:"${vtx:jstring(userNotFound)}"
 	});
 
-	checkedUsers = checkbox("#users input[type='checkbox'][name='userID']")
+	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
 		.onChange(function(checked){
 			if (checked)
 				$("#btnDelUsers").fadeIn();

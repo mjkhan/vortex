@@ -56,8 +56,8 @@ var getRole,
 		get:function(){
 			return currentMembers == getUsers ? memberType.User : memberType.Permission;
 		},
-		setList:function(){
-			return currentMembers == getUsers ? setUserList : setPermissionList;
+		setList:function(resp){
+			currentMembers == getUsers ? setUserList(resp) : setPermissionList(resp);
 		}
 	};
 
@@ -76,7 +76,7 @@ function search(start) {
 		},
 		success:function(resp) {
 			setRoleList(resp);
-			memberType.setList()(resp);
+			memberType.setList(resp);
 		}
 	});
 	currentRoles = function(){search(start);};

@@ -15,7 +15,7 @@
 </div>
 <table class="infoList">
 	<thead>
-		<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
+		<tr><th width="10%"><input id="toggleRoles" type="checkbox" /></th>
 			<th width="20%">아이디</th>
 			<th width="50%">이름</th>
 			<th width="20%">수정시간</th>
@@ -31,15 +31,17 @@
 		</tr></c:set>
 	</tbody>
 </table>
-<div class="paging"></div>
-<div style="display:flex;">
-	<div id="roleName" style="padding:.5em .5em 0 0;"></div>
-	<ul class="tab">
-		<li id="userTab" class="current" onclick="getUsers();">사용자</li>
-		<li id="permissionTab" onclick="getPermissions();">권한</li>
-	</ul>
-</div>
+<div id="rolePages" class="paging"></div>
 <div id="members">
+	<div style="display:flex;">
+		<div id="memberTitle" style="padding:.5em .5em 0 0;"></div>
+		<ul class="tab">
+			<li id="userTab" class="current" onclick="currentRoleUsers();">사용자</li>
+			<li id="permissionTab" onclick="currentRolePermissions();">권한</li>
+		</ul>
+	</div>
+	<jsp:include page="/WEB-INF/jsp/role/users.jsp"/>
+	<jsp:include page="/WEB-INF/jsp/role/permissions.jsp"/>
 </div>
 <vtx:script type="decl">
 var getRole,
@@ -47,7 +49,17 @@ var getRole,
 	checkedRoles,
 	currentRoles,
 	currentMembers,
-	afterSave;
+	afterSave,
+	memberType = {
+		User:"000",
+		Permission:"001",
+		get:function(){
+			return currentMembers == getUsers ? memberType.User : memberType.Permission;
+		},
+		setList:function(){
+			return currentMembers == getUsers ? setUserList : setPermissionList;
+		}
+	};
 
 function search(start) {
 	var field = $("#field").val(),
@@ -59,10 +71,12 @@ function search(start) {
 		data:{
 			searchBy:field,
 			searchTerms:value,
-			start:start || 0
+			start:start || 0,
+			memberType:memberType.get(),
 		},
 		success:function(resp) {
 			setRoleList(resp);
+			memberType.setList()(resp);
 		}
 	});
 	currentRoles = function(){search(start);};
@@ -96,7 +110,7 @@ function getInfo(roleID) {
 }
 
 function setRoleName(name) {
-	$("#roleName").html(name);
+	$("#memberTitle").html(name);
 }
 
 function setRoleList(resp) {
@@ -104,7 +118,7 @@ function setRoleList(resp) {
 		var roles = resp.roles;
 		if (!roles || roles.length < 1) return {};
 		if (!roleID) return roles[0];
-		var found = elementsOf(roles, "GRP_ID", groupID);
+		var found = elementsOf(roles, "GRP_ID", roleID);
 		return found ? found[0] : {};
 	};
 	currentRole = getRole();
@@ -121,8 +135,7 @@ function setRoleList(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
-	$("#roleArea .showOnCheck").fadeOut();
-	$("#roleArea .paging").setPaging({
+	$("#rolePages").setPaging({
 	    start:resp.roleStart
 	   ,fetchSize:resp.fetch
 	   ,totalSize:resp.totalRoles
@@ -136,44 +149,33 @@ function setRoleList(resp) {
 			else
 				$("#roleArea .showOnCheck").fadeOut();
 		});
-	checkbox("#roleArea #toggleChecks").onChange(function(checked){checkedRoles.check(checked);});
+	checkbox("#toggleRoles")
+		.onChange(function(checked){checkedRoles.check(checked);})
+		.check(false);
+		
+	if (resp.totalRoles < 1)
+		$("#members").hide();
+	else
+		$("#members").show();
 }
 
-function getUsers(start) {
+function currentRoleUsers() {
 	$(".tab li").removeClass("current");
 	$("#userTab").addClass("current");
-	ajax({
-		url:"<c:url value='/role/user/list.do'/>",
-		data:{
-			groupID:currentRole.GRP_ID,
-			start:start || 0
-		},
-		success:function(resp){
-			setUserList(resp);
-			currentMembers = function() {getUsers(start);};
-		}
-	});
+	getUsers();
+	$("#permissions").hide();
+	$("#users").fadeIn();
+	currentMembers = getUsers;
 }
 
-function setUserList(resp) {}
-
-function getPermissions(start) {
+function currentRolePermissions() {
 	$(".tab li").removeClass("current");
 	$("#permissionTab").addClass("current");
-	ajax({
-		url:"<c:url value='/role/permission/list.do'/>",
-		data:{
-			groupID:currentRole.GRP_ID,
-			start:start || 0
-		},
-		success:function(resp){
-			setPermissionList(resp);
-			currentMembers = function() {getPermissions(start);};
-		}
-	});
+	getPermissions();
+	$("#users").hide();
+	$("#permissions").fadeIn();
+	currentMembers = getPermissions;
 }
-
-function setPermissionList(resp) {}
 
 function getMembers(roleID) {
 	currentRole = getRole(roleID);
@@ -190,11 +192,5 @@ setRoleList({
 	fetch:${fetch}
 });
 currentRoles = search;
-setUserList({
-	users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
-	totalUsers:${totalRoles},
-	userStart:${roleStart},
-	fetch:${fetch}
-});
 currentMembers = getUsers;
 </vtx:script>

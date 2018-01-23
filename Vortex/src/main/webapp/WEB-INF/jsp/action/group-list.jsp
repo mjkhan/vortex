@@ -109,8 +109,6 @@ function setGroupList(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
-	$("#actionGroups .showOnCheck").fadeOut();
-	
 	checkedGroups = checkbox("#actionGroups input[type='checkbox'][name='groupID']")
 		.onChange(function(checked){
 			if (checked)
@@ -118,7 +116,9 @@ function setGroupList(resp) {
 			else
 				$("#actionGroups .showOnCheck").fadeOut();
 		});
-	checkbox("#actionGroups #toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
+	checkbox("#actionGroups #toggleChecks")
+		.onChange(function(checked){checkedGroups.check(checked);})
+		.check(false);
 }
 </vtx:script>
 <vtx:script type="docReady">

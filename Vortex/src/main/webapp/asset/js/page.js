@@ -90,7 +90,9 @@ $.fn.populate = function(config) {
 			trs = [];
 		if (length) {
 			for (var i = 0; i < length; ++i) {
-				trs.push(config.tr(list[i]));
+				var tag = config.tr(list[i]);
+				if (!isEmpty(tag))
+					trs.push(tag);
 			}
 		} else {
 			if (!config.append) {

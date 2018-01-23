@@ -3,8 +3,8 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <div id="users" style="padding:1em 0;">
 	<div class="inputArea">
-		 <button id="btnAdd" onclick="addUsers();" type="button">추가</button>
-		 <button id="btnRemove" onclick="deleteUsers();" type="button" class="hidden">삭제</button>
+		 <button id="btnAddUsers" onclick="addUsers();" type="button">추가</button>
+		 <button id="btnDelUsers" onclick="deleteUsers();" type="button" class="hidden">삭제</button>
 	</div>
 	<table class="infoList">
 		<thead>
@@ -24,11 +24,10 @@
 			</tr></c:set>
 		</tbody>
 	</table>
-	<div id="userPages"></div>
+	<div id="moreUsers" class="paging"></div>
 </div>
 <vtx:script type="decl">
-var checkedUsers,
-	currentUsers;
+var checkedUsers;
 
 function getUsers(start) {
 	ajax({
@@ -39,10 +38,9 @@ function getUsers(start) {
 		},
 		success:setUserList
 	});
-	currentUsers = function(){getUsers(roleID);};
 }
 
-function setUserLis(resp) {
+function setUserList(resp) {
 	$("#userList").populate({
 		data:resp.users,
 		tr:function(row){
@@ -54,16 +52,23 @@ function setUserLis(resp) {
 		ifEmpty:"${vtx:jstring(userNotFound)}"
 	});
 
-	$("#btnRemove").fadeOut();
-	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
+	checkedUsers = checkbox("#users input[type='checkbox'][name='userID']")
 		.onChange(function(checked){
-			if (checked) {
-				if (checkedRoles.isChecked())
-					$("#btnRemove").fadeIn();
-			} else
-				$("#btnRemove").fadeOut();
+			if (checked)
+				$("#btnDelUsers").fadeIn();
+			else
+				$("#btnDelUsers").fadeOut();
 		});
-	checkbox("#toggleUsers").onChange(function(checked){checkedUsers.check(checked);});
+	checkbox("#toggleUsers")
+		.onChange(function(checked){checkedUsers.check(checked);})
+		.check(false);
+	
+	$("#moreUsers").setPaging({
+		start:resp.userStart,
+		fetchSize:resp.fetch,
+		totalSize:resp.totalUsers,
+		func:"getUsers({index});"
+	});
 }
 
 function addUsers(){
@@ -80,16 +85,13 @@ function addUsers(){
 					ajax({
 						url:"<c:url value='/role/user/add.do'/>",
 						data:{
-							roleID:checkedRoles.value().join(","),
+							roleID:currentRole.GRP_ID,
 							userID:userIDs
 						},
 						success:function(resp){
 							if (!resp.saved)
 								return alert("저장되지 않았습니다.");
-							if (currentUsers)
-								currentUsers();
-							else
-								location.reload();
+							getUsers();
 						}
 					});
 				}
@@ -99,31 +101,28 @@ function addUsers(){
 }
 
 function deleteUsers(){
-	if (!confirm("선택한 사용자를 ROLE에서 삭제하시겠습니까?")) return;
+	if (!confirm("선택한 사용자를 '" + currentRole.GRP_NAME + "' ROLE에서 삭제하시겠습니까?")) return;
 	
 	var userIDs = checkedUsers.value();
 	ajax({
 		url:"<c:url value='/role/user/delete.do'/>",
 		data:{
-			roleID:checkedRoles.value().join(","),
+			roleID:currentRole.GRP_ID,
 			userID:userIDs.join(","),
 		},
 		success:function(resp){
 			if (!resp.saved)
 				return alert("저장되지 않았습니다.");
-			if (currentUsers)
-				currentUsers();
-			else
-				location.reload();
+			getUsers();
 		}
 	});
 }
 </vtx:script>
 <vtx:script type="docReady">
-	setUsers({
-		users:<vtx:json data="${users}" mapper="${objectMapper}"/>,
-		totalUsers:${totalUsers},
-		userStart:${userStart},
+	setUserList({
+		users:<c:if test="${!empty users}"><vtx:json data="${users}" mapper="${objectMapper}"/></c:if><c:if test="${empty users}">[]</c:if>,
+		totalUsers:${vtx:ifEmpty(totalUsers, 0)},
+		userStart:${vtx:ifEmpty(userStart, -1)},
 		fetch:${fetch}
 	});
 </vtx:script>

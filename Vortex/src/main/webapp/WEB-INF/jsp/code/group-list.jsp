@@ -104,7 +104,6 @@ function setGroupList(resp) {
 	   ,ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
-	$("#codeGroups .showOnCheck").fadeOut();
 	$("#codeGroups .paging").setPaging({
 	    start:resp.groupStart
 	   ,fetchSize:resp.fetch
@@ -119,7 +118,9 @@ function setGroupList(resp) {
 			else
 				$("#codeGroups .showOnCheck").fadeOut();
 		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
+	checkbox("#toggleChecks")
+		.onChange(function(checked){checkedGroups.check(checked);})
+		.check(false);
 }
 
 function getGroupCodes(groupID) {

@@ -69,7 +69,6 @@ function setGroupList(resp) {
 	   ,ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
-	$(".showOnCheck").fadeOut();
 	$(".paging").setPaging({
 		start:resp.start
 	   ,fetchSize:resp.fetch
@@ -84,7 +83,9 @@ function setGroupList(resp) {
 			else
 				$(".showOnCheck").fadeOut();
 		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedGroups.check(checked);});
+	checkbox("#toggleChecks")
+		.onChange(function(checked){checkedGroups.check(checked);})
+		.check(false);
 }
 
 function removeGroups() {

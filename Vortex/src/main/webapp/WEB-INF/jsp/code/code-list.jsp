@@ -88,8 +88,9 @@ function setCodeList(resp) {
 			else
 				$("#codes .showOnCheck").fadeOut();
 		});
-	checkbox("#codes #toggleChecks").onChange(function(checked){checkedCodes.check(checked);});
-	$(".showOnCheck").fadeOut();
+	checkbox("#codes #toggleChecks")
+		.onChange(function(checked){checkedCodes.check(checked);})
+		.check(false);
 	$("#codes .paging").setPaging({
 	    start:resp.codeStart
 	   ,fetchSize:resp.fetch

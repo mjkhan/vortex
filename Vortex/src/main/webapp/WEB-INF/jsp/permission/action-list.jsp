@@ -108,8 +108,9 @@ function setActionList(resp) {
 			else
 				$("#actions .showOnCheck").fadeOut();
 		});
-	checkbox("#actions #toggleChecks").onChange(function(checked){checkedActions.check(checked);});
-	$("#actions .showOnCheck").fadeOut();
+	checkbox("#actions #toggleChecks")
+		.onChange(function(checked){checkedActions.check(checked);})
+		.check(false);
 	$("#actions .paging").setPaging({
 	    start:resp.actionStart
 	   ,fetchSize:resp.fetch

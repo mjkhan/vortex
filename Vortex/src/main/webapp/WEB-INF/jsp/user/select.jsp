@@ -33,7 +33,7 @@
 		</tr></c:set>
 	</tbody>
 </table>
-<div class="paging"></div>
+<div id="_moreUsers" class="paging"></div>
 <script type="text/javascript">
 var userSelection;
 
@@ -45,8 +45,8 @@ function _searchUsers(start) {
 	ajax({
 		url:"<c:url value='/user/select.do'/>",
 		data:{
-			field:field,
-			value:value,
+			searchBy:field,
+			searchTerms:value,
 			start:start || 0
 		},
 		success:_setUsers
@@ -66,7 +66,7 @@ function _setUsers(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
-	$(".paging").setPaging({
+	$("#_moreUsers").setPaging({
 		start:resp.start,
 		fetchSize:resp.fetchSize,
 		totalSize:resp.totalSize,

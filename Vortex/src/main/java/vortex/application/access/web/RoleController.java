@@ -69,7 +69,8 @@ public class RoleController extends ApplicationController {
 	}
 	
 	private ModelAndView getUsers(DataObject req, ModelAndView mv) {
-		req.set("start", req.number("start").intValue())
+		req.set("groupID", req.remove("roleID"))
+		   .set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
 		BoundedList<DataObject> users = roleService.getUsers(req);
 		return mv.addObject("users", users)
@@ -100,7 +101,8 @@ public class RoleController extends ApplicationController {
 	}
 	
 	private ModelAndView getPermissions(DataObject req, ModelAndView mv) {
-		req.set("start", req.number("start").intValue())
+		req.set("groupID", req.remove("roleID"))
+		   .set("start", req.number("start").intValue())
 		   .set("fetch", properties.getInt("fetch"));
 		BoundedList<DataObject> permissions = roleService.getPermissions(req);
 		return mv

@@ -86,7 +86,7 @@ public class GroupMapper extends DataMapper {
 		if (!queryID.contains("."))
 			queryID = "group." + queryID;
 		return boundedList(
-			selectList(queryID, req)
+			selectList(queryID, req.set("groupType", groupType))
 		  , req
 		);
 	}

@@ -88,8 +88,9 @@ function setActionList(resp) {
 			else
 				$("#actions .showOnCheck").fadeOut();
 		});
-	checkbox("#actions #toggleChecks").onChange(function(checked){checkedActions.check(checked);});
-	$("#actions .showOnCheck").fadeOut();
+	checkbox("#actions #toggleChecks")
+		.onChange(function(checked){checkedActions.check(checked);})
+		.check(false);
 }
 </vtx:script>
 <vtx:script type="docReady">

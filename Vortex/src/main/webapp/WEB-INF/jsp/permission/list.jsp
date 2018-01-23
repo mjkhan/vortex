@@ -108,7 +108,6 @@ function setPermissionList(resp) {
 	builtin.find("input[name='permissionID']").hide();
 	builtin.find("td a[onclick^='getInfo']").removeAttr("onclick");
 
-	$("#permission-actions .showOnCheck").fadeOut();
 	$("#permission-actions .paging").setPaging({
 	    start:resp.permissionStart
 	   ,fetchSize:resp.fetch
@@ -123,7 +122,9 @@ function setPermissionList(resp) {
 			else
 				$("#permissions .showOnCheck").fadeOut();
 		});
-	checkbox("#permissions #toggleChecks").onChange(function(checked){checkedPermissions.check(checked);});
+	checkbox("#permissions #toggleChecks")
+		.onChange(function(checked){checkedPermissions.check(checked);})
+		.check(false);
 }
 
 function getActionsOf(permissionID) {

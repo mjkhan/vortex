@@ -115,7 +115,6 @@ function setUserList(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
-	$(".showOnCheck").fadeOut();
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
 		.onChange(function(checked){
 			if (checked)
@@ -123,7 +122,9 @@ function setUserList(resp) {
 			else
 				$(".showOnCheck").fadeOut();
 		});
-	checkbox("#toggleChecks").onChange(function(checked){checkedUsers.check(checked);});
+	checkbox("#toggleChecks")
+		.onChange(function(checked){checkedUsers.check(checked);})
+		.check(false);
 	
 	$(".paging").setPaging({
 	    start:resp.start

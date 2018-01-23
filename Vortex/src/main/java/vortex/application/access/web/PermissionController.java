@@ -49,7 +49,7 @@ public class PermissionController extends ApplicationController {
 		return mv
 			.addObject("permissions", permissions)
 			.addObject("totalPermissions", permissions.getTotalSize())
-			.addObject("permissionStart", req.get("start"))
+			.addObject("permissionStart", permissions.getStart())
 			.addObject("fetch", req.get("fetch"));
 	}
 	

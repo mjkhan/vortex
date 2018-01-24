@@ -142,8 +142,8 @@ function setRoleList(resp) {
 	   ,func:"window.search({index})"
 	});
 	
-	var showOnCheck = function(show) {
-		if (show)
+	var showOnCheck = function(checked) {
+		if (checked)
 			$("#roleArea .showOnCheck").fadeIn();
 		else
 			$("#roleArea .showOnCheck").fadeOut();
@@ -152,11 +152,13 @@ function setRoleList(resp) {
 	checkedRoles = checkbox("input[type='checkbox'][name='roleID']")
 		.onChange(showOnCheck);
 	checkbox("#toggleRoles")
-		.onChange(function(checked){checkedRoles.check(checked);})
+		.onChange(function(checked){
+			checkedRoles.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 		
 	if (resp.totalRoles < 1) {
-		showOnCheck(false);
 		$("#members").hide();
 	} else
 		$("#members").show();

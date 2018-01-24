@@ -4,13 +4,13 @@
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="searchUsers" style="width:100%;">
 	<div class="inputArea">
-		<select id="searchBy">
+		<select id="field">
 			<option value="">검색조건</option>
 			<option value="USER_ID">아이디</option>
 			<option value="USER_NAME">이름</option>
 			<option value="ALIAS">별명</option>
 		 </select>
-		 <input id="searchTerms" type="search" placeholder="검색어" style="width:40%;"/>
+		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getUsers(0);" type="button">찾기</button>
 		 <button onclick="getInfo();" type="button" class="add">추가</button>
 		 <button onclick="removeUsers();" type="button" class="showOnCheck">삭제</button>
@@ -51,8 +51,8 @@ function getUsers(start) {
 	ajax({
 		url:"<c:url value='/user/list.do'/>",
 		data:{
-			field:field,
-			value:value,
+			searchBy:field,
+			searchTerms:value,
 			start:start || 0
 		},
 		success:function(resp) {
@@ -115,15 +115,20 @@ function setUserList(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
+	var showOnCheck = function(checked){
+		if (checked)
+			$(".showOnCheck").fadeIn();
+		else
+			$(".showOnCheck").fadeOut();
+	};
+	
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
-		.onChange(function(checked){
-			if (checked)
-				$(".showOnCheck").fadeIn();
-			else
-				$(".showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#toggleChecks")
-		.onChange(function(checked){checkedUsers.check(checked);})
+		.onChange(function(checked){
+			checkedUsers.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 	
 	$(".paging").setPaging({

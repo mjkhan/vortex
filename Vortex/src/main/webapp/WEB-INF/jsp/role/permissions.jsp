@@ -49,8 +49,8 @@ function setPermissionList(resp) {
 		ifEmpty:"${vtx:jstring(permissionNotFound)}"
 	});
 	
-	var showOnCheck = function(show) {
-		if (show)
+	var showOnCheck = function(checked) {
+		if (checked)
 			$("#btnDelPermissions").fadeIn();
 		else
 			$("#btnDelPermissions").fadeOut();
@@ -59,7 +59,10 @@ function setPermissionList(resp) {
 	checkedPermissions = checkbox("input[type='checkbox'][name='permissionID']")
 		.onChange(showOnCheck);
 	checkbox("#togglePermissions")
-		.onChange(function(checked){checkedPermissions.check(checked);})
+		.onChange(function(checked){
+			checkedPermissions.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 	if (resp.totalPermissions < 1)
 		showOnCheck(false);

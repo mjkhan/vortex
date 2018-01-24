@@ -52,8 +52,8 @@ function setUserList(resp) {
 		ifEmpty:"${vtx:jstring(userNotFound)}"
 	});
 	
-	var showOnCheck = function(show) {
-		if (show)
+	var showOnCheck = function(checked) {
+		if (checked)
 			$("#btnDelUsers").fadeIn();
 		else
 			$("#btnDelUsers").fadeOut();
@@ -62,10 +62,11 @@ function setUserList(resp) {
 	checkedUsers = checkbox("input[type='checkbox'][name='userID']")
 		.onChange(showOnCheck);
 	checkbox("#toggleUsers")
-		.onChange(function(checked){checkedUsers.check(checked);})
+		.onChange(function(checked){
+			checkedUsers.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
-	if (resp.totalUsers < 1)
-		showOnCheck(false);
 	
 	$("#moreUsers").setPaging({
 		start:resp.userStart,

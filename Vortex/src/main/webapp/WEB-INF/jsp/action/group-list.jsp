@@ -109,15 +109,20 @@ function setGroupList(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 	
+	var showOnCheck = function(checked){
+		if (checked)
+			$("#actionGroups .showOnCheck").fadeIn();
+		else
+			$("#actionGroups .showOnCheck").fadeOut();
+	};
+	
 	checkedGroups = checkbox("#actionGroups input[type='checkbox'][name='groupID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#actionGroups .showOnCheck").fadeIn();
-			else
-				$("#actionGroups .showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#actionGroups #toggleChecks")
-		.onChange(function(checked){checkedGroups.check(checked);})
+		.onChange(function(checked){
+			checkedGroups.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 }
 </vtx:script>

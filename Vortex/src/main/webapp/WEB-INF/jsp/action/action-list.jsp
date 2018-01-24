@@ -81,15 +81,20 @@ function setActionList(resp) {
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
 
+	var showOnCheck = function(checked){
+		if (checked)
+			$("#actions .showOnCheck").fadeIn();
+		else
+			$("#actions .showOnCheck").fadeOut();
+	};
+	
 	checkedActions = checkbox("#actions input[type='checkbox'][name='actionID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#actions .showOnCheck").fadeIn();
-			else
-				$("#actions .showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#actions #toggleChecks")
-		.onChange(function(checked){checkedActions.check(checked);})
+		.onChange(function(checked){
+			checkedActions.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 }
 </vtx:script>

@@ -111,15 +111,20 @@ function setGroupList(resp) {
 	   ,func:"searchGroups({index})"
 	});
 	
+	var showOnCheck = function(checked){
+		if (checked)
+			$("#codeGroups .showOnCheck").fadeIn();
+		else
+			$("#codeGroups .showOnCheck").fadeOut();
+	};
+	
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#codeGroups .showOnCheck").fadeIn();
-			else
-				$("#codeGroups .showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#toggleChecks")
-		.onChange(function(checked){checkedGroups.check(checked);})
+		.onChange(function(checked){
+			checkedGroups.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 }
 

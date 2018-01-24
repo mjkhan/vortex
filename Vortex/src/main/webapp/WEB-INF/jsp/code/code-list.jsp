@@ -80,16 +80,21 @@ function setCodeList(resp) {
 		},
 		ifEmpty:"${vtx:jstring(notFound)}"
 	});
+	
+	var showOnCheck = function(checked){
+		if (checked)
+			$("#codes .showOnCheck").fadeIn();
+		else
+			$("#codes .showOnCheck").fadeOut();
+	};
 
 	checkedCodes = checkbox("input[type='checkbox'][name='code']")
-		.onChange(function(checked){
-			if (checked)
-				$("#codes .showOnCheck").fadeIn();
-			else
-				$("#codes .showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#codes #toggleChecks")
-		.onChange(function(checked){checkedCodes.check(checked);})
+		.onChange(function(checked){
+			checkedCodes.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 	$("#codes .paging").setPaging({
 	    start:resp.codeStart

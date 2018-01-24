@@ -115,15 +115,20 @@ function setPermissionList(resp) {
 	   ,func:"search({index})"
 	});
 	
+	var showOnCheck = function(checked){
+		if (checked)
+			$("#permissions .showOnCheck").fadeIn();
+		else
+			$("#permissions .showOnCheck").fadeOut();
+	};
+	
 	checkedPermissions = checkbox("input[type='checkbox'][name='permissionID']")
-		.onChange(function(checked){
-			if (checked)
-				$("#permissions .showOnCheck").fadeIn();
-			else
-				$("#permissions .showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#permissions #toggleChecks")
-		.onChange(function(checked){checkedPermissions.check(checked);})
+		.onChange(function(checked){
+			checkedPermissions.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 }
 

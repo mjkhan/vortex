@@ -75,16 +75,21 @@ function setGroupList(resp) {
 	   ,totalSize:resp.totalSize
 	   ,func:"searchGroups({index})"
 	});
+	
+	var showOnCheck = function(checked){
+		if (checked)
+			$(".showOnCheck").fadeIn();
+		else
+			$(".showOnCheck").fadeOut();
+	};
 
 	checkedGroups = checkbox("input[type='checkbox'][name='groupID']")
-		.onChange(function(checked){
-			if (checked)
-				$(".showOnCheck").fadeIn();
-			else
-				$(".showOnCheck").fadeOut();
-		});
+		.onChange(showOnCheck);
 	checkbox("#toggleChecks")
-		.onChange(function(checked){checkedGroups.check(checked);})
+		.onChange(function(checked){
+			checkedGroups.check(checked);
+			showOnCheck(checked);
+		})
 		.check(false);
 }
 

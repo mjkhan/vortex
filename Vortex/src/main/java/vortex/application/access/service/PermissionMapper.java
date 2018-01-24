@@ -1,5 +1,7 @@
 package vortex.application.access.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import vortex.application.DataMapper;
@@ -17,6 +19,10 @@ public class PermissionMapper extends DataMapper {
 			selectList("permission.search", params)
 		  , params
 		);
+	}
+	
+	public List<Permission> getPermissions(String userID) {
+		return selectList("permission.getPermissions", userID);
 	}
 	
 	public DataObject getInfo(String pmsID) {

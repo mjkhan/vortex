@@ -43,5 +43,5 @@ public interface ActionService {
 	
 	public int deleteActions(String groupID, String... actionIDs);
 	
-	public Action.Permission getPermission(String userID, String actionPath);
+	public Permission.Status getPermission(String userID, String actionPath);
 }

@@ -32,6 +32,15 @@ AND A.STATUS &lt;&gt; '999'
 ORDER BY SRT_ORD, MENU_ID
 </select>
 
+<!-- menu action별 permission 가져오기 -->
+<select id="getMenuActionPermissions" resultType="dataobject">
+SELECT ACT_PATH, PMS_ID
+FROM TBL_MENU A, TBL_ACTION B, TBL_PMS_ACTION C
+WHERE A.ACT_ID = B.ACT_ID
+AND B.ACT_ID = C.ACT_ID
+ORDER BY ACT_PATH
+</select>
+
 <!-- Menu 가져오기 -->
 <select id="getMenu" parameterType="string" resultMap="menuRow">
 SELECT A.*, B.ACT_PATH

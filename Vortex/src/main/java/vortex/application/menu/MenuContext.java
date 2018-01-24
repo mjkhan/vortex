@@ -10,7 +10,7 @@ import vortex.support.data.hierarchy.Hierarchy;
 
 public class MenuContext extends AbstractObject {
 	private Hierarchy<Menu> menus;
-	private Map<String, List<String>> actionRoles;
+	private Map<String, List<String>> actionPermissions;
 	
 	public Hierarchy<Menu> getMenus() {
 		return menus;
@@ -21,21 +21,22 @@ public class MenuContext extends AbstractObject {
 		return this;
 	}
 	
-	public Map<String, List<String>> getActionRoles() {
-		return actionRoles;
+	public Map<String, List<String>> getActionPermissions() {
+		return actionPermissions;
 	}
 	
-	public MenuContext setActionRoles(Map<String, List<String>> actionRoles) {
-		this.actionRoles = actionRoles;
+	public MenuContext setActionPermissions(Map<String, List<String>> actionPermissions) {
+		this.actionPermissions = actionPermissions;
 		return this;
 	}
 
 	public String getPermittedAction(Menu menu) {
 		String actionPath = menu.getActionPath();
 		if (!isEmpty(actionPath)) {
-			List<String> roles = ifEmpty(actionRoles.get(actionPath), () -> Collections.emptyList());
-			List<String> userRoles = User.current().getRoleIDs();
-			boolean permitted = !Collections.disjoint(roles, userRoles);
+			List<String>
+				permissions = ifEmpty(actionPermissions.get(actionPath), () -> Collections.emptyList()),
+				userPermissions = User.current().getPermissionIDs();
+			boolean permitted = !Collections.disjoint(permissions, userPermissions);
 			return permitted ? actionPath : null;
 		} else {
 			for (Menu child: menu.getChildren()) {

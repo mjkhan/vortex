@@ -12,8 +12,6 @@ import vortex.support.data.DataObject;
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
 	@Autowired
-	private RoleMemberMapper roleMemberMapper; //TODO:DELETE
-	@Autowired
 	private GroupMapper roleGroup;
 	
 	@Override

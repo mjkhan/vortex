@@ -21,7 +21,7 @@ public class MenuMapper extends DataMapper {
 		List<Menu> menus = selectList("menu.getTree");
 		return new HierarchyBuilder<Menu>().setElements(menus).build();
 	}
-	
+/*	TODO:delete	
 	public Map<String, List<String>> getMenuActionRoles() {
 		List<Map<String, Object>> list = selectList("roleMember.getMenuActionRoles");
 		Map<String, List<String>> rolesByAction = new HashMap<>();
@@ -29,6 +29,18 @@ public class MenuMapper extends DataMapper {
 			rolesByAction
 				.computeIfAbsent((String)row.get("ACT_PATH"), key -> new ArrayList<>())
 				.add((String)row.get("ROLE_ID"))
+		);
+		return rolesByAction;
+	}
+*/	
+	public Map<String, List<String>> getMenuActionPermissions() {
+		List<DataObject> list = selectList("menu.getMenuActionPermissions");
+		
+		Map<String, List<String>> rolesByAction = new HashMap<>();
+		list.forEach(row -> 
+			rolesByAction
+				.computeIfAbsent(row.string("ACT_PATH"), key -> new ArrayList<>())
+				.add(row.string("PMS_ID"))
 		);
 		return rolesByAction;
 	}

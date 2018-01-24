@@ -15,17 +15,23 @@ public class AuthenticationServiceImpl extends ApplicationService implements Aut
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
+	private PermissionMapper permissionMapper;
+/*
+	@Autowired
 	private RoleMemberMapper roleMemberMapper;
-
+*/
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userMapper.getUser(username);
 		if (user == null)
 			throw new UsernameNotFoundException("User not found with the username: " + username);
 		
+		List<Permission> permissions = permissionMapper.getPermissions(username);
+		user.setAuthorities(permissions);
+/*		
 		List<Role> roles = roleMemberMapper.getRoles(username);
 		user.setAuthorities(roles);
-		
+*/		
 		return user;
 	}
 }

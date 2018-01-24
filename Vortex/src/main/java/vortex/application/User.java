@@ -45,7 +45,7 @@ public class User implements UserDetails {
 	private Date
 		createdAt,
 		lastModified;
-	private List<? extends GrantedAuthority> roles;
+	private List<? extends GrantedAuthority> permissions;
 	private List<String> roleIDs;
 	private boolean sealed;
 	
@@ -53,7 +53,7 @@ public class User implements UserDetails {
 		return UNKNOWN.equals(getId());
 	}
 	
-	public List<String> getRoleIDs() {//TODO:authority 관련 수정?
+	public List<String> getPermissionIDs() {//TODO:authority 관련 수정?
 		if (roleIDs == null) {
 			roleIDs = new ArrayList<>();
 			roleIDs.add("all");
@@ -154,11 +154,11 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles != null ? roles : Collections.emptyList();
+		return permissions != null ? permissions : Collections.emptyList();
 	}
 	
 	public void setAuthorities(List<? extends GrantedAuthority> authorities) {
-		notSealed().roles = authorities;
+		notSealed().permissions = authorities;
 		roleIDs = null;
 	}
 
@@ -179,7 +179,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return Status.ACTIVE.equals(status());
 	}
 	
 	private User seal() {

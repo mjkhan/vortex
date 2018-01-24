@@ -34,6 +34,21 @@
 </if>
 </select>
 
+
+<!-- 사용자(userID) 권한 정보 가져오기 -->
+<select id="getPermissions" parameterType="string" resultMap="pmsRow">
+SELECT B.*
+FROM TBL_GROUP_MEMBER A, TBL_PERMISSION B
+WHERE GRP_TYPE = '003'
+AND A.GRP_ID IN (
+	SELECT GRP_ID FROM TBL_GROUP_MEMBER
+	WHERE GRP_TYPE = '003' AND MB_TYPE = '000' AND MB_ID = 'user02'
+)
+AND MB_TYPE = '001'
+AND MB_ID = PMS_ID
+ORDER BY B.GRP_ID, PMS_ID;
+</select>
+
 <sql id="select-by-id">
 SELECT A.*, GRP_NAME
 FROM TBL_PERMISSION A, TBL_GROUP B

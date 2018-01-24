@@ -25,7 +25,8 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	public MenuContext getMenuCotext() {
 		return new MenuContext()
 			.setMenus(getTree())
-			.setActionRoles(menuMapper.getMenuActionRoles());
+			.setActionPermissions(menuMapper.getMenuActionPermissions());
+//		.setActionPermissions(menuMapper.getMenuActionRoles());
 	}
 	
 	@Override

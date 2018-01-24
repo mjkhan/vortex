@@ -26,14 +26,6 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Override
 	public List<DataObject> getGroups(DataObject req) {
 		return actionGroup.search(req);
-/*		
-		return dataobject()
-			.set("groups", groups)
-			.set("totalSize", groups.getTotalSize())
-			.set("fetchSize", groups.getFetchSize())
-			.set("more", groups.hasNext())
-			.set("next", groups.getEnd() + 1);
-*/		
 	}
 
 	@Override
@@ -122,20 +114,20 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private static Boolean checkAccessPermission;
 	
 	@Override
-	public Action.Permission getPermission(String userID, String actionPath) {
+	public Permission.Status getPermission(String userID, String actionPath) {
 		if (checkAccessPermission == null)
 			checkAccessPermission = "enable".equalsIgnoreCase(properties.getString("accessPermission"));
 		if (!checkAccessPermission)
-			return Action.Permission.GRANTED;
+			return Permission.Status.GRANTED;
 		
 		if (permitAll == null)
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
-		if (permitAll.contains(actionPath)) return Action.Permission.GRANTED;
+		if (permitAll.contains(actionPath)) return Permission.Status.GRANTED;
 		
 		log().debug(() -> "Getting permission for " + userID + "to " + actionPath);
 		return
-			roleMemberMapper.isPermitted(userID, actionPath) ? Action.Permission.GRANTED :
-			actionMapper.findAction(actionPath) != null ? Action.Permission.DENIED :
-			Action.Permission.NOT_FOUND;
+			roleMemberMapper.isPermitted(userID, actionPath) ? Permission.Status.GRANTED :
+			actionMapper.findAction(actionPath) != null ? Permission.Status.DENIED :
+			Permission.Status.ACTION_NOT_FOUND;
 	}
 }

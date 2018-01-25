@@ -101,7 +101,7 @@ AND ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{
 DELETE FROM TBL_ACTION
 WHERE 1 = 1
 <if test="groupIDs != null">
-AND GRP_IDs IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 </if>
 <if test="actionIDs != null">
 AND ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)

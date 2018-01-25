@@ -30,7 +30,7 @@ public class GrantedTag extends VortexTag {
 	}
 	
 	private int processPermission() throws JspException {
-		return User.current().getPermissionIDs().contains(permission) ? EVAL_BODY_INCLUDE : SKIP_BODY;
+		return User.current().isGranted(permission) ? EVAL_BODY_INCLUDE : SKIP_BODY;
 	}
 	
 	private int processMenu() throws JspException {

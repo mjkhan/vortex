@@ -46,25 +46,13 @@ public class User implements UserDetails {
 		createdAt,
 		lastModified;
 	private List<? extends GrantedAuthority> permissions;
-	private List<String> roleIDs;
+	private List<String> permissionIDs;
 	private boolean sealed;
 	
 	public boolean isUnknown() {
 		return UNKNOWN.equals(getId());
 	}
-	
-	public List<String> getPermissionIDs() {//TODO:authority 관련 수정?
-		if (roleIDs == null) {
-			roleIDs = new ArrayList<>();
-			roleIDs.add("all");
-			if (!isUnknown()) {
-				roleIDs.add("authenticated");
-				getAuthorities().forEach(auth -> roleIDs.add(auth.getAuthority()));;
-			}
-		}
-		return roleIDs;
-	}
-	
+
 	public String getId() {
 		return id != null ? id : UNKNOWN;
 	}
@@ -146,20 +134,31 @@ public class User implements UserDetails {
 	public void setStatus(String status) {
 		notSealed().status = status;
 	}
-	
-	@Override
-	public String toString() {
-		return String.format("%s('%s', '%s')", getClass().getSimpleName(), id, name);
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return permissions != null ? permissions : Collections.emptyList();
 	}
+
+	public List<String> getPermissionIDs() {
+		if (permissionIDs == null) {
+			permissionIDs = new ArrayList<>();
+			permissionIDs.add("all");
+			if (!isUnknown()) {
+				permissionIDs.add("authenticated");
+				getAuthorities().forEach(auth -> permissionIDs.add(auth.getAuthority()));;
+			}
+		}
+		return permissionIDs;
+	}
+	
+	public boolean isGranted(String permissionID) {
+		return getPermissionIDs().contains(permissionID);
+	}
 	
 	public void setAuthorities(List<? extends GrantedAuthority> authorities) {
 		notSealed().permissions = authorities;
-		roleIDs = null;
+		permissionIDs = null;
 	}
 
 	@Override
@@ -191,5 +190,10 @@ public class User implements UserDetails {
 		if (sealed)
 			throw new IllegalStateException(this + " is sealed");
 		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s('%s', '%s')", getClass().getSimpleName(), id, name);
 	}
 }

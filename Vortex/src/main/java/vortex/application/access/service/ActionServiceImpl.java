@@ -103,10 +103,18 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
 		if (permitAll.contains(actionPath)) return Permission.Status.GRANTED;
 		
-		log().debug(() -> "Getting permission for " + userID + "to " + actionPath);
-		return
+		log().debug(() -> "Getting permission for " + userID + " to " + actionPath);
+		Permission.Status status =
 			permissionMapper.isPermitted(userID, actionPath) ? Permission.Status.GRANTED :
 			actionMapper.findAction(actionPath) != null ? Permission.Status.DENIED :
 			Permission.Status.ACTION_NOT_FOUND;
+		log().debug(() -> {
+			switch (status) {
+			case GRANTED: return "Permission granted for " + userID +  " to " + actionPath;
+			case DENIED: return "Permission denied for " + userID + " to " + actionPath;
+			default: return "Action not found: " + actionPath;
+			}
+		});
+		return status;
 	}
 }

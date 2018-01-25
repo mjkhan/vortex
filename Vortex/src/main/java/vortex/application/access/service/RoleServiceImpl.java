@@ -1,6 +1,7 @@
 package vortex.application.access.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
@@ -11,7 +12,7 @@ import vortex.support.data.DataObject;
 
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
-	@Autowired
+	@Resource(name="roleGroup")
 	private GroupMapper roleMapper;
 	
 	@Override

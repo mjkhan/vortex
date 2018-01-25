@@ -43,7 +43,6 @@ function removeActions() {
 	ajax({
 		url:"<c:url value='/action/delete.do'/>",
 		data:{
-			groupID:currentGroup.GRP_ID,
 			actionID:checkedActions.values().join(",")
 		},
 		success:function(resp) {

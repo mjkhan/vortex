@@ -103,7 +103,7 @@ DELETE FROM TBL_PERMISSION WHERE 1 = 1
 AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 </if>
 <if test="permissionIDs != null">
-WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
+AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>
 </delete>
 

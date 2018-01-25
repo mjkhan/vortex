@@ -118,8 +118,8 @@ public class ActionController extends ApplicationController {
 	}
 	
 	@RequestMapping("/delete.do")
-	public ModelAndView deleteActions(@RequestParam(required=false) String groupID, @RequestParam(required=false) String actionID) {
+	public ModelAndView deleteActions(@RequestParam String actionID) {
 		return new ModelAndView("jsonView")
-			.addObject("saved" , actionService.deleteActions(groupID, ifEmpty(actionID, "").split(",")) > 0);
+			.addObject("saved" , actionService.delete(ifEmpty(actionID, "").split(",")) > 0);
 	}
 }

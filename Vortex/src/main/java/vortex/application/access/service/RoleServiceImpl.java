@@ -12,40 +12,40 @@ import vortex.support.data.DataObject;
 @Service("roleService")
 public class RoleServiceImpl extends ApplicationService implements RoleService {
 	@Autowired
-	private GroupMapper roleGroup;
+	private GroupMapper roleMapper;
 	
 	@Override
 	public BoundedList<DataObject> search(DataObject req) {
-		return roleGroup.search(req);
+		return roleMapper.search(req);
 	}
 
 	@Override
 	public DataObject getInfo(String roleID) {
-		return roleGroup.getInfo(roleID);
+		return roleMapper.getInfo(roleID);
 	}
 
 	@Override
 	public Group getRole(String roleID) {
-		return roleGroup.getGroup(roleID);
+		return roleMapper.getGroup(roleID);
 	}
 	@Override
 	public boolean create(Group role) {
-		return roleGroup.create(role);
+		return roleMapper.create(role);
 	}
 
 	@Override
 	public boolean update(Group role) {
-		return roleGroup.update(role);
+		return roleMapper.update(role);
 	}
 
 	@Override
 	public int delete(String... roleIDs) {
-		return roleGroup.deleteGroups(roleIDs);
+		return roleMapper.deleteGroups(roleIDs);
 	}
 
 	@Override
 	public BoundedList<DataObject> getUsers(DataObject req) {
-		return roleGroup.getMembers(
+		return roleMapper.getMembers(
 			"getUsers"
 		   , req.set("memberType", USER)
 		);
@@ -53,17 +53,17 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 
 	@Override
 	public int addUsers(String[] roleIDs, String[] userIDs) {
-		return roleGroup.addMembers(roleIDs, USER, userIDs);
+		return roleMapper.addMembers(roleIDs, USER, userIDs);
 	}
 
 	@Override
 	public int deleteUsers(String[] roleIDs, String[] userIDs) {
-		return roleGroup.deleteMembers(roleIDs, USER, userIDs);
+		return roleMapper.deleteMembers(roleIDs, USER, userIDs);
 	}
 
 	@Override
 	public BoundedList<DataObject> getPermissions(DataObject req) {
-		return roleGroup.getMembers(
+		return roleMapper.getMembers(
 			"getPermissions"
 		   , req.set("memberType", PERMISSION)
 		);
@@ -71,11 +71,11 @@ public class RoleServiceImpl extends ApplicationService implements RoleService {
 
 	@Override
 	public int addPermissions(String[] roleIDs, String[] permissionIDs) {
-		return roleGroup.addMembers(roleIDs, PERMISSION, permissionIDs);
+		return roleMapper.addMembers(roleIDs, PERMISSION, permissionIDs);
 	}
 
 	@Override
 	public int deletePermissions(String[] roleIDs, String[] permissionIDs) {
-		return roleGroup.deleteMembers(roleIDs, PERMISSION, permissionIDs);
+		return roleMapper.deleteMembers(roleIDs, PERMISSION, permissionIDs);
 	}
 }

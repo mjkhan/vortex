@@ -100,8 +100,8 @@ AND ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{
 <delete id="delete" parameterType="hashmap">
 DELETE FROM TBL_ACTION
 WHERE 1 = 1
-<if test="groupID != null">
-AND GRP_ID = #{groupID}
+<if test="groupIDs != null">
+AND GRP_IDs IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 </if>
 <if test="actionIDs != null">
 AND ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)

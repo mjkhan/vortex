@@ -22,9 +22,9 @@ public class AuthenticationServiceImpl extends ApplicationService implements Aut
 */
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userMapper.getUser(username);
+		User user = userMapper.getUser(notEmpty(username, "username"));
 		if (user == null)
-			throw new UsernameNotFoundException("User not found with the username: " + username);
+			throw new UsernameNotFoundException("User not found named '" + username + "'");
 		
 		List<Permission> permissions = permissionMapper.getPermissions(username);
 		user.setAuthorities(permissions);

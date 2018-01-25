@@ -12,7 +12,6 @@ import vortex.application.ApplicationService;
 import vortex.application.group.Group;
 import vortex.application.group.GroupMapper;
 import vortex.support.data.DataObject;
-import vortex.support.data.Status;
 
 @Service("actionService")
 public class ActionServiceImpl extends ApplicationService implements ActionService {
@@ -21,8 +20,11 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Autowired
 	private ActionMapper actionMapper;
 	@Autowired
+	private PermissionMapper permissionMapper;
+/*
+	@Autowired
 	private RoleMemberMapper roleMemberMapper;
-
+*/
 	@Override
 	public List<DataObject> getGroups(DataObject req) {
 		return actionGroup.search(req);
@@ -47,26 +49,13 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	public boolean update(Group group) {
 		return actionGroup.update(group);
 	}
-	
-	@Override
-	public int setGroupStatus(String status, String... groupIDs) {
-		int affected = roleMemberMapper.deleteActionsOfGroups(groupIDs);
-		for (String groupID: groupIDs) {
-			affected += actionMapper.setStatus(status, groupID);
-		}
-		return affected += actionGroup.setStatus(status, groupIDs);
-	}
 
 	@Override
 	public int deleteGroups(String... groupIDs) {
-		int affected = roleMemberMapper.deleteActionsOfGroups(groupIDs);
-		if (isEmpty(groupIDs)) {
-			affected += actionMapper.deleteActions(null);
-		} else {
-			for (String groupID: groupIDs)
-				affected += actionMapper.deleteActions(groupID);
-		}
-		return affected += actionGroup.deleteGroups(groupIDs);
+		return
+			permissionMapper.delete(groupIDs, null)
+		  + actionMapper.delete(groupIDs, null)
+		  + actionGroup.deleteGroups(groupIDs);
 	}
 
 	@Override
@@ -95,19 +84,9 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 
 	@Override
-	public int setStatus(String status, String... actionIDs) {
-		int affected = 0;
-		if (Status.REMOVED.code().equals(status))
-			affected += roleMemberMapper.deleteActions(null, actionIDs);
-		return affected += actionMapper.setStatus(status, null, actionIDs);
-	}
-
-	@Override
-	public int deleteActions(String groupID, String... actionIDs) {
-		if (isEmpty(actionIDs))
-			return deleteGroups(groupID);
-		return roleMemberMapper.deleteActions(null, actionIDs)
-			 + actionMapper.deleteActions(null, actionIDs);
+	public int delete(String... actionIDs) {
+		return permissionMapper.deleteActions(null, actionIDs)
+			 + actionMapper.delete((String[])null, actionIDs);
 	}
 	
 	private static List<String> permitAll;
@@ -126,7 +105,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		
 		log().debug(() -> "Getting permission for " + userID + "to " + actionPath);
 		return
-			roleMemberMapper.isPermitted(userID, actionPath) ? Permission.Status.GRANTED :
+			permissionMapper.isPermitted(userID, actionPath) ? Permission.Status.GRANTED :
 			actionMapper.findAction(actionPath) != null ? Permission.Status.DENIED :
 			Permission.Status.ACTION_NOT_FOUND;
 	}

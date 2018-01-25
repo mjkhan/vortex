@@ -48,12 +48,16 @@ public class ActionMapper extends DataMapper {
 		return setStatus(Status.REMOVED.code(), groupID, actionIDs);
 	}
 	
-	public int deleteActions(String groupID, String... actionIDs) {
+	public int delete(String[] groupIDs, String[] actionIDs) {
 		return delete(
-			"action.delete"
-		   , params(true)
-		   		.set("groupID", groupID)
-		  		.set("actionIDs", !isEmpty(actionIDs) ? actionIDs : null)
-		);
+				"action.delete"
+			   , params(true)
+			   		.set("groupIDs", ifEmpty(groupIDs, null))
+			  		.set("actionIDs", ifEmpty(actionIDs, null))
+			);
+	}
+	
+	public int delete(String... actionIDs) {
+		return delete((String[])null, actionIDs);
 	}
 }

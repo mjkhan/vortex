@@ -48,14 +48,19 @@ public class PermissionMapper extends DataMapper {
 			  , params(true).set("permission", permission)
 			) == 1;
 	}
+	
+	public int delete(String[] groupIDs, String[] permissionIDs) {
+		deleteActions(groupIDs, permissionIDs, null);
+		return delete(
+			"permission.delete"
+		   , params()
+		   	.set("groupIDs", ifEmpty(groupIDs, null))
+		   	.set("permissionIDs", ifEmpty(permissionIDs, null))
+		);
+	}
 
 	public int delete(String... permissionIDs) {
-		return
-			deleteActions(null, permissionIDs, null)
-		  + delete(
-				"permission.delete"
-			   , params().set("permissionIDs", permissionIDs)
-			);
+		return delete((String[])null, permissionIDs);
 	}
 	
 	public BoundedList<DataObject> getActions(DataObject req) {
@@ -101,5 +106,14 @@ public class PermissionMapper extends DataMapper {
 	
 	public int deleteActions(String... groupIDs) {
 		return deleteActions(groupIDs, null, null);
+	}
+		
+	public boolean isPermitted(String userID, String actionPath) {
+		int count = selectOne(
+			"permission.countUserPermissionsForAction"
+		  , params().set("userID", userID)
+					.set("actionPath", actionPath)
+		);
+		return count > 0;
 	}
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import vortex.application.group.Group;
 import vortex.support.data.DataObject;
-import vortex.support.data.Status;
 
 public interface ActionService {
 	public List<DataObject> getGroups(DataObject req);
@@ -16,12 +15,6 @@ public interface ActionService {
 	public boolean create(Group group);
 	
 	public boolean update(Group group);
-	
-	public int setGroupStatus(String status, String... groupIDs);
-	
-	public default int removeGroups(String... groupIDs) {
-		return setGroupStatus(Status.REMOVED.code(), groupIDs);
-	}
 	
 	public int deleteGroups(String... groupIDs);
 	
@@ -35,13 +28,7 @@ public interface ActionService {
 	
 	public boolean update(Action action);
 	
-	public int setStatus(String status, String... actionIDs);
-	
-	public default int removeActions(String... actionIDs) {
-		return setStatus(Status.REMOVED.code(), actionIDs);
-	}
-	
-	public int deleteActions(String groupID, String... actionIDs);
+	public int delete(String... actionIDs);
 	
 	public Permission.Status getPermission(String userID, String actionPath);
 }

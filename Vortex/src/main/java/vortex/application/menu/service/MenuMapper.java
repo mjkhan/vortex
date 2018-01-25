@@ -36,13 +36,13 @@ public class MenuMapper extends DataMapper {
 	public Map<String, List<String>> getMenuActionPermissions() {
 		List<DataObject> list = selectList("menu.getMenuActionPermissions");
 		
-		Map<String, List<String>> rolesByAction = new HashMap<>();
+		Map<String, List<String>> pmsByAction = new HashMap<>();
 		list.forEach(row -> 
-			rolesByAction
+			pmsByAction
 				.computeIfAbsent(row.string("ACT_PATH"), key -> new ArrayList<>())
 				.add(row.string("PMS_ID"))
 		);
-		return rolesByAction;
+		return pmsByAction;
 	}
 	
 	public List<DataObject> getMenus(String parentID) {

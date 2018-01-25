@@ -42,7 +42,7 @@ FROM TBL_GROUP_MEMBER A, TBL_PERMISSION B
 WHERE GRP_TYPE = '003'
 AND A.GRP_ID IN (
 	SELECT GRP_ID FROM TBL_GROUP_MEMBER
-	WHERE GRP_TYPE = '003' AND MB_TYPE = '000' AND MB_ID = 'user02'
+	WHERE GRP_TYPE = '003' AND MB_TYPE = '000' AND MB_ID = #{userID}
 )
 AND MB_TYPE = '001'
 AND MB_ID = PMS_ID
@@ -98,7 +98,10 @@ WHERE PMS_ID = #{permission.id}
 
 <!-- 권한 정보 삭제 -->
 <delete id="delete" parameterType="hashmap">
-DELETE FROM TBL_PERMISSION
+DELETE FROM TBL_PERMISSION WHERE 1 = 1
+<if test="groupIDs != null">
+AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+</if>
 <if test="permissionIDs != null">
 WHERE PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>
@@ -144,7 +147,16 @@ WHERE NOT EXISTS (
 DELETE FROM TBL_PMS_ACTION
 WHERE 1 = 1
 <if test="groupIDs != null">
-AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+AND (
+	PMS_ID IN (
+		SELECT PMS_ID FROM TBL_PERMISSION
+		WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+	) OR
+	ACT_ID IN (
+		SELECT ACT_ID FROM TBL_ACTION
+		WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
+	)
+)
 </if>
 <if test="permissionIDs != null">
 AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
@@ -153,5 +165,17 @@ AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator
 AND	ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
 </if>
 </delete>
+
+<!-- user role에 대해 허용된 action permission 가져오기 -->
+<select id="countUserPermissionsForAction" parameterType="hashmap" resultType="int">
+SELECT COUNT(*)
+FROM TBL_ACTION A, TBL_PMS_ACTION B, TBL_GROUP_MEMBER C, TBL_GROUP_MEMBER D
+WHERE ACT_PATH = #{actionPath}
+AND C.GRP_TYPE = '003' AND C.MB_TYPE = '001'
+AND D.GRP_TYPE = '003' AND D.MB_TYPE = '000' AND D.MB_ID = #{userID}
+AND A.ACT_ID = B.ACT_ID
+AND B.PMS_ID = C.MB_ID
+AND C.GRP_ID = D.GRP_ID;
+</select>
 
 </mapper>

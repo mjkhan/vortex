@@ -78,7 +78,7 @@ public class ApplicationController extends AbstractObject {
 			);
 			hreq.setAttribute("currentUser", User.current());
 			
-			MenuContext mctx = menuService.getMenuCotext();
+			MenuContext mctx = menuService.getMenuContext();
 			if (mctx != null) {
 				hreq.setAttribute("menuContext", mctx);
 				Hierarchy<Menu> menus = mctx.getMenus();

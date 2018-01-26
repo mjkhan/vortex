@@ -23,7 +23,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private PermissionMapper permissionMapper;
 /*
 	@Autowired
-	private RoleMemberMapper roleMemberMapper;
+	private RequestMappingHandlerMapping handlerMapping;
 */
 	@Override
 	public List<DataObject> getGroups(DataObject req) {
@@ -94,27 +94,35 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	
 	@Override
 	public Permission.Status getPermission(String userID, String actionPath) {
+		System.out.println("actionPath: " + actionPath);
 		if (checkAccessPermission == null)
 			checkAccessPermission = "enable".equalsIgnoreCase(properties.getString("accessPermission"));
 		if (!checkAccessPermission)
 			return Permission.Status.GRANTED;
 		
-		if (permitAll == null)
+		if (permitAll == null)	
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
-		if (permitAll.contains(actionPath)) return Permission.Status.GRANTED;
+		if (permitAll.contains(actionPath))
+			return Permission.Status.GRANTED;
 		
 		log().debug(() -> "Getting permission for " + userID + " to " + actionPath);
-		Permission.Status status =
-			permissionMapper.isPermitted(userID, actionPath) ? Permission.Status.GRANTED :
-			actionMapper.findAction(actionPath) != null ? Permission.Status.DENIED :
-			Permission.Status.ACTION_NOT_FOUND;
-		log().debug(() -> {
-			switch (status) {
-			case GRANTED: return "Permission granted for " + userID +  " to " + actionPath;
-			case DENIED: return "Permission denied for " + userID + " to " + actionPath;
-			default: return "Action not found: " + actionPath;
-			}
-		});
-		return status;
+		if (permissionMapper.isPermitted(userID, actionPath))
+			return Permission.Status.GRANTED;
+		
+		if (actionMapper.findAction(actionPath) != null)
+			return Permission.Status.DENIED;
+		
+		return Permission.Status.ACTION_NOT_FOUND;
+//		return findMapping(actionPath) ? Permission.Status.DENIED : Permission.Status.ACTION_NOT_FOUND;
 	}
+/*	
+	private boolean findMapping(String actionPath) {
+		Map<RequestMappingInfo, HandlerMethod> methods = handlerMapping.getHandlerMethods();
+		for (RequestMappingInfo info: methods.keySet()) {
+			if (info.getPatternsCondition().getPatterns().contains(actionPath))
+				return true;
+		}
+		return false;
+	}
+*/
 }

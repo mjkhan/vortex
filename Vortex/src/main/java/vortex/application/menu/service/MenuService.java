@@ -10,7 +10,7 @@ import vortex.support.data.hierarchy.Hierarchy;
 public interface MenuService {
 	public Hierarchy<Menu> getTree();
 	
-	public MenuContext getMenuCotext();
+	public MenuContext getMenuContext();
 	
 	public List<DataObject> getMenus(String parentID);
 	

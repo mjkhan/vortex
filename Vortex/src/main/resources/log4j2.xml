@@ -33,6 +33,10 @@
             <AppenderRef ref="console" />
         </Logger>
  -->
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="file" />
+        </Logger>
         <Logger name="vortex" level="DEBUG" additivity="false">
             <AppenderRef ref="console" />
             <AppenderRef ref="file" />

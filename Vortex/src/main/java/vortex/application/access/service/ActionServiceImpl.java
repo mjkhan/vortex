@@ -94,7 +94,6 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	
 	@Override
 	public Permission.Status getPermission(String userID, String actionPath) {
-		System.out.println("actionPath: " + actionPath);
 		if (checkAccessPermission == null)
 			checkAccessPermission = "enable".equalsIgnoreCase(properties.getString("accessPermission"));
 		if (!checkAccessPermission)
@@ -104,18 +103,17 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
 		if (permitAll.contains(actionPath))
 			return Permission.Status.GRANTED;
-		
+/*
+		if (!findMapping(actionPath))
+			return Permission.Status.ACTION_NOT_FOUND;
+*/		
 		log().debug(() -> "Getting permission for " + userID + " to " + actionPath);
 		if (permissionMapper.isPermitted(userID, actionPath))
 			return Permission.Status.GRANTED;
-		
-		if (actionMapper.findAction(actionPath) != null)
+		else
 			return Permission.Status.DENIED;
-		
-		return Permission.Status.ACTION_NOT_FOUND;
-//		return findMapping(actionPath) ? Permission.Status.DENIED : Permission.Status.ACTION_NOT_FOUND;
 	}
-/*	
+/*
 	private boolean findMapping(String actionPath) {
 		Map<RequestMappingInfo, HandlerMethod> methods = handlerMapping.getHandlerMethods();
 		for (RequestMappingInfo info: methods.keySet()) {

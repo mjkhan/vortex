@@ -9,21 +9,21 @@
 
     <mvc:resources location="/asset/**" mapping="/asset/**"/>
     <mvc:annotation-driven/>
-    
+
     <context:component-scan base-package="vortex">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
 
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+    <bean name="requestMapper" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" >
         <property name="interceptors">
             <list>
                 <ref bean="localeChangeInterceptor" />
             </list>
         </property>
     </bean>
-    
+
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
     <!-- 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">

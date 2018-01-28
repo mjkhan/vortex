@@ -7,7 +7,9 @@
     <context:component-scan base-package="vortex">
        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
-
+<!-- 
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+ -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>

@@ -168,17 +168,17 @@ public class Menu implements CompositeElement {
 		return null;
 	}
 	
-	public Menu getPermitted(Map<String, List<String>> actionRoles) {
+	public Menu getPermitted(Map<String, List<String>> actionPermissions) {
 		if (!isActive()) return null;
 		if (actionPath != null) {
-			List<String> roles = actionRoles.get(actionPath);
-			return roles != null && !roles.isEmpty() ? this : null;
+			List<String> permissions = actionPermissions.get(actionPath);
+			return permissions != null && !permissions.isEmpty() ? this : null;
 		}
 		List<Menu> children = getChildren();
 		if (children.isEmpty()) return null;
 		
 		for (Menu child: children) {
-			Menu permitted = child.getPermitted(actionRoles);
+			Menu permitted = child.getPermitted(actionPermissions);
 			if (permitted != null)
 				return permitted;
 		}

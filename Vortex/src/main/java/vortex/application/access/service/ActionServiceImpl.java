@@ -107,6 +107,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 			}
 			Collections.sort(actions);
 		}
+		actions.forEach(System.out::println);
 		return actions;
 	}
 	

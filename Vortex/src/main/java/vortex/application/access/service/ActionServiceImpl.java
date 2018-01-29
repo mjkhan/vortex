@@ -129,6 +129,5 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		return permissionMapper.isPermitted(userID, actionPath) ?
 			Permission.Status.GRANTED :
 			Permission.Status.DENIED;
-		
 	}
 }

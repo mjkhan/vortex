@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -16,18 +17,17 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import vortex.application.ApplicationService;
-import vortex.application.group.Group;
-import vortex.application.group.GroupMapper;
 import vortex.support.data.DataObject;
 
 @Service("actionService")
 public class ActionServiceImpl extends ApplicationService implements ActionService {
+	@Autowired
+	private PermissionMapper permissionMapper;
+/*
 	@Resource(name="actionGroup")
 	private GroupMapper actionGroup;
 	@Autowired
 	private ActionMapper actionMapper;
-	@Autowired
-	private PermissionMapper permissionMapper;
 
 	@Override
 	public List<DataObject> getGroups(DataObject req) {
@@ -92,23 +92,50 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		return permissionMapper.deleteActions(null, actionIDs)
 			 + actionMapper.delete((String[])null, actionIDs);
 	}
-	
-	private static List<String> permitAll;
-	private static final ArrayList<String> actions = new ArrayList<>();
+*/	
+	private static List<String>
+		permitAll,
+		actions;
+	private static Map<String, List<String>> actionsByPrefix;
 	private static Boolean checkAccessPermission;
 	@Resource(name="requestHandlers")
 	private RequestMappingHandlerMapping requestHandlers;
 	
-	private ArrayList<String> actions() {
-		if (actions.isEmpty()) {
+	private List<String> actions() {
+		if (actions == null) {
+			actions = new ArrayList<>();
 			Map<RequestMappingInfo, HandlerMethod> methods = requestHandlers.getHandlerMethods();
 			for (RequestMappingInfo info: methods.keySet()) {
-				actions.addAll(info.getPatternsCondition().getPatterns().stream().distinct().collect(Collectors.toList()));
+				actions.addAll(
+					info.getPatternsCondition().getPatterns().stream().distinct().collect(Collectors.toList())
+				);
 			}
 			Collections.sort(actions);
 		}
-		actions.forEach(System.out::println);
 		return actions;
+	}
+	
+	private Map<String, List<String>> groupedActions() {
+		if (actionsByPrefix == null) {
+			actionsByPrefix = DataObject.groupBy(actions(), action -> {
+				int pos = action.indexOf('/', 1);
+				return pos < 0 ?
+					action :
+					action.substring(0, pos);
+			});
+		}
+		return actionsByPrefix;
+	}
+	
+	@Override
+	public Set<String> getPrefixes() {
+		return groupedActions().keySet();
+	}
+	
+	@Override
+	public List<String> getActions(String prefix) {
+		List<String> result = groupedActions().get(prefix);
+		return result != null ? result : Collections.emptyList();
 	}
 	
 	@Override

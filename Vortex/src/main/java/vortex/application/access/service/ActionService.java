@@ -1,11 +1,15 @@
 package vortex.application.access.service;
 
 import java.util.List;
-
-import vortex.application.group.Group;
-import vortex.support.data.DataObject;
+import java.util.Set;
 
 public interface ActionService {
+	public Set<String> getPrefixes();
+	
+	public List<String> getActions(String prefix);
+	
+	public Permission.Status getPermission(String userID, String actionPath);
+/*	
 	public List<DataObject> getGroups(DataObject req);
 	
 	public DataObject getGroupInfo(String groupID);
@@ -29,6 +33,5 @@ public interface ActionService {
 	public boolean update(Action action);
 	
 	public int delete(String... actionIDs);
-	
-	public Permission.Status getPermission(String userID, String actionPath);
+*/
 }

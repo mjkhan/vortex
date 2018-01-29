@@ -29,7 +29,7 @@ public class Client extends AbstractObject {
 	}
 	
 	public static Client current() {
-		return current.get();
+		return ifEmpty(current.get(), Client::new);
 	}
 	
 	public Client setCurrent() {

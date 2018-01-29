@@ -1,12 +1,19 @@
 package vortex.application.access.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import vortex.application.ApplicationService;
 import vortex.application.group.Group;
@@ -21,10 +28,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private ActionMapper actionMapper;
 	@Autowired
 	private PermissionMapper permissionMapper;
-/*
-	@Autowired
-	private RequestMappingHandlerMapping handlerMapping;
-*/
+
 	@Override
 	public List<DataObject> getGroups(DataObject req) {
 		return actionGroup.search(req);
@@ -90,7 +94,21 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	}
 	
 	private static List<String> permitAll;
+	private static final ArrayList<String> actions = new ArrayList<>();
 	private static Boolean checkAccessPermission;
+	@Resource(name="requestHandlers")
+	private RequestMappingHandlerMapping requestHandlers;
+	
+	private ArrayList<String> actions() {
+		if (actions.isEmpty()) {
+			Map<RequestMappingInfo, HandlerMethod> methods = requestHandlers.getHandlerMethods();
+			for (RequestMappingInfo info: methods.keySet()) {
+				actions.addAll(info.getPatternsCondition().getPatterns().stream().distinct().collect(Collectors.toList()));
+			}
+			Collections.sort(actions);
+		}
+		return actions;
+	}
 	
 	@Override
 	public Permission.Status getPermission(String userID, String actionPath) {
@@ -103,24 +121,14 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
 		if (permitAll.contains(actionPath))
 			return Permission.Status.GRANTED;
-/*
-		if (!findMapping(actionPath))
+
+		if (!actions().contains(actionPath))
 			return Permission.Status.ACTION_NOT_FOUND;
-*/		
+
 		log().debug(() -> "Getting permission for " + userID + " to " + actionPath);
-		if (permissionMapper.isPermitted(userID, actionPath))
-			return Permission.Status.GRANTED;
-		else
-			return Permission.Status.DENIED;
+		return permissionMapper.isPermitted(userID, actionPath) ?
+			Permission.Status.GRANTED :
+			Permission.Status.DENIED;
+		
 	}
-/*
-	private boolean findMapping(String actionPath) {
-		Map<RequestMappingInfo, HandlerMethod> methods = handlerMapping.getHandlerMethods();
-		for (RequestMappingInfo info: methods.keySet()) {
-			if (info.getPatternsCondition().getPatterns().contains(actionPath))
-				return true;
-		}
-		return false;
-	}
-*/
 }

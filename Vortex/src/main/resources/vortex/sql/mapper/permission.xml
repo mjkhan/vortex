@@ -34,7 +34,6 @@
 </if>
 </select>
 
-
 <!-- 사용자(userID) 권한 정보 가져오기 -->
 <select id="getPermissions" parameterType="string" resultMap="pmsRow">
 SELECT B.*
@@ -109,36 +108,33 @@ AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator
 
 <select id="getActions" parameterType="hashmap" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
-	SELECT SQL_CALC_FOUND_ROWS A.*, GRP_ID, ACT_NAME, ACT_PATH
-	FROM TBL_PMS_ACTION A, TBL_ACTION B
+	SELECT SQL_CALC_FOUND_ROWS *
+	FROM TBL_PMS_ACTION
 	WHERE PMS_ID = #{permissionID}
-	AND A.ACT_ID = B.ACT_ID
-	ORDER BY GRP_ID, A.ACT_ID
+	ORDER BY ACT_PATH
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
-	SELECT A.*, GRP_ID, ACT_NAME, ACT_PATH
-	FROM TBL_PMS_ACTION A, TBL_ACTION B
+	SELECT * FROM TBL_PMS_ACTION
 	WHERE PMS_ID = #{permissionID}
-	AND A.ACT_ID = B.ACT_ID
-	ORDER BY GRP_ID, A.ACT_ID
+	ORDER BY ACT_PATH
 </if>
 </select>
 
 <!-- 액션 추가 -->
 <insert id="addActions" parameterType="hashmap">
-INSERT INTO TBL_PMS_ACTION (PMS_ID, ACT_ID, INS_ID, INS_TIME)
-SELECT PMS_ID, ACT_ID, #{currentUser.id}, CURRENT_TIMESTAMP
+INSERT INTO TBL_PMS_ACTION (PMS_ID, ACT_PATH, INS_ID, INS_TIME)
+SELECT PMS_ID, ACT_PATH, #{currentUser.id}, CURRENT_TIMESTAMP
 FROM (
 	<foreach collection="permissionIDs" item="permissionID" separator=" UNION">SELECT #{permissionID} PMS_ID</foreach>
 ) A, (
-	<foreach collection="actionIDs" item="actionID" separator=" UNION">SELECT #{actionID} ACT_ID</foreach>
+	<foreach collection="actionPaths" item="actionPath" separator=" UNION">SELECT #{actionPath} ACT_PATH</foreach>
 ) B
 WHERE NOT EXISTS (
-	SELECT PMS_ID, ACT_ID
+	SELECT PMS_ID, ACT_PATH
 	FROM TBL_PMS_ACTION C
 	WHERE C.PMS_ID = A.PMS_ID
-	AND C.ACT_ID = B.ACT_ID
+	AND C.ACT_PATH = B.ACT_PATH
 )
 </insert>
 
@@ -147,35 +143,28 @@ WHERE NOT EXISTS (
 DELETE FROM TBL_PMS_ACTION
 WHERE 1 = 1
 <if test="groupIDs != null">
-AND (
-	PMS_ID IN (
-		SELECT PMS_ID FROM TBL_PERMISSION
-		WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
-	) OR
-	ACT_ID IN (
-		SELECT ACT_ID FROM TBL_ACTION
-		WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
-	)
+AND PMS_ID IN (
+	SELECT PMS_ID FROM TBL_PERMISSION
+	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
 )
 </if>
 <if test="permissionIDs != null">
 AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>
-<if test="actionIDs != null">
-AND	ACT_ID IN (<foreach collection="actionIDs" item="actionID" separator=", ">#{actionID}</foreach>)
+<if test="actionPaths != null">
+AND	ACT_PATH IN (<foreach collection="actionPaths" item="actionPath" separator=", ">#{actionPath}</foreach>)
 </if>
 </delete>
 
 <!-- user role에 대해 허용된 action permission 가져오기 -->
 <select id="countUserPermissionsForAction" parameterType="hashmap" resultType="int">
 SELECT COUNT(*)
-FROM TBL_ACTION A, TBL_PMS_ACTION B, TBL_GROUP_MEMBER C, TBL_GROUP_MEMBER D
+FROM TBL_PMS_ACTION A, TBL_GROUP_MEMBER B, TBL_GROUP_MEMBER C
 WHERE ACT_PATH = #{actionPath}
+AND B.GRP_TYPE = '003' AND B.MB_TYPE = '000' AND B.MB_ID = #{userID}
 AND C.GRP_TYPE = '003' AND C.MB_TYPE = '001'
-AND D.GRP_TYPE = '003' AND D.MB_TYPE = '000' AND D.MB_ID = #{userID}
-AND A.ACT_ID = B.ACT_ID
-AND B.PMS_ID = C.MB_ID
-AND C.GRP_ID = D.GRP_ID;
+AND PMS_ID = C.MB_ID
+AND B.GRP_ID = C.GRP_ID
 </select>
 
 </mapper>

@@ -8,7 +8,7 @@
 		<property name="properties">
 			<map>
 				<entry key="debugDomain" value="localhost"/>
-				<entry key="accessPermission" value="enable"/>
+				<entry key="accessPermission" value="disable"/>
 				<entry key="permitAll" value="/user/login.do"/>
 				
 				<entry key="fetch" value="10"/>

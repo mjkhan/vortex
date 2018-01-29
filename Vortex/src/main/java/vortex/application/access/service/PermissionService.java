@@ -16,9 +16,9 @@ public interface PermissionService {
 	
 	public BoundedList<DataObject> getActions(DataObject req);
 	
-	public int addActions(String permissionID, String... actionIDs);
+	public int addActions(String permissionID, String... actionPaths);
 	
-	public int deleteActions(String permissionID, String... actionIDs);
+	public int deleteActions(String permissionID, String... actionPaths);
 	
 	public int delete(String... permissionIDs);
 }

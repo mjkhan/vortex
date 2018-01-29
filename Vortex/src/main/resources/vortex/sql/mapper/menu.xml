@@ -5,7 +5,6 @@
 <resultMap id="menuRow" type="menu">
 	<id property="id" column="MENU_ID"/>
 	<result property="name" column="MENU_NAME"/>
-	<result property="actionID" column="ACT_ID"/>
 	<result property="actionPath" column="ACT_PATH"/>
 	<result property="imageConfig" column="IMG_CFG"/>
 	<result property="parentID" column="PRNT_ID"/>
@@ -17,34 +16,30 @@
 
 <!-- 메뉴 트리 생성을 위한 목록 가져오기 -->
 <select id="getTree" resultMap="menuRow">
-SELECT A.*, B.ACT_PATH
-FROM TBL_MENU A LEFT OUTER JOIN TBL_ACTION B ON A.ACT_ID = B.ACT_ID
-WHERE A.STATUS &lt;&gt; '999'
+SELECT * FROM TBL_MENU
+WHERE STATUS &lt;&gt; '999'
 ORDER BY PRNT_ID, SRT_ORD, MENU_ID
 </select>
 
 <!-- 하위 메뉴 목록 가져오기 -->
 <select id="getMenus" parameterType="string"  resultType="dataobject">
-SELECT A.*, B.ACT_PATH
-FROM TBL_MENU A LEFT OUTER JOIN TBL_ACTION B ON A.ACT_ID = B.ACT_ID
+SELECT * FROM TBL_MENU
 WHERE PRNT_ID = #{value}
-AND A.STATUS &lt;&gt; '999'
+AND STATUS &lt;&gt; '999'
 ORDER BY SRT_ORD, MENU_ID
 </select>
 
 <!-- menu action별 permission 가져오기 -->
 <select id="getMenuActionPermissions" resultType="dataobject">
-SELECT ACT_PATH, PMS_ID
-FROM TBL_MENU A, TBL_ACTION B, TBL_PMS_ACTION C
-WHERE A.ACT_ID = B.ACT_ID
-AND B.ACT_ID = C.ACT_ID
-ORDER BY ACT_PATH
+SELECT A.ACT_PATH, PMS_ID
+FROM TBL_MENU A, TBL_PMS_ACTION B
+WHERE A.ACT_PATH = B.ACT_PATH
+ORDER BY A.ACT_PATH
 </select>
 
 <!-- Menu 가져오기 -->
 <select id="getMenu" parameterType="string" resultMap="menuRow">
-SELECT A.*, B.ACT_PATH
-FROM TBL_MENU A LEFT OUTER JOIN TBL_ACTION B ON A.ACT_ID = B.ACT_ID
+SELECT * FROM TBL_MENU
 WHERE MENU_ID = #{value}
 </select>
 
@@ -57,7 +52,7 @@ FROM TBL_MENU
 INSERT INTO TBL_MENU (
 	MENU_ID
    ,MENU_NAME
-   ,ACT_ID
+   ,ACT_PATH
    ,IMG_CFG
    ,PRNT_ID
    ,SRT_ORD
@@ -67,7 +62,7 @@ INSERT INTO TBL_MENU (
 ) VALUES (
 	#{menu.id}
    ,#{menu.name}
-   ,#{menu.actionID}
+   ,#{menu.actionPath}
    ,#{menu.imageConfig}
    ,#{menu.parentID}
    ,99999
@@ -81,7 +76,7 @@ INSERT INTO TBL_MENU (
 <update id="update" parameterType="hashmap">
 UPDATE TBL_MENU SET
 	MENU_NAME = #{menu.name}
-   ,ACT_ID = #{menu.actionID}
+   ,ACT_PATH = #{menu.actionPath}
    ,IMG_CFG = #{menu.imageConfig}
    ,UPD_ID = #{currentUser.id}
    ,UPD_TIME = CURRENT_TIMESTAMP

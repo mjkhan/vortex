@@ -8,16 +8,14 @@
 	<table class="infoList">
 		<thead>
 			<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
-				<th width="20%">이름</th>
 				<th width="30%">경로</th>
 				<th width="20%">등록시간</th>
 			</tr>
 		</thead>
 		<tbody id="actionList">
-		<c:set var="notFound"><tr><td colspan="4" class="notFound">액션정보를 찾지 못했습니다.</td></c:set>
+		<c:set var="notFound"><tr><td colspan="3" class="notFound">액션정보를 찾지 못했습니다.</td></c:set>
 		<c:set var="actionRow"><tr>
-				<td><input name="actionID" value="{actionID}" type="checkbox" /></td>
-				<td>{actionName}</td>
+				<td><input name="actionID" value="{actionPath}" type="checkbox" /></td>
 				<td>{actionPath}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
@@ -46,6 +44,7 @@ function addActions() {
 		url:"<c:url value='/action/select.do'/>"
 	   ,data:{init:true}
 	   ,success:function(resp){
+	   		log(resp);
 	   		dialog({
 	   			title:"액션 선택",
 	   			content:resp,
@@ -54,7 +53,7 @@ function addActions() {
 	   					url:"<c:url value='/permission/action/add.do'/>"
 	   				   ,data:{
 	   				   		permissionID:currentPermission.PMS_ID,
-	   				   		actionID:valuesOf(selected, "ACT_ID").join()
+	   				   		actionPath:selected.join()
 	   				    }
 	   				   ,success:function(resp) {
 	   				   		if (resp.saved)
@@ -76,7 +75,7 @@ function removeActions() {
 		url:"<c:url value='/permission/action/delete.do'/>",
 		data:{
 			permissionID:currentPermission.PMS_ID,
-			actionID:checkedActions.values().join(",")
+			actionPath:checkedActions.values().join(",")
 		},
 		success:function(resp) {
 			if (resp.saved) {
@@ -93,8 +92,6 @@ function setActionList(resp) {
 		data:resp.actions,
 		tr:function(row){
 			return "${vtx:jstring(actionRow)}"
-				.replace(/{actionID}/g, row.ACT_ID)
-				.replace(/{actionName}/g, row.ACT_NAME)
 				.replace(/{actionPath}/g, row.ACT_PATH)
 				.replace(/{insTime}/g, row.INS_TIME);
 		},

@@ -1,10 +1,9 @@
 package vortex.application.access.service;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ActionService {
-	public Set<String> getPrefixes();
+	public List<String> getPrefixes();
 	
 	public List<String> getActions(String prefix);
 	

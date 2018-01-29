@@ -74,34 +74,34 @@ public class PermissionMapper extends DataMapper {
 		);
 	}
 	
-	public int addActions(String[] permissionIDs, String[] actionIDs) {
-		if (isEmpty(permissionIDs) || isEmpty(actionIDs)) return 0;
+	public int addActions(String[] permissionIDs, String[] actionPaths) {
+		if (isEmpty(permissionIDs) || isEmpty(actionPaths)) return 0;
 		return insert(
 			"permission.addActions"
 		   ,params(true)
 		   	.set("permissionIDs", permissionIDs)
-		   	.set("actionIDs", actionIDs)
+		   	.set("actionPaths", actionPaths)
 		);
 	}
 	
-	public int addActions(String permissionID, String... actionIDs) {
+	public int addActions(String permissionID, String... actionPaths) {
 		return !isEmpty(permissionID) ?
-			addActions(new String[]{permissionID}, actionIDs) :
+			addActions(new String[]{permissionID}, actionPaths) :
 			0;
 	}
 	
-	private int deleteActions(String[] groupIDs, String[] permissionIDs, String[] actionIDs) {
+	private int deleteActions(String[] groupIDs, String[] permissionIDs, String[] actionPaths) {
 		return delete(
 			"permission.deleteActions"
 		   ,params()
 		   	.set("groupIDs", ifEmpty(groupIDs, () -> null))
-		   	.set("actionIDs", ifEmpty(actionIDs, () -> null))
+		   	.set("actionPaths", ifEmpty(actionPaths, () -> null))
 		   	.set("permissionIDs", ifEmpty(permissionIDs, () -> null))
 		);
 	}
 	
-	public int deleteActions(String permissionID, String... actionIDs) {
-		return deleteActions(null, new String[]{permissionID}, actionIDs);
+	public int deleteActions(String permissionID, String... actionPaths) {
+		return deleteActions(null, new String[]{permissionID}, actionPaths);
 	}
 	
 	public int deleteActions(String... groupIDs) {

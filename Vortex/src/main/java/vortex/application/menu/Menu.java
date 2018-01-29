@@ -16,7 +16,6 @@ public class Menu implements CompositeElement {
 	private String
 		id,
 		name,
-		actionID,
 		actionPath,
 		imageConfig,
 		parentID,
@@ -61,15 +60,7 @@ public class Menu implements CompositeElement {
 	public int getLevel() {
 		return parent != null ? parent.getLevel() + 1 : 0;
 	}
-	
-	public String getActionID() {
-		return actionID;
-	}
-	
-	public void setActionID(String actionID) {
-		this.actionID = actionID;
-	}
-	
+
 	public String getAction() {
 		if (!isActive()) return null;
 		

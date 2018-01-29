@@ -3,19 +3,14 @@ package vortex.application.access.web;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
-import vortex.application.access.service.Action;
 import vortex.application.access.service.ActionService;
-import vortex.application.group.Group;
-import vortex.support.data.DataObject;
 
 @Controller
 @RequestMapping("/action")
@@ -23,6 +18,19 @@ public class ActionController extends ApplicationController {
 	@Resource(name="actionService")
 	private ActionService actionService;
 	
+	@RequestMapping("/select.do")
+	public ModelAndView select(@RequestParam(required=false) String prefix) {
+		boolean init = isEmpty(prefix);
+		ModelAndView mv = new ModelAndView(init ? "action/select" : "jsonView");
+		if (init) {
+			List<String> prefixes = actionService.getPrefixes();
+			prefix = prefixes.get(0);
+			mv.addObject("prefixes", prefixes);
+		}
+		return mv
+			.addObject("actions", actionService.getActions(prefix));
+	}
+/*	
 	@RequestMapping("/group/list.do")
 	public ModelAndView getGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -74,20 +82,6 @@ public class ActionController extends ApplicationController {
 			.addObject("saved", actionService.deleteGroups(groupID.split(",")) > 0);
 	}
 	
-	@RequestMapping("/select.do")
-	public ModelAndView select(HttpServletRequest hreq) {
-		String groupID = hreq.getParameter("groupID");
-		boolean init = isEmpty(groupID);
-		List<DataObject> groups = null;
-		if (init) {
-			groups = actionService.getGroups(request(hreq));
-			if (!groups.isEmpty())
-				groupID = groups.get(0).string("GRP_ID");
-		}
-		return search(groupID, init ? "action/select" : "jsonView")
-			.addObject("groups", groups != null ? groups : null);
-	}
-	
 	@RequestMapping("/list.do")
 	public ModelAndView getActions(@RequestParam(required=false) String groupID) {
 		return search(groupID, "jsonView");
@@ -122,4 +116,5 @@ public class ActionController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("saved" , actionService.delete(ifEmpty(actionID, "").split(",")) > 0);
 	}
+*/
 }

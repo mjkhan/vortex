@@ -86,15 +86,15 @@ public class PermissionController extends ApplicationController {
 	}
 	
 	@RequestMapping("/action/add.do")
-	public ModelAndView addActions(@RequestParam String permissionID, @RequestParam String actionID) {
+	public ModelAndView addActions(@RequestParam String permissionID, @RequestParam String actionPath) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", permissionService.addActions(permissionID, actionID.split(",")) > 0);
+			.addObject("saved", permissionService.addActions(permissionID, actionPath.split(",")) > 0);
 	}
 	
 	@RequestMapping("/action/delete.do")
-	public ModelAndView deleteActions(@RequestParam String permissionID, @RequestParam String actionID) {
+	public ModelAndView deleteActions(@RequestParam String permissionID, @RequestParam String actionPath) {
 		return new ModelAndView("jsonView")
-			.addObject("saved", permissionService.deleteActions(permissionID, actionID.split(",")) > 0);
+			.addObject("saved", permissionService.deleteActions(permissionID, actionPath.split(",")) > 0);
 	}
 	
 	@RequestMapping("/delete.do")

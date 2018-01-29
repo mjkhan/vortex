@@ -12,8 +12,7 @@
 		<td><input id="menuName" value="${menu.name}" type="text" required maxlength="32" /></td>
 	</tr>
 	<tr><th><label for="actionPath">액션</label><img onclick="setAction();" alt="액션 선택" title="액션 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></th>
-		<td><input id="actionID" value="${menu.actionID}" type="hidden" />
-			<input id="actionPath" value="${menu.actionPath}" type="text" readonly/>
+		<td><input id="actionPath" value="${menu.actionPath}" type="text" readonly/>
 		</td>
 	</tr>
 	<tr><th><label for="imgCfg">이미지</label></th>
@@ -39,8 +38,8 @@ function setAction(){
 				title:"액션 선택",
 				content:resp,
 				onOK:function(selected){
-					$("#actionID").val(selected.ACT_ID);
-					$("#actionPath").val(selected.ACT_PATH);
+					log("selected: " + selected);
+					$("#actionPath").val(selected);
 				}
 			});
 		}
@@ -56,7 +55,7 @@ function saveMenu() {
 			id:$("#menuID").val(),
 			parentID:selectedID(),
 			name:$("#menuName").val(),
-			actionID:$("#actionID").val(),
+			actionPath:$("#actionPath").val(),
 			imageConfig:$("#imgCfg").val()
 		},
 		success:function(resp) {

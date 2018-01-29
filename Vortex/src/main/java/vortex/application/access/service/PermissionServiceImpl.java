@@ -43,13 +43,13 @@ public class PermissionServiceImpl extends ApplicationService implements Permiss
 	}
 
 	@Override
-	public int addActions(String permissionID, String... actionIDs) {
-		return permissionMapper.addActions(permissionID, actionIDs);
+	public int addActions(String permissionID, String... actionPaths) {
+		return permissionMapper.addActions(permissionID, actionPaths);
 	}
 
 	@Override
-	public int deleteActions(String permissionID, String... actionIDs) {
-		return permissionMapper.deleteActions(permissionID, actionIDs);
+	public int deleteActions(String permissionID, String... actionPaths) {
+		return permissionMapper.deleteActions(permissionID, actionPaths);
 	}
 
 	@Override

@@ -16,22 +16,23 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import vortex.application.ApplicationService;
+import vortex.application.group.GroupMapper;
 import vortex.support.data.DataObject;
 
 @Service("actionService")
 public class ActionServiceImpl extends ApplicationService implements ActionService {
 	@Autowired
 	private PermissionMapper permissionMapper;
-/*
 	@Resource(name="actionGroup")
 	private GroupMapper actionGroup;
-	@Autowired
-	private ActionMapper actionMapper;
 
 	@Override
 	public List<DataObject> getGroups(DataObject req) {
 		return actionGroup.search(req);
 	}
+	/*
+	@Autowired
+	private ActionMapper actionMapper;
 
 	@Override
 	public DataObject getGroupInfo(String groupID) {

@@ -2,15 +2,18 @@ package vortex.application.access.service;
 
 import java.util.List;
 
+import vortex.support.data.DataObject;
+
 public interface ActionService {
 	public List<String> getPrefixes();
 	
 	public List<String> getActions(String prefix);
 	
 	public Permission.Status getPermission(String userID, String actionPath);
-/*	
+
 	public List<DataObject> getGroups(DataObject req);
 	
+	/*	
 	public DataObject getGroupInfo(String groupID);
 	
 	public Group getGroup(String groupID);

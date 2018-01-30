@@ -3,7 +3,7 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="eheader.jsp"/>
 <%	pageContext.setAttribute("title", "알 수 없는 요청입니다.");
-	pageContext.setAttribute("msg", "요청 URL이 올바른지, TBL_ACTION에 등록된 액션 URL인지 확인하십시오.");
+	pageContext.setAttribute("msg", "요청 URL이 올바른지 확인하십시오.");
 %>
 <c:if test="${!ajax}">
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>

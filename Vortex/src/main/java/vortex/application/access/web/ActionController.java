@@ -3,6 +3,7 @@ package vortex.application.access.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
 import vortex.application.access.service.ActionService;
+import vortex.support.data.DataObject;
 
 @Controller
 @RequestMapping("/action")
@@ -30,6 +32,18 @@ public class ActionController extends ApplicationController {
 		return mv
 			.addObject("actions", actionService.getActions(prefix));
 	}
+	
+	@RequestMapping("/group/select.do")
+	public ModelAndView selectGroup(HttpServletRequest hreq) {
+		DataObject req = request(hreq);
+		List<DataObject> groups = actionService.getGroups(
+			req.set("start", req.number("start").intValue())
+			   .set("fetch", properties.getInt("fetch"))
+		);
+		return new ModelAndView(req.bool("init") ? "action/group-select" : "jsonView")
+			.addObject("groups", groups);
+	}
+
 /*	
 	@RequestMapping("/group/list.do")
 	public ModelAndView getGroups(HttpServletRequest hreq) {
@@ -44,17 +58,6 @@ public class ActionController extends ApplicationController {
 			mv.addObject("actions", actionService.getActions(groups.get(0).string("grp_id")));
 		}
 		return mv;
-	}
-	
-	@RequestMapping("/group/select.do")
-	public ModelAndView selectGroup(HttpServletRequest hreq) {
-		DataObject req = request(hreq);
-		List<DataObject> groups = actionService.getGroups(
-			req.set("start", req.number("start").intValue())
-			   .set("fetch", properties.getInt("fetch"))
-		);
-		return new ModelAndView(req.bool("init") ? "action/group-select" : "jsonView")
-			.addObject("groups", groups);
 	}
 	
 	@RequestMapping("/group/info.do")

@@ -24,6 +24,11 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private PermissionMapper permissionMapper;
 	@Autowired
 	private ActionMapper actionMapper;
+	
+	@Override
+	public int changeAction(String oldName, String newName) {
+		return 0;
+	}
 	/*
 	@Resource(name="actionGroup")
 	private GroupMapper actionGroup;

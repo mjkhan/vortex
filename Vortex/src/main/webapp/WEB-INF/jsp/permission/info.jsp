@@ -9,6 +9,7 @@
 	<tr><th><label for="permissionName">이름</label></th>
 		<td><input id="permissionName" value="${permission.PMS_NAME}" type="text" required maxlength="64" /></td>
 	</tr>
+<%-- 
 	<tr><th><label for="actionGroup">액션그룹</label>
 			<c:if test="${create}"><img onclick="setActionGroup();" alt="액션그룹 선택" title="액션그룹 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></c:if>
 		</th>
@@ -16,6 +17,7 @@
 			<span id="groupName" >${permission.GRP_NAME}</span>
 		</td>
 	</tr>
+ --%>
 	<tr><th><label for="descrption">설명</label></th>
 		<td><textarea id="description" rows="5" style="width:100%; line-height:2em;">${permission.DESCRP}</textarea>
 		</td>
@@ -62,7 +64,9 @@ function savePermission() {
 		url:"<c:if test='${create}'><c:url value='/permission/create.do'/></c:if><c:if test='${!create}'><c:url value='/permission/update.do'/></c:if>"
 	   ,data:{
 			id:$("#permissionID").val()
+<%-- 
 		   ,groupID:$("#actionGroup").val()
+--%>
 		   ,name:$("#permissionName").val()
 		   ,description:$("#description").val()
 		}

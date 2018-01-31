@@ -3,7 +3,6 @@ package vortex.application.access.web;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import vortex.application.ApplicationController;
 import vortex.application.access.service.ActionService;
-import vortex.support.data.DataObject;
 
 @Controller
 @RequestMapping("/action")
@@ -33,6 +31,7 @@ public class ActionController extends ApplicationController {
 			.addObject("actions", actionService.getActions(prefix));
 	}
 	
+/*	
 	@RequestMapping("/group/select.do")
 	public ModelAndView selectGroup(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -44,7 +43,6 @@ public class ActionController extends ApplicationController {
 			.addObject("groups", groups);
 	}
 
-/*	
 	@RequestMapping("/group/list.do")
 	public ModelAndView getGroups(HttpServletRequest hreq) {
 		DataObject req = request(hreq);

@@ -12,7 +12,7 @@ public class Permission extends AbstractGroup implements GrantedAuthority {
 		DENIED,
 		ACTION_NOT_FOUND
 	}
-	
+/*	
 	private String groupID;
 
 	public String getGroupID() {
@@ -22,7 +22,7 @@ public class Permission extends AbstractGroup implements GrantedAuthority {
 	public void setGroupID(String groupID) {
 		this.groupID = groupID;
 	}
-
+*/
 	@Override
 	public String getAuthority() {
 		return getId();

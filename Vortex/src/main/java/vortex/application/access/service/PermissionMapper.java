@@ -48,7 +48,7 @@ public class PermissionMapper extends DataMapper {
 			  , params(true).set("permission", permission)
 			) == 1;
 	}
-	
+/*	
 	public int delete(String[] groupIDs, String[] permissionIDs) {
 		deleteActions(groupIDs, permissionIDs, null);
 		return delete(
@@ -58,9 +58,14 @@ public class PermissionMapper extends DataMapper {
 		   	.set("permissionIDs", ifEmpty(permissionIDs, null))
 		);
 	}
-
+*/
 	public int delete(String... permissionIDs) {
-		return delete((String[])null, permissionIDs);
+		deleteActions(permissionIDs, null);
+		return delete(
+			"permission.delete"
+		   , params()
+		   	.set("permissionIDs", ifEmpty(permissionIDs, null))
+		);
 	}
 	
 	public BoundedList<DataObject> getActions(DataObject req) {
@@ -89,7 +94,7 @@ public class PermissionMapper extends DataMapper {
 			addActions(new String[]{permissionID}, actionPaths) :
 			0;
 	}
-	
+/*	
 	private int deleteActions(String[] groupIDs, String[] permissionIDs, String[] actionPaths) {
 		return delete(
 			"permission.deleteActions"
@@ -99,15 +104,26 @@ public class PermissionMapper extends DataMapper {
 		   	.set("permissionIDs", ifEmpty(permissionIDs, () -> null))
 		);
 	}
-	
-	public int deleteActions(String permissionID, String... actionPaths) {
-		return deleteActions(null, new String[]{permissionID}, actionPaths);
+*/	
+	private int deleteActions(String[] permissionIDs, String[] actionPaths) {
+		return delete(
+			"permission.deleteActions"
+		   ,params()
+		   	.set("actionPaths", ifEmpty(actionPaths, () -> null))
+		   	.set("permissionIDs", ifEmpty(permissionIDs, () -> null))
+		);
 	}
-	
+
+	public int deleteActions(String permissionID, String... actionPaths) {
+		return !isEmpty(permissionID) ?
+			deleteActions(new String[]{permissionID}, actionPaths)
+		  : 0;
+	}
+/*	
 	public int deleteActions(String... groupIDs) {
 		return deleteActions(groupIDs, null, null);
 	}
-		
+*/		
 	public boolean isPermitted(String userID, String actionPath) {
 		int count = selectOne(
 			"permission.countUserPermissionsForAction"

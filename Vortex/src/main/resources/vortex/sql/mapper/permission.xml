@@ -4,7 +4,9 @@
 
 <resultMap id="pmsRow" type="permission">
 	<id property="id" column="PMS_ID"/>
+<!-- 
 	<result property="groupID" column="GRP_ID"/>
+ -->
 	<result property="name" column="PMS_NAME"/>
 	<result property="description" column="DESCRP"/>
 	<result property="modifiedBy" column="UPD_ID"/>
@@ -15,22 +17,22 @@
 <select id="search" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
 	SELECT SQL_CALC_FOUND_ROWS * FROM (
-		SELECT '000' GRP_ID, 'all' PMS_ID, '모든 사용자' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
-		SELECT '000' GRP_ID, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
-		SELECT GRP_ID, PMS_ID, PMS_NAME, DESCRP, UPD_TIME FROM TBL_PERMISSION
+		SELECT 0 SRT_ORD, 'all' PMS_ID, '모든 사용자' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT 1 SRT_ORD, 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT 2 SRT_ORD, PMS_ID, PMS_NAME, DESCRP, UPD_TIME FROM TBL_PERMISSION
 	) A WHERE 1 = 1
 	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
-	ORDER BY <if test="order != null">#{order}</if><if test="order == null">GRP_ID, PMS_ID</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">SRT_ORD, PMS_ID</if>
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
 	SELECT * FROM (
-		SELECT '000' GRP_ID, , 'all' PMS_ID, '모든 사용자' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
-		SELECT '000' GRP_ID, , 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
-		SELECT GRP_ID, PMS_ID, PMS_NAME, DESCRP, UPD_TIME FROM TBL_PERMISSION
+		SELECT 0 SRT_ORD, , 'all' PMS_ID, '모든 사용자' PMS_NAME, '로그인하지 않은 사용자를 포함한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT 1 SRT_ORD, , 'authenticated' PMS_ID, '인증된 사용자' PMS_NAME, '로그인한 모든 사용자에게 허용된 권한' DESCRP, CURRENT_TIMESTAMP() UPD_TIME UNION
+		SELECT 2 SRT_ORD, PMS_ID, PMS_NAME, DESCRP, UPD_TIME FROM TBL_PERMISSION
 	) A WHERE 1 = 1
 	<if test="searchBy != null and searchTerms != null">AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')</if>
-	ORDER BY <if test="order != null">#{order}</if><if test="order == null">GRP_ID, PMS_ID</if>
+	ORDER BY <if test="order != null">#{order}</if><if test="order == null">SRT_ORD, PMS_ID</if>
 </if>
 </select>
 
@@ -45,14 +47,13 @@ AND A.GRP_ID IN (
 )
 AND MB_TYPE = '001'
 AND MB_ID = PMS_ID
-ORDER BY B.GRP_ID, PMS_ID;
+ORDER BY PMS_ID;
 </select>
 
 <sql id="select-by-id">
-SELECT A.*, GRP_NAME
-FROM TBL_PERMISSION A, TBL_GROUP B
+SELECT *
+FROM TBL_PERMISSION
 WHERE PMS_ID = #{pmsID}
-AND GRP_TYPE = '002' AND A.GRP_ID = B.GRP_ID
 </sql>
 
 <!-- 권한 정보 가져오기 -->
@@ -69,14 +70,12 @@ AND GRP_TYPE = '002' AND A.GRP_ID = B.GRP_ID
 <insert id="insert" parameterType="hashmap">
 INSERT INTO TBL_PERMISSION (
 	PMS_ID
-   ,GRP_ID
    ,PMS_NAME
    ,DESCRP
    ,UPD_ID
    ,UPD_TIME
 ) VALUES (
 	#{permission.id}
-   ,#{permission.groupID}
    ,#{permission.name}
    ,#{permission.description}
    ,#{currentUser.id}
@@ -87,7 +86,6 @@ INSERT INTO TBL_PERMISSION (
 <!-- 권한 정보 수정 -->
 <update id="update" parameterType="hashmap">
 UPDATE TBL_PERMISSION SET
-	GRP_ID = #{permission.groupID}
    ,PMS_NAME = #{permission.name}
    ,DESCRP = #{permission.description}
    ,UPD_ID = #{currentUser.id}
@@ -98,9 +96,6 @@ WHERE PMS_ID = #{permission.id}
 <!-- 권한 정보 삭제 -->
 <delete id="delete" parameterType="hashmap">
 DELETE FROM TBL_PERMISSION WHERE 1 = 1
-<if test="groupIDs != null">
-AND GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
-</if>
 <if test="permissionIDs != null">
 AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>
@@ -142,12 +137,6 @@ WHERE NOT EXISTS (
 <delete id="deleteActions" parameterType="hashmap">
 DELETE FROM TBL_PMS_ACTION
 WHERE 1 = 1
-<if test="groupIDs != null">
-AND PMS_ID IN (
-	SELECT PMS_ID FROM TBL_PERMISSION
-	WHERE GRP_ID IN (<foreach collection="groupIDs" item="groupID" separator=", ">#{groupID}</foreach>)
-)
-</if>
 <if test="permissionIDs != null">
 AND PMS_ID IN (<foreach collection="permissionIDs" item="permissionID" separator=", ">#{permissionID}</foreach>)
 </if>

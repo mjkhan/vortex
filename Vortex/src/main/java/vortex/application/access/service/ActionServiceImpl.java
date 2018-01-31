@@ -16,13 +16,15 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import vortex.application.ApplicationService;
-import vortex.application.group.GroupMapper;
 import vortex.support.data.DataObject;
 
 @Service("actionService")
 public class ActionServiceImpl extends ApplicationService implements ActionService {
 	@Autowired
 	private PermissionMapper permissionMapper;
+	@Autowired
+	private ActionMapper actionMapper;
+	/*
 	@Resource(name="actionGroup")
 	private GroupMapper actionGroup;
 
@@ -30,9 +32,6 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	public List<DataObject> getGroups(DataObject req) {
 		return actionGroup.search(req);
 	}
-	/*
-	@Autowired
-	private ActionMapper actionMapper;
 
 	@Override
 	public DataObject getGroupInfo(String groupID) {
@@ -100,7 +99,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private static Boolean checkAccessPermission;
 	@Resource(name="requestHandlers")
 	private RequestMappingHandlerMapping requestHandlers;
-	
+
 	private List<String> actions() {
 		if (actions == null) {
 			actions = new ArrayList<>();
@@ -114,7 +113,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		}
 		return actions;
 	}
-	
+
 	private Map<String, List<String>> groupedActions() {
 		if (actionsByPrefix == null) {
 			actionsByPrefix = DataObject.groupBy(actions(), action -> {
@@ -126,25 +125,27 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		}
 		return actionsByPrefix;
 	}
-	
+
 	@Override
 	public List<String> getPrefixes() {
-		return new ArrayList<>(groupedActions().keySet());
+		ArrayList<String> result = new ArrayList<>(groupedActions().keySet());
+		Collections.sort(result);
+		return result;
 	}
-	
+
 	@Override
 	public List<String> getActions(String prefix) {
 		List<String> result = groupedActions().get(prefix);
 		return result != null ? result : Collections.emptyList();
 	}
-	
+
 	@Override
 	public Permission.Status getPermission(String userID, String actionPath) {
 		if (checkAccessPermission == null)
 			checkAccessPermission = "enable".equalsIgnoreCase(properties.getString("accessPermission"));
 		if (!checkAccessPermission)
 			return Permission.Status.GRANTED;
-		
+
 		if (permitAll == null)	
 			permitAll = Arrays.asList(properties.getStringArray("permitAll"));
 		if (permitAll.contains(actionPath))

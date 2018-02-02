@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import vortex.application.ApplicationService;
+import vortex.application.menu.service.MenuMapper;
 import vortex.support.data.DataObject;
 
 @Service("actionService")
@@ -28,13 +29,14 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	@Autowired
 	private PermissionMapper permissionMapper;
 	@Autowired
-	private ActionMapper actionMapper;
+	private MenuMapper menuMapper;
 	@Resource(name="requestHandlers")
 	private RequestMappingHandlerMapping requestHandlers;
 	
 	@Override
-	public int changeAction(String oldName, String newName) {
-		return 0;
+	public int updateAction(String oldPath, String newPath) {
+		return permissionMapper.updateAction(oldPath, newPath)
+			 + menuMapper.updateAction(oldPath, newPath);
 	}
 
 	private List<String> actions() {

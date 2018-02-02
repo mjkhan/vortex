@@ -4,9 +4,6 @@
 
 <resultMap id="pmsRow" type="permission">
 	<id property="id" column="PMS_ID"/>
-<!-- 
-	<result property="groupID" column="GRP_ID"/>
- -->
 	<result property="name" column="PMS_NAME"/>
 	<result property="description" column="DESCRP"/>
 	<result property="modifiedBy" column="UPD_ID"/>
@@ -132,6 +129,12 @@ WHERE NOT EXISTS (
 	AND C.ACT_PATH = B.ACT_PATH
 )
 </insert>
+
+<!-- 액션 수정 -->
+<update id="updateAction" parameterType="hashmap">
+UPDATE TBL_PMS_ACTION SET ACT_PATH = #{oldPath}
+WHERE ACT_PATH = #{newPath}
+</update>
 
 <!-- 액션 삭제 -->
 <delete id="deleteActions" parameterType="hashmap">

@@ -7,7 +7,7 @@ public interface ActionService {
 	
 	public List<String> getActions(String prefix);
 	
-	public int changeAction(String oldName, String newName);
+	public int updateAction(String oldPath, String newPath);
 	
 	public Permission.Status getPermission(String userID, String actionPath);
 }

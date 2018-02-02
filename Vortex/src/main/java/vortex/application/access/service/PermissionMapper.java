@@ -84,6 +84,18 @@ public class PermissionMapper extends DataMapper {
 			addActions(new String[]{permissionID}, actionPaths) :
 			0;
 	}
+	
+	public int updateAction(String oldPath, String newPath) {
+		if (isEmpty(oldPath) || isEmpty(newPath)) return 0;
+		if (oldPath.equals(newPath)) return 0;
+		
+		return update(
+			"permission.updateAction"
+		  , params(true)
+		  	.set("oldPath", oldPath)
+		  	.set("newPath", newPath)
+		);
+	}
 
 	private int deleteActions(String[] permissionIDs, String[] actionPaths) {
 		return delete(

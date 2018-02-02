@@ -102,6 +102,18 @@ public class MenuMapper extends DataMapper {
 		return IDs.toArray(new String[IDs.size()]);
 	}
 	
+	public int updateAction(String oldPath, String newPath) {
+		if (isEmpty(oldPath) || isEmpty(newPath)) return 0;
+		if (oldPath.equals(newPath)) return 0;
+		
+		return update(
+			"menu.updateAction"
+		  , params(true)
+		  	.set("oldPath", oldPath)
+		  	.set("newPath", newPath)
+		);
+	}
+	
 	public int setStatus(String status, String... menuIDs) {
 		return update(
 			"menu.setStatus"

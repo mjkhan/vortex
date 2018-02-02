@@ -44,7 +44,6 @@ function addActions() {
 		url:"<c:url value='/action/select.do'/>"
 	   ,data:{init:true}
 	   ,success:function(resp){
-	   		log(resp);
 	   		dialog({
 	   			title:"액션 선택",
 	   			content:resp,

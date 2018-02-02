@@ -20,90 +20,22 @@ import vortex.support.data.DataObject;
 
 @Service("actionService")
 public class ActionServiceImpl extends ApplicationService implements ActionService {
-	@Autowired
-	private PermissionMapper permissionMapper;
-	@Autowired
-	private ActionMapper actionMapper;
-	
-	@Override
-	public int changeAction(String oldName, String newName) {
-		return 0;
-	}
-	/*
-	@Resource(name="actionGroup")
-	private GroupMapper actionGroup;
-
-	@Override
-	public List<DataObject> getGroups(DataObject req) {
-		return actionGroup.search(req);
-	}
-
-	@Override
-	public DataObject getGroupInfo(String groupID) {
-		return actionGroup.getInfo(groupID);
-	}
-
-	@Override
-	public Group getGroup(String groupID) {
-		return actionGroup.getGroup(groupID);
-	}
-
-	@Override
-	public boolean create(Group group) {
-		return actionGroup.create(group);
-	}
-
-	@Override
-	public boolean update(Group group) {
-		return actionGroup.update(group);
-	}
-
-	@Override
-	public int deleteGroups(String... groupIDs) {
-		return
-			permissionMapper.delete(groupIDs, null)
-		  + actionMapper.delete(groupIDs, null)
-		  + actionGroup.deleteGroups(groupIDs);
-	}
-
-	@Override
-	public List<DataObject> getActions(String groupID) {
-		return actionMapper.getActions(groupID);
-	}
-
-	@Override
-	public DataObject getInfo(String actionID) {
-		return actionMapper.getInfo(actionID);
-	}
-
-	@Override
-	public Action getAction(String actionID) {
-		return actionMapper.getAction(actionID);
-	}
-
-	@Override
-	public boolean create(Action action) {
-		return actionMapper.create(action);
-	}
-
-	@Override
-	public boolean update(Action action) {
-		return actionMapper.update(action);
-	}
-
-	@Override
-	public int delete(String... actionIDs) {
-		return permissionMapper.deleteActions(null, actionIDs)
-			 + actionMapper.delete((String[])null, actionIDs);
-	}
-*/	
 	private static List<String>
 		permitAll,
 		actions;
 	private static Map<String, List<String>> actionsByPrefix;
 	private static Boolean checkAccessPermission;
+	@Autowired
+	private PermissionMapper permissionMapper;
+	@Autowired
+	private ActionMapper actionMapper;
 	@Resource(name="requestHandlers")
 	private RequestMappingHandlerMapping requestHandlers;
+	
+	@Override
+	public int changeAction(String oldName, String newName) {
+		return 0;
+	}
 
 	private List<String> actions() {
 		if (actions == null) {

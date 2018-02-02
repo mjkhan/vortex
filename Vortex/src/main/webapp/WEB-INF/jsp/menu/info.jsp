@@ -38,7 +38,6 @@ function setAction(){
 				title:"액션 선택",
 				content:resp,
 				onOK:function(selected){
-					log("selected: " + selected);
 					$("#actionPath").val(selected);
 				}
 			});

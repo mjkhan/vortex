@@ -48,17 +48,7 @@ public class PermissionMapper extends DataMapper {
 			  , params(true).set("permission", permission)
 			) == 1;
 	}
-/*	
-	public int delete(String[] groupIDs, String[] permissionIDs) {
-		deleteActions(groupIDs, permissionIDs, null);
-		return delete(
-			"permission.delete"
-		   , params()
-		   	.set("groupIDs", ifEmpty(groupIDs, null))
-		   	.set("permissionIDs", ifEmpty(permissionIDs, null))
-		);
-	}
-*/
+
 	public int delete(String... permissionIDs) {
 		deleteActions(permissionIDs, null);
 		return delete(
@@ -94,17 +84,7 @@ public class PermissionMapper extends DataMapper {
 			addActions(new String[]{permissionID}, actionPaths) :
 			0;
 	}
-/*	
-	private int deleteActions(String[] groupIDs, String[] permissionIDs, String[] actionPaths) {
-		return delete(
-			"permission.deleteActions"
-		   ,params()
-		   	.set("groupIDs", ifEmpty(groupIDs, () -> null))
-		   	.set("actionPaths", ifEmpty(actionPaths, () -> null))
-		   	.set("permissionIDs", ifEmpty(permissionIDs, () -> null))
-		);
-	}
-*/	
+
 	private int deleteActions(String[] permissionIDs, String[] actionPaths) {
 		return delete(
 			"permission.deleteActions"
@@ -119,11 +99,7 @@ public class PermissionMapper extends DataMapper {
 			deleteActions(new String[]{permissionID}, actionPaths)
 		  : 0;
 	}
-/*	
-	public int deleteActions(String... groupIDs) {
-		return deleteActions(groupIDs, null, null);
-	}
-*/		
+
 	public boolean isPermitted(String userID, String actionPath) {
 		int count = selectOne(
 			"permission.countUserPermissionsForAction"

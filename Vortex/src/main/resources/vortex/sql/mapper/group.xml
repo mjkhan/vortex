@@ -190,7 +190,7 @@ AND MB_TYPE = #{memberType}
 	AND A.GRP_ID = #{groupID}
 	AND MB_TYPE = #{memberType}
 	AND MB_ID = PMS_ID
-	ORDER BY SRT_ORD, B.GRP_ID, PMS_ID
+	ORDER BY SRT_ORD, PMS_ID
 	LIMIT #{start}, #{fetch}
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
@@ -200,7 +200,7 @@ AND MB_TYPE = #{memberType}
 	AND A.GRP_ID = #{groupID}
 	AND MB_TYPE = #{memberType}
 	AND MB_ID = PMS_ID
-	ORDER BY SRT_ORD, B.GRP_ID, PMS_ID
+	ORDER BY SRT_ORD, PMS_ID
 </if>
 </select>
 

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,8 +31,13 @@ public class ActionController extends ApplicationController {
 		return mv
 			.addObject("actions", actionService.getActions(prefix));
 	}
+	
+	@RequestMapping(value="/update.do", method=RequestMethod.GET)
+	public String updateAction() {
+		return "action/update";
+	}
 
-	@RequestMapping("/update.do")
+	@RequestMapping(value="/update.do", method=RequestMethod.POST)
 	public ModelAndView updateAction(@RequestParam String oldPath, @RequestParam String newPath) {
 		int affected = actionService.updateAction(oldPath, newPath);
 		return new ModelAndView("jsonView")

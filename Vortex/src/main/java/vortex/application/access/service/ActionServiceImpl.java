@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -32,21 +31,17 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	private MenuMapper menuMapper;
 	@Resource(name="requestHandlers")
 	private RequestMappingHandlerMapping requestHandlers;
-	
-	@Override
-	public int updateAction(String oldPath, String newPath) {
-		return permissionMapper.updateAction(oldPath, newPath)
-			 + menuMapper.updateAction(oldPath, newPath);
-	}
 
 	private List<String> actions() {
 		if (actions == null) {
 			actions = new ArrayList<>();
 			Map<RequestMappingInfo, HandlerMethod> methods = requestHandlers.getHandlerMethods();
 			for (RequestMappingInfo info: methods.keySet()) {
-				actions.addAll(
-					info.getPatternsCondition().getPatterns().stream().distinct().collect(Collectors.toList())
-				);
+				info.getPatternsCondition().getPatterns().forEach(action -> {
+					if (!actions.contains(action))
+						actions.add(action);
+						
+				});
 			}
 			Collections.sort(actions);
 		}
@@ -76,6 +71,12 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 	public List<String> getActions(String prefix) {
 		List<String> result = groupedActions().get(prefix);
 		return result != null ? result : Collections.emptyList();
+	}
+	
+	@Override
+	public int updateAction(String oldPath, String newPath) {
+		return permissionMapper.updateAction(oldPath, newPath)
+			 + menuMapper.updateAction(oldPath, newPath);
 	}
 
 	@Override

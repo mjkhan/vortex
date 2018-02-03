@@ -27,27 +27,6 @@
 	<button onclick="showDetail(false);" type="button">닫기</button>
 </div>
 <script type="text/javascript">
-<c:if test="${create}">
-function setActionGroup() {
-	ajax({
-		url:"<c:url value='/action/group/select.do'/>"
-	   ,data:{
-		   init:true
-		  ,type:"radio"
-		}
-	   ,success:function(resp) {
-			dialog({
-				title:"액션그룹 선택"
-			   ,content:resp
-			   ,onOK:function(selected) {
-					$("#actionGroup").val(selected.GRP_ID);
-					$("#groupName").html(selected.GRP_NAME);
-				}
-			});
-		}
-	});
-}</c:if>
-
 function savePermission() {
 	if (requiredEmpty()) return;
 	

@@ -42,8 +42,7 @@ SELECT '000' GRP_TYPE, A.*, 'admin' INS_ID, CURRENT_TIMESTAMP INS_TIME, 'admin' 
 FROM (
 	SELECT '000' GRP_ID, '그룹 유형' GRP_NAME, 'TBL_GROUP.GRP_TYPE' DESCRP UNION
 	SELECT '001' GRP_ID, '공통 코드' GRP_NAME, 'TBL_CMN_CODE.GRP_ID' DESCRP UNION
-	SELECT '002' GRP_ID, '액션 그룹' GRP_NAME, 'TBL_ACTION.GRP_ID' DESCRP UNION
-	SELECT '003' GRP_ID, '역할(ROLE)' GRP_NAME, 'TBL_GROUP.GRP_ID' DESCRP
+	SELECT '002' GRP_ID, '역할(ROLE)' GRP_NAME, 'TBL_GROUP.GRP_ID' DESCRP
 ) A;
 
 DROP TABLE IF EXISTS TBL_GROUP_MEMBER;
@@ -174,3 +173,20 @@ CREATE TABLE TBL_COMMENT (
 	PRIMARY KEY (OWNER_TYPE, OWNEER_ID, CMT_ID)
 ) COMMENT '댓글 정보';
 */
+
+select *
+from tbl_group
+order by grp_type, grp_id;
+
+select *
+from tbl_group_member;
+
+delete from tbl_group where grp_type = '002';
+update tbl_group_member set grp_type = '002';
+
+insert into tbl_group (grp_type, grp_id, grp_name, descrp, ins_id, ins_time, upd_id, upd_time, status)
+select '002' grp_type, grp_id, grp_name, descrp, ins_id, ins_time, upd_id, upd_time, status
+from tbl_group
+where grp_type = '003';
+
+delete from tbl_group where grp_type = '003';

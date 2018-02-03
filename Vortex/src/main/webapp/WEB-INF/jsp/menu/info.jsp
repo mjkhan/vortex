@@ -11,7 +11,7 @@
 	<tr><th><label for="menuName">이름</label></th>
 		<td><input id="menuName" value="${menu.name}" type="text" required maxlength="32" /></td>
 	</tr>
-	<tr><th><label for="actionPath">액션</label><img onclick="setAction();" alt="액션 선택" title="액션 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></th>
+	<tr><th><label for="actionPath" onclick="setAction();">액션</label><img onclick="setAction();" alt="액션 선택" title="액션 선택" src="<c:url value='/asset/image/search.png'/>" style="width:15px; height:15px; margin-left:.5em;"></th>
 		<td><input id="actionPath" value="${menu.actionPath}" type="text" readonly/>
 		</td>
 	</tr>

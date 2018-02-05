@@ -173,20 +173,3 @@ CREATE TABLE TBL_COMMENT (
 	PRIMARY KEY (OWNER_TYPE, OWNEER_ID, CMT_ID)
 ) COMMENT '댓글 정보';
 */
-
-select *
-from tbl_group
-order by grp_type, grp_id;
-
-select *
-from tbl_group_member;
-
-delete from tbl_group where grp_type = '002';
-update tbl_group_member set grp_type = '002';
-
-insert into tbl_group (grp_type, grp_id, grp_name, descrp, ins_id, ins_time, upd_id, upd_time, status)
-select '002' grp_type, grp_id, grp_name, descrp, ins_id, ins_time, upd_id, upd_time, status
-from tbl_group
-where grp_type = '003';
-
-delete from tbl_group where grp_type = '003';

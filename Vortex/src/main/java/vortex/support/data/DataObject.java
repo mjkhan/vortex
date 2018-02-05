@@ -13,7 +13,12 @@ import vortex.support.Assert;
  */
 public class DataObject extends GenericMap<Object> {
 	private static final long serialVersionUID = 1L;
-	
+	/**objs의 각 요소들을 keyMapper와 valueMapper를 사용하여 DataObject의 entry로 설정한 후 반환한다.
+	 * @param objs			오브젝트들
+	 * @param keyMapper		결과 DataObject에 등록될 key를 반환
+	 * @param valueMapper	결과 DataObject의 등록될 value를 반환
+	 * @return objs의 각 요소들을 keyMapper와 valueMapper를 사용하여 entry로 설정한 DataObject
+	 */
 	public static <T> DataObject from(Iterable<T> objs, Function<T, String> keyMapper, Function<T, Object> valueMapper) {
 		DataObject result = new DataObject();
 		if (!isEmpty(objs)) {

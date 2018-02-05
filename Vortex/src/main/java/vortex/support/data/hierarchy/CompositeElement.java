@@ -7,28 +7,28 @@ import java.util.List;
 
 import vortex.support.AbstractObject;
 
-/**Interface for objects that have child HierarchyElements.
+/**하위 HierarchyElement를 갖는 오브젝트를 위한 Interface.
  * @author mjkhan
  */
 public interface CompositeElement extends HierarchyElement {
-	/**Adds e as a child
-	 * @param e child element
+	/**e를 하위요소로 추가한다.
+	 * @param e 하위요소
 	 */
 	public void add(HierarchyElement e);
-	/**Returns child elements.
-	 * @return child elements
+	/**하위요소들을 반환한다.
+	 * @return 하위요소들
 	 */
 	public Collection<? extends HierarchyElement> getChildren();
-	/**CompositeElement utility
+	/**CompositeElement 유틸리티
 	 */
 	public static class Support extends AbstractObject {
-		/**Returns whether dsc is a branch of asc.<br />
-		 * That is, it tests whether asc is an ancestor of dsc and dsc is a descendent of asc on a hierarchy branch.
-		 * @param asc ancestor element
-		 * @param dsc descendent element
+		/**dsc가 asc의 하위요소인지를 반환한다.<br />
+		 * 즉, asc가 dsc의 상위요소이고 dsc가 asc의 하위요소인지 반환한다.
+		 * @param asc 상위요소
+		 * @param dsc 하위요소
 		 * @return
-		 * <ul><li>true if dsc is a branch of asc</li>
-		 * 	   <li>false otherwise</li>
+		 * <ul><li>dsc가 asc의 하위요소이면 true</li>
+		 * 	   <li>그렇지 않으면 false</li>
 		 * </ul>
 		 */
 		public static final boolean ofBranch(CompositeElement asc, CompositeElement dsc) {
@@ -38,9 +38,9 @@ public interface CompositeElement extends HierarchyElement {
 			return asc.equals(parent)
 				|| ofBranch(asc, parent);
 		}
-		/**Returns IDs of the elements and their child CompositeElements.
+		/**elements와 각 하위 CompositeElement들의 ID를 반환한다.
 		 * @param elements CompositeElements
-		 * @return IDs of the elements and their child CompositeElements
+		 * @return elements와 각 하위 CompositeElement들의 ID
 		 */
 		public static final List<String> getIDs(Iterable<? extends CompositeElement> elements) {
 			if (isEmpty(elements))
@@ -71,9 +71,9 @@ public interface CompositeElement extends HierarchyElement {
 
 			return result += element.toString();
 		}
-		/**Returns the string representation of the elements and their children.
+		/**elements와 그 하위요소들을 String으로 변환하여 반환한다.
 		 * @param elements CompositeElements
-		 * @return string representation of the elements and their children
+		 * @return string elements와 그 하위요소들의 String 표현
 		 */
 		public static final <T extends HierarchyElement> String toString(Iterable<T> elements) {
 			if (isEmpty(elements)) return "";

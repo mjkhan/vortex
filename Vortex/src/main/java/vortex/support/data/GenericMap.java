@@ -16,6 +16,11 @@ import java.util.stream.Collectors;
  * @param <T> 값의 타입
  */
 public class GenericMap<T> extends LinkedHashMap<String, T> {
+	/**objs들을 groupMapper가 반환하는 값을 기준으로 grouping하여 반환한다.
+	 * @param objs			객체 목록
+	 * @param groupMapper	요소 중 키로 쓰일 값을 반환
+	 * @return groupMapper가 반환하는 값을 기준으로 grouping하여 만든 결과 Map
+	 */
 	public static <E> Map<String, List<E>> groupBy(Collection<E> objs, Function<E, String> groupMapper) {
 		return objs != null ?
 			objs.stream().collect(Collectors.groupingBy(groupMapper)) :

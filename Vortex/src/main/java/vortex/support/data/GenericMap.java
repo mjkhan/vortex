@@ -107,4 +107,9 @@ public class GenericMap<T> extends LinkedHashMap<String, T> {
 	public T putIfAbsent(String key, T value) {
 		return super.putIfAbsent(findKey(key), value);
 	}
+	
+	public GenericMap<T> setIfAbsent(String key, T value) {
+		putIfAbsent(key, value);
+		return this;
+	}
 }

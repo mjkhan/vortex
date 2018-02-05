@@ -17,8 +17,10 @@ public class DataMapper extends AbstractMapper {
 	
 	protected DataObject params(boolean currentUser) {
 		DataObject p = super.params();
-		if (currentUser)
-			p.put("currentUser", currentUser());
+		if (currentUser) {
+			p.set("currentUser", currentUser())
+			 .set("currentClient", Client.current());
+		}
 		return p;
 	}
 	

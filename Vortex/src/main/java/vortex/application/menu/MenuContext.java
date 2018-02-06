@@ -29,6 +29,16 @@ public class MenuContext extends AbstractObject {
 		this.actionPermissions = actionPermissions;
 		return this;
 	}
+	
+	public String getPermittedAction() {
+		Iterable<Menu> topMenus = menus.topElements();
+		for (Menu menu: topMenus) {
+			String actionPath = getPermittedAction(menu);
+			if (!isEmpty(actionPath))
+				return actionPath;
+		}
+		return null;
+	}
 
 	public String getPermittedAction(Menu menu) {
 		String actionPath = menu.getActionPath();

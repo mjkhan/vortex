@@ -3,10 +3,10 @@
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div id="searchUsers" style="width:100%;">
-	<div class="inputArea" style="width:100%; height:auto;">
+	<div style="width:100%; height:auto;">
 		<canvas id="mychart"></canvas>
 	</div>
-	<div class="paging">
+	<div>
 		<input id="start" type="number" min="0" placeholder="시작회차"/>
 		<button onclick="update($('#start').val());" type="button">update</button>
 	</div>

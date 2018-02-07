@@ -9,6 +9,7 @@
 	<div>
 		<input id="start" type="number" min="0" placeholder="시작회차"/>
 		<button onclick="update($('#start').val());" type="button">update</button>
+		<button onclick="spinner.toggle();" type="button">spinner</button>
 	</div>
 </div>
 <vtx:script type="src"><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" type="text/javascript"></script></vtx:script>
@@ -81,7 +82,13 @@ var cfg = {
 			}
 		}
 	},
-	chart;
+	chart,
+	spinner = {
+		show:false,
+		toggle:function() {
+			wait(spinner.show = !spinner.show);
+		}
+	};
 
 function update(start) {
 	result.reset(start);

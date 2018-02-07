@@ -115,6 +115,13 @@ function Eval(expr, debug) {
 	}
 }
 
+function wait(show) {
+	if (show == false)
+		$(".wait").hide();
+	else
+		$(".wait").show();
+}
+
 function onError(xhr, options, error) {
 	if (xhr.readyState == 0)
 		return alert("서버에 접근할 수 없습니다.");
@@ -132,14 +139,23 @@ function onError(xhr, options, error) {
 }
 
 function ajax(options) {
+	options.beforeSend = function(xhr) {
+		wait();
+		if (window.csrf)
+			xhr.setRequestHeader(csrf.header, csrf.token);
+	}
+/*
 	if (window.csrf) 
 	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};
-
+*/
 	if (!options.type) {
 		if (options.data)
 			options.type = "POST";
 	}
 	if (!options.error)
 		options.error = onError
+	if (!options.complete)
+		options.complete = function(){wait(false);};
+		
 	$.ajax(options);
 }

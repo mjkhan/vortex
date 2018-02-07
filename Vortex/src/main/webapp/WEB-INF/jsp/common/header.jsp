@@ -13,6 +13,7 @@
 <title></title>
 </head>
 <body>
+<img class="wait" src="<c:url value='/asset/image/spinner.gif'/>"/>
 <header><c:set var="wctx" scope="request">${pageContext.request.contextPath}</c:set>
 	<div id="mainTitle" class="mainTitle"><a href="${wctx}">Vortex</a></div>
 	<jsp:include page="menu.jsp"/>

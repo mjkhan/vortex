@@ -154,3 +154,10 @@ button.add {
 	border:2px solid purple;
 	font-weight:bold;
 }
+
+.wait {
+	position:fixed; top:45%; left:50%;
+	filter:alpha(opacity=50); -moz-opacity:0.5; opacity:0.5;
+	z-index:99999;
+	display:none;
+}

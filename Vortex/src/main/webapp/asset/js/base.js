@@ -144,10 +144,6 @@ function ajax(options) {
 		if (window.csrf)
 			xhr.setRequestHeader(csrf.header, csrf.token);
 	}
-/*
-	if (window.csrf) 
-	    options.beforeSend = function(xhr){xhr.setRequestHeader(csrf.header, csrf.token);};
-*/
 	if (!options.type) {
 		if (options.data)
 			options.type = "POST";

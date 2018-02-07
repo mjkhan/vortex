@@ -3,6 +3,7 @@ package vortex.application.menu.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
@@ -21,8 +22,10 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 		return menuMapper.getTree();
 	}
 
+	@Cacheable(value="menuContext", key="#root.methodName")
 	@Override
 	public MenuContext getMenuContext() {
+		log().debug(() -> "Loading menuContext...");
 		return new MenuContext()
 			.setMenus(getTree())
 			.setActionPermissions(menuMapper.getMenuActionPermissions());

@@ -1,5 +1,6 @@
 package vortex.application.menu;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import vortex.application.User;
 import vortex.support.AbstractObject;
 import vortex.support.data.hierarchy.Hierarchy;
 
-public class MenuContext extends AbstractObject {
+public class MenuContext extends AbstractObject implements Serializable {
 	private Hierarchy<Menu> menus;
 	private Map<String, List<String>> actionPermissions;
 	

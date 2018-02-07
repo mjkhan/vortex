@@ -1,5 +1,6 @@
 package vortex.application.menu;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,8 @@ import vortex.support.data.Status;
 import vortex.support.data.hierarchy.CompositeElement;
 import vortex.support.data.hierarchy.HierarchyElement;
 
-public class Menu implements CompositeElement {
+public class Menu implements CompositeElement, Serializable {
+	private static final long serialVersionUID = 1L;
 	public static final String ROOT_ID = "00000";
 	
 	private String

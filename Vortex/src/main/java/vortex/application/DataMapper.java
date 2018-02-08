@@ -10,6 +10,10 @@ public class DataMapper extends AbstractMapper {
 		return User.current();
 	}
 	
+	protected Client currentClient() {
+		return Client.current();
+	}
+	
 	@Override
 	protected DataObject params() {
 		return params(false);
@@ -19,7 +23,7 @@ public class DataMapper extends AbstractMapper {
 		DataObject p = super.params();
 		if (currentUser) {
 			p.set("currentUser", currentUser())
-			 .set("currentClient", Client.current());
+			 .set("currentClient", currentClient());
 		}
 		return p;
 	}

@@ -10,6 +10,7 @@ import vortex.support.AbstractObject;
 import vortex.support.data.hierarchy.Hierarchy;
 
 public class MenuContext extends AbstractObject implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Hierarchy<Menu> menus;
 	private Map<String, List<String>> actionPermissions;
 	

@@ -1,6 +1,7 @@
 package vortex.application.access.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
@@ -42,16 +43,19 @@ public class PermissionServiceImpl extends ApplicationService implements Permiss
 		return permissionMapper.getActions(req);
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public int addActions(String permissionID, String... actionPaths) {
 		return permissionMapper.addActions(permissionID, actionPaths);
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public int deleteActions(String permissionID, String... actionPaths) {
 		return permissionMapper.deleteActions(permissionID, actionPaths);
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public int delete(String... permissionIDs) {
 		return permissionMapper.delete(permissionIDs);

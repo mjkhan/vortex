@@ -38,5 +38,8 @@
 			</beans:list>
 		</beans:constructor-arg>
 	</beans:bean>
+	
+	<beans:bean class="org.springframework.security.core.session.SessionRegistryImpl" >
+	</beans:bean>
 
 </beans:beans>

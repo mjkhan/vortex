@@ -3,6 +3,7 @@ package vortex.application.menu.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 	@Cacheable(value="menuContext", key="#root.methodName")
 	@Override
 	public MenuContext getMenuContext() {
-		log().debug(() -> "Loading menuContext...");
+		log().debug(() -> "(Re)loading menuContext...");
 		return new MenuContext()
 			.setMenus(getTree())
 			.setActionPermissions(menuMapper.getMenuActionPermissions());
@@ -41,36 +42,43 @@ public class MenuServiceImpl extends ApplicationService implements MenuService {
 		return menuMapper.getMenu(id);
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean create(Menu menu) {
 		return menuMapper.create(menu);
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean update(Menu menu) {
 		return menuMapper.update(menu);
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean move(String parentID, String... menuIDs) {
 		return menuMapper.move(parentID, menuIDs) > 0;
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean reorder(String parentID, String... menuIDs) {
 		return menuMapper.reorder(parentID, menuIDs) > 0;
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean reorder(String parentID, String menuID, int offset) {
 		return menuMapper.reorder(parentID, menuID, offset) > 0;
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean setStatus(String status, String... menuIDs) {
 		return menuMapper.setStatus(status, menuIDs) > 0;
 	}
 
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public boolean delete(String... menuIDs) {
 		return menuMapper.delete(menuIDs) > 0;

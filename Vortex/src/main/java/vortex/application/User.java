@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,13 +20,18 @@ public class User implements UserDetails {
 		Object obj = authentication != null ? authentication.getPrincipal() : null;
 		return obj instanceof User ? (User)obj : User.unknown;
 	}
+
+	private static SecurityContext securityContext() {
+		return SecurityContextHolder.getContext();
+	}
+	
 	
 	public static User current() {
-		return get(SecurityContextHolder.getContext().getAuthentication());
+		return get(securityContext().getAuthentication());
 	}
 	
 	public void update() {
-		SecurityContextHolder.getContext().setAuthentication(
+		securityContext().setAuthentication(
 			new UsernamePasswordAuthenticationToken(this, getPassword(), getAuthorities())
 		);
 	}

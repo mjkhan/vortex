@@ -55,7 +55,7 @@ function saveUser() {
 				<c:if test='${!create}'>afterSave = currentUsers;</c:if>
 				alert("저장됐습니다.");
 				<c:if test='${create}'>afterSave = getUsers;</c:if>
-				getUser($("#userID").val());
+				getInfo($("#userID").val());
 			} else {
 				alert("저장하지 못했습니다.");
 			}

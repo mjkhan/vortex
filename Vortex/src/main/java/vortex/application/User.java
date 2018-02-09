@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import vortex.application.group.Group;
 import vortex.support.data.Status;
 
 public class User implements UserDetails {
@@ -51,6 +53,7 @@ public class User implements UserDetails {
 	private Date
 		createdAt,
 		lastModified;
+	private List<Group> roles;
 	private List<? extends GrantedAuthority> permissions;
 	private List<String> permissionIDs;
 	private boolean sealed;
@@ -139,6 +142,15 @@ public class User implements UserDetails {
 	
 	public void setStatus(String status) {
 		notSealed().status = status;
+	}
+	
+	public String getRoleNames() {
+		return roles == null ? "" :
+			roles.stream().map(role -> role.getName()).collect(Collectors.joining(", "));
+	}
+	
+	public void setRoles(List<Group> roles) {
+		this.roles = roles;
 	}
 
 	@Override

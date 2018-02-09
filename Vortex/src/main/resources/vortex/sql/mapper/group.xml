@@ -13,8 +13,8 @@
 	<result property="lastModified" column="UPD_TIME"/>
 	<result property="status" column="STATUS"/>
 </resultMap>
-	
-<!-- 그룹 목록 찾기 -->
+
+<!-- 그룹 정보 찾기 -->
 <select id="search" parameterType="hashmap" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
 	SELECT SQL_CALC_FOUND_ROWS *
@@ -40,6 +40,27 @@
 	<if test="order == null">ORDER BY GRP_ID</if>
 	<if test="order != null">ORDER BY #{order}</if>
 </if>
+</select>
+
+<sql id="select-of-members">
+SELECT B.*
+FROM TBL_GROUP_MEMBER A, TBL_GROUP B
+WHERE A.GRP_TYPE = #{groupType} AND B.GRP_TYPE = #{groupType}
+AND MB_TYPE = #{memberType}
+<if test="memberIDs != null">AND MB_ID IN (<foreach collection="memberIDs" item="memberID" separator=", ">#{memberID}</foreach>)</if>
+AND STATUS &lt;&gt; '999' 
+AND A.GRP_ID = B.GRP_ID
+ORDER BY GRP_ID
+</sql>
+
+<!-- 멤버별 그룹 정보 가져오기 -->
+<select id="groupInfoOfMembers" parameterType="hashmap" resultType="dataobject">
+<include refid="select-of-members"/>
+</select>
+
+<!-- 멤버별 Group 가져오기 -->
+<select id="groupsOfMembers" parameterType="hashmap" resultMap="groupRow">
+<include refid="select-of-members"/>
 </select>
 
 <sql id="select-by-id">

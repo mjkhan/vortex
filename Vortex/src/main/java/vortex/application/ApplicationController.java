@@ -2,7 +2,6 @@ package vortex.application;
 
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import vortex.application.menu.Menu;
@@ -38,17 +36,6 @@ public class ApplicationController extends AbstractObject {
 			req.put(name, hreq.getParameter(name));
 		}
 		return req.set("ajax", hreq.getAttribute("ajax"));
-	}
-	
-	protected ModelAndView modelAndView(String viewName) {
-		ModelAndView result = new ModelAndView();
-		log().debug(() -> "view name: " + viewName);
-		result.setViewName(viewName);
-		return result;
-	}
-	
-	protected ModelAndView modelAndView(String viewName, Map<String, ?> map) {
-		return modelAndView(viewName).addAllObjects(map);
 	}
 
 	public static class Filter extends AbstractObject implements javax.servlet.Filter {
@@ -76,7 +63,6 @@ public class ApplicationController extends AbstractObject {
 					.setNewSession(session != null && session.isNew())
 					.setCurrent()
 			);
-			hreq.setAttribute("currentUser", User.current());
 			
 			MenuContext mctx = menuService.getMenuContext();
 			if (mctx != null) {

@@ -91,6 +91,22 @@ public class GroupMapper extends DataMapper {
 		);
 	}
 	
+	public List<DataObject> getGroupInfoOfMembers(String memberType, String... memberIDs) {
+		return selectList(
+			"group.groupInfoOfMembers"
+		   , params().set("memberType", memberType)
+		   			 .set("memberIDs", ifEmpty(memberIDs, null))
+		);
+	}
+	
+	public List<Group> getGroupsOfMembers(String memberType, String... memberIDs) {
+		return selectList(
+			"group.groupsOfMembers"
+		   , params().set("memberType", memberType)
+		   			 .set("memberIDs", ifEmpty(memberIDs, null))
+		);
+	}
+
 	public int addMembers(String[] groupIDs, String memberType, String... memberIDs) {
 		if (isEmpty(memberIDs)) return 0;
 		

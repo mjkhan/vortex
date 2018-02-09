@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -73,6 +74,7 @@ public class ActionServiceImpl extends ApplicationService implements ActionServi
 		return result != null ? result : Collections.emptyList();
 	}
 	
+	@CacheEvict(value="menuContext", allEntries=true)
 	@Override
 	public int updateAction(String oldPath, String newPath) {
 		return permissionMapper.updateAction(oldPath, newPath)

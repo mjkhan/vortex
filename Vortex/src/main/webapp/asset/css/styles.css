@@ -62,7 +62,7 @@ button.add {
 }
 
 .menu {
-	width:100%; margin:0; padding:0;
+	width:100%; margin:0; padding:.2em 0;
 	border-top:1px solid white; border-bottom:1px solid white;
 	list-style-type:none; overflow:hidden;
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" session="false"%>
+<%@ page import="vortex.application.User"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
+<!DOCTYPE html><% request.setAttribute("currentUser", User.current()); %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -16,6 +17,7 @@
 <img class="wait" src="<c:url value='/asset/image/spinner.gif'/>"/>
 <header><c:set var="wctx" scope="request">${pageContext.request.contextPath}</c:set>
 	<div id="mainTitle" class="mainTitle"><a href="${wctx}">Vortex</a></div>
+	<div style="text-align:right; padding-left:.5em; padding-bottom:.5em; color:white; background-color:purple; font-size:90%;">반갑습니다, ${currentUser.name}님(${currentUser.roleNames})</div>
 	<jsp:include page="menu.jsp"/>
 	<div id="subTitle" class="subTitle"></div>
 </header>

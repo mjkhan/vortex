@@ -2,11 +2,14 @@ package vortex.application.user.service;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
 import vortex.application.User;
+import vortex.application.group.GroupMapper;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
@@ -14,6 +17,8 @@ import vortex.support.data.DataObject;
 public class UserServiceImpl extends ApplicationService implements UserService {
 	@Autowired
 	private UserMapper userMapper;
+	@Resource(name="roleGroup")
+	private GroupMapper roleGroup;
 
 	@Override
 	public BoundedList<DataObject> search(DataObject req) {
@@ -45,14 +50,20 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 	public boolean setStatus(String status, String... userIDs) {
 		return userMapper.setStatus(status, userIDs) > 0;
 	}
+	
+	private int deleteUserRoles(String... userIDs) {
+		return roleGroup.deleteMembers((String[])null, "000" /* RoleService.USER */, userIDs);
+	}
 
 	@Override
 	public boolean remove(String... userIDs) {
-		return userMapper.remove(userIDs) > 0;
+		return deleteUserRoles(userIDs)
+			 + userMapper.remove(userIDs) > 0;
 	}
 
 	@Override
 	public boolean delete(String... userIDs) {
-		return userMapper.deleteUsers(userIDs) > 0;
+		return deleteUserRoles(userIDs)
+			 + userMapper.deleteUsers(userIDs) > 0;
 	}
 }

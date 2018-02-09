@@ -39,10 +39,8 @@ public class AuthenticationServiceImpl extends ApplicationService implements Aut
 	}
 
 	@Override
-	public void update(String... userIDs) {
-	}
+	public void update(String... userIDs) {}
 
 	@Override
-	public void expire(String... userIDs) {
-	}
+	public void expire(String... userIDs) {}
 }

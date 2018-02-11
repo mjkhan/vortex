@@ -74,10 +74,16 @@ public class AbstractMapper extends EgovAbstractMapper {
 		return boundedList(list, start, fetch);
 	}
 	
+	/**파라미터를 담을 DataObject를 생성하여 반환한다.
+	 * @return DataObject
+	 */
 	protected DataObject params() {
 		return new DataObject();
 	}
 	
+	/**현재 클래스의 Log를 반환한다.
+	 * @return 현재 클래스의 Log
+	 */
 	protected Log log() {
 		return Log.get(getClass());
 	}

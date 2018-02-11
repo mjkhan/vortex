@@ -7,9 +7,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**Builds an object hierarchy.
- * <p>A HierarchyBuilder builds up a hierarchy of objects.<br />
- * And the objects should be either of HierarchyElement or CompositeElement.</p>
+/**<p객체의 계층구조를 생성한다. 이 때 객체는 HierarchyElement나 CompositeElement를 구현해야 한다.</p>
  * <p>{@link #setElements(Collection) Setting elements} to work with,<br />
  * you can get a {@link #build() hierarchy} either of {@link #get() multiple top elements} or of a {@link #get(Object) single root element}.</p>
  * <p>Following is a typical example of a HierarchyBuilder creating a hierarchy of objects.
@@ -27,16 +25,15 @@ import java.util.function.Supplier;
  *     <li>the element returns HierarchyInfo <a href="HierarchyElement.HierarchyInfo.html#top-element">specifying itself as a top element</a></li>
  * 	   <li>the parent element is not found from the given elements</li>
  * </ul></p>
- * @author mjkhan
- * @param <T> a HierarchyElement type
+ * @param <T> HierarchyElement 타입
  */
 public class HierarchyBuilder<T extends HierarchyElement> {
 	private HashMap<String, T> index;
 	private Collection<T> elements;
 	private Predicate<HierarchyElement.HierarchyInfo> atTop;
-	/**Sets a list of hierarchy elements that are not yet put in a hierarchy.
-	 * @param elements a list of hierarchy elements
-	 * @return the HierarchyBuilder
+	/**계층구조로 생성할 요소객체들을 설정한다.
+	 * @param elements 계층구조로 생성할 요소객체들
+	 * @return HierarchyBuilder
 	 */
 	public HierarchyBuilder<T> setElements(Collection<T> elements) {
 		if (elements == null)
@@ -47,7 +44,7 @@ public class HierarchyBuilder<T extends HierarchyElement> {
 	}
 	/**Sets a predicate to test whether a HierarchyElement is a top element by examining the info.
 	 * @param test predicate to test whether a HierarchyElement is a top element by examining the info
-	 * @return the HierarchyBuilder
+	 * @return HierarchyBuilder
 	 */
 	public HierarchyBuilder<T> testTop(Predicate<HierarchyElement.HierarchyInfo> test) {
 		atTop = test;

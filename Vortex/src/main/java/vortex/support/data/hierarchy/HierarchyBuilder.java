@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/**<p객체의 계층구조를 생성한다. 이 때 객체는 HierarchyElement나 CompositeElement를 구현해야 한다.</p>
+/**<p>객체의 계층구조를 생성한다. 이 때 객체는 HierarchyElement나 CompositeElement를 구현해야 한다.</p>
  * <p>{@link #setElements(Collection) Setting elements} to work with,<br />
  * you can get a {@link #build() hierarchy} either of {@link #get() multiple top elements} or of a {@link #get(Object) single root element}.</p>
  * <p>Following is a typical example of a HierarchyBuilder creating a hierarchy of objects.

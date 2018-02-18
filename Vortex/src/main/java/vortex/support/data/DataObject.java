@@ -71,11 +71,7 @@ public class DataObject extends GenericMap<Object> {
 			notEmpty(get(name), name);
 		return this;
 	}
-	@Override
-	public DataObject set(String key, Object value) {
-		super.set(key, value);
-		return this;
-	}
+
 	@SuppressWarnings("unchecked")
 	/**지정하는 이름의 값을 T로 캐스팅하여 반환한다.
 	 * @param name 필드 이름

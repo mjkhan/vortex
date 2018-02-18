@@ -36,13 +36,15 @@ public class GroupController extends ApplicationController {
 	@RequestMapping("/list.do")
 	public ModelAndView search(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		return search(req.set("viewName", !req.bool("ajax") ? "group/list" : "jsonView"));
+		req.set("viewName", !req.bool("ajax") ? "group/list" : "jsonView");
+		return search(req);
 	}
 	
 	@RequestMapping("/select.do")
 	public ModelAndView select(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
-		return search(req.set("viewName", req.bool("init") ? "group/select" : "jsonView"));
+		req.set("viewName", req.bool("init") ? "group/select" : "jsonView");
+		return search(req);
 	}
 	
 	@RequestMapping("/info.do")

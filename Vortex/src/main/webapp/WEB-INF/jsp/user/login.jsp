@@ -4,7 +4,9 @@
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
 <div style="width:100%;">
 	<form id="loginForm" action="<c:url value='/login'/>" method="POST">
+<%-- 	
 		<input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden"/>
+ --%>
 		<div><label for="userID">아이디</label>
 			 <input id="userID" name="userID" type="text" required placeholder="로그인 아이디" />
 		</div>
@@ -21,7 +23,25 @@
 <vtx:script type="decl">
 function login() {
 	if (requiredEmpty()) return;
+
+	json({
+		url:"<c:url value='/login'/>",
+		data:{
+			userID:$("#userID").val(),
+			passwd:$("#passwd").val()
+		},
+		success:function(resp){
+			if (resp.authenticated)
+				location.href = "<c:url value='/'/>";
+			else {
+				alert("로그인하지 못했습니다.\n\n올바른 아이디와 비밀번호를 입력하십시오.");
+				$("#userID").focus().select();
+			}
+		}
+	});
+<%-- 		
 	$("#loginForm").submit();
+--%>
 }
 </vtx:script>
 <vtx:script type="docReady">

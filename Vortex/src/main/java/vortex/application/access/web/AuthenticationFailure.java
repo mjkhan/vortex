@@ -23,7 +23,7 @@ public class AuthenticationFailure extends SimpleUrlAuthenticationFailureHandler
 		String accept = getAccept(hreq);
 		if (accept.contains("json")) {
 			setContentType(hresp, "application/json");
-			print(hresp, "{success:false}");
+			print(hresp, "{\"authenticated\":false}");
 		} else {
 			super.onAuthenticationFailure(hreq, hresp, exception);
 		}

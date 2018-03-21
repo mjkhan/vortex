@@ -61,6 +61,10 @@ public class User implements UserDetails {
 	public boolean isUnknown() {
 		return UNKNOWN.equals(getId());
 	}
+	
+	public boolean isAuthenticated() {
+		return !isUnknown();
+	}
 
 	public String getId() {
 		return id != null ? id : UNKNOWN;

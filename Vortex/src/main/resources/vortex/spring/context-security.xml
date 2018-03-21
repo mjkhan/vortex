@@ -15,6 +15,8 @@
 		<form-login
 			login-page="/user/login.do"
 			username-parameter="userID" password-parameter="passwd"
+			authentication-success-handler-ref="authenticationSuccess"
+			authentication-failure-handler-ref="authenticationFailure"
 		/>
 		<remember-me
 			remember-me-parameter="remember"
@@ -38,5 +40,8 @@
 			</beans:list>
 		</beans:constructor-arg>
 	</beans:bean>
+	
+	<beans:bean id="authenticationSuccess" class="vortex.application.access.web.AuthenticationSuccess"/>
+	<beans:bean id="authenticationFailure" class="vortex.application.access.web.AuthenticationFailure"/>
 
 </beans:beans>

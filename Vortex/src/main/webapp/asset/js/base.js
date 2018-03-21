@@ -155,3 +155,8 @@ function ajax(options) {
 		
 	$.ajax(options);
 }
+
+function json(options) {
+	options.dataType = "json";
+	ajax(options);
+}

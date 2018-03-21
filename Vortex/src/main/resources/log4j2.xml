@@ -29,9 +29,6 @@
         <Logger name="egovframework" level="INFO" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
-        <Logger name="org.springframework" level="INFO" additivity="false">
-            <AppenderRef ref="console" />
-        </Logger>
  -->
         <Logger name="org.springframework" level="INFO" additivity="false">
             <AppenderRef ref="console" />

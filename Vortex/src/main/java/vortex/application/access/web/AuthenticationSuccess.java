@@ -23,7 +23,7 @@ public class AuthenticationSuccess extends SavedRequestAwareAuthenticationSucces
 		String accept = getAccept(hreq);
 		if (accept.contains("json")) {
 			setContentType(hresp, "application/json");
-			print(hresp, "{success:true}");
+			print(hresp, "{\"authenticated\":true}");
 		} else {
 			super.onAuthenticationSuccess(hreq, hresp, authentication);
 		}

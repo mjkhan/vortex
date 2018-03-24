@@ -12,7 +12,8 @@
 <script type="text/javascript">
 var wctx = {
 		path:"${pageContext.request.contextPath}",
-		debug:"${debug}" == "true"
+		debug:"${debug}",
+		mobile:"${mobile}"
 	},
 	csrf = {
 		header:"${_csrf.headerName}",

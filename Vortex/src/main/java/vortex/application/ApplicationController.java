@@ -54,6 +54,8 @@ public class ApplicationController extends AbstractObject {
 			HttpServletRequest hreq = (HttpServletRequest)sreq;
 			hreq.setAttribute("ajax", "XMLHttpRequest".equals(hreq.getHeader("X-Requested-With")));
 			hreq.setAttribute("debug", debugDomain.contains(hreq.getServerName()));
+			String userAgent = hreq.getHeader("User-Agent");
+			hreq.setAttribute("mobile", userAgent.contains("Mobi"));
 			
 			HttpSession session = hreq.getSession(false);
 			hreq.setAttribute("client", 

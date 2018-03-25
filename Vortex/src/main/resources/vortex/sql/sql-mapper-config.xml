@@ -12,5 +12,7 @@
 
 		<typeAlias alias="permission" type="vortex.application.access.service.Permission"/>
 		<typeAlias alias="menu" type="vortex.application.menu.Menu"/>
+
+		<typeAlias alias="file" type="vortex.application.file.File"/>
     </typeAliases>
 </configuration>

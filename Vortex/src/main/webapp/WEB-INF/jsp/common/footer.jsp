@@ -13,7 +13,9 @@
 var wctx = {
 		path:"${pageContext.request.contextPath}",
 		debug:"${debug}",
-		mobile:"${mobile}"
+		url:function(path) {
+			return this.path + path;
+		}
 	},
 	csrf = {
 		header:"${_csrf.headerName}",

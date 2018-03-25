@@ -35,7 +35,8 @@ public class ApplicationController extends AbstractObject {
 			String name = names.nextElement();
 			req.put(name, hreq.getParameter(name));
 		}
-		return req.set("ajax", hreq.getAttribute("ajax"));
+		return req.set("ajax", hreq.getAttribute("ajax"))
+				  .set("json", hreq.getAttribute("json"));
 	}
 
 	public static class Filter extends AbstractObject implements javax.servlet.Filter {
@@ -53,9 +54,9 @@ public class ApplicationController extends AbstractObject {
 		public void doFilter(ServletRequest sreq, ServletResponse sresp, FilterChain chain) throws IOException, ServletException {
 			HttpServletRequest hreq = (HttpServletRequest)sreq;
 			hreq.setAttribute("ajax", "XMLHttpRequest".equals(hreq.getHeader("X-Requested-With")));
+			hreq.setAttribute("json", ifEmpty(hreq.getHeader("accept"), "").contains("json"));
 			hreq.setAttribute("debug", debugDomain.contains(hreq.getServerName()));
 			String userAgent = hreq.getHeader("User-Agent");
-			hreq.setAttribute("mobile", userAgent.contains("Mobi"));
 			
 			HttpSession session = hreq.getSession(false);
 			hreq.setAttribute("client", 
@@ -63,6 +64,7 @@ public class ApplicationController extends AbstractObject {
 					.setAction(hreq.getRequestURI().replace(hreq.getContextPath(), ""))
 					.setIpAddress(sreq.getRemoteAddr())
 					.setNewSession(session != null && session.isNew())
+					.setMobile(userAgent.contains("Mobi"))
 					.setCurrent()
 			);
 			

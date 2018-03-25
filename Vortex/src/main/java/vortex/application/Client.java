@@ -8,7 +8,9 @@ public class Client extends AbstractObject {
 	private String
 		action,
 		ipAddress;
-	private boolean newSession;
+	private boolean
+		newSession,
+		mobile;
 
 	public String getAction() {
 		return action;
@@ -43,6 +45,15 @@ public class Client extends AbstractObject {
 	
 	public Client setNewSession(boolean newSession) {
 		this.newSession = newSession;
+		return this;
+	}
+	
+	public boolean isMobile() {
+		return mobile;
+	}
+	
+	public Client setMobile(boolean mobile) {
+		this.mobile = mobile;
 		return this;
 	}
 	

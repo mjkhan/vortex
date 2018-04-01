@@ -15,7 +15,24 @@ public class File {
 		description,
 		createdBy,
 		status;
+	private long size;
 	private Date createdAt;
+	
+	public static final String name(String path) {
+		if (path == null || path.trim().isEmpty()) return "";
+		int pos = path.lastIndexOf("\\");
+		if (pos < 0)
+			pos = path.lastIndexOf("/");
+		if (pos < 0) return path;
+		return path.substring(pos + 1, path.length());
+	}
+	
+	public static final String ext(String filename) {
+		if (filename == null || filename.trim().isEmpty()) return "";
+		int pos = filename.lastIndexOf(".");
+		if (pos < 1) return "";
+		return filename.substring(pos + 1, filename.length());
+	}
 	
 	public String getId() {
 		return id;
@@ -81,6 +98,14 @@ public class File {
 		this.description = description;
 	}
 
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
 	public FileInputStream getStream() {
 		try {
 			return id == null ? null : new FileInputStream(path);
@@ -117,4 +142,10 @@ public class File {
 	public String toString() {
 		return String.format("%s{%s, %s}", getClass().getName(), id, name);
 	}
+/*
+	public static void main(String[] args) {
+//		Arrays.asList("abc.txt", "def", ".ghi", "jkl.mno.pqr").forEach(s -> System.out.println("[" + ext(s) + "]"));
+		Arrays.asList("abc.txt", "/def", "/111/222.ghi", "jkl.mno.pqr", "\\stu\\vw.xyz").forEach(s -> System.out.println("[" + name(s) + "]"));
+	}
+*/
 }

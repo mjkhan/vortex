@@ -1,5 +1,7 @@
 package vortex.application.file.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import vortex.application.file.File;
@@ -13,11 +15,11 @@ public interface FileService {
 	
 	public File getFile(String fileID);
 	
-	public String[] create(MultipartFile... files);
+	public List<File> create(MultipartFile... files);
 	
 	public boolean update(File file);
 	
-	public boolean setStatus(String status, String... fileIDs);
+	public int setStatus(String status, String... fileIDs);
 	
 	public int remove(String... fileIDs);
 }

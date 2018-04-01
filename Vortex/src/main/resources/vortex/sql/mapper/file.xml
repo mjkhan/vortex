@@ -66,10 +66,13 @@ WHERE FILE_ID = #{fileID}
 
 <!-- 파일 정보 생성 -->
 <insert id="insert" parameterType="hashmap">
-<selectKey keyProperty="file.id" resultType="string" order="BEFORE">
-SELECT IFNULL(CAST(CAST(MAX(FILE_ID) AS UNSIGNED) + 1 AS CHAR(11)), CONCAT(TODAY, '00001')) FILE_ID
-FROM TBL_FILE A, (SELECT DATE_FORMAT(CURDATE(), '%y%m%d') TODAY) B
-WHERE FILE_ID LIKE CONCAT(TODAY, '%')
+<selectKey keyProperty="file.id,file.path" resultType="string" order="BEFORE">
+SELECT FILE_ID, CONCAT(DATE_FORMAT(CURDATE(), '%y/%m/'), FILE_ID, <if test="ext == null">''</if><if test="ext != null">'.${ext}'</if>) FILE_PATH
+FROM (
+	SELECT IFNULL(CAST(CAST(MAX(FILE_ID) AS UNSIGNED) + 1 AS CHAR(11)), CONCAT(TODAY, '00001')) FILE_ID
+	FROM TBL_FILE A, (SELECT DATE_FORMAT(CURDATE(), '%y%m%d') TODAY) B
+	WHERE FILE_ID LIKE CONCAT(TODAY, '%')
+) A
 </selectKey>
 INSERT INTO TBL_FILE (
     FILE_ID
@@ -86,7 +89,7 @@ INSERT INTO TBL_FILE (
     #{file.id}
    ,#{fileType}
    ,#{file.name}
-   ,CONCAT(DATE_FORMAT(CURDATE(), '%y/%m/'), #{file.id}#, <if test="ext == null">''</if><if test="ext != null">'.${ext}'</if>)
+   ,#{file.path}
    ,#{file.contentType}
    ,#{file.description}
    ,#{file.size}

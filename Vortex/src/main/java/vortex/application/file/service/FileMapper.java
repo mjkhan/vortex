@@ -1,6 +1,6 @@
 package vortex.application.file.service;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,7 +69,7 @@ public class FileMapper extends DataMapper {
 		);
 	}
 	
-	private File create(MultipartFile upload) {
+	protected File convert(MultipartFile upload) {
 		File file = new File();
 		file.setType(fileType);
 		file.setName(File.name(upload.getOriginalFilename()));
@@ -78,16 +78,17 @@ public class FileMapper extends DataMapper {
 		return file;
 	}
 	
-	public Collection<File> create(MultipartFile... uploads) throws Exception {
+	public List<File> create(MultipartFile... uploads) {
 		if (isEmpty(uploads))
 			return Collections.emptyList();
 		
 		LinkedHashMap<MultipartFile, File> files = new LinkedHashMap<>();
 		for (MultipartFile upload: uploads) {
-			files.put(upload, create(upload));
+			files.put(upload, convert(upload));
 		}
 		DataObject params = params(true);
 		try {
+			//먼저 INSERT
 			files.values().forEach(file ->
 				insert(
 					"file.insert",
@@ -96,17 +97,28 @@ public class FileMapper extends DataMapper {
 				)
 			);
 			
+			//dir 추출 및 생성
+			files.values().stream().map(file -> {
+				String location = pathPrefix + file.getPath(),
+					   filename = File.name(location);
+				return location.replace(filename, "");
+			}).distinct().forEach(dir -> {
+				java.io.File d = new java.io.File(dir);
+				if (!d.exists())
+					d.mkdirs();
+			});
+			
+			// 파일 저장
 			for (Map.Entry<MultipartFile, File> entry: files.entrySet()) {
 				File file = entry.getValue();
-				MultipartFile upload = entry.getKey();
 				String path = pathPrefix + file.getPath();
-				upload.transferTo(new java.io.File(path));
+				entry.getKey().transferTo(new java.io.File(path));
 			}
 			
-			return files.values();
+			return new ArrayList<File>(files.values());
 		} catch (Exception e) {
 			files.values().forEach(this::delete);
-			throw e;
+			throw runtimeException(e);
 		}
 	}
 	

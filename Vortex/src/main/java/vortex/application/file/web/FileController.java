@@ -1,5 +1,7 @@
 package vortex.application.file.web;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,18 +55,21 @@ public class FileController extends ApplicationController {
 	
 	@RequestMapping("/upload.do")
 	public ModelAndView upload(@RequestParam MultipartFile upload) {
-		String[] fileIDs = fileService.create(upload);
-		String fileID = !isEmpty(fileIDs) ? fileIDs[0] : null;
-		return new ModelAndView("jsonView")
-			.addObject("saved", !isEmpty(fileID))
-			.addObject("fileID", fileID);
+		List<File> files = fileService.create(upload);
+		File file = !files.isEmpty() ? files.get(0) : null;
+		boolean saved = file != null;
+		ModelAndView mv = new ModelAndView("jsonView").addObject("saved", saved);
+		if (saved)
+			mv.addObject("file", file);
+		return mv;
 	}
 	
 	@RequestMapping("/multiUpload.do")
-	public ModelAndView upload(@RequestParam MultipartFile[] uploads) {
-		String[] fileIDs = fileService.create(uploads);
+	public ModelAndView upload(@RequestParam MultipartFile[] upload) {
+		List<File> files = fileService.create(upload);
 		return new ModelAndView("jsonView")
-			.addObject("saved", !isEmpty(fileIDs));
+			.addObject("affected", files.size())
+			.addObject("saved", !files.isEmpty());
 	}
 	
 	@RequestMapping("/update.do")

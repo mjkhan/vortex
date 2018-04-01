@@ -28,6 +28,12 @@ public class AbstractMapper extends EgovAbstractMapper {
 	protected static <T> T ifEmpty(T t, Supplier<T> nt) {
 		return Assert.ifEmpty(t, nt);
 	}
+	
+	/**{@link vortex.support.Asser#runtimeException(Throwable) Assert.runtimeException(...)} 참고
+	 */
+	protected static RuntimeException runtimeException(Throwable t) {
+		return Assert.runtimeException(t);
+	}
 
 	protected SqlSession getSqlSession(String name) {
 		return SqlSessionDispenser.get(name);

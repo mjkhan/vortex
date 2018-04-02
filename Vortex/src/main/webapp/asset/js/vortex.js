@@ -1,7 +1,3 @@
-function url(path) {
-	return wctx.path + path;
-}
-
 $.fn.setPaging = function(config) {
 	config.links = 5;
 	config.first = function(index, label) {return "<a onclick='{func};'>|◀</a>".replace(/{func}/, config.func.replace(/{index}/, 0));};

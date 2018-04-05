@@ -12,10 +12,10 @@
 <script type="text/javascript">
 var wctx = {
 		path:"${pageContext.request.contextPath}",
-		debug:"${debug}",
 		url:function(path) {
 			return this.path + path;
-		}
+		},
+		debug:${debug}
 	},
 	csrf = {
 		header:"${_csrf.headerName}",
@@ -34,6 +34,7 @@ function subTitle(title) {
 
 $(function(){
 	<vtx:script type="docReady" write="true"/>
+	debug("Hello, world!");
 });
 </script>
 </body>

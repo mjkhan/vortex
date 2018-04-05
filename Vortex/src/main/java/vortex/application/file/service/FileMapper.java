@@ -1,6 +1,7 @@
 package vortex.application.file.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -86,19 +87,13 @@ public class FileMapper extends DataMapper {
 		for (MultipartFile upload: uploads) {
 			files.put(upload, convert(upload));
 		}
-		DataObject params = params(true);
 		try {
+			ArrayList<File> list = new ArrayList<>(files.values());
 			//먼저 INSERT
-			files.values().forEach(file ->
-				insert(
-					"file.insert",
-					params.set("file", file)
-						  .set("ext", ifEmpty(File.ext(file.getName()), null))
-				)
-			);
+			insert(list);
 			
 			//dir 추출 및 생성
-			files.values().stream().map(file -> {
+			list.stream().map(file -> {
 				String location = pathPrefix + file.getPath(),
 					   filename = File.name(location);
 				return location.replace(filename, "");
@@ -115,14 +110,31 @@ public class FileMapper extends DataMapper {
 				entry.getKey().transferTo(new java.io.File(path));
 			}
 			
-			return new ArrayList<File>(files.values());
+			return list;
 		} catch (Exception e) {
 			files.values().forEach(this::delete);
 			throw runtimeException(e);
 		}
 	}
 	
-	private void delete(File file) {
+	protected int insert(File... files) {
+		return insert(Arrays.asList(files));
+	}
+	
+	protected int insert(Iterable<File> files) {
+		DataObject params = params(true);
+		int affected = 0;
+		for (File file: files) {
+			affected += insert(
+				"file.insert",
+				params.set("file", file)
+					  .set("ext", ifEmpty(File.ext(file.getName()), null))
+			);
+		}
+		return affected;
+	}
+	
+	protected void delete(File file) {
 		java.io.File target = new java.io.File(pathPrefix + file.getPath());
 		if (target.exists())
 			target.delete();
@@ -142,6 +154,34 @@ public class FileMapper extends DataMapper {
 		   		.set("fileIDs", fileIDs)
 		   		.set("status", status)
 		);
+	}
+	
+	public void copy(Iterable<File> srcs) {
+		LinkedHashMap<File, File> map = new LinkedHashMap<>();
+		for (File src: srcs) {
+			File file = new File();
+			file.setType(fileType);
+			file.setName(src.getName());
+			file.setContentType(src.getContentType());
+			file.setDescription(src.getDescription());
+			file.setSize(src.getSize());
+			map.put(src, file);
+		}
+		try {
+			insert(map.values());
+			map.entrySet().forEach(entry -> {
+				try {
+					File src = entry.getKey();
+					src.copy(pathPrefix + entry.getValue().getPath());					
+				} catch (Exception e) {
+					throw runtimeException(e);
+				}
+			});
+		} catch (Exception e) {
+			map.values().forEach(this::delete);
+			throw runtimeException(e);
+		}
+		
 	}
 	
 	public int remove(String... fileIDs) {

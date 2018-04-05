@@ -1,6 +1,14 @@
-function log(msg) {
+function info(msg) {
 	if (window.console && window.console.log)
 		console.log(msg);
+}
+
+function debug(msg) {
+	if (wctx) {
+		if (wctx.debug)
+			info(msg);
+	} else
+		info(msg);
 }
 
 function trim(s) {

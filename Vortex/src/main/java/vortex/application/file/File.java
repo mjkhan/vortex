@@ -1,6 +1,10 @@
 package vortex.application.file;
 
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 
 public class File {
@@ -32,6 +36,12 @@ public class File {
 		int pos = filename.lastIndexOf(".");
 		if (pos < 1) return "";
 		return filename.substring(pos + 1, filename.length());
+	}
+	
+	public void copy(String path) throws Exception {
+		Path src = Paths.get(location),
+			 dest = Paths.get(path);
+		Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
 	}
 	
 	public String getId() {
@@ -108,7 +118,7 @@ public class File {
 
 	public FileInputStream getStream() {
 		try {
-			return id == null ? null : new FileInputStream(path);
+			return location == null ? null : new FileInputStream(location);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

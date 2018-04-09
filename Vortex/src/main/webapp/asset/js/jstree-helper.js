@@ -7,7 +7,7 @@ function helpTree(selector, options) {
 		_folding: null,
 		log:function(msg) {
 			if (options.trace)
-				log(msg);
+				debug(msg);
 		},
 		open: function(id) {
 		   if (!id) {

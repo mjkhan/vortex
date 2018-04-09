@@ -128,7 +128,7 @@ public class FileMapper extends DataMapper {
 			affected += insert(
 				"file.insert",
 				params.set("file", file)
-					  .set("ext", ifEmpty(File.ext(file.getName()), null))
+					  .set("ext", ifEmpty(File.ext(file.getName()).toLowerCase(), null))
 			);
 		}
 		return affected;

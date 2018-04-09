@@ -30,7 +30,7 @@
 	</if>
 	<if test="status == null">AND STATUS &lt;&gt; '999'</if> 
 	<if test="status != null">AND STATUS = #{status}</if> 
-	<if test="order == null">ORDER BY FILE_ID</if>
+	<if test="order == null">ORDER BY FILE_ID DESC</if>
 	<if test="order != null">ORDER BY #{order}</if>
 	LIMIT #{start}, #{fetch} 
 </if>
@@ -43,7 +43,7 @@
 	</if>
 	<if test="status == null">AND STATUS &lt;&gt; '999'</if> 
 	<if test="status != null">AND STATUS = #{status}</if> 
-	<if test="order == null">ORDER BY FILE_ID</if>
+	<if test="order == null">ORDER BY FILE_ID DESC</if>
 	<if test="order != null">ORDER BY #{order}</if>
 </if>
 </select>
@@ -66,7 +66,7 @@ WHERE FILE_ID = #{fileID}
 
 <!-- 파일 정보 생성 -->
 <insert id="insert" parameterType="hashmap">
-<selectKey keyProperty="file.id,file.path" resultType="string" order="BEFORE">
+<selectKey keyProperty="file.id,file.path" keyColumn="FILE_ID,FILE_PATH" resultType="hashmap" order="BEFORE">
 SELECT FILE_ID, CONCAT(DATE_FORMAT(CURDATE(), '%y/%m/'), FILE_ID, <if test="ext == null">''</if><if test="ext != null">'.${ext}'</if>) FILE_PATH
 FROM (
 	SELECT IFNULL(CAST(CAST(MAX(FILE_ID) AS UNSIGNED) + 1 AS CHAR(11)), CONCAT(TODAY, '00001')) FILE_ID

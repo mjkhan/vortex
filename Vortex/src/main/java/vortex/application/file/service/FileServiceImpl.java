@@ -2,6 +2,9 @@ package vortex.application.file.service;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import vortex.application.ApplicationService;
@@ -9,7 +12,9 @@ import vortex.application.file.File;
 import vortex.support.data.BoundedList;
 import vortex.support.data.DataObject;
 
+@Service("fileService")
 public class FileServiceImpl extends ApplicationService implements FileService {
+	@Resource(name="genericFile")
 	private FileMapper fileMapper;
 
 	@Override

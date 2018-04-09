@@ -34,7 +34,6 @@ function subTitle(title) {
 
 $(function(){
 	<vtx:script type="docReady" write="true"/>
-	debug("Hello, world!");
 });
 </script>
 </body>

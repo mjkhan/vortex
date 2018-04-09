@@ -168,3 +168,7 @@ function json(options) {
 	options.dataType = "json";
 	ajax(options);
 }
+
+function submit(options) {
+	json(options);
+}

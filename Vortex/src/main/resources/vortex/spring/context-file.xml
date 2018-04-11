@@ -8,7 +8,10 @@
 		<property name="sqlSessionFactory" ref="sqlSession"/>
 		<property name="fileType" value="000"/>
 		<property name="pathPrefix" value="D:/Workspace/vortex/files/"/>
-		<property name="urlPrefix" value="/files/"/>
+		<property name="urlPrefix" value="/vortex/file/download.do?fileID="/>
+<!-- 
+		<property name="urlPrefix" value="/vortex/files/"/>
+ -->
     </bean>
 
 </beans>

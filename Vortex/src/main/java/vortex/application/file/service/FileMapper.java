@@ -71,9 +71,12 @@ public class FileMapper extends DataMapper {
 	}
 	
 	protected File convert(MultipartFile upload) {
+		String filename = upload.getOriginalFilename();
+		if (isEmpty(filename))
+			return null;
 		File file = new File();
 		file.setType(fileType);
-		file.setName(File.name(upload.getOriginalFilename()));
+		file.setName(filename);
 		file.setContentType(upload.getContentType());
 		file.setSize(upload.getSize());
 		return file;
@@ -85,7 +88,9 @@ public class FileMapper extends DataMapper {
 		
 		LinkedHashMap<MultipartFile, File> files = new LinkedHashMap<>();
 		for (MultipartFile upload: uploads) {
-			files.put(upload, convert(upload));
+			File file = convert(upload);
+			if (file != null)
+				files.put(upload, file);
 		}
 		try {
 			ArrayList<File> list = new ArrayList<>(files.values());

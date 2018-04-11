@@ -19,7 +19,7 @@
 			<tr><th width="10%"><input id="toggleChecks" type="checkbox" /></th>
 				<th width="20%">아이디</th>
 				<th width="30%">이름</th>
-				<th width="20%">유형</th>
+				<th width="20%">컨텐트(MIME) 유형</th>
 				<th width="20%">등록시간</th>
 			</tr>
 		</thead>
@@ -28,7 +28,7 @@
 			<c:set var="fileRow"><tr>
 				<td><input name="fileID" value="{fileID}" type="checkbox" /></td>
 				<td><a onclick="getInfo('{fileID}')">{fileID}</a></td>
-				<td>{fileName}</td>
+				<td><a href="{url}" target="_blank">{fileName}</a></td>
 				<td>{contentType}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
@@ -118,6 +118,7 @@ function setFileList(resp) {
 			return "${vtx:jstring(fileRow)}"
 				.replace(/{fileID}/g, row.FILE_ID)
 				.replace(/{fileName}/g, row.FILE_NAME)
+				.replace(/{url}/g, row.URL)
 				.replace(/{contentType}/g, row.CNT_TYPE)
 				.replace(/{insTime}/g, row.INS_TIME);
 		},

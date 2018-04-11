@@ -17,7 +17,12 @@
 	<result property="status" column="STATUS"/>
 </resultMap>
 
-<sql id="file-refs">CONCAT(#{pathPrefix}, FILE_PATH) LOCATION, CONCAT(#{urlPrefix}, FILE_PATH) URL</sql>
+<sql id="file-refs">
+	CONCAT(#{pathPrefix}, FILE_PATH) LOCATION, CONCAT(#{urlPrefix}, FILE_ID) URL
+<!-- 
+	CONCAT(#{pathPrefix}, FILE_PATH) LOCATION, CONCAT(#{urlPrefix}, FILE_PATH) URL
+ -->
+</sql>
 
 <!-- 파일 정보 찾기 -->
 <select id="search" parameterType="hashmap" resultType="dataobject">
@@ -102,8 +107,7 @@ INSERT INTO TBL_FILE (
 <!-- 파일 정보 수정 -->
 <update id="update" parameterType="hashmap">
 UPDATE TBL_FILE SET
-    CNT_TYPE = #{file.contentType}
-   ,DESCRP = #{file.description}
+   DESCRP = #{file.description}
 WHERE FILE_ID = #{file.id}
 </update>
 

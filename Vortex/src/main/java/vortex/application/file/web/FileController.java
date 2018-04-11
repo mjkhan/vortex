@@ -1,11 +1,14 @@
 package vortex.application.file.web;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +71,16 @@ public class FileController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("affected", files.size())
 			.addObject("saved", !files.isEmpty());
+	}
+	
+	@RequestMapping("/download.do")
+	public void download(@RequestParam String fileID, HttpServletResponse hresp) throws Exception {
+		hresp.setCharacterEncoding("UTF-8");
+		File file = fileService.getFile(fileID);
+		hresp.setContentType(file.getContentType());
+		hresp.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(file.getName(), "UTF-8") +"\"");
+		hresp.setContentLength((int)file.getSize());
+		FileCopyUtils.copy(file.getStream(), hresp.getOutputStream());
 	}
 	
 	@RequestMapping("/update.do")

@@ -22,6 +22,7 @@ import vortex.application.menu.service.MenuService;
 import vortex.support.AbstractObject;
 import vortex.support.data.DataObject;
 import vortex.support.data.hierarchy.Hierarchy;
+import vortex.support.web.ClientAddress;
 
 public class ApplicationController extends AbstractObject {
 	@Autowired
@@ -62,7 +63,7 @@ public class ApplicationController extends AbstractObject {
 			hreq.setAttribute("client", 
 				new Client()
 					.setAction(hreq.getRequestURI().replace(hreq.getContextPath(), ""))
-					.setIpAddress(sreq.getRemoteAddr())
+					.setIpAddress(ClientAddress.get(hreq))
 					.setNewSession(session != null && session.isNew())
 					.setMobile(userAgent.contains("Mobi"))
 					.setCurrent()

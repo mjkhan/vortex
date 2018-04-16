@@ -12,6 +12,7 @@
 		 <input id="value" type="search" placeholder="검색어" style="width:40%;"/>
 		 <button onclick="getFiles(0);" type="button">찾기</button>
 		 <button onclick="newFile();" type="button" class="add">추가</button>
+		 <button onclick="copyFiles();" type="button" class="showOnCheck">복사</button>
 		 <button onclick="removeFiles();" type="button" class="showOnCheck">삭제</button>
 	</div>
 	<table class="infoList">
@@ -67,6 +68,22 @@ function newFile() {
 		success:function(resp){
 			$("#fileDetail").html(resp);
 			showDetail();
+		}
+	});
+}
+
+function copyFiles() {
+	if (!confirm("선택한 파일을 복사하시겠습니까?")) return;
+
+	ajax({
+		url:"<c:url value='/file/copy.do'/>",
+		data:{fileID:checkedFiles.values().join(",")},
+		success:function(resp) {
+			if (resp.saved) {
+				currentFiles();
+			} else {
+				alert("저장하지 못했습니다.");
+			}
 		}
 	});
 }
@@ -153,6 +170,9 @@ function setFileList(resp) {
 	docTitle("파일 정보");
 	subTitle("파일 정보");
 	$("#value").onEnterPress(getFiles);
+	$("#field").change(function(){
+		$("#value").focus().select();
+	});
 	setFileList({
 		files:<vtx:json data="${files}" mapper="${objectMapper}"/>,
 		start:${start},

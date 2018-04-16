@@ -57,17 +57,23 @@ public class FileMapper extends DataMapper {
 	}
 	
 	public DataObject getInfo(String fileID) {
-		return selectOne(
+		List<DataObject> list = selectList(
 			"file.getInfo"
-			,params().set("fileID", fileID)
+		    ,params().set("fileIDs", new String[]{fileID})
+		);
+		return !list.isEmpty() ? list.get(0) : null;
+	}
+	
+	public List<File> getFiles(String... fileIDs) {
+		return selectList(
+			"file.getFile"
+		    ,params().set("fileIDs", fileIDs)
 		);
 	}
 	
 	public File getFile(String fileID) {
-		return selectOne(
-			"file.getFile"
-			,params().set("fileID", fileID)
-		);
+		List<File> files = getFiles(fileID);
+		return !files.isEmpty() ? files.get(0) : null;
 	}
 	
 	protected File convert(MultipartFile upload) {
@@ -97,18 +103,7 @@ public class FileMapper extends DataMapper {
 			//먼저 INSERT
 			insert(list);
 			
-			//dir 추출 및 생성
-			list.stream().map(file -> {
-				String location = pathPrefix + file.getPath(),
-					   filename = File.name(location);
-				return location.replace(filename, "");
-			}).distinct().forEach(dir -> {
-				java.io.File d = new java.io.File(dir);
-				if (!d.exists())
-					d.mkdirs();
-			});
-			
-			// 파일 저장
+			File.mkdirs(list, pathPrefix);
 			for (Map.Entry<MultipartFile, File> entry: files.entrySet()) {
 				File file = entry.getValue();
 				String path = pathPrefix + file.getPath();
@@ -152,16 +147,13 @@ public class FileMapper extends DataMapper {
 		return insert("file.update", params(true).set("file", file)) == 1;
 	}
 	
-	public int setStatus(String status, String... fileIDs) {
-		return update(
-			"file.setStatus"
-		   , params(true)
-		   		.set("fileIDs", fileIDs)
-		   		.set("status", status)
-		);
+	public int copy(String... fileIDs) {
+		return copy(getFiles(fileIDs));
 	}
 	
-	public void copy(Iterable<File> srcs) {
+	public int copy(Iterable<File> srcs) {
+		if (isEmpty(srcs)) return 0;
+		
 		LinkedHashMap<File, File> map = new LinkedHashMap<>();
 		for (File src: srcs) {
 			File file = new File();
@@ -173,23 +165,38 @@ public class FileMapper extends DataMapper {
 			map.put(src, file);
 		}
 		try {
-			insert(map.values());
+			int affected = insert(map.values());
+			
+			File.mkdirs(map.values(), pathPrefix);
 			map.entrySet().forEach(entry -> {
-				try {
-					File src = entry.getKey();
-					src.copy(pathPrefix + entry.getValue().getPath());					
-				} catch (Exception e) {
-					throw runtimeException(e);
-				}
+				File src = entry.getKey();
+				src.copy(pathPrefix + entry.getValue().getPath());					
 			});
+			
+			return affected;
 		} catch (Exception e) {
 			map.values().forEach(this::delete);
 			throw runtimeException(e);
 		}
-		
+	}
+	
+	public int setStatus(String status, String... fileIDs) {
+		return update(
+			"file.setStatus"
+		   , params(true)
+		   		.set("fileIDs", fileIDs)
+		   		.set("status", status)
+		);
 	}
 	
 	public int remove(String... fileIDs) {
-		return  setStatus(Status.REMOVED.code(), fileIDs);
+		List<File> files = getFiles(fileIDs);
+		int affected = setStatus(Status.REMOVED.code(), fileIDs);
+		if (affected > 0) {
+			String dir = pathPrefix + "removed/";
+			File.mkdirs(files, dir);
+			files.forEach(src -> src.move(dir + src.getPath()));
+		}
+		return affected;
 	}
 }

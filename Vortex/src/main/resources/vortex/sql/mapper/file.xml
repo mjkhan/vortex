@@ -56,14 +56,14 @@
 <sql id="select-by-id">
 SELECT A.*, <include refid="file-refs"/>
 FROM TBL_FILE A
-WHERE FILE_ID = #{fileID}
+WHERE FILE_ID IN (<foreach collection="fileIDs" item="fileID" separator=",">#{fileID}</foreach>)
 </sql>
 	
 <!-- ID별 파일 정보 가져오기 -->
 <select id="getInfo" parameterType="hashmap" resultType="dataobject">
 <include refid="select-by-id"/>
 </select>
-	
+
 <!-- ID별 File 가져오기 -->
 <select id="getFile" parameterType="hashmap" resultMap="fileRow">
 <include refid="select-by-id"/>
@@ -116,6 +116,7 @@ WHERE FILE_ID = #{file.id}
 UPDATE TBL_FILE SET
 	STATUS = #{status}
 WHERE FILE_ID IN (<foreach collection="fileIDs" item="fileID" separator=", ">#{fileID}</foreach>)
+AND STATUS &lt;&gt; #{status}
 </update>
 
 <!-- fileIDs의 파일 정보를 삭제 -->

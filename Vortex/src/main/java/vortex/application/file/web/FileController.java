@@ -77,16 +77,29 @@ public class FileController extends ApplicationController {
 	public void download(@RequestParam String fileID, HttpServletResponse hresp) throws Exception {
 		hresp.setCharacterEncoding("UTF-8");
 		File file = fileService.getFile(fileID);
-		hresp.setContentType(file.getContentType());
-		hresp.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(file.getName(), "UTF-8") +"\"");
-		hresp.setContentLength((int)file.getSize());
-		FileCopyUtils.copy(file.getStream(), hresp.getOutputStream());
+		if (file == null) {
+			hresp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			hresp.sendError(HttpServletResponse.SC_NOT_FOUND);
+		} else {
+			hresp.setContentType(file.getContentType());
+			hresp.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(file.getName(), "UTF-8") +"\"");
+			hresp.setContentLength((int)file.getSize());
+			FileCopyUtils.copy(file.getInputStream(), hresp.getOutputStream());
+		}
 	}
 	
 	@RequestMapping("/update.do")
 	public ModelAndView update(@ModelAttribute File file) {
 		return new ModelAndView("jsonView")
 			.addObject("saved", fileService.update(file));
+	}
+	
+	@RequestMapping("/copy.do")
+	public ModelAndView copy(@RequestParam String fileID) {
+		int affected = fileService.copy(fileID.split(","));
+		return new ModelAndView("jsonView")
+				.addObject("affected", affected)
+				.addObject("saved", affected > 0);
 	}
 	
 	@RequestMapping("/remove.do")

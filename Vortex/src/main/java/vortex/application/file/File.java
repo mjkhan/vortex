@@ -6,6 +6,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
+import java.util.Collection;
+
+import vortex.support.Assert;
 
 public class File {
 	private String
@@ -22,11 +25,18 @@ public class File {
 	private long size;
 	private Date createdAt;
 	
+	public static final String dir(String path) {
+		String name = name(path);
+		if (name.isEmpty()) return path;
+		
+		return path.replace(name, "");
+	}
+	
 	public static final String name(String path) {
 		if (path == null || path.trim().isEmpty()) return "";
-		int pos = path.lastIndexOf("\\");
+		int pos = path.lastIndexOf("/");
 		if (pos < 0)
-			pos = path.lastIndexOf("/");
+			pos = path.lastIndexOf("\\");
 		if (pos < 0) return path;
 		return path.substring(pos + 1, path.length());
 	}
@@ -38,10 +48,39 @@ public class File {
 		return filename.substring(pos + 1, filename.length());
 	}
 	
-	public void copy(String path) throws Exception {
-		Path src = Paths.get(location),
-			 dest = Paths.get(path);
-		Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
+	public static final void mkdirs(String path) {
+		java.io.File d = new java.io.File(path);
+		if (!d.exists())
+			d.mkdirs();
+	}
+	
+	public static final void mkdirs(Collection<File> files, String prefix) {
+		if (files == null || files.isEmpty()) return;
+		
+		files.stream()
+			 .map(file -> File.dir(prefix + file.getPath()))
+			 .distinct()
+			 .forEach(File::mkdirs);
+	}
+	
+	public void copy(String path) {
+		try {
+			Path src = Paths.get(location),
+				 dest = Paths.get(path);
+			Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			throw Assert.runtimeException(e);
+		}
+	}
+	
+	public void move(String path) {
+		try {
+			Path src = Paths.get(location),
+				 dest = Paths.get(path);
+			Files.move(src, dest, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			throw Assert.runtimeException(e);
+		}
 	}
 	
 	public String getId() {
@@ -116,7 +155,7 @@ public class File {
 		this.size = size;
 	}
 
-	public FileInputStream getStream() {
+	public FileInputStream getInputStream() {
 		try {
 			return location == null ? null : new FileInputStream(location);
 		} catch (Exception e) {
@@ -154,8 +193,9 @@ public class File {
 	}
 /*
 	public static void main(String[] args) {
-//		Arrays.asList("abc.txt", "def", ".ghi", "jkl.mno.pqr").forEach(s -> System.out.println("[" + ext(s) + "]"));
+		Arrays.asList("abc.txt", "def", ".ghi", "jkl.mno.pqr").forEach(s -> System.out.println("[" + ext(s) + "]"));
 		Arrays.asList("abc.txt", "/def", "/111/222.ghi", "jkl.mno.pqr", "\\stu\\vw.xyz").forEach(s -> System.out.println("[" + name(s) + "]"));
+		Arrays.asList("abc.txt", "/def", "/111/222.ghi", "jkl.mno.pqr", "\\stu\\vw.xyz").forEach(s -> System.out.println("[" + dir(s) + "]"));
 	}
 */
 }

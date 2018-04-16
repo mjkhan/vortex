@@ -19,7 +19,7 @@ public interface FileService {
 	
 	public boolean update(File file);
 	
-	public int setStatus(String status, String... fileIDs);
+	public int copy(String... fileIDs);
 	
 	public int remove(String... fileIDs);
 }

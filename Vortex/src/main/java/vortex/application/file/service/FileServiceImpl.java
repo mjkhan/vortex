@@ -43,8 +43,8 @@ public class FileServiceImpl extends ApplicationService implements FileService {
 	}
 
 	@Override
-	public int setStatus(String status, String... fileIDs) {
-		return fileMapper.setStatus(status, fileIDs);
+	public int copy(String... fileIDs) {
+		return fileMapper.copy(fileIDs);
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class File {
 			 .forEach(File::mkdirs);
 	}
 	
-	public static void zip(String zipPath, Iterable<File> files) {
+	public static final void zip(String zipPath, Iterable<File> files) {
 		try (
 			FileOutputStream fos = new FileOutputStream(zipPath);
 			ZipOutputStream zos = new ZipOutputStream(fos);

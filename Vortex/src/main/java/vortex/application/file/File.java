@@ -1,12 +1,15 @@
 package vortex.application.file;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.Collection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import vortex.support.Assert;
 
@@ -61,6 +64,29 @@ public class File {
 			 .map(file -> File.dir(prefix + file.getPath()))
 			 .distinct()
 			 .forEach(File::mkdirs);
+	}
+	
+	public static void zip(String zipPath, Iterable<File> files) {
+		try (
+			FileOutputStream fos = new FileOutputStream(zipPath);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+			) {
+			for (File file: files) {
+				String filename = file.getName();
+				ZipEntry entry = new ZipEntry(filename);
+				zos.putNextEntry(entry);
+				FileInputStream fis = file.getInputStream();
+				byte[] data = new byte[1024];
+				int length = -1;
+				while ((length = fis.read(data)) >= 0) {
+					zos.write(data, 0, length);
+				}
+				fis.close();
+			}
+			zos.closeEntry();
+		} catch (Exception e) {
+			throw Assert.runtimeException(e);
+		}
 	}
 	
 	public void copy(String path) {

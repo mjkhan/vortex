@@ -1,5 +1,6 @@
 package vortex.application.file.web;
 
+import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -74,17 +75,44 @@ public class FileController extends ApplicationController {
 	}
 	
 	@RequestMapping("/download.do")
-	public void download(@RequestParam String fileID, HttpServletResponse hresp) throws Exception {
+	public void download(HttpServletRequest hreq, HttpServletResponse hresp) throws Exception {
 		hresp.setCharacterEncoding("UTF-8");
-		File file = fileService.getFile(fileID);
-		if (file == null) {
-			hresp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			hresp.sendError(HttpServletResponse.SC_NOT_FOUND);
+		String fileID = hreq.getParameter("fileID");
+		if (!fileID.contains(",")) {
+			File file = fileService.getFile(fileID);
+			if (file == null) {
+				hresp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				hresp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			} else {
+	/*			
+				hresp.setHeader("Cache-Control", "no-cache");
+		        hresp.setHeader("Pragma", "no-cache");
+		        hresp.setDateHeader("Expires", 0);
+	*/
+		        hresp.setContentType(file.getContentType());
+				hresp.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(file.getName(), "UTF-8") +"\"");
+				hresp.setContentLength((int)file.getSize());
+				FileCopyUtils.copy(file.getInputStream(), hresp.getOutputStream());
+			}
 		} else {
-			hresp.setContentType(file.getContentType());
-			hresp.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(file.getName(), "UTF-8") +"\"");
-			hresp.setContentLength((int)file.getSize());
-			FileCopyUtils.copy(file.getInputStream(), hresp.getOutputStream());
+			List<File> files = fileService.getFiles(fileID.split(","));
+			if (isEmpty(files)) {
+				hresp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				hresp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			} else {
+				String zipname = ifEmpty(hreq.getParameter("zip"), "압축 다운로드.zip"),
+					   zipPath = zipname;
+				File.zip(zipPath, files);
+				java.io.File zip = new java.io.File(zipPath);
+				FileInputStream input = new FileInputStream(zip);
+
+				hresp.setContentType("application/zip");
+				hresp.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(zipname, "UTF-8") +"\"");
+				hresp.setContentLength((int)zip.length());
+
+				FileCopyUtils.copy(input, hresp.getOutputStream());
+				zip.delete();
+			}
 		}
 	}
 	

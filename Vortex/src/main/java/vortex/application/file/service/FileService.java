@@ -15,6 +15,8 @@ public interface FileService {
 	
 	public File getFile(String fileID);
 	
+	public List<File> getFiles(String... fileIDs);
+	
 	public List<File> create(MultipartFile... files);
 	
 	public boolean update(File file);

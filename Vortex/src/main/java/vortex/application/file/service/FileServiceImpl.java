@@ -31,6 +31,11 @@ public class FileServiceImpl extends ApplicationService implements FileService {
 	public File getFile(String fileID) {
 		return fileMapper.getFile(fileID);
 	}
+	
+	@Override
+	public List<File> getFiles(String... fileIDs) {
+		return fileMapper.getFiles(fileIDs);
+	}
 
 	@Override
 	public List<File> create(MultipartFile... files) {

@@ -15,7 +15,9 @@
 		<td><input id="contentType" value="${file.CNT_TYPE}" type="text" readonly /></td>
 	</tr>
 	<tr><th><label for="size">크기</label></th>
-		<td><input id="size" value="${file.FILE_SIZE}" type="text" readonly /></td>
+		<td>${file.UNIT_SIZE}
+			<input id="size" value="${file.FILE_SIZE}" type="hidden" />
+		</td>
 	</tr>
 	<tr><th><label for="descrp">설명</label></th>
 		<td><textarea id="descrp" rows="4" cols="50">${file.DESCRP}</textarea></td>

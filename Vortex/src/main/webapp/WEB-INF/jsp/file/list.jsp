@@ -2,6 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="vtx" uri="vortex.tld"%>
 <jsp:include page="/WEB-INF/jsp/common/header.jsp"/>
+<style>
+.numeric {text-align:right;}
+</style>
 <div id="searchFiles" style="width:100%;">
 	<div class="inputArea">
 		<select id="field" onchange="$('#value').focus().select();">
@@ -21,6 +24,7 @@
 				<th width="20%">아이디</th>
 				<th width="30%">이름</th>
 				<th width="20%">컨텐트(MIME) 유형</th>
+				<th width="20%">크기</th>
 				<th width="20%">등록시간</th>
 			</tr>
 		</thead>
@@ -31,6 +35,7 @@
 				<td><a onclick="getInfo('{fileID}')">{fileID}</a></td>
 				<td><a href="{url}" target="_blank">{fileName}</a></td>
 				<td>{contentType}</td>
+				<td>{fileSize}</td>
 				<td>{insTime}</td>
 			</tr></c:set>
 		</tbody>
@@ -137,6 +142,7 @@ function setFileList(resp) {
 				.replace(/{fileName}/g, row.FILE_NAME)
 				.replace(/{url}/g, row.URL)
 				.replace(/{contentType}/g, row.CNT_TYPE)
+				.replace(/{fileSize}/g, row.UNIT_SIZE)
 				.replace(/{insTime}/g, row.INS_TIME);
 		},
 		ifEmpty:"${vtx:jstring(notFound)}"

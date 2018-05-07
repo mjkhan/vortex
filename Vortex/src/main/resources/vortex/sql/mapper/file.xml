@@ -24,11 +24,24 @@
  -->
 </sql>
 
+<sql id="size-unit">
+SELECT 1024.0 KB, 1024.0 * 1024.0 MB, 1024.0 * 1024.0 * 1024.0 GB
+</sql>
+
+<sql id="file-size-in-unit">
+CASE WHEN FILE_SIZE >= GB THEN CONCAT(FILE_SIZE / GB, ' GB')
+     WHEN FILE_SIZE >= MB THEN CONCAT(FILE_SIZE / MB, ' MB')
+     WHEN FILE_SIZE >= KB THEN CONCAT(FILE_SIZE / KB, ' KB')
+     ELSE CONCAT(FILE_SIZE, ' Bytes')
+END
+</sql>
+
 <!-- 파일 정보 찾기 -->
 <select id="search" parameterType="hashmap" resultType="dataobject">
 <if test="fetch != null and fetch &gt; 0"><!-- 페이징 필요 시 -->
-	SELECT SQL_CALC_FOUND_ROWS A.*, <include refid="file-refs"/>
-	FROM TBL_FILE A
+	SELECT SQL_CALC_FOUND_ROWS A.*, <include refid="file-refs"/>,
+		   <include refid="file-size-in-unit"/> UNIT_SIZE
+	FROM TBL_FILE A, (<include refid="size-unit"></include>) B
 	WHERE FILE_TYPE = #{fileType}
 	<if test="searchBy != null and searchTerms != null">
 	AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')
@@ -40,8 +53,9 @@
 	LIMIT #{start}, #{fetch} 
 </if>
 <if test="fetch == null or fetch == 0"><!-- 페이징 불필요 시 -->
-	SELECT A.*, <include refid="file-refs"/>
-	FROM TBL_FILE A
+	SELECT A.*, <include refid="file-refs"/>,
+		   <include refid="file-size-in-unit"/> UNIT_SIZE
+	FROM TBL_FILE A, (<include refid="size-unit"></include>) B
 	WHERE FILE_TYPE = #{fileType}
 	<if test="searchBy != null and searchTerms != null">
 	AND ${searchBy} LIKE CONCAT(#{searchTerms}, '%')
@@ -54,8 +68,9 @@
 </select>
 
 <sql id="select-by-id">
-SELECT A.*, <include refid="file-refs"/>
-FROM TBL_FILE A
+SELECT A.*, <include refid="file-refs"/>,
+	   <include refid="file-size-in-unit"/> UNIT_SIZE
+FROM TBL_FILE A, (<include refid="size-unit"></include>) B
 WHERE FILE_ID IN (<foreach collection="fileIDs" item="fileID" separator=",">#{fileID}</foreach>)
 </sql>
 	

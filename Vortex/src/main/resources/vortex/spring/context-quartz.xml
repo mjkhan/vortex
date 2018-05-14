@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<context:component-scan base-package="vortex.application.batch" />
+
+	<bean id="task" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="scheduledJob"/>
+		<property name="targetMethod" value="execute"/>
+	</bean>
+	
+	<bean id="taskTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="task" />
+		<property name="cronExpression" value="0 0/1 * * * ?" /> <!-- 1분 마다 -->
+<!--	매일 0시 마다 
+		<property name="cronExpression" value="0 0 0 * * ?" />
+ -->
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="task" />
+			</list>
+		</property>
+		
+		<property name="triggers">
+			<list>
+				<ref bean="taskTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>

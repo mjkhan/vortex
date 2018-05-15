@@ -20,14 +20,14 @@
 		<property name="cacheManager" ref="ehcache"/>
 	</bean>
 	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:vortex/spring/ehcache.xml"/>
+		<property name="configLocation" value="classpath:spring/ehcache.xml"/>
 		<property name="shared" value="true"/>
 	</bean>
     
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
-				<value>classpath:/vortex/properties/message-common</value>
+				<value>classpath:properties/message-common</value>
 				<value>classpath:/egovframework/rte/fdl/property/messages/properties</value>
 			</list>
 		</property>

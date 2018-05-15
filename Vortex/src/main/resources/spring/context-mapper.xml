@@ -5,8 +5,8 @@
 	<!-- SqlSession setup for MyBatis Database Layer -->
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:vortex/sql/sql-mapper-config.xml" />
-		<property name="mapperLocations" value="classpath:vortex/sql/mapper/*.xml" />
+		<property name="configLocation" value="classpath:sql/sql-mapper-config.xml" />
+		<property name="mapperLocations" value="classpath:sql/mapper/*.xml" />
 	</bean>
 
 	<!-- MapperConfigurer setup for MyBatis Database Layer with @Mapper("deptMapper") in DeptMapper Interface -->

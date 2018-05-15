@@ -19,7 +19,7 @@
 			<set>
 				<map>
 					<entry key="encoding" value="UTF-8"/>
-					<entry key="filename" value="classpath*:vortex/properties/your-file.properties"/>
+					<entry key="filename" value="classpath*:properties/your-file.properties"/>
 				</map>
 			</set>
 		</property>

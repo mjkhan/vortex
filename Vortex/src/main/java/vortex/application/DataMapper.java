@@ -12,8 +12,8 @@ public class DataMapper extends AbstractMapper {
 		return User.current();
 	}
 	
-	protected Client currentClient() {
-		return Client.current();
+	protected Access currentAccess() {
+		return Access.current();
 	}
 	
 	@Override
@@ -23,12 +23,12 @@ public class DataMapper extends AbstractMapper {
 	
 	protected void setCurrent(Map<String, Object> map) {
 		map.put("currentUser", currentUser());
-		map.put("currentClient", currentClient());
+		map.put("currentAccess", currentAccess());
 	}
 	
-	protected DataObject params(boolean currentUser) {
+	protected DataObject params(boolean current) {
 		DataObject p = super.params();
-		if (currentUser) {
+		if (current) {
 			setCurrent(p);
 		}
 		return p;

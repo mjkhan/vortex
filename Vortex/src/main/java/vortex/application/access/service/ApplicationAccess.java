@@ -7,7 +7,7 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.Authentication;
 
-import vortex.application.Client;
+import vortex.application.Access;
 import vortex.application.User;
 import vortex.support.AbstractObject;
 
@@ -28,8 +28,8 @@ public class ApplicationAccess extends AbstractObject implements AccessDecisionV
 	@Override
 	public int vote(Authentication authentication, Object obj, Collection<ConfigAttribute> attributes) {
 		User user = User.get(authentication);
-		Client client = Client.current();
-		switch (actionService.getPermission(user.getId(), client.getAction())) {
+		Access access = Access.current();
+		switch (actionService.getPermission(user.getId(), access.getAction())) {
 		case GRANTED: return ACCESS_GRANTED;
 		case DENIED: return ACCESS_DENIED;
 		default: return ACCESS_ABSTAIN;

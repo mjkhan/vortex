@@ -37,8 +37,8 @@ public class ApplicationService extends AbstractService {
 		return User.current();
 	}
 	
-	protected Client client() {
-		return Client.current();
+	protected Access currentAccess() {
+		return Access.current();
 	}
 	
 	protected AccessDeniedException denyAccess(String msg) {

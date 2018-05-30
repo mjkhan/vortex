@@ -61,7 +61,7 @@ public class ApplicationController extends AbstractObject {
 			
 			HttpSession session = hreq.getSession(false);
 			hreq.setAttribute("client", 
-				new Client()
+				new Access()
 					.setAction(hreq.getRequestURI().replace(hreq.getContextPath(), ""))
 					.setIpAddress(ClientAddress.get(hreq))
 					.setNewSession(session != null && session.isNew())

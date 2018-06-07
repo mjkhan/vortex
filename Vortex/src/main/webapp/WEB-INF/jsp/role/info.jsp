@@ -26,7 +26,7 @@
 </div>
 <script type="text/javascript">
 function saveRole() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/role/create.do'/></c:if><c:if test='${!create}'><c:url value='/role/update.do'/></c:if>",

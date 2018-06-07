@@ -46,7 +46,7 @@ function setAction(){
 }
 
 function saveMenu() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/menu/create.do'/></c:if><c:if test='${!create}'><c:url value='/menu/update.do'/></c:if>",

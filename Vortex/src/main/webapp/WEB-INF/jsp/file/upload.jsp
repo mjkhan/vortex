@@ -29,7 +29,7 @@ function add() {
 		uploads.append(row);
 	else {
 		if ($("#uploads input[type='file']")
-			.requiredEmpty(function(){
+			.hasEmptyValue(function(){
 				alert("업로드할 파일을 선택하십시오.");
 			})) return;
 		uploads.append(row);
@@ -41,7 +41,7 @@ function remove(index) {
 }
 
 function uploadFile() {
-	if ($("#uploads input[type='file']").requiredEmpty(function(){alert("업로드할 파일을 선택하십시오.");})) return;
+	if ($("#uploads input[type='file']").hasEmptyValue(function(){alert("업로드할 파일을 선택하십시오.");})) return;
 	
 	var formData = new FormData($("form")[0]);
 	json({

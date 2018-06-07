@@ -31,7 +31,7 @@ function setAction(){
 }
 
 function updateAction(){
-	if ($(".infoForm [required]").requiredEmpty()) return;
+	if ($(".infoForm [required]").hasEmptyValue()) return;
 	
 	ajax({
 		url:"",

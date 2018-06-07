@@ -39,7 +39,7 @@
 </div>
 <script type="text/javascript">
 function saveUser() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/user/create.do'/></c:if><c:if test='${!create}'><c:url value='/user/update.do'/></c:if>",

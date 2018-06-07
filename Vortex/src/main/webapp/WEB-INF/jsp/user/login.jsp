@@ -22,7 +22,7 @@
 </div>
 <vtx:script type="decl">
 function login() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 
 	json({
 		url:"<c:url value='/login'/>",

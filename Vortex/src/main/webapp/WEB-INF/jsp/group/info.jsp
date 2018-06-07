@@ -36,7 +36,7 @@
 </div>
 <script type="text/javascript">
 function saveGroup() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/group/create.do'/></c:if><c:if test='${!create}'><c:url value='/group/update.do'/></c:if>",

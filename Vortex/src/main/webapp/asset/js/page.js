@@ -16,7 +16,11 @@ function labelFor(input) {
 	return $(selector).text();
 }
 
-function requiredEmpty(whenEmpty) {
+function onEmptyValue(input) {
+	alert(labelFor(input) + "을(를) 입력하십시오.");
+}
+
+function hasEmptyValue(whenEmpty) {
 	var empty = false;
 	$("*[required]").each(function(){
 		if (empty) return;
@@ -26,7 +30,7 @@ function requiredEmpty(whenEmpty) {
 			if (whenEmpty)
 				whenEmpty(input);
 			else {
-				alert(labelFor(input) + "을(를) 입력하십시오.");
+				onEmptyValue(input);
 			}
 			input.focus();
 		}
@@ -34,7 +38,7 @@ function requiredEmpty(whenEmpty) {
 	return empty;
 }
 
-$.fn.requiredEmpty = function(whenEmpty) {
+$.fn.hasEmptyValue = function(whenEmpty) {
 	var empty = false;
 	this.each(function(){
 		var input = $(this),
@@ -43,7 +47,7 @@ $.fn.requiredEmpty = function(whenEmpty) {
 			if (whenEmpty)
 				whenEmpty(input);
 			else {
-				alert(labelFor(input) + "을(를) 입력하십시오.");
+				onEmptyValue(input);
 			}
 			input.focus();
 			return false;
@@ -51,6 +55,15 @@ $.fn.requiredEmpty = function(whenEmpty) {
 	});
 	return empty;
 }
+
+function onInvalidValue(input) {
+	var label = labelFor(input);
+	if (label)
+		alert("올바른 " + label + "을(를) 입력하십시오.");
+	else
+		alert("잘못된 값이 입력됐습니다.");
+}
+
 /**config = {
  * 	test:function(v){...}
  * ,onError:function(input){...} //Optional
@@ -65,11 +78,7 @@ $.fn.validate = function(config) {
 			if (config.onError)
 				config.onError(input);
 			else {
-				var label = labelFor(input);
-				if (label)
-					alert("올바른 " + label + "을(를) 입력하십시오.");
-				else
-					alert("잘못된 값이 입력됐습니다.");
+				onInvalidValue(input);
 			}
 		})
 	});

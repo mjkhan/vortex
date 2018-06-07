@@ -28,7 +28,7 @@
 </div>
 <script type="text/javascript">
 function savePermission() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/permission/create.do'/></c:if><c:if test='${!create}'><c:url value='/permission/update.do'/></c:if>"

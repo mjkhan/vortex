@@ -29,7 +29,7 @@
 </div>
 <script type="text/javascript">
 function saveCode() {
-	if (requiredEmpty()) return;
+	if (hasEmptyValue()) return;
 	
 	ajax({
 		url:"<c:if test='${create}'><c:url value='/code/create.do'/></c:if><c:if test='${!create}'><c:url value='/code/update.do'/></c:if>",

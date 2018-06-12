@@ -12,7 +12,7 @@
 		<csrf />
 
 		<intercept-url pattern="/user/login.do" access="permitAll" />
-		<intercept-url pattern="/**/**" access="isAuthenticated()" />
+		<intercept-url pattern="/**" access="isAuthenticated()" />
 		
 		<form-login
 			login-page="/user/login.do"

@@ -25,7 +25,8 @@
 			remember-me-cookie="remember"
 			data-source-ref="dataSource"
 		/>
-		<logout logout-success-url="/user/login.do"/>
+		<logout logout-success-url="/user/login.do" />
+		<!--logout logout-success-handler="logoutSuccess" /-->
 	</http>
 	
 	<authentication-manager>
@@ -42,8 +43,5 @@
 			</beans:list>
 		</beans:constructor-arg>
 	</beans:bean>
-	
-	<beans:bean id="authenticationSuccess" class="vortex.application.access.web.AuthenticationSuccess"/>
-	<beans:bean id="authenticationFailure" class="vortex.application.access.web.AuthenticationFailure"/>
 
 </beans:beans>

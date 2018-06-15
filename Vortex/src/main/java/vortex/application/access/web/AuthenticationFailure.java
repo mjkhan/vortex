@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import vortex.support.Log;
 
-@Controller
+@Controller("authenticationFailure")
 public class AuthenticationFailure extends SimpleUrlAuthenticationFailureHandler {
 	private static final Log log = Log.get(AuthenticationFailure.class);
 

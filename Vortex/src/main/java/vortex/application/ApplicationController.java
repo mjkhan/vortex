@@ -67,6 +67,7 @@ public class ApplicationController extends AbstractObject {
 					.setNewSession(session != null && session.isNew())
 					.setMobile(userAgent.contains("Mobi"))
 					.setCurrent()
+					.setSessionID(session != null ? session.getId() : null)
 			);
 			
 			MenuContext mctx = menuService.getMenuContext();

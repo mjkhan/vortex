@@ -1,5 +1,6 @@
 package vortex.application.access.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -40,6 +41,15 @@ public class AuthenticationServiceImpl extends ApplicationService implements Aut
 
 	@Override
 	public void update(String... userIDs) {}
+
+	@Override
+	public Date onSuccess(Object obj) {
+		return null;
+	}
+
+	@Override
+	public void onFailure(Object obj) {
+	}
 
 	@Override
 	public void expire(String... userIDs) {}

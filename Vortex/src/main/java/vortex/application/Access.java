@@ -6,11 +6,21 @@ public class Access extends AbstractObject {
 	private static final ThreadLocal<Access> current = new ThreadLocal<>();
 	
 	private String
+		sessionID,
 		action,
 		ipAddress;
 	private boolean
 		newSession,
 		mobile;
+
+	public String getSessionID() {
+		return sessionID;
+	}
+
+	public Access setSessionID(String sessionID) {
+		this.sessionID = sessionID;
+		return this;
+	}
 
 	public String getAction() {
 		return action;

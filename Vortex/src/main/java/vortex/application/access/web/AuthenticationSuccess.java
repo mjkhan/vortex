@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import vortex.support.Log;
 
-@Controller
+@Controller("authenticationSuccess")
 public class AuthenticationSuccess extends SavedRequestAwareAuthenticationSuccessHandler {
 	private static final Log log = Log.get(AuthenticationSuccess.class);
 	

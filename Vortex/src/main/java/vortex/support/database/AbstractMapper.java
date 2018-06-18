@@ -28,11 +28,11 @@ public class AbstractMapper extends EgovAbstractMapper {
 	protected static <T> T ifEmpty(T t, Supplier<T> nt) {
 		return Assert.ifEmpty(t, nt);
 	}
-
+	
 	/**{@link vortex.support.Assert#notEmpty(Object, String) Assert.notEmpty(...)} 참고
 	 */
 	protected static <T> T notEmpty(T t, String s) {
-		return Assert.notEmpty(t, s);
+		return Assert.notEmpty(t, s); 
 	}
 	
 	/**{@link vortex.support.Asser#runtimeException(Throwable) Assert.runtimeException(...)} 참고

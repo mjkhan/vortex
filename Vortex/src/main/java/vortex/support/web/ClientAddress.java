@@ -13,6 +13,14 @@ public class ClientAddress extends AbstractObject {
 		LOCALHOST_V6 = "0:0:0:0:0:0:0:1";
 	private static final String[] HEADERS = {"x-forwarded-for", "X-FORWARDED-FOR", "WL-Proxy-Client-IP", "HTTP_X_FORWARDED_FOR"};
 	
+	public static final String getLocalAddress() {
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (Exception e) {
+			throw runtimeException(e);
+		}
+	}
+	
 	public static final String get(HttpServletRequest hreq) {
 		for (String header: HEADERS) {
 			String addr = hreq.getHeader(header);
@@ -23,7 +31,7 @@ public class ClientAddress extends AbstractObject {
 		String addr = hreq.getRemoteAddr();
 		if (LOCALHOST_V4.equals(addr) || LOCALHOST_V6.equals(addr))
 		try {
-			addr = InetAddress.getLocalHost().getHostAddress();
+			addr = getLocalAddress();
 		} catch (Exception e) {
 			throw runtimeException(e);
 		}

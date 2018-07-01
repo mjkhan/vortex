@@ -5,6 +5,7 @@ import vortex.support.data.DataObject;
 
 public class ApplicationException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
+	
 	public static ApplicationException create(Throwable t) {
 		if (t instanceof ApplicationException)
 			return ApplicationException.class.cast(t);

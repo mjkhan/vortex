@@ -9,6 +9,15 @@
 
     <mvc:resources location="/asset/**" mapping="/asset/**"/>
     <mvc:annotation-driven/>
+<!--     
+    <mvc:interceptors>
+    	<mvc:interceptor>
+    		<mvc:mapping path="/**"/>
+    		<mvc:exclude-mapping path="/asset/**"/>
+    		<bean class="vortex.application.RequestInterceptor"/>
+    	</mvc:interceptor>
+    </mvc:interceptors>
+ -->
 <!-- 
     <context:component-scan base-package="vortex">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>

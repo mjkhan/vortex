@@ -1,5 +1,6 @@
 package vortex.support;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
 
@@ -21,13 +22,12 @@ public class Assert {
 			String str = (String)obj;
 			return str.trim().isEmpty();
 		}
-		if (obj instanceof Object[]) {
-			Object[] objs = (Object[])obj;
-			return objs.length < 1;
-		}
 		if (obj instanceof Iterable) {
 			Iterable<?> objs = (Iterable<?>)obj;
 			return !objs.iterator().hasNext();
+		}
+		if (obj.getClass().isArray()) {
+			return Array.getLength(obj) < 1;
 		}
 		return false;
 	}

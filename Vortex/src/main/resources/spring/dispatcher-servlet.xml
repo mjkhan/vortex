@@ -9,7 +9,7 @@
 
     <mvc:resources location="/asset/**" mapping="/asset/**"/>
     <mvc:annotation-driven/>
-<!--     
+    
     <mvc:interceptors>
     	<mvc:interceptor>
     		<mvc:mapping path="/**"/>
@@ -17,6 +17,7 @@
     		<bean class="vortex.application.RequestInterceptor"/>
     	</mvc:interceptor>
     </mvc:interceptors>
+<!-- 
  -->
 <!-- 
     <context:component-scan base-package="vortex">

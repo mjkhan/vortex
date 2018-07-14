@@ -8,20 +8,6 @@
         ">
 
     <context:component-scan base-package="vortex"/>
-<!--     
-    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-    	<property name="mappings">
-    		<props>
-    			<prop key="/**">requestInterceptor</prop>
-    		</props>
-    	</property>
-    	<property name="interceptors">
-    		<list>
-    			<ref bean="requestInterceptor"/>
-    		</list>
-    	</property>
-    </bean>
- -->
 <!-- 
     <context:component-scan base-package="vortex">
        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />

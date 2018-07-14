@@ -69,7 +69,7 @@ public class ApplicationController extends AbstractObject {
 					.setCurrent()
 					.setSessionID(session != null ? session.getId() : null)
 			);
-			
+
 			MenuContext mctx = menuService.getMenuContext();
 			if (mctx != null) {
 				hreq.setAttribute("menuContext", mctx);

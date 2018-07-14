@@ -17,7 +17,7 @@ import vortex.application.menu.service.MenuService;
 import vortex.support.data.hierarchy.Hierarchy;
 import vortex.support.data.hierarchy.Stringify;
 
-@Controller
+@Controller("menuController")
 @RequestMapping("/menu")
 public class MenuController extends ApplicationController {
 	@Autowired
@@ -86,4 +86,15 @@ public class MenuController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("saved", menuService.delete(menuID.split(",")));
 	}
+/*	
+	public void setMenuContext(HttpServletRequest hreq) {
+		MenuContext mctx = menuService.getMenuContext();
+		if (mctx == null) return;
+		
+		hreq.setAttribute("menuContext", mctx);
+		Hierarchy<Menu> menus = mctx.getMenus();
+		hreq.setAttribute("menus", menus);
+		hreq.setAttribute("topMenus", menus.topElements());
+	}
+*/
 }

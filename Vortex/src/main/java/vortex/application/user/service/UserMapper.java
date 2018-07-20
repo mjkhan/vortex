@@ -1,6 +1,7 @@
 package vortex.application.user.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Repository;
 
@@ -72,5 +73,48 @@ public class UserMapper extends DataMapper {
 			"user.delete",
 			params().set("userIDs", userIDs)
 		);
+	}
+	
+	private static class Password {
+		static enum Result {
+			VALID("사용할 수 있는 비밀번호 입니다."),
+			INVALID_LENGTH("허용되는 길이의 문자열이 아닙니다."),
+			CONTAINS_USER_ID("사용자 아이디를 포함할 수 없습니다."),
+			INVALID_CHARS("영문, 숫자, 특수문자를 각각  하나 이상 포함하고 있어야 합니다."),
+			REPEATING_CHARS("반복되는 문자를 포함할 수 없습니다.");
+			
+			private final String msg;
+
+			private Result(String msg) {
+				this.msg = msg;
+			}
+			
+			public String message() {
+				return msg;
+			}
+		}
+		
+		private static final Pattern
+			alphaNumericSpecialChars = Pattern.compile("^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z]).{8,16}$"),
+			repeatingChars = Pattern.compile("(.)\\1{2,}");
+		
+		static Result isValid(String userID, String password) {
+			if (password.length() < 8)
+				return Result.INVALID_LENGTH;
+			String str = password.toLowerCase();
+			if (str.contains(userID))
+				return Result.CONTAINS_USER_ID;
+			if (!alphaNumericSpecialChars.matcher(str).matches())
+				return Result.INVALID_CHARS;
+			if (repeatingChars.matcher(str).find())
+				return Result.REPEATING_CHARS;
+			return Result.VALID;
+		}
+		
+		static void validate(String userID, String password) {
+			Result result = isValid(userID, password);
+//			if (!Result.VALID.equals(result))
+//				throw exception(null).setCode("EUSR004").info("info", result.message());
+		}
 	}
 }

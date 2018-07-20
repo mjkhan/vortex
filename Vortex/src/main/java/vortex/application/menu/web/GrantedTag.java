@@ -2,7 +2,6 @@ package vortex.application.menu.web;
 
 import javax.servlet.jsp.JspException;
 
-import vortex.application.Access;
 import vortex.application.User;
 import vortex.application.menu.Menu;
 import vortex.application.menu.MenuContext;
@@ -10,7 +9,9 @@ import vortex.support.web.tag.VortexTag;
 
 public class GrantedTag extends VortexTag {
 	private static final long serialVersionUID = 1L;
-	private String permission;
+	private String
+		permission,
+		var;
 	private Menu menu;
 
 	public void setPermission(String permission) {
@@ -19,6 +20,10 @@ public class GrantedTag extends VortexTag {
 	
 	public void setMenu(Menu menu) {
 		this.menu = menu;
+	}
+	
+	public void setVar(String var) {
+		this.var = var;
 	}
 	@Override
 	public int doStartTag() throws JspException {
@@ -30,14 +35,20 @@ public class GrantedTag extends VortexTag {
 	}
 	
 	private int processPermission() throws JspException {
-		return User.current().isGranted(permission) ? EVAL_BODY_INCLUDE : SKIP_BODY;
+		boolean granted = User.current().isGranted(permission);
+		if (!isEmpty(var))
+			pageContext.setAttribute(var, granted);
+		return granted ? EVAL_BODY_INCLUDE : SKIP_BODY;
 	}
 	
 	private int processMenu() throws JspException {
 		MenuContext mctx = (MenuContext)hreq().getAttribute("menuContext");
 		String action = mctx.getPermittedAction(menu);
-		if (isEmpty(action)) return SKIP_BODY;
-
+		boolean granted = !isEmpty(action);
+		if (!isEmpty(var))
+			pageContext.setAttribute(var, granted);
+		if (!granted) return SKIP_BODY;
+/*
 		pageContext.setAttribute("menuID", menu.getId());
 		pageContext.setAttribute("menuName", menu.getName());
 		pageContext.setAttribute("menuAction", action);
@@ -47,17 +58,20 @@ public class GrantedTag extends VortexTag {
 			action.equals(clientAction) ||
 			mctx.hasAction(menu.getChildren(), clientAction)
 		);
+*/
 		return EVAL_BODY_INCLUDE;
 	}
 	@Override
 	public void release() {
+/*		
 		pageContext.removeAttribute("menuID");
 		pageContext.removeAttribute("menuName");
 		pageContext.removeAttribute("menuAction");
 		pageContext.removeAttribute("menuImage");
 		pageContext.removeAttribute("currentMenu");
+*/		
 		menu = null;
-		permission = null;
+		permission = var = null;
 		super.release();
 	}
 }

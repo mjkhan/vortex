@@ -3,6 +3,7 @@ package vortex.application;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import vortex.application.menu.Menu;
@@ -27,6 +30,8 @@ import vortex.support.web.ClientAddress;
 public class ApplicationController extends AbstractObject {
 	@Autowired
 	protected EgovPropertyService properties;
+	@Resource(name="objectMapper")
+	protected ObjectMapper objectMapper;
 
 	@SuppressWarnings("unchecked")
 	protected DataObject request(HttpServletRequest hreq) {
@@ -38,6 +43,14 @@ public class ApplicationController extends AbstractObject {
 		}
 		return req.set("ajax", hreq.getAttribute("ajax"))
 				  .set("json", hreq.getAttribute("json"));
+	}
+	
+	protected String inJson(Object obj) {
+		try {
+			return objectMapper.writeValueAsString(obj);
+		} catch (Exception e) {
+			throw runtimeException(e);
+		}
 	}
 
 	public static class Filter extends AbstractObject implements javax.servlet.Filter {

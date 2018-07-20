@@ -88,6 +88,12 @@
 			<type>vortex.application.menu.Menu</type>
 			<description><![CDATA[ ]]></description>
 		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description><![CDATA[ ]]></description>
+		</attribute>
     </tag>
 
     <tag>

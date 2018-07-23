@@ -75,13 +75,14 @@ public class UserMapper extends DataMapper {
 		);
 	}
 	
-	private static class Password {
+	static class Password {
 		static enum Result {
 			VALID("사용할 수 있는 비밀번호 입니다."),
 			INVALID_LENGTH("허용되는 길이의 문자열이 아닙니다."),
 			CONTAINS_USER_ID("사용자 아이디를 포함할 수 없습니다."),
 			INVALID_CHARS("영문, 숫자, 특수문자를 각각  하나 이상 포함하고 있어야 합니다."),
-			REPEATING_CHARS("반복되는 문자를 포함할 수 없습니다.");
+			REPEATING_CHARS("반복되는 문자를 포함할 수 없습니다."),
+			SEQUENTIAL_CHARS("연속되는 문자나 숫자를 포함할 수 없습니다.");
 			
 			private final String msg;
 
@@ -93,28 +94,30 @@ public class UserMapper extends DataMapper {
 				return msg;
 			}
 		}
-		
+
 		private static final Pattern
-			alphaNumericSpecialChars = Pattern.compile("^(?=.*\\d)(?=.*[~`!@#$%\\^&*()-])(?=.*[a-z]).{8,16}$"),
-			repeatingChars = Pattern.compile("(.)\\1{2,}");
+			alphaNumericSpecialChars = Pattern.compile("^(?=.*[~`!@#$%\\^&*()-])(?=.*\\d)(?=.*\\w).{8,16}$", Pattern.CASE_INSENSITIVE),
+			repeatingChars = Pattern.compile("(.)\\1{2,}"),
+			sequentialChars = Pattern.compile("\\b(\\d{3,}[^\\w]*)", Pattern.CASE_INSENSITIVE);
 		
 		static Result isValid(String userID, String password) {
 			if (password.length() < 8)
 				return Result.INVALID_LENGTH;
-			String str = password.toLowerCase();
-			if (str.contains(userID))
+			if (password.contains(userID))
 				return Result.CONTAINS_USER_ID;
-			if (!alphaNumericSpecialChars.matcher(str).matches())
+			if (!alphaNumericSpecialChars.matcher(password).matches())
 				return Result.INVALID_CHARS;
-			if (repeatingChars.matcher(str).find())
+			if (repeatingChars.matcher(password).find())
 				return Result.REPEATING_CHARS;
+			if (sequentialChars.matcher(password).find())
+				return Result.SEQUENTIAL_CHARS;
 			return Result.VALID;
 		}
 		
 		static void validate(String userID, String password) {
 			Result result = isValid(userID, password);
-//			if (!Result.VALID.equals(result))
-//				throw exception(null).setCode("EUSR004").info("info", result.message());
+			if (!Result.VALID.equals(result))
+				throw new RuntimeException(result.message());
 		}
 	}
 }

@@ -9,7 +9,7 @@ public class Encryptor extends AbstractObject {
 	private static Encryptor obj;
 	
 	public static Encryptor get() {
-		return obj != null ? obj : (obj = new Encryptor());
+		return ifEmpty(obj, () -> obj = new Encryptor());
 	}
 	
 	private String
@@ -17,7 +17,7 @@ public class Encryptor extends AbstractObject {
 		salt;
 	
 	private String password() {
-		return ifEmpty(password, () -> "password");
+		return ifEmpty(password, "password");
 	}
 	
 	public Encryptor setPassword(String password) {
@@ -36,10 +36,7 @@ public class Encryptor extends AbstractObject {
 	private TextEncryptor txtEnc;
 	
 	private TextEncryptor encryptor() {
-		if (txtEnc != null) return txtEnc;
-		
-		txtEnc = Encryptors.queryableText(password(), salt());
-		return txtEnc;
+		return ifEmpty(txtEnc, () -> txtEnc = Encryptors.queryableText(password(), salt()));
 	}
 
 	public String encrypt(String str) {
@@ -49,10 +46,10 @@ public class Encryptor extends AbstractObject {
 	public String decrypt(String str) {
 		return isEmpty(str) ? str : encryptor().decrypt(str);
 	}
-/*	
+/*
 	public static void main(String[] args) {
 		String str = "가나다";
-		Encryptor enc = new Encryptor();
+		Encryptor enc = new Encryptor().setPassword("smartPform");
 		String encoded = enc.encrypt(str);
 		System.out.println(encoded);
 		String decoded = enc.decrypt(encoded);

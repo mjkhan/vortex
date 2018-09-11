@@ -5,11 +5,11 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import vortex.support.AbstractObject;
 
-public class Encryptor extends AbstractObject {
-	private static Encryptor obj;
+public class TxtEncryptor extends AbstractObject {
+	private static TxtEncryptor obj;
 	
-	public static Encryptor get() {
-		return ifEmpty(obj, () -> obj = new Encryptor());
+	public static TxtEncryptor get() {
+		return ifEmpty(obj, () -> obj = new TxtEncryptor());
 	}
 	
 	private String
@@ -20,7 +20,7 @@ public class Encryptor extends AbstractObject {
 		return ifEmpty(password, "password");
 	}
 	
-	public Encryptor setPassword(String password) {
+	public TxtEncryptor setPassword(String password) {
 		this.password = notEmpty(password, "password");
 		return this;
 	}
@@ -29,7 +29,7 @@ public class Encryptor extends AbstractObject {
 		return ifEmpty(salt, "5c0744940b5c369b");
 	}
 	
-	public Encryptor setSalt(String salt) {
+	public TxtEncryptor setSalt(String salt) {
 		this.salt = notEmpty(salt, "salt");
 		return this;
 	}

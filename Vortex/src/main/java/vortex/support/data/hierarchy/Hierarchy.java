@@ -2,6 +2,7 @@ package vortex.support.data.hierarchy;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import vortex.support.AbstractObject;
@@ -34,7 +35,7 @@ public class Hierarchy<T> extends AbstractObject implements Serializable {
 	 * @return Hierarchy 구성요소들의 색인
 	 */
 	public Map<String, T> getIndex() {
-		return index;
+		return ifEmpty(index, Collections::emptyMap);
 	}
 
 	Hierarchy<T> setIndex(Map<String, T> index) {
@@ -45,7 +46,7 @@ public class Hierarchy<T> extends AbstractObject implements Serializable {
 	 * @return 계층의 구성요소들
 	 */
 	public Collection<T> getElements() {
-		return elements;
+		return ifEmpty(elements, Collections::emptyList);
 	}
 
 	Hierarchy<T> setElements(Collection<T> elements) {
@@ -56,7 +57,7 @@ public class Hierarchy<T> extends AbstractObject implements Serializable {
 	 * @return 계층의 최상위 요소들
 	 */
 	public Collection<T> topElements() {
-		return tops;
+		return ifEmpty(tops, Collections::emptyList);
 	}
 	/**계층의 루트 요소, 또는 첫번째 최상위 요소를 반환한다.
 	 * @return 계층의 루트 요소, 또는 첫번째 최상위 요소

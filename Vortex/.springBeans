@@ -10,7 +10,6 @@
 		<config>src/main/resources/spring/context-properties.xml</config>
 		<config>src/main/resources/spring/context-transaction.xml</config>
 		<config>src/main/resources/spring/context-common.xml</config>
-		<config>src/main/resources/spring/context-aspect.xml</config>
 		<config>src/main/resources/spring/context-datasource.xml</config>
 		<config>src/main/resources/spring/context-quartz.xml</config>
 		<config>src/main/resources/spring/dispatcher-servlet.xml</config>

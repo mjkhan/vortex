@@ -7,15 +7,15 @@ public class ApplicationException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	
 	public static ApplicationException create(Throwable t) {
-		if (t instanceof ApplicationException)
-			return ApplicationException.class.cast(t);
-		return new ApplicationException(Assert.rootCause(t));
+		return t instanceof ApplicationException ?
+			ApplicationException.class.cast(t) :
+			new ApplicationException(t);
 	}
 	
 	private DataObject objs;
 	
 	private ApplicationException(Throwable t) {
-		Assert.rootCause(t);
+		super(Assert.rootCause(t));
 	}
 	
 	public DataObject info() {

@@ -19,12 +19,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-import vortex.application.menu.Menu;
 import vortex.application.menu.MenuContext;
 import vortex.application.menu.service.MenuService;
 import vortex.support.AbstractObject;
 import vortex.support.data.DataObject;
-import vortex.support.data.hierarchy.Hierarchy;
 import vortex.support.web.ClientAddress;
 
 public class ApplicationController extends AbstractObject {
@@ -86,9 +84,8 @@ public class ApplicationController extends AbstractObject {
 			MenuContext mctx = menuService.getMenuContext();
 			if (mctx != null) {
 				hreq.setAttribute("menuContext", mctx);
-				Hierarchy<Menu> menus = mctx.getMenus();
-				hreq.setAttribute("menus", menus);
-				hreq.setAttribute("topMenus", menus.topElements());
+				hreq.setAttribute("menus", mctx);
+				hreq.setAttribute("topMenus", mctx.topElements());
 			}
 
 			chain.doFilter(sreq, sresp);

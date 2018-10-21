@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vortex.application.ApplicationService;
@@ -15,7 +14,7 @@ import vortex.support.data.DataObject;
 
 @Service("userService")
 public class UserServiceImpl extends ApplicationService implements UserService {
-	@Autowired
+	@Resource(name="userMapper")
 	private UserMapper userMapper;
 	@Resource(name="roleGroup")
 	private GroupMapper roleGroup;
@@ -45,25 +44,35 @@ public class UserServiceImpl extends ApplicationService implements UserService {
 	public boolean update(User user) {
 		return userMapper.update(user);
 	}
-
-	@Override
-	public boolean setStatus(String status, String... userIDs) {
-		return userMapper.setStatus(status, userIDs) > 0;
-	}
 	
 	private int deleteUserRoles(String... userIDs) {
 		return roleGroup.deleteMembers((String[])null, "000" /* RoleService.USER */, userIDs);
 	}
 
 	@Override
-	public boolean remove(String... userIDs) {
+	public int remove(String... userIDs) {
 		return deleteUserRoles(userIDs)
-			 + userMapper.remove(userIDs) > 0;
+			 + userMapper.remove(userIDs);
 	}
 
 	@Override
-	public boolean delete(String... userIDs) {
+	public int delete(String... userIDs) {
 		return deleteUserRoles(userIDs)
-			 + userMapper.deleteUsers(userIDs) > 0;
+			 + userMapper.deleteUsers(userIDs);
+	}
+
+	@Override
+	public boolean updatePassword(String userID, String old, String password) {
+		return userMapper.updatePassword(userID, old, password);
+	}
+
+	@Override
+	public int initFailedLogin(String... userIDs) {
+		return userMapper.initFailedLogin(userIDs);
+	}
+
+	@Override
+	public int activate(String... userIDs) {
+		return userMapper.activate(userIDs);
 	}
 }

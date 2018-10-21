@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import vortex.application.DataMapper;
 import vortex.application.menu.Menu;
+import vortex.application.menu.MenuContext;
 import vortex.support.data.DataObject;
 import vortex.support.data.Status;
 import vortex.support.data.hierarchy.Hierarchy;
@@ -17,9 +18,9 @@ import vortex.support.data.hierarchy.HierarchyBuilder;
 
 @Repository("menuMapper")
 public class MenuMapper extends DataMapper {
-	public Hierarchy<Menu> getTree() {
+	public MenuContext getTree() {
 		List<Menu> menus = selectList("menu.getTree");
-		return new HierarchyBuilder<Menu>().setElements(menus).build();
+		return new HierarchyBuilder<Menu>().setElements(menus).build(MenuContext::new);
 	}
 
 	public Map<String, List<String>> getMenuActionPermissions() {

@@ -1,27 +1,17 @@
 package vortex.application.menu;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import vortex.application.User;
-import vortex.support.AbstractObject;
 import vortex.support.data.hierarchy.Hierarchy;
 
-public class MenuContext extends AbstractObject implements Serializable {
+public class MenuContext extends Hierarchy<Menu> {
 	private static final long serialVersionUID = 1L;
-	private Hierarchy<Menu> menus;
 	private Map<String, List<String>> actionPermissions;
-	
-	public Hierarchy<Menu> getMenus() {
-		return menus;
-	}
-
-	public MenuContext setMenus(Hierarchy<Menu> menus) {
-		this.menus = menus;
-		return this;
-	}
+	private Map<String, Menu> byUrls;
 	
 	public Map<String, List<String>> getActionPermissions() {
 		return actionPermissions;
@@ -33,8 +23,7 @@ public class MenuContext extends AbstractObject implements Serializable {
 	}
 	
 	public String getPermittedAction() {
-		Iterable<Menu> topMenus = menus.topElements();
-		for (Menu menu: topMenus) {
+		for (Menu menu: topElements()) {
 			String actionPath = getPermittedAction(menu);
 			if (!isEmpty(actionPath))
 				return actionPath;
@@ -68,5 +57,15 @@ public class MenuContext extends AbstractObject implements Serializable {
 				return true;
 		}
 		return false;
+	}
+	
+	public Menu byUrl(String url) {
+		return isEmpty(url) || isEmpty(byUrls) ? null : byUrls.get(url);
+	}
+	
+	public MenuContext init() {
+		byUrls = getElements().stream().filter(e -> !isEmpty(e.getActionPath()))
+				.collect(Collectors.toMap(e -> e.getActionPath(), e -> e));
+		return this;
 	}
 }

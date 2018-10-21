@@ -66,7 +66,7 @@ public class UserController extends ApplicationController {
 		return new ModelAndView("jsonView")
 			.addObject("saved", userService.update(user));
 	}
-
+/*
 	@RequestMapping("/setStatus.do")
 	public ModelAndView setStatus(HttpServletRequest hreq) {
 		DataObject req = request(hreq);
@@ -77,7 +77,7 @@ public class UserController extends ApplicationController {
 				userService.setStatus(status, userID.split(","))
 			);
 	}
-	
+*/	
 	@RequestMapping("/remove.do")
 	public ModelAndView remove(HttpServletRequest hreq) {
 		DataObject req = request(hreq);

@@ -7,6 +7,10 @@
 	<result property="name" column="USER_NAME"/>
 	<result property="alias" column="ALIAS"/>
 	<result property="password" column="PASSWD"/>
+	<result property="passwordModified" column="PASSWD_UPD"/>
+	<result property="passwordExpiryDays" column="PASSWD_XPRD"/>
+	<result property="failedLogin" column="FAILED_LOGIN"/>
+	<result property="lastLogin" column="LAST_LOGIN"/>
 	<result property="createdBy" column="INS_ID"/>
 	<result property="createdAt" column="INS_TIME"/>
 	<result property="modifiedBy" column="UPD_ID"/>
@@ -34,9 +38,10 @@
 </select>
 
 <sql id="select-by-id">
-SELECT *
+SELECT *, DATEDIFF(DATE_ADD(PASSWD_UPD, INTERVAL 3 MONTH), CURRENT_TIMESTAMP) PASSWD_XPRD
 FROM TBL_USER
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
+ORDER BY USER_ID
 </sql>
 
 <!-- ID별 사용자 목록 -->
@@ -56,21 +61,21 @@ INSERT INTO TBL_USER (
    ,USER_NAME
    ,ALIAS
    ,PASSWD
+   ,PASSWD_UPD
    ,INS_ID
    ,INS_TIME
    ,UPD_ID
    ,UPD_TIME
-   ,STATUS
 ) VALUES (
 	#{user.id}
    ,#{user.name}
    ,#{user.alias}
    ,#{user.password}
-   ,#{currentUser.id}
    ,CURRENT_TIMESTAMP
    ,#{currentUser.id}
    ,CURRENT_TIMESTAMP
-   ,'001'
+   ,#{currentUser.id}
+   ,CURRENT_TIMESTAMP
 )
 </insert>
 
@@ -79,10 +84,31 @@ INSERT INTO TBL_USER (
 UPDATE TBL_USER SET
 	USER_NAME = #{user.name}
    ,ALIAS = #{user.alias}
-   ,PASSWD = #{user.password}
    ,UPD_ID = #{currentUser.id}
    ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE USER_ID = #{user.id}
+</update>
+
+<!-- 비밀번호 변경 -->
+<update id="updatePassword" parameterType="hashmap">
+UPDATE TBL_USER SET
+	PASSWD = #{password}
+   ,PASSWD_UPD = CURRENT_TIMESTAMP
+   ,FAILED_LOGIN = 0
+   ,UPD_ID = #{currentUser.id}
+   ,UPD_TIME = CURRENT_TIMESTAMP
+WHERE USER_ID = #{userID}
+</update>
+
+<!-- 로그인 실패 횟수 변경 -->
+<update id="updateFailedLogin" parameterType="hashmap">
+UPDATE TBL_USER SET
+    <if test="login == true">FAILED_LOGIN = 0
+    ,LAST_LOGIN = CURRENT_TIMESTAMP</if>
+    <if test="login == false"><![CDATA[FAILED_LOGIN = CASE WHEN FAILED_LOGIN < 5 THEN FAILED_LOGIN + 1 ELSE FAILED_LOGIN END]]></if>
+    <if test="init == true">FAILED_LOGIN = 0
+    ,STATUS = CASE STATUS WHEN '900' THEN '001' ELSE STATUS END</if>
+WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
 </update>
 
 <!-- 사용자 상태 변경 -->
@@ -92,6 +118,7 @@ UPDATE TBL_USER SET
    ,UPD_ID = #{currentUser.id}
    ,UPD_TIME = CURRENT_TIMESTAMP
 WHERE USER_ID IN (<foreach collection="userIDs" item="userID" separator=", ">#{userID}</foreach>)
+AND STATUS != #{status}
 </update>
 
 <!-- userIDs의 사용자 정보를 삭제 -->

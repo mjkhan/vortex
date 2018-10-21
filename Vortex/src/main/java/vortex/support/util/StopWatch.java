@@ -2,10 +2,12 @@ package vortex.support.util;
 
 import java.util.concurrent.TimeUnit;
 
+import vortex.support.AbstractObject;
+
 /**소요 시간 측정을 위한 유틸리티
  * @author mjkhan
  */
-public class StopWatch {
+public class StopWatch extends AbstractObject {
 	private boolean started;
 	private long start;
 	/**StopWatch를 시작한다.
@@ -30,5 +32,23 @@ public class StopWatch {
 		start = 0;
 		started = false;
 		return elapsed;
+	}
+	
+	/**runnable을 실행하고 소요시간을 millisecond 단위로 반환한다. 
+	 * @param runnable Runnable
+	 * @return runnable의 실행 소요시간
+	 */
+	public long elapsedTime(Runnable runnable) {
+		if (runnable == null)
+			return 0;
+		
+		try {
+			start();
+			runnable.run();
+		} catch (Exception e) {
+			throw runtimeException(e);
+		} finally {
+			return stop();
+		}
 	}
 }

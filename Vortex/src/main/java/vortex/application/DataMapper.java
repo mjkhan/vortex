@@ -37,4 +37,8 @@ public class DataMapper extends AbstractMapper {
 	protected AccessDeniedException denyAccess(String msg) {
 		return new AccessDeniedException(msg);
 	}
+	
+	protected static ApplicationException exception(Throwable cause) {
+		return ApplicationException.create(cause);
+	}
 }

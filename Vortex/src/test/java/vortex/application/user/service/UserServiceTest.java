@@ -1,6 +1,10 @@
 package vortex.application.user.service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -10,7 +14,9 @@ import vortex.application.User;
 import vortex.application.VortexTest;
 
 public class UserServiceTest extends VortexTest {
-	private UserService userService = getBean("userService");
+	@Resource(name="userService")
+	private UserService userService;
+	private ArrayList<User> users = new ArrayList<>();
 	
 	private User newUser(int num) {
 		User user = new User();
@@ -20,11 +26,17 @@ public class UserServiceTest extends VortexTest {
 		user.setPassword("password " + num);
 		return user;
 	}
+	
+	private User create(int num) {
+		User user = newUser(num);
+		userService.create(user);
+		users.add(user);
+		return user;
+	}
 
 	@Test
 	public void create() {
-		User user = newUser(0);
-		userService.create(user);
+		User user = create(0);
 		String id = user.getId();
 		User loaded = userService.getUser(id);
 		Assert.assertNotNull(loaded);
@@ -35,8 +47,7 @@ public class UserServiceTest extends VortexTest {
 
 	@Test
 	public void update() {
-		User user = newUser(0);
-		userService.create(user);
+		User user = create(0);
 		String id = user.getId();
 		User loaded = userService.getUser(id);
 		
@@ -55,9 +66,8 @@ public class UserServiceTest extends VortexTest {
 	
 	@Test
 	public void search() {
-		for (int i = 0; i < 5; ++i) {
-			userService.create(newUser(i));
-		}
+		for (int i = 0; i < 5; ++i)
+			create(i);
 		userService.search(dataObject());
 		userService.search(dataObject().set("field", "USER_NAME").set("value", "user"));
 		userService.search(dataObject().set("field", "USER_NAME").set("value", "user").set("status", "998"));
@@ -68,7 +78,7 @@ public class UserServiceTest extends VortexTest {
 		userService.search(dataObject().set("field", "USER_NAME").set("value", "user").set("status", "998").set("start", 0).set("fetch", 10));
 		userService.search(dataObject().set("field", "USER_NAME").set("value", "value").set("start", 0).set("fetch", 10));
 	}
-	
+/*	
 	@Test
 	public void setStatus() {
 		ArrayList<String> userIDs = new ArrayList<>();
@@ -91,9 +101,12 @@ public class UserServiceTest extends VortexTest {
 			Assert.assertEquals("999", user.getStatus());
 		}
 	}
-	
+*/	
 	@After
 	public void tearDown() {
-		userService.delete();
+		if (users.isEmpty()) return;
+		
+		List<String> userIDs = users.stream().map(user -> user.getId()).collect(Collectors.toList());
+		userService.delete(userIDs.toArray(new String[userIDs.size()]));
 	}
 }

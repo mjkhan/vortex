@@ -2,6 +2,7 @@ package vortex.application.menu.web;
 
 import javax.servlet.jsp.JspException;
 
+import vortex.application.Access;
 import vortex.application.User;
 import vortex.application.menu.Menu;
 import vortex.application.menu.MenuContext;
@@ -48,7 +49,7 @@ public class GrantedTag extends VortexTag {
 		if (!isEmpty(var))
 			pageContext.setAttribute(var, granted);
 		if (!granted) return SKIP_BODY;
-/*
+
 		pageContext.setAttribute("menuID", menu.getId());
 		pageContext.setAttribute("menuName", menu.getName());
 		pageContext.setAttribute("menuAction", action);
@@ -58,7 +59,7 @@ public class GrantedTag extends VortexTag {
 			action.equals(clientAction) ||
 			mctx.hasAction(menu.getChildren(), clientAction)
 		);
-*/
+
 		return EVAL_BODY_INCLUDE;
 	}
 	@Override

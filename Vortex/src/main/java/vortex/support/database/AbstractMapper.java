@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.apache.ibatis.session.SqlSession;
-
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import vortex.support.Assert;
 import vortex.support.Log;
@@ -39,10 +37,6 @@ public class AbstractMapper extends EgovAbstractMapper {
 	 */
 	protected static RuntimeException runtimeException(Throwable t) {
 		return Assert.runtimeException(t);
-	}
-
-	protected SqlSession getSqlSession(String name) {
-		return SqlSessionDispenser.get(name);
 	}
 	
 	/**list를 BoundedList로 옮겨담고 start, fetchSize, totalSize등을 설정한 후 반환한다.

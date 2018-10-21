@@ -15,9 +15,13 @@ public interface UserService {
 	
 	public boolean update(User user);
 	
-	public boolean setStatus(String status, String... userIDs);
+	public boolean updatePassword(String userID, String old, String password);
 	
-	public boolean remove(String... userIDs);
+	public int initFailedLogin(String... userIDs);
 	
-	public boolean delete(String... userIDs);
+	public int remove(String... userIDs);
+	
+	public int activate(String... userIDs);
+	
+	public int delete(String... userIDs);
 }

@@ -16,9 +16,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class PropertyManager extends AbstractObject implements InitializingBean, DisposableBean, ResourceLoaderAware {
+public class PropertyManager extends AbstractComponent implements InitializingBean, DisposableBean, ResourceLoaderAware {
 	private ResourceLoader resourceLoader;
 	private ExtendedProperties extendedProperties;
 	private Set<?> extFilenames;

@@ -5,10 +5,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
 @Component
-public class ApplicationListener extends AbstractObject {
+public class ApplicationListener extends AbstractComponent {
 	private static enum Status {
 		STARTED,
 		STOPPED

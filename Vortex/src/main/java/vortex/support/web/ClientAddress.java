@@ -4,9 +4,9 @@ import java.net.InetAddress;
 
 import javax.servlet.http.HttpServletRequest;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class ClientAddress extends AbstractObject {
+public class ClientAddress extends AbstractComponent {
 	private static final String
 		UNKNOWN = "unknown",
 		LOCALHOST_V4 = "127.0.0.1",

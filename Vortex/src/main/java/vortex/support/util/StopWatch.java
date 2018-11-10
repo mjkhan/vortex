@@ -2,12 +2,12 @@ package vortex.support.util;
 
 import java.util.concurrent.TimeUnit;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
 /**소요 시간 측정을 위한 유틸리티
  * @author mjkhan
  */
-public class StopWatch extends AbstractObject {
+public class StopWatch extends AbstractComponent {
 	private boolean started;
 	private long start;
 	/**StopWatch를 시작한다.

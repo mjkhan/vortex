@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 /**계층 구조를 구성하는 객체들이 구현하는 인터페이스.<br />
  * HierarchyElement는 HierarchyInfo를 제공한다. HierarchyInfo는 HierarchyBuilder가 계층 구조를 구축하는데 사용한다.
  * @author mjkhan
@@ -31,7 +31,7 @@ public interface HierarchyElement {
 	 * 이어야 한다.
 	 * </p>
 	 */
-	public static class HierarchyInfo extends AbstractObject implements Externalizable {
+	public static class HierarchyInfo extends AbstractComponent implements Externalizable {
 		private String
 			id,
 			parentID;

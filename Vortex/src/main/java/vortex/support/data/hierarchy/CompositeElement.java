@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
 /**하위 HierarchyElement를 갖는 오브젝트를 위한 Interface.
  * @author mjkhan
@@ -21,7 +21,7 @@ public interface CompositeElement extends HierarchyElement {
 	public Collection<? extends HierarchyElement> getChildren();
 	/**CompositeElement 유틸리티
 	 */
-	public static class Support extends AbstractObject {
+	public static class Support extends AbstractComponent {
 		/**dsc가 asc의 하위요소인지를 반환한다.<br />
 		 * 즉, asc가 dsc의 상위요소이고 dsc가 asc의 하위요소인지 반환한다.
 		 * @param asc 상위요소

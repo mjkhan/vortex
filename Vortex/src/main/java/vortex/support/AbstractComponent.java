@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 /**java.lang.Object를 확장하여 많이 쓰는 소소한 메소드들을 추가한 클래스
  * @author mjkhan
  */
-public abstract class AbstractObject {
+public abstract class AbstractComponent {
 	/**lv와 rv가 같은 지 반환한다.
 	 * @param lv 좌측 값
 	 * @param rv 우측 값

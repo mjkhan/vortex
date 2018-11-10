@@ -1,8 +1,8 @@
 package vortex.support.web.tag;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class ToJScript extends AbstractObject {
+public class ToJScript extends AbstractComponent {
 	public static final String get(String s) {
 		return isEmpty(s) ? s :
 			s.replace("\\","\\\\")

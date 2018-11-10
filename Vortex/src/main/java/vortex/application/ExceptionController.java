@@ -1,13 +1,11 @@
 package vortex.application;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ExceptionController extends ApplicationController {
-	@ExceptionHandler(ApplicationException.class)
+//	@ExceptionHandler(ApplicationException.class)
 	public ModelAndView onApplicationException(ApplicationException e) {
 		Throwable cause = rootCause(e);
 		String stacktrace = ExceptionUtils.getStackTrace(cause);
@@ -21,7 +19,7 @@ public class ExceptionController extends ApplicationController {
 			.addObject("message", msg);
 	}
 	
-	@ExceptionHandler(Throwable.class)
+//	@ExceptionHandler(Throwable.class)
 	public ModelAndView onException(Exception e) {
 		Throwable cause = rootCause(e);
 		String stacktrace = ExceptionUtils.getStackTrace(cause),

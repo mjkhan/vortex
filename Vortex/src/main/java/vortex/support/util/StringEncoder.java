@@ -4,9 +4,9 @@ import java.security.MessageDigest;
 
 import javax.xml.bind.DatatypeConverter;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class StringEncoder extends AbstractObject {
+public class StringEncoder extends AbstractComponent {
 	public static final String hash(String s) {
 		if (isEmpty(s)) return "";
 		try {

@@ -20,6 +20,7 @@ public class LogoutSuccess extends SimpleUrlLogoutSuccessHandler implements Appl
 	@Override
 	public void onLogoutSuccess(HttpServletRequest hreq, HttpServletResponse hresp, Authentication authentication) throws IOException, ServletException {
 		super.onLogoutSuccess(hreq, hresp, authentication);
+		hreq.logout();
 	}
 
 	@Override

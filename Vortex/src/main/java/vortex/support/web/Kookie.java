@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
 /**쿠키 처리를 돕는 유틸리티.
  * <p>Kookie는 {@link #get(HttpServletRequest) HttpServletRequest}에서 얻는다.<br />
@@ -14,7 +14,7 @@ import vortex.support.AbstractObject;
  * 쿠키값 저장을 돕는 편의성 메소드로 {@link #longSave(String, String) longSave(...)}와 {@link #shortSave(String, String) shortSave(...)}가 제공된다.
  * </p>
  */
-public class Kookie extends AbstractObject {
+public class Kookie extends AbstractComponent {
 	private static final String NAME = "vtx_kookie";
 
 	public static final Kookie get(HttpServletRequest request) {

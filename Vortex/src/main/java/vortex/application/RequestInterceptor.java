@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class RequestInterceptor extends AbstractObject implements HandlerInterceptor {
+public class RequestInterceptor extends AbstractComponent implements HandlerInterceptor {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest hreq, HttpServletResponse hresp, Object handler) throws Exception {

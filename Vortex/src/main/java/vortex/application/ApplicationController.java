@@ -21,11 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import vortex.application.menu.MenuContext;
 import vortex.application.menu.service.MenuService;
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 import vortex.support.data.DataObject;
 import vortex.support.web.ClientAddress;
 
-public class ApplicationController extends AbstractObject {
+public class ApplicationController extends AbstractComponent {
 	@Autowired
 	protected EgovPropertyService properties;
 	@Resource(name="objectMapper")
@@ -51,7 +51,7 @@ public class ApplicationController extends AbstractObject {
 		}
 	}
 
-	public static class Filter extends AbstractObject implements javax.servlet.Filter {
+	public static class Filter extends AbstractComponent implements javax.servlet.Filter {
 		private MenuService menuService;
 		private String debugDomain;
 

@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 /**파일 처리를 위한 유틸리티.
  * <p>FileSupport는 <code>new</code> constructor나 {@link #get() 싱글턴}으로 생성할 수 있다.<br />
  * FileSupport는
@@ -23,7 +23,7 @@ import vortex.support.AbstractObject;
  * </p>
  * @author mjkhan
  */
-public class FileSupport extends AbstractObject {
+public class FileSupport extends AbstractComponent {
 	private static FileSupport obj;
 	/**싱글턴 FileSupport를 반환한다.
 	 * @return 싱글턴 FileSupport

@@ -3,9 +3,9 @@ package vortex.support.util;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class TxtEncryptor extends AbstractObject {
+public class TxtEncryptor extends AbstractComponent {
 	private static TxtEncryptor obj;
 	
 	public static TxtEncryptor get() {

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 /**HierarchyElement의 집합체로, {@link HierarchyBuilder HierarchyBuilder}로 생성한다.
  * Hierarchy는
  * <ul><li>{@link #getElements() 계층구조 요소}</li>
@@ -16,7 +16,7 @@ import vortex.support.AbstractObject;
  * </ul>
  * @param <T> HierarchyElement 타입
  */
-public class Hierarchy<T> extends AbstractObject implements Serializable {
+public class Hierarchy<T> extends AbstractComponent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Collection<T>
 		elements,

@@ -1,8 +1,8 @@
 package vortex.application;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class Access extends AbstractObject {
+public class Access extends AbstractComponent {
 	private static final ThreadLocal<Access> current = new ThreadLocal<>();
 	
 	private String

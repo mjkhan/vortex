@@ -3,13 +3,13 @@ package vortex.support.data.hierarchy;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
 /**계층구조의 객체들을 String 형태로 변환한다.
  * @author mjkhan
  * @param <T> HierarchyElement 타입
  */
-public class Stringify<T extends HierarchyElement> extends AbstractObject {
+public class Stringify<T extends HierarchyElement> extends AbstractComponent {
 	/**HierarchyElement를 String으로 변환하는 Functional interface.
 	 * @author mjkhan
 	 * @param <T> HierarchyElement 타입

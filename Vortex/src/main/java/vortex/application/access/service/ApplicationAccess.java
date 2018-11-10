@@ -9,9 +9,9 @@ import org.springframework.security.core.Authentication;
 
 import vortex.application.Access;
 import vortex.application.User;
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class ApplicationAccess extends AbstractObject implements AccessDecisionVoter<Object> {
+public class ApplicationAccess extends AbstractComponent implements AccessDecisionVoter<Object> {
 	@Autowired
 	private ActionService actionService;
 	

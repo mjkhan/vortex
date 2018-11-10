@@ -7,9 +7,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class Encryptor extends AbstractObject {
+public class Encryptor extends AbstractComponent {
 	public static String newKey(String algorithm) {
 		try {
 			SecretKey key = KeyGenerator.getInstance(algorithm).generateKey();

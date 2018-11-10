@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import vortex.support.AbstractObject;
+import vortex.support.AbstractComponent;
 
-public class PickCounter extends AbstractObject {
+public class PickCounter extends AbstractComponent {
 	private static final List<Integer> picks = Arrays.asList(42, 38, 41, 26, 13, 13, 26);
 	private static final HashMap<Integer, Counter> counts = new HashMap<>();
 	
